@@ -36,20 +36,7 @@ var PLY = (function($) {
 		// Never assume that keys is not filled with keys that were held down 
 		// the last time the browser was in focus.		
 		keys_depressed: {}, 
-		mouse_state: {},
-
-		// the (serialized HTML) debug view of the data-model (i.e., me) 
-		dump: function () {
-			var str = "<ul>";
-			for (var prop in this) {
-				str += "<li>";
-				str += prop + ": "; 
-				str += JSON.stringify(this[prop]);
-				str += "</li>";
-			}
-			str += "</ul>";
-			return str;
-		}
+		mouse_state: {}
 	};
 
 	function key(evt) {
