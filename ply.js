@@ -30,35 +30,7 @@ var PLY = (function($) {
 
 	// all vars except the variable "exposed" are private variables 
 
-	/* 
-	// a poor man's JSON.stringify.
-	function flatten(obj, levels) {
-		if (levels === 0) return '';
-		var empty = true;
-		if (obj instanceof Array) {
-			str = '[';
-			empty = true;
-			for (var i=0;i<obj.length;i++) {
-				empty = false;
-				str += flatten(obj[i],levels-1)+', ';
-			}
-			return (empty?str:str.slice(0,-2))+']';
-		} else if (obj instanceof Function) {
-			str += 'function';
-		} else if (obj instanceof Object) {
-			str = '{'; 
-			empty = true;
-			for (var j in obj) { 
-				empty = false;
-				str += j + ':' + flatten(obj[j],levels-1)+', '; 
-			} 
-			return (empty?str:str.slice(0,-2))+'}';
-		} else {
-			return obj.toString(); 
-		}
-	} */
-
-	// contains all "global" state of the library 
+	// various parts of state of the library 
 	// accessible via window.PLY to allow debug display
 	var exposed = {
 		// Never assume that keys is not filled with keys that were held down 
