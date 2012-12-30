@@ -4,7 +4,9 @@
 // This is a jQuery library //
 //////////////////////////////
 
-// When using the library, please be careful about stopPropagation(). It will prevent things from functioning. 
+// When using the library, please be careful about stopPropagation(). It can prevent things from functioning. 
+// Be aware that whenever any element in the DOM has a event handler which returns false or calls stopPropagation(), this library's default behavior 
+// will cease to function for those elements. 
 
 var PLY = (function($){
 	// contains all "global" state of the library. 
