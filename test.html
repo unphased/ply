@@ -32,6 +32,8 @@
 <script>
 	setInterval(function() {
 		$("#debug").html(PLY.dump());
-	},100);
+	},8); 
+	// The only reason this timeout is 8ms is because the author uses a 120Hz monitor.
+	// The library should be fast enough to handle these kind of rates, as well. 
 </script>
 </html>
