@@ -22,10 +22,16 @@
 </head>
 <body>
 	<h1><span class="ply_js_title">ply.js</span></h1>
-
+	<div id="debug">Debug div</div>
 	<div>Content of page</div>
 	<div>Containing div
 		<div>level 1 div<div>level 2 div</div></div>
 	</div>
+	<input type="text" value="text field" />
 </body>
+<script>
+	setInterval(function() {
+		$("#debug").html(PLY.dump());
+	},100);
+</script>
 </html>

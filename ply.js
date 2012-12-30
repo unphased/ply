@@ -4,10 +4,6 @@
 // This is a jQuery library //
 //////////////////////////////
 
-// When using the library, please be careful about stopPropagation(). It can prevent things from functioning. 
-// Be aware that whenever any element in the DOM has a event handler which returns false or calls stopPropagation(), this library's default behavior 
-// will cease to function for those elements. 
-
 // ===================================================================================================================================================
 // Copyright (c) 2012 Steven Lu 
 
@@ -24,8 +20,35 @@
 // ===================================================================================================================================================
 
 var PLY = (function($) {
-	// contains all "global" state of the library. 
-	var data_model = {
+
+	// all vars except the variable "exposed" are private variables 
+	function flatten(obj, levels) {
+		if (levels === 0) return '';
+		var empty = true;
+		if (obj instanceof Array) {
+			str = '[';
+			empty = true;
+			for (var i=0;i<obj.length;i++) {
+				empty = false;
+				str += flatten(obj[i],levels-1)+', ';
+			}
+			return (empty?str:str.slice(0,-2))+']';
+		} else if (obj instanceof Object) {
+			str = '{'; 
+			empty = true;
+			for (var j in obj) { 
+				empty = false;
+				str += j + ':' + flatten(obj[j],levels-1)+', '; 
+			} 
+			return (empty?str:str.slice(0,-2))+'}';
+		} else {
+			return obj.toString(); 
+		}
+	}
+
+	// contains all "global" state of the library (returned)
+	var exposed = {
+		// Never assume that keys is not filled with keys that were held down the last time the browser was in focus. Just assume the user has sat on his 100 key rollover keyboard. 
 		keys_depressed: {}, 
 		// the (serialized HTML) debug view of the data-model (i.e., me) 
 		dump: function () {
@@ -33,12 +56,18 @@ var PLY = (function($) {
 			for (var prop in this) {
 				str += "<li>";
 				str += prop + ": "; 
-				str += this[prop].toString();
+				str += flatten(this[prop]);
 				str += "</li>";
 			}
 			str += "</ul>";
+			return str;
 		}
 	};
+
+	function key(evt) {
+		return evt.which || evt.keyCode || /*window.*/event.keyCode;
+	}
+
 	// entry point for code is the document's event handlers. 
 	var handlers_for_doc = {
 		mousedown: function(evt) {
@@ -49,11 +78,17 @@ var PLY = (function($) {
 		},
 		mousemove: function(evt) {
 
+		}, 
+		keydown: function(evt) {			
+			exposed.keys_depressed[key(evt)] = String.fromCharCode(key(evt));
+		},
+		keyup: function(evt) {
+			delete exposed.keys_depressed[key(evt)]; 
 		}
 	};
 	// for the sake of simplicity i rely on jQuery to correctly bind event handlers
 	for (var event_name in handlers_for_doc) {
 		$(document).on(event_name, handlers_for_doc[event_name]);
 	}
-	return data_model;
+	return exposed;
 })(jQuery);

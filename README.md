@@ -1,8 +1,10 @@
 ply
 ===
 
+> (tr. v.) to use or wield diligently
+> -- Merriam-Webster
+
 A cross-browser input abstraction layer and event framework implemented in JavaScript. 
-Designed for the web designer (but the web programmer can also have some fun with it, too).
 
 ## Dependencies
 
@@ -25,4 +27,10 @@ ply defines a set of HTML5 classes, which prompt the library to automatically ap
 ply defines an extended set of JavaScript events. Some of these events define and provide high-level transform information such as translation and scale, which conveniently correspond to input that is incident on those elements. Other events define (and are triggered by) useful user input actions which can be used to drive UI in a way that is identical to the built-in events (such as `click` or `touchstart`).
 
 
+#### Notes
+
+When using the library, please be careful about stopPropagation(). It can prevent things from functioning. Be aware that whenever any element in the DOM has a event handler which returns false or calls stopPropagation(), this library's default behavior will cease to function for those elements. 
+
+
+Disclaimer: 
 Note to self: No feature-creep is tolerated! the only things you may add to the scope of this library are the list of classes and the list of events (and their associated handlers)
