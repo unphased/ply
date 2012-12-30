@@ -32,5 +32,5 @@ ply defines an extended set of JavaScript events. Some of these events define an
 When using the library, please be careful about stopPropagation(). It can prevent things from functioning. Be aware that whenever any element in the DOM has a event handler which returns false or calls stopPropagation(), this library's default behavior will cease to function for those elements. 
 
 
-Disclaimer: No relation to [PLY](http://www.dabeaz.com/ply/)
+Disclaimer: No relation to [PLY](http://www.dabeaz.com/ply/)  
 Note to self: No feature-creep is tolerated! the only things you may add to the scope of this library are the list of classes and the list of events (and their associated handlers)
