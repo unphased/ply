@@ -18,11 +18,11 @@ Designed for the web designer (but the web programmer can also have some fun wit
 
 ### Classes
 
-HTML5 classes are reserved for use by ply to indicate that the library shall automatically apply the (indicated) transformation in a hardware-accelerated fashion (when possible). 
+ply defines a set of HTML5 classes, which prompt the library to automatically apply the indicated transformation in a hardware-accelerated fashion (when possible). 
 
 ### Events
 
-ply defines an extended set of JavaScript events. Some of these events define and provide high-level transform information, which conveniently correspond to input that is incident on those elements. Other events define useful user input actions which can be used to drive UI in a way that is identical to the built-in events (such as `click` or `touchstart`).
+ply defines an extended set of JavaScript events. Some of these events define and provide high-level transform information such as translation and scale, which conveniently correspond to input that is incident on those elements. Other events define (and are triggered by) useful user input actions which can be used to drive UI in a way that is identical to the built-in events (such as `click` or `touchstart`).
 
 
-Note to self: No feature-creep is tolerated! the only things you can add to the scope of this library are the list of classes and the list of events (and their associated handlers)
+Note to self: No feature-creep is tolerated! the only things you may add to the scope of this library are the list of classes and the list of events (and their associated handlers)
