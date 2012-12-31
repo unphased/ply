@@ -37,7 +37,7 @@ var PLY = (function($) {
 		// the last time the browser was in focus.		
 		keys_depressed: {}, 
 
-		// The pointer_state array's order is important. It is maintained 
+		// The pointer_state array's order is important. It is maintained in
 		// the order that touches are created. If you lift a finger it is 
 		// removed and the rest of the array's ordering remains. 
 		// all mouse-pointer activity is mapped onto the first pointer. This is 
@@ -59,11 +59,11 @@ var PLY = (function($) {
 			// less problematic for touch events. 
 
 			// trap the right clicks!! this is huge
-			if (evt.which === 3) // secondary mouse button causes context menu
+			if (evt.which === 3) // secondary mouse button causes context menu,
 				// context menu prevents mouseup. ply by default ignores
 				// the secondary mouse button interaction
 				return;
-			var x = {ty:"m", x:evt.pageX, y:evt.pageY};
+			var x = {ty:"m", x:evt.pageX, y:evt.pageY, e: evt.target};
 			exposed.pointer_state.unshift(x); // keep at front
 		},
 		mouseup: function(evt) {
@@ -87,11 +87,33 @@ var PLY = (function($) {
 		},
 		keyup: function(evt) {
 			delete exposed.keys_depressed[key(evt)];
+		},
+		touchstart: function(evt) {
+			//exposed.pointer_state.push(evt.changedTouches);
+			//evt.preventDefault();
+			for (var i=0;i<evt.changedTouches.length;++i) {
+				var eci = evt.changedTouches[i];
+				//console.log(eci);
+				exposed.pointer_state.push({id: eci.identifier, 
+					x: eci.pageX, y: eci.pageY});
+			}
+		},
+		touchend: function(evt) {
+			for (var i=0;i<evt.changedTouches.length;++i) {
+				var eci = evt.changedTouches[i];
+				
+			}
+		},
+		touchmove: function(evt) {
+
+		},
+		touchcancel: function(evt) {
+
 		}
 	};
-	// for simplicity i rely on jQuery to correctly bind event handlers
 	for (var event_name in handlers_for_doc) {
-		$(document).on(event_name, handlers_for_doc[event_name]);
+		document.addEventListener(event_name, handlers_for_doc[event_name], true);
+		//$(document).on(event_name, handlers_for_doc[event_name]);
 	}
 	return exposed;
 })(jQuery);
