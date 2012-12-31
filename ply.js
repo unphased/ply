@@ -34,7 +34,7 @@ var PLY = (function($) {
 	// accessible via window.PLY to allow debug display
 	var exposed = {
 		// Never assume that keys is not filled with keys that were held down 
-		// the last time the browser was in focus.		
+		// the last time the browser was in focus.
 		keys_depressed: {}, 
 
 		// The pointer_state array's order is important. It is maintained 
@@ -44,18 +44,22 @@ var PLY = (function($) {
 		// not terribly complicated because on a mouse system in all likelihood
 		// (barring strange IE10 touch-notebook situations) the mouse will be 
 		// the only member of the pointer list. 
-		pointer_state: []
+		pointer_state: [], 
+		mmlast: [0],
+		mmlasti: 0, 
+		mmsamplerate: 1
 	};
 
 	function key(evt) {
 		return evt.which || evt.keyCode || /*window.*/event.keyCode;
 	}
 
+	var MAX_MOUSE_BUFFER_SIZE = 20;
 	// entry point for code is the document's event handlers. 
 	var handlers_for_doc = {
 		mousedown: function(evt) {
-			// need to trap drag-of-selection. Crap. Will just have to use 
-			// an ugly work-around in the mouseup. Funny this stuff is quite
+			// need to trap drag-of-selection. Crap. You'll have to prevent
+			// selection. Funny this stuff is quite
 			// less problematic for touch events. 
 
 			// trap the right clicks!! this is huge
@@ -77,7 +81,35 @@ var PLY = (function($) {
 			}
 		},
 		mousemove: function(evt) {
-			
+			// mousemove fires a lot (I can get my gaming mouse and Chrome to 
+			// fire mousemove 1000 times per second), I limit execution of body
+			// of this function to 8ms minimum interval. 
+			var now = Date.now();
+			var em = exposed.mmlast;
+			em[++exposed.mmlasti] = now;
+			if (exposed.mmlasti	>= MAX_MOUSE_BUFFER_SIZE) {
+				var tmp_last_one = em[exposed.mmlasti];
+				console.log('before', em.slice());
+				// also scan to help set rate. This construction is less 
+				// ideal than with a circular buffer (clipping scans at 
+				// buffer size intervals) but it should be far more efficient
+				for (var i=MAX_MOUSE_BUFFER_SIZE; i>0; --i) {
+					// this computes difference (1st deriv)
+					em[i] = em[i]-em[i-1];
+				}
+				console.log('one',em.slice());
+				for (i=MAX_MOUSE_BUFFER_SIZE; i>1; --i) {
+					// this computes difference again (2nd deriv)
+					em[i] = em[i]-em[i-1];
+				}
+				console.log('after',em.slice());
+				// wrap around
+				exposed.mmlasti = 0;
+				em[0] = tmp_last_one;
+			}
+			if (exposed.mmlast[exposed.mmlasti]+8 < now) {
+				
+			}
 		}, 
 		keydown: function(evt) {
 			exposed.keys_depressed[key(evt)] = String.fromCharCode(key(evt));
@@ -86,7 +118,7 @@ var PLY = (function($) {
 			delete exposed.keys_depressed[key(evt)];
 		}
 	};
-	// for the sake of simplicity i rely on jQuery to correctly bind event handlers
+	// for simplicity i rely on jQuery to correctly bind event handlers
 	for (var event_name in handlers_for_doc) {
 		$(document).on(event_name, handlers_for_doc[event_name]);
 	}
