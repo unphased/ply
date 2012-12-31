@@ -54,8 +54,8 @@ var PLY = (function($) {
 	// entry point for code is the document's event handlers. 
 	var handlers_for_doc = {
 		mousedown: function(evt) {
-			// need to trap drag-of-selection. Crap. Will just have to use 
-			// an ugly work-around in the mouseup. Funny this stuff is quite
+			// need to trap drag-of-selection. Crap. You'll have to prevent 
+			// selections entirely. Funny this stuff is quite
 			// less problematic for touch events. 
 
 			// trap the right clicks!! this is huge
@@ -63,7 +63,7 @@ var PLY = (function($) {
 				// context menu prevents mouseup. ply by default ignores
 				// the secondary mouse button interaction
 				return;
-			var x = {ty:"m", x:evt.clientX, y:evt.clientY};
+			var x = {ty:"m", x:evt.pageX, y:evt.pageY};
 			exposed.pointer_state.unshift(x); // keep at front
 		},
 		mouseup: function(evt) {
@@ -77,7 +77,10 @@ var PLY = (function($) {
 			}
 		},
 		mousemove: function(evt) {
-			
+			var ep0 = exposed.pointer_state[0];
+			if (ep0 && ep0.ty === "m") {
+				ep0.x = evt.pageX; ep0.y = evt.pageY;
+			}
 		}, 
 		keydown: function(evt) {
 			exposed.keys_depressed[key(evt)] = String.fromCharCode(key(evt));
@@ -86,7 +89,7 @@ var PLY = (function($) {
 			delete exposed.keys_depressed[key(evt)];
 		}
 	};
-	// for the sake of simplicity i rely on jQuery to correctly bind event handlers
+	// for simplicity i rely on jQuery to correctly bind event handlers
 	for (var event_name in handlers_for_doc) {
 		$(document).on(event_name, handlers_for_doc[event_name]);
 	}
