@@ -49,7 +49,7 @@
     } */
     
     var transform_name = Modernizr.prefixed('transform');
-	// be aware this routine sucks CPU a bit -- I use both rAF and window focus listening to make it friendlier
+    // be aware this routine sucks CPU a bit -- I use both rAF and window focus listening to make it friendlier
     // I am implementing this as a separate component rather than building it into the library. This is to decouple
     // the debug logic into the test page, and keep the library itself as lean and mean as it can reasonably be.
     function debugdump(time) {
@@ -65,13 +65,15 @@
         var str = "<ul>";
         for (var prop in PLY) {
             var s = JSON.stringify(PLY[prop],function(key,val) {
-                if (val instanceof HTMLElement) return "DOMElement &lt;"+val.tagName+" c="+val.className+" id="+val.id+"&gt;";
+                var cn = val.className;
+                var tn = val.tagName;
+                if (tn === "HTML") { cn = ""; } // too much due to Modernizr
+                if (val instanceof HTMLElement) return "DOMElement &lt;"+tn+" c="+cn+" id="+val.id+"&gt;";
                 return val;
             });
             str += "<li>";
             str += prop + ": "; 
             str += s;
-            //(PLY[prop] instanceof HTMLElement)?(PLY[prop].tagName+"."+PLY[prop].className):(JSON.stringify(PLY[prop]));
             str += "</li>";
         }
         str += "</ul>";
@@ -82,7 +84,8 @@
         }
         var jmpc = $("#pointer_marker_container");
         var mpc = jmpc[0];
-        var ppl = PLY.pointer_state.length;
+        var ppk = Object.keys(PLY.pointer_state);
+        var ppl = ppk.length;
         while (mpc.children.length < ppl) {
             var ne = document.createElement('DIV');
             ne.className = "pointer_marker";
@@ -91,12 +94,13 @@
         while (mpc.children.length > ppl) {
             mpc.removeChild(mpc.lastChild);
         }
-        for (var i=0; i<ppl; ++i) {
-            var ppi = PLY.pointer_state[i];
-            mpc.children[i].style[transform_name] = "translate3d("+ppi.x+"px,"+ppi.y+"px,0)";
+        var i=0;
+        for (var p in PLY.pointer_state) {
+            var ppp = PLY.pointer_state[p];
+            mpc.children[i++].style[transform_name] = "translate3d("+ppp.x+"px,"+ppp.y+"px,0)";
         }
     }
-	requestAnimationFrame(debugdump);
+    requestAnimationFrame(debugdump);
     $(window).focus(function(){
         console.log("Window got focus. Jumpstarting rAF");
         requestAnimationFrame(debugdump);
