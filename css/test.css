@@ -19,7 +19,7 @@ body {
 }
 
 div {
-    border: rgba(25,100,25,0.4) dotted 1px;
+    /*border: rgba(25,100,25,0.4) dotted 1px;*/
 }
 
 .ply_js_title {
@@ -47,7 +47,11 @@ div {
 
 #debug {
     pointer-events: none;
-    position: absolute;
-    bottom: 5px;
-    left: 5px;
+    position: fixed;
+    top: 5px;
+    right: 5px;
+}
+
+.error {
+    color: red;
 }

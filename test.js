@@ -52,13 +52,13 @@
     // be aware this routine sucks CPU a bit -- I use both rAF and window focus listening to make it friendlier
     // I am implementing this as a separate component rather than building it into the library. This is to decouple
     // the debug logic into the test page, and keep the library itself as lean and mean as it can reasonably be.
-    function debugdump(time) {
+    function debug_refresh(time) {
         if (time < 1e12) {
             // we're getting new-style sub-ms time stamp
         }
         // schedule 
         if (document.hasFocus()) 
-            requestAnimationFrame(debugdump);
+            requestAnimationFrame(debug_refresh);
         else console.log("document has lost focus. Stopping rAF");
         //console.log(Date.now());
         // the HTML debug dump of the data
@@ -94,15 +94,23 @@
         while (mpc.children.length > ppl) {
             mpc.removeChild(mpc.lastChild);
         }
-        var i=0;
+        var i = 0;
         for (var p in PLY.pointer_state) {
             var ppp = PLY.pointer_state[p];
             mpc.children[i++].style[transform_name] = "translate3d("+ppp.x+"px,"+ppp.y+"px,0)";
         }
+        // cleaning up the debug log 
+        var now = Date.now();
+        var debuglog = $("#debug_log")[0];
+        var dc = debuglog.children;
+        for (i = 0; dc.length > 50 && i < dc.length; ++i) {
+            if (dc[i].getAttribute('data-time') < (now - 15000))
+                debuglog.removeChild(dc[i]);
+        }
     }
-    requestAnimationFrame(debugdump);
+    requestAnimationFrame(debug_refresh);
     $(window).focus(function(){
         console.log("Window got focus. Jumpstarting rAF");
-        requestAnimationFrame(debugdump);
+        requestAnimationFrame(debug_refresh);
     });
 }());
