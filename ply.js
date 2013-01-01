@@ -28,7 +28,7 @@
 
 var PLY = (function($) {
 
-    var PLY_DEBUG = true; 
+    var PLY_DEBUG = false; 
     // sigh... Android browser touch events are super difficult to figure out 
 
     // this HTML escapist came from mustache.js
@@ -134,7 +134,7 @@ var PLY = (function($) {
     $(function(){
         $(".ply-noscroll").on("DOMNodeInserted",function(evt){
                 $(evt.target).addClass("ply-noscroll");
-            }).children().addClass("ply-noscroll");
+            }).addClassToChildren("ply-noscroll");
     });
 
     function key(evt) {
@@ -231,6 +231,10 @@ var PLY = (function($) {
                 if (ep_ecid) {
                     ep_ecid.x = eci.pageX;
                     ep_ecid.y = eci.pageY;
+                    if (eci.webkitForce) { // curious bit of extra data on
+                        // Android (why does iOS not provide this kind of thing?)
+                        ep_ecid.fatness = eci.webkitForce;
+                    }
                 }
             }
         },

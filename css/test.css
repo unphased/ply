@@ -34,14 +34,15 @@ div {
     top: 0; left: 0;
 }
 .pointer_marker {
+    pointer-events: none;
     position: absolute;
     background-color: #33f;
-    border: #009 1px solid;
-    top: -3px;
-    left: -3px;
+    border: #009 2px solid;
+    top: -4px;
+    left: -4px;
     width: 4px;
     height: 4px;
-    border-radius: 10px;
+    border-radius: 300px;
     box-shadow: 0 0 8px 0 blue;
 }
 

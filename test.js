@@ -97,7 +97,13 @@
         var i = 0;
         for (var p in PLY.pointer_state) {
             var ppp = PLY.pointer_state[p];
-            mpc.children[i++].style[transform_name] = "translate3d("+ppp.x+"px,"+ppp.y+"px,0)";
+            var mci = mpc.children[i++];
+            mci.style[transform_name] = "translate3d("+ppp.x+"px,"+ppp.y+"px,0)";
+            if (ppp.fatness) { 
+                var rounded_fatness = Math.floor(ppp.fatness*100);
+                mci.style.width = mci.style.height = rounded_fatness+"px";
+                mci.style.top = mci.style.left = -(rounded_fatness/2+2)+"px";
+            }
         }
         // cleaning up the debug log 
         var now = Date.now();
