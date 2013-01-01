@@ -125,6 +125,10 @@ var PLY = (function($) {
         }
     };
 
+    $.fn.addClassToChildren = function (class_name) {
+        
+    };
+
     // propagate "umbrella" style classes through to their children, now and in
     // the future. 
     $(function(){
