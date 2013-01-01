@@ -28,7 +28,7 @@
 
 var PLY = (function($) {
 
-    var PLY_DEBUG = false; 
+    var PLY_DEBUG = true; 
     // sigh... Android browser touch events are super difficult to figure out 
 
     // this HTML escapist came from mustache.js
@@ -128,11 +128,9 @@ var PLY = (function($) {
     // propagate "umbrella" style classes through to their children, now and in
     // the future. 
     $(function(){
-        $(".ply-noscroll").children()
-            .addClass("ply-noscroll")
-            .on("DOMNodeInserted",function(evt){
+        $(".ply-noscroll").on("DOMNodeInserted",function(evt){
                 $(evt.target).addClass("ply-noscroll");
-            });
+            }).children().addClass("ply-noscroll");
     });
 
     function key(evt) {
@@ -165,10 +163,14 @@ var PLY = (function($) {
                 epm.x = evt.pageX; epm.y = evt.pageY;
             }
         }, 
-        mousewheel: function (evt) { console.log("mousewheel", evt.wheelDeltaX, evt.wheelDeltaY, evt.target); 
+        mousewheel: function (evt) { console.log("mousewheel", evt.wheelDeltaX, evt.wheelDeltaY); 
             if (evt.target.tagName === "HTML") return; // don't waste cycles 
             // scanning Modernizr's class list on <html>
-            if (evt.target.className && evt.target.className.indexOf("ply-noscroll") !== -1) 
+            var et = evt.target;
+            // check for safari "bug"
+            if (evt.target.nodeType === 3) /* is text node */ 
+                et = evt.target.parentNode;
+            if (et.className && et.className.indexOf("ply-noscroll") !== -1) 
                 evt.preventDefault();
         },
         keydown: function(evt) { console.log("keydown",key(evt));
