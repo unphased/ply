@@ -103,7 +103,7 @@
         var now = Date.now();
         var debuglog = $("#debug_log")[0];
         var dc = debuglog.children;
-        for (i = 0; dc.length > 50 && i < dc.length; ++i) {
+        for (i = dc.length-1; dc.length > 50 && i >= 0; --i) {
             if (dc[i].getAttribute('data-time') < (now - 15000))
                 debuglog.removeChild(dc[i]);
         }

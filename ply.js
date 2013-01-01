@@ -195,8 +195,7 @@ var PLY = (function($) {
                 else seen_target = eci.target;
                 exposed.pointer_state[eci.identifier] = {x: eci.pageX, y: eci.pageY, e: evt.target};                    
             }
-            if (exposed.allow_scroll && (seen_target.className.indexOf("ply-noscroll") !== -1 || 
-                    class_actions[seen_target.className])) {
+            if (exposed.allow_scroll && ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1)) {
                 exposed.allow_scroll = false;
             }
             if (!exposed.allow_scroll) 
