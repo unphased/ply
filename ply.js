@@ -153,6 +153,9 @@ var PLY = (function($) {
 
     // entry point for code is the document's event handlers. 
     var handlers_for_doc = {
+        click: function(evt) { console.log('click', evt.pageX, evt.pageY); 
+
+        },
         mousedown: function(evt) { console.log('mousedown',evt.pageX,evt.pageY);
             // need to trap drag-of-selection. Crap. You'll have to prevent 
             // selections entirely. Funny this stuff is quite
