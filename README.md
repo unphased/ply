@@ -32,13 +32,13 @@ ply defines an extended set of JavaScript events. Some of these events define an
 
 The real power of ply comes from the intuitive JS events it generates. 
 
-#### Transform Events
+#### Transform Events (not yet implemented)
 
 - `ply_translate`: Event sent to any element which the user attempts to "drag" in any way. On a PC no declarative classes need to be specified for fully functional `ply_translate` events. On touch devices, a ply-class must be set on an element (or one of its ancestors) to disable default scrolling behavior in order for touchmove events to get processed. 
 - `ply_scale`: Event sent to any element which the user attempts to "pinch". 
 - `ply_rotate`: Event sent to any element which the user attmepts to "rotate". Realistically, on any touch device you are liable to see both `ply_scale` and `ply_rotate` events fire when two fingers are being used to manipulate an element. The reason for separating them into to events is that it makes it easier to process only the transformation type that you care about. 
 
-#### Termination Events
+#### Termination Events (not yet implemented)
 
 A common need when constructing UI interactions is a way to define behavior after the interaction ends. Termination events are fired when manipulation ends and provide information about the changes that took place. For example, when the user is moving an element around with two fingers and lifts one of them, a termination event will be issued that you can run code on to handle the (accumulated change in) rotation and scale. I will revisit this and describe in better detail what information is provided (still have to code up the rest before it becomes clear what this information will be).
 
@@ -50,8 +50,8 @@ ply recognizes a set of "declarative" HTML5 classes which prompt the library to 
 
 #### General purpose 
 
-- `ply-noscroll`: This applies the property that touching this element prevents browser default scrolling on touch devices. On a PC, *depending on the configuration* scrolling the mousewheel with the cursor over this element can prevent the default browser behavior of scrolling the page. Note that this class and its behavior is automatically applied to every element that matches any of the ply classes. This class will also be applied recursively to all children. 
-- `ply-collect`: This class when applied to an element with no children has no effect. The purpose of this class is to consolidate ply's events to a container element so that it is manipulated as a unit. `ply-collect` can be applied in different locations in the DOM tree to specify granularity. 
+- `ply-noscroll`: This applies the property that touching this element prevents browser default scrolling on touch devices. On a PC, *depending on the configuration* scrolling the mousewheel with the cursor over this element can prevent the default browser behavior of scrolling the page. Note that this class and its behavior is automatically applied to every element that matches any of the ply classes. This class will also be applied recursively to all children.
+- `ply-collect`: This class when applied to an element with no children has no effect. The purpose of this class is to consolidate ply's events to a container element so that it is manipulated as a unit. `ply-collect` can be applied in different locations in the DOM tree to specify granularity. (not yet implemented)
 
 To illustrate:
 If you have this structure: 
@@ -100,16 +100,15 @@ You will find it processes to be
 
 The behavior will be such that manipulating the list item element "list item 1" will cause the transform events to be sent to its parent the `<ul>` element instead. 
 
-#### Manipulation
+#### Manipulation 
 
-- `ply-translate`: The overall translation described through the ply_translate event is automatically applied using CSS3 `transform` style with requestAnimationFrame.
-- `ply-scale`: The overall scale described through the ply_scale event is automatically applied using CSS3 `transform` style with requestAnimationFrame. 
-- `ply-rotate`: The overall rotation described through the ply_rotate event is automatically applied using CSS3 `transform` style with requestAnimationFrame. 
+- `ply-translate`: The overall translation described through the ply_translate event is automatically applied using CSS3 `transform` style with requestAnimationFrame. (not yet implemented)
+- `ply-scale`: The overall scale described through the ply_scale event is automatically applied using CSS3 `transform` style with requestAnimationFrame. (not yet implemented)
+- `ply-rotate`: The overall rotation described through the ply_rotate event is automatically applied using CSS3 `transform` style with requestAnimationFrame. (not yet implemented)
 
 #### Configuration
 
 Configuration classes should be applied in the body element of the HTML page. This is to mitigate conflict with classes assigned to the html element by Modernizr. 
-
 
 #### PC-specific config classes (not yet implemented)
 
@@ -124,7 +123,7 @@ These following configurations can be combined in any combination.
 - `ply-scale-secondary-drag`: Secondary mouse button drag produces scale transform (like resizing a window in a windowing system, but available everywhere on the element surface by default), middle mouse button produces rotate transform
 - `ply-rotate-secondary-drag`: Secondary mouse button drag produces rotate transform, middle mouse button produces scale transform
 
-### Indicative Classes
+### Indicative Classes (not yet implemented)
 
 Indicative classes are assigned automatically to all page elements. 
 
