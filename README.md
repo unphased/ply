@@ -50,7 +50,7 @@ ply recognizes a set of "declarative" HTML5 classes which prompt the library to 
 
 #### General purpose 
 
-- `ply-noscroll`: This applies the property that touching this element prevents browser default scrolling on touch devices. On a PC, scrolling the mousewheel with the cursor over this element also prevents the default browser behavior of scrolling the page. Note that this class and its behavior is automatically applied to every element that matches any of the ply classes. This class will also be applied recursively to all children. 
+- `ply-noscroll`: This applies the property that touching this element prevents browser default scrolling on touch devices. On a PC, *depending on the configuration* scrolling the mousewheel with the cursor over this element can prevent the default browser behavior of scrolling the page. Note that this class and its behavior is automatically applied to every element that matches any of the ply classes. This class will also be applied recursively to all children. 
 - `ply-collect`: This class when applied to an element with no children has no effect. The purpose of this class is to consolidate ply's events to a container element so that it is manipulated as a unit. `ply-collect` can be applied in different locations in the DOM tree to specify granularity. 
 
 To illustrate:
@@ -110,7 +110,19 @@ The behavior will be such that manipulating the list item element "list item 1" 
 
 Configuration classes should be applied in the body element of the HTML page. This is to mitigate conflict with classes assigned to the html element by Modernizr. 
 
-- `ply-modifierkeys`: 
+
+#### PC-specific config classes (not yet implemented)
+
+In all cases the primary mouse button drag will issue the `ply_translate` transform. If you never want to move anything (suppose you want left drag to scale only) just write your callback for the `ply_translate` to perform scaling rather than translating. 
+
+These following configurations can be combined in any combination. 
+
+- `ply-modifierkeys-scroll`: Modifier keys in conjunction with scroll (over a noscroll element) will produce scale and rotate transforms.
+- `ply-modifierkeys-drag`: Modifier keys in conjunction with dragging produces the transforms.
+- `ply-scale-scroll`: Scrolling over a noscroll element produces the scale transform.
+- `ply-rotate-scroll`: Scrolling over a noscroll element produces the rotate transform. 
+- `ply-scale-secondary-drag`: Secondary mouse button drag produces scale transform (like resizing a window in a windowing system, but available everywhere on the element surface by default), middle mouse button produces rotate transform
+- `ply-rotate-secondary-drag`: Secondary mouse button drag produces rotate transform, middle mouse button produces scale transform
 
 ### Indicative Classes
 
