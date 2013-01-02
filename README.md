@@ -26,19 +26,26 @@ None yet, the library is not yet in a functional state. But I have a Nexus 7 and
 3. Write zero lines of code. 
 4. Enjoy the fresh and clean feeling. 
 
-### Classes
-
-ply defines a set of HTML5 classes, which prompt the library to change the interaction behavior of the element. 
-
-- `ply-noscroll`: This applies the property that touching this element prevents browser default scrolling on touch devices. On a PC, scrolling the mousewheel (or gesture-scrolling with a touchpad) with the cursor over this element also prevents the default browser behavior of scrolling the page. 
-- `ply-translate`: 
-
 ### Events
 
 ply defines an extended set of JavaScript events. Some of these events define and provide high-level transform information such as translation and scale, which conveniently correspond to input that is incident on those elements. Other events define (and are triggered by) useful user input actions which can be used to drive UI in a way that is identical to the built-in events (such as `click` or `touchstart`).
 
 The real power of ply comes from the intuitive JS events it generates: A vast space of UI interaction possibilities opens up as prototyping and implementation time is reduced from hours to minutes. 
 
+### Classes
+
+ply defines a set of HTML5 classes, which prompt the library to change the interaction behavior of the element. 
+
+#### General purpose 
+
+- `ply-noscroll`: This applies the property that touching this element prevents browser default scrolling on touch devices. On a PC, scrolling the mousewheel with the cursor over this element also prevents the default browser behavior of scrolling the page. Note that this class and its behavior is automatically applied to every element that matches any of the following Manipulation classes. This class will also be applied recursively to all children. 
+
+#### Manipulation
+
+- `ply-translate`: The overall translation described through the ply_translate event is automatically applied using CSS3 `transform` style with requestAnimationFrame.
+- `ply-rotate`: The overall rotation described through the ply_rotate event is automatically applied using CSS3 `transform` style with requestAnimationFrame. 
+- `ply-scale`: The overall scale described through the ply_scale event is automatically applied using CSS3 `transform` style with requestAnimationFrame. 
+<!-- - `ply-skew`: The affine skew transformation described through the ply_skew event is automatically applied using CSS3 `transform` style with requestAnimationFrame. -->
 
 #### Notes
 

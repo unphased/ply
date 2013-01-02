@@ -119,20 +119,29 @@ var PLY = (function($) {
         allow_scroll: true 
     };
 
-    var class_actions = {
-        'ply-linear': function() {
+    var class_set = {
+        'ply-translate': function() {
 
         }
     };
 
     // a neat little exercise in recursive programming
     $.fn.addClassToChildren = function (class_name) {
-        this.children().addClass(class_name).addClassToChildren(class_name);
+        var c = this.children();
+        if (c.length)
+            c.addClass(class_name).addClassToChildren(class_name);
     };
 
     // propagate "umbrella" style classes through to their children, now and in
     // the future. 
     $(function(){
+        // consolidate event handler behavior of marked elements by setting 
+        // ply-noscroll on all of them
+        for (var classname in class_set) {
+            $("."+classname).addClass("ply-noscroll");
+        }
+        // propagate the noscroll class to all children and apply it to all 
+        // future children 
         $(".ply-noscroll").on("DOMNodeInserted",function(evt){
                 $(evt.target).addClass("ply-noscroll");
             }).addClassToChildren("ply-noscroll");
@@ -154,7 +163,8 @@ var PLY = (function($) {
                 // context menu prevents mouseup. ply by default ignores
                 // the secondary mouse button interaction
                 return;
-            exposed.pointer_state.m = {x:evt.pageX, y:evt.pageY, e: evt.target};
+            exposed.pointer_state.m = {xs:evt.pageX, ys:evt.pageY, 
+                xc: evt.pageX, yc: evt.pageY, e: evt.target};
         },
         mouseup: function(evt) { console.log('mouseup',evt.pageX,evt.pageY);
             // this event may fail to fire by dragging mouse out of
@@ -165,9 +175,15 @@ var PLY = (function($) {
         mousemove: function(evt) { 
             var epm = exposed.pointer_state.m;
             if (epm) {
-                epm.x = evt.pageX; epm.y = evt.pageY;
+                epm.xc = evt.pageX; epm.yc = evt.pageY;
             }
         }, 
+        mouseover: function(evt) { console.log("mouseover", evt.target);
+
+        },
+        mouseout: function (evt) { console.log("mouseout", evt.target);
+
+        },
         mousewheel: function (evt) { console.log("mousewheel", evt.wheelDeltaX, evt.wheelDeltaY); 
             if (evt.target.tagName === "HTML") return; // don't waste cycles 
             // scanning Modernizr's class list on <html>
@@ -198,7 +214,8 @@ var PLY = (function($) {
                 
                 if (seen_target) assert(eci.target === seen_target);
                 else seen_target = eci.target;
-                exposed.pointer_state[eci.identifier] = {x: eci.pageX, y: eci.pageY, e: evt.target};                    
+                exposed.pointer_state[eci.identifier] = {xs: eci.pageX, 
+                    ys: eci.pageY, xc: evt.pageX, yc: pageY, e: evt.target};
             }
             if (exposed.allow_scroll && ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1)) {
                 exposed.allow_scroll = false;
@@ -230,8 +247,8 @@ var PLY = (function($) {
                 var eci = ec[i];
                 var ep_ecid = exposed.pointer_state[eci.identifier];
                 if (ep_ecid) {
-                    ep_ecid.x = eci.pageX;
-                    ep_ecid.y = eci.pageY;
+                    ep_ecid.xc = eci.pageX;
+                    ep_ecid.yc = eci.pageY;
                     if (eci.webkitForce) { // curious bit of extra data on
                         // Android (why does iOS not provide this kind of thing?)
                         ep_ecid.fatness = eci.webkitForce;

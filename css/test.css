@@ -10,16 +10,18 @@
 }
 
 body {
-	font-family: sans-serif;
-
-    /* overriding iOS Safari behaviors */
-    -webkit-user-select: none;                /* disable cut copy paste */
-    -webkit-touch-callout: none;              /* disable callout, image save panel */
-    -webkit-tap-highlight-color: transparent; /* "turn off" link highlight */
+	font-family: sans-serif;    
 }
 
 div {
     /*border: rgba(25,100,25,0.4) dotted 1px;*/
+}
+
+.ply-noscroll {
+    /* overriding iOS Safari behaviors */
+    -webkit-user-select: none;                /* disable cut copy paste */
+    -webkit-touch-callout: none;              /* disable callout, image save panel */
+    -webkit-tap-highlight-color: transparent; /* "turn off" link highlight */
 }
 
 .ply_js_title {
@@ -27,13 +29,13 @@ div {
     font-weight: bold;
 }
 
-#pointer_marker_container {
+#pointer_marker_container,#pointer_start_marker_container{
     pointer-events: none;
     border: none;
     position: absolute;
     top: 0; left: 0;
 }
-.pointer_marker {
+.pointer_marker,.pointer_start_marker {
     pointer-events: none;
     position: absolute;
     background-color: #33f;
@@ -43,7 +45,13 @@ div {
     width: 4px;
     height: 4px;
     border-radius: 300px;
-    box-shadow: 0 0 8px 0 blue;
+    box-shadow: 0 0 8px 0 #33f;
+}
+
+.pointer_start_marker {
+    background-color: #f33;
+    border: #900 2px solid;
+    box-shadow: 0 0 8px 0 #f33;
 }
 
 #debug {

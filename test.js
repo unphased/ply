@@ -80,29 +80,41 @@
         $("#debug").html(str);
         // actual debug visualization of pointer locations
         if (!$('#pointer_marker_container').length) {
-            $('body').append('<div id="pointer_marker_container"></div>');
+            $('body').append('<div id="pointer_marker_container"></div><div id="pointer_start_marker_container"></div>');
         }
-        var jmpc = $("#pointer_marker_container");
-        var mpc = jmpc[0];
+        var jpmc = $("#pointer_marker_container");
+        var jpsmc = $("#pointer_start_marker_container");
+        var pmc = jpmc[0];
+        var psmc = jpsmc[0];
         var ppk = Object.keys(PLY.pointer_state);
         var ppl = ppk.length;
-        while (mpc.children.length < ppl) {
+        while (pmc.children.length < ppl) {
             var ne = document.createElement('DIV');
             ne.className = "pointer_marker";
-            mpc.appendChild(ne);
+            pmc.appendChild(ne);
         }
-        while (mpc.children.length > ppl) {
-            mpc.removeChild(mpc.lastChild);
+        while (pmc.children.length > ppl) {
+            pmc.removeChild(pmc.lastChild);
+        }
+        while (psmc.children.length < ppl) {
+            var ne2 = document.createElement('DIV');
+            ne2.className = "pointer_start_marker";
+            psmc.appendChild(ne2);
+        }
+        while (psmc.children.length > ppl) {
+            psmc.removeChild(psmc.lastChild);
         }
         var i = 0;
         for (var p in PLY.pointer_state) {
             var ppp = PLY.pointer_state[p];
-            var mci = mpc.children[i++];
-            mci.style[transform_name] = "translate3d("+ppp.x+"px,"+ppp.y+"px,0)";
+            var pci = pmc.children[i];
+            var psci = psmc.children[i++];
+            pci.style[transform_name] = "translate3d("+ppp.xc+"px,"+ppp.yc+"px,0)";
+            psci.style[transform_name] = "translate3d("+ppp.xs+"px,"+ppp.ys+"px,0)";
             if (ppp.fatness) { 
                 var rounded_fatness = Math.floor(ppp.fatness*100);
-                mci.style.width = mci.style.height = rounded_fatness+"px";
-                mci.style.top = mci.style.left = -(rounded_fatness/2+2)+"px";
+                pci.style.width = pci.style.height = rounded_fatness+"px";
+                pci.style.top = pci.style.left = -(rounded_fatness/2+2)+"px";
             }
         }
         // cleaning up the debug log 
