@@ -215,7 +215,7 @@ var PLY = (function($) {
                 if (seen_target) assert(eci.target === seen_target);
                 else seen_target = eci.target;
                 exposed.pointer_state[eci.identifier] = {xs: eci.pageX, 
-                    ys: eci.pageY, xc: evt.pageX, yc: pageY, e: evt.target};
+                    ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, e: evt.target};
             }
             if (exposed.allow_scroll && ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1)) {
                 exposed.allow_scroll = false;
