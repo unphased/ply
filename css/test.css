@@ -10,7 +10,7 @@
 }
 
 body {
-	font-family: "Gill Sans", sans-serif;
+	font-family: sans-serif;
 
     /* overriding iOS Safari behaviors */
     -webkit-user-select: none;                /* disable cut copy paste */

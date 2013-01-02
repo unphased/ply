@@ -125,8 +125,9 @@ var PLY = (function($) {
         }
     };
 
+    // a neat little exercise in recursive programming
     $.fn.addClassToChildren = function (class_name) {
-        
+        this.children().addClass(class_name).addClassToChildren(class_name);
     };
 
     // propagate "umbrella" style classes through to their children, now and in
