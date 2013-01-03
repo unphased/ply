@@ -29,22 +29,6 @@
 var PLY = (function($) {
 
     var PLY_DEBUG = false; 
-    // sigh... Android browser touch events are super difficult to figure out 
-
-    // this HTML escapist came from mustache.js
-    var entityMap = {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': '&quot;',
-        "'": '&#39;',
-        "/": '&#x2F;'
-    };
-    function escapeHtml(string) {
-        return String(string).replace(/[&<>"'\/]/g, function (s) {
-            return entityMap[s];
-        });
-    }
 
     var AssertException, assert; 
     
@@ -59,6 +43,21 @@ var PLY = (function($) {
                 throw new AssertException(message);
             }
         };
+
+        // this HTML escapist came from mustache.js
+        var entityMap = {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': '&quot;',
+            "'": '&#39;',
+            "/": '&#x2F;'
+        };
+        function escapeHtml(string) {
+            return String(string).replace(/[&<>"'\/]/g, function (s) {
+                return entityMap[s];
+            });
+        }
 
         var original_console_log = console.log;
         // echo console logs to the debug 
