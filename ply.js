@@ -27,69 +27,7 @@
 // ============================================================================
 
 var PLY = (function($) {
-
-    var PLY_DEBUG = false; 
-
-    var AssertException, assert; 
     
-    if (PLY_DEBUG) { 
-        AssertException = function(message) { this.message = message; };
-        AssertException.prototype.toString = function () {
-            return 'AssertException: ' + this.message;
-        };
-
-        assert = function (exp, message) {
-            if (!exp) {
-                throw new AssertException(message);
-            }
-        };
-
-        // this HTML escapist came from mustache.js
-        var entityMap = {
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': '&quot;',
-            "'": '&#39;',
-            "/": '&#x2F;'
-        };
-        function escapeHtml(string) {
-            return String(string).replace(/[&<>"'\/]/g, function (s) {
-                return entityMap[s];
-            });
-        }
-
-        var original_console_log = console.log;
-        // echo console logs to the debug 
-        window.instrumented_log = function () {
-            var str = "";
-            for (var i=0;i<arguments.length;++i) {
-                str += JSON.stringify(arguments[i],function(key,val) {
-                    if (val instanceof HTMLElement) {
-                        var cn = val.className;
-                        var tn = val.tagName;
-                        if (tn === "HTML") { cn = ""; } // too much due to Modernizr
-                        return "DOMElement<"+tn+" c="+cn+" id="+val.id+">";
-                    }
-                    return val;
-                });
-                str += ", ";
-            }
-            str = str.slice(0,-2);
-            $("#debug_log").prepend('<div class="log" data-time="'+Date.now()+'">'+escapeHtml(str)+'</div>');
-            original_console_log.apply(console, arguments);
-        };
-        console.log = instrumented_log; 
-        // this means all logs in your application get dumped into #debug_log if 
-        // you've got one
-    }
-
-    function each(obj, f) {
-        for (var i in obj) {
-            f(i, obj[i]);
-        }
-    }
-
     // all vars except the variable "exposed" are private variables 
 
     // various parts of state of the library 
@@ -115,8 +53,71 @@ var PLY = (function($) {
         // prevented (iOS's behavior is still inconsistent with touchstart pD'd
         // on the second or later finger that goes down (messes up the scroll, 
         // actually))
-        allow_scroll: true 
+        allow_scroll: true,
+
+        debug: true
     };
+
+    var AssertException, assert; 
+    
+    AssertException = function(message) { this.message = message; };
+    AssertException.prototype.toString = function () {
+        return 'AssertException: ' + this.message;
+    };
+
+    assert = function (exp, message) {
+        if (!exp) {
+            throw new AssertException(message);
+        }
+    };
+
+    // this HTML escapist came from mustache.js
+    var entityMap = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': '&quot;',
+        "'": '&#39;',
+        "/": '&#x2F;'
+    };
+    function escapeHtml(string) {
+        return String(string).replace(/[&<>"'\/]/g, function (s) {
+            return entityMap[s];
+        });
+    }
+
+    var original_console_log = console.log;
+    // echo console logs to the debug 
+    window.instrumented_log = function () {
+        original_console_log.apply(console, arguments);
+        if (!exposed.debug) return;
+        var str = "";
+        for (var i=0;i<arguments.length;++i) {
+            str += JSON.stringify(arguments[i],function(key,val) {
+                if (val instanceof HTMLElement) {
+                    var cn = val.className;
+                    var tn = val.tagName;
+                    if (tn === "HTML") { cn = ""; } // too much due to Modernizr
+                    return "DOMElement<"+tn+" c="+cn+" id="+val.id+">";
+                }
+                return val;
+            });
+            str += ", ";
+        }
+        str = str.slice(0,-2);
+        $("#debug_log").prepend('<div class="log" data-time="'+Date.now()+'">'+escapeHtml(str)+'</div>');            
+    };
+    console.log = instrumented_log; 
+    // this means all logs in your application get dumped into #debug_log if 
+    // you've got one
+
+    function each(obj, f) {
+        for (var i in obj) {
+            f(i, obj[i]);
+        }
+    }
+
+    
 
     var class_set = {
         'ply-translate': function() {
@@ -242,7 +243,7 @@ var PLY = (function($) {
                 exposed.allow_scroll = true;
             }
         },
-        touchmove: function(evt) {
+        touchmove: function(evt) { //console.log("touchmove",evt);
             if (!exposed.allow_scroll) evt.preventDefault(); 
             var ec = evt.changedTouches;
             var ecl = ec.length;

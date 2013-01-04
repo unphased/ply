@@ -139,6 +139,8 @@
         var psmc = jpsmc[0];
         var echl = jechl[0];
         var eshl = jeshl[0];
+        var scrollY = document.body.scrollTop;
+        var scrollX = document.body.scrollLeft;
         var ppk = Object.keys(PLY.pointer_state);
         var ppl = ppk.length;
         /* while (pmc.children.length < ppl) {
@@ -175,30 +177,42 @@
             var pci = pmc.children[i];
             var psci = psmc.children[i];
             if (ppp.es === ppp.ec) {
-                eshli.style[transform_name] = hide_transform;
+                // I defer the calling of elementFromPoint to here for performance reasons
+                // ply will never do this kind of heavy lifting without being told to
+                var detected_element;
+                if ((detected_element = document.elementFromPoint(ppp.xc-scrollX,ppp.yc-scrollY)) !== ppp.es) {
+                    var de = $(detected_element);
+                    var deo = de.offset();
+                    echli.style.width = de.outerWidth()+"px";
+                    echli.style.height = de.outerHeight()+"px";
+                    echli.style[transform_name] = "translate3d("+deo.left+"px,"+deo.top+"px,0)";
+                } else
+                    echli.style[transform_name] = hide_transform;
             } else {
                 if (has_bounding_client_rect) {
-                    var sbcr = ppp.es.getBoundingClientRect();
-                    eshli.style.width = sbcr.width+"px";
-                    eshli.style.height = sbcr.height+"px";
-                    eshli.style[transform_name] = "translate3d("+sbcr.left+"px,"+sbcr.top+"px,0)";
+                    var cbcr = ppp.ec.getBoundingClientRect();
+                    echli.style.width = cbcr.width+"px";
+                    echli.style.height = cbcr.height+"px";
+                    echli.style[transform_name] = "translate3d("+(scrollX+cbcr.left)+"px,"+(scrollY+cbcr.top)+"px,0)";
                 } else {
-                    var jpppeso = $(ppp.es).offset();
-                    eshli.style.width = jpppes.outerWidth()+"px";
-                    eshli.style.height = jpppes.outerHeight()+"px";
-                    eshli.style[transform_name] = "translate3d("+jpppeso.left+"px,"+jpppeso.top+"px,0)";
+                    var jpppec = $(ppp.ec);
+                    var jpppeco = jpppec.offset();
+                    echli.style.width = jpppec.outerWidth()+"px";
+                    echli.style.height = jpppec.outerHeight()+"px";
+                    echli.style[transform_name] = "translate3d("+jpppeco.left+"px,"+jpppeco.top+"px,0)";
                 }
             }
             if (has_bounding_client_rect) {
-                var cbcr = ppp.ec.getBoundingClientRect();
-                echli.style.width = cbcr.width+"px";
-                echli.style.height = cbcr.height+"px";
-                echli.style[transform_name] = "translate3d("+cbcr.left+"px,"+cbcr.top+"px,0)";
+                var sbcr = ppp.es.getBoundingClientRect();
+                eshli.style.width = sbcr.width+"px";
+                eshli.style.height = sbcr.height+"px";
+                eshli.style[transform_name] = "translate3d("+(scrollX+sbcr.left)+"px,"+(scrollY+sbcr.top)+"px,0)";
             } else {
-                var jpppeco = $(ppp.ec).offset();
-                echli.style.width = jpppec.outerWidth()+"px";
-                echli.style.height = jpppec.outerHeight()+"px";
-                echli.style[transform_name] = "translate3d("+jpppeco.left+"px,"+jpppeco.top+"px,0)";
+                var jpppes = $(ppp.es);
+                var jpppeso = jpppes.offset();
+                eshli.style.width = jpppes.outerWidth()+"px";
+                eshli.style.height = jpppes.outerHeight()+"px";
+                eshli.style[transform_name] = "translate3d("+jpppeso.left+"px,"+jpppeso.top+"px,0)";
             }
             pci.style[transform_name] = "translate3d("+ppp.xc+"px,"+ppp.yc+"px,0)";
             psci.style[transform_name] = "translate3d("+ppp.xs+"px,"+ppp.ys+"px,0)";
