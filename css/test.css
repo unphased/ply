@@ -10,7 +10,11 @@
 }
 
 body {
-	font-family: sans-serif;    
+	font-family: sans-serif;  
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 div {
@@ -29,7 +33,7 @@ div {
     font-weight: bold;
 }
 
-#pointer_marker_container,#pointer_start_marker_container{
+#pointer_marker_container, #pointer_start_marker_container, #element_start_highlight_layers, #element_current_highlight_layers {
     pointer-events: none;
     border: none;
     position: absolute;
@@ -46,6 +50,16 @@ div {
     height: 4px;
     border-radius: 300px;
     box-shadow: 0 0 8px 0 #33f;
+}
+
+.element_start_highlight, .element_current_highlight {
+
+}
+.element_current_highlight {
+    background-color: rgba(0,255,0,0.3);
+}
+.element_start_highlight {
+    background-color: rgba(255,185,80,0.3);
 }
 
 .pointer_start_marker {

@@ -49,6 +49,8 @@
     } */
     
     var transform_name = Modernizr.prefixed('transform');
+    var hide_transform = "translate3d(-99999px,-99999px,0)";
+
     // be aware this routine sucks CPU a bit -- I use both rAF and window focus listening to make it friendlier
     // I am implementing this as a separate component rather than building it into the library. This is to decouple
     // the debug logic into the test page, and keep the library itself as lean and mean as it can reasonably be.
@@ -80,15 +82,64 @@
         $("#debug").html(str);
         // actual debug visualization of pointer locations
         if (!$('#pointer_marker_container').length) {
-            $('body').append('<div id="pointer_marker_container"></div><div id="pointer_start_marker_container"></div>');
+            $('body').append(
+                '<div id="element_current_highlight_layers">'+
+                    '<div class="element_current_highlight"></div>'+
+                    '<div class="element_current_highlight"></div>'+
+                    '<div class="element_current_highlight"></div>'+
+                    '<div class="element_current_highlight"></div>'+
+                    '<div class="element_current_highlight"></div>'+
+                    '<div class="element_current_highlight"></div>'+
+                    '<div class="element_current_highlight"></div>'+
+                    '<div class="element_current_highlight"></div>'+
+                    '<div class="element_current_highlight"></div>'+
+                    '<div class="element_current_highlight"></div></div>'+
+                '<div id="element_start_highlight_layers">'+
+                    '<div class="element_start_highlight"></div>'+
+                    '<div class="element_start_highlight"></div>'+
+                    '<div class="element_start_highlight"></div>'+
+                    '<div class="element_start_highlight"></div>'+
+                    '<div class="element_start_highlight"></div>'+
+                    '<div class="element_start_highlight"></div>'+
+                    '<div class="element_start_highlight"></div>'+
+                    '<div class="element_start_highlight"></div>'+
+                    '<div class="element_start_highlight"></div>'+
+                    '<div class="element_start_highlight"></div></div>'+
+                '<div id="pointer_marker_container">'+
+                    '<div class="pointer_marker"></div>'+
+                    '<div class="pointer_marker"></div>'+
+                    '<div class="pointer_marker"></div>'+
+                    '<div class="pointer_marker"></div>'+
+                    '<div class="pointer_marker"></div>'+
+                    '<div class="pointer_marker"></div>'+
+                    '<div class="pointer_marker"></div>'+
+                    '<div class="pointer_marker"></div>'+
+                    '<div class="pointer_marker"></div>'+
+                    '<div class="pointer_marker"></div></div>'+
+                '<div id="pointer_start_marker_container">'+
+                    '<div class="pointer_start_marker"></div>'+
+                    '<div class="pointer_start_marker"></div>'+
+                    '<div class="pointer_start_marker"></div>'+
+                    '<div class="pointer_start_marker"></div>'+
+                    '<div class="pointer_start_marker"></div>'+
+                    '<div class="pointer_start_marker"></div>'+
+                    '<div class="pointer_start_marker"></div>'+
+                    '<div class="pointer_start_marker"></div>'+
+                    '<div class="pointer_start_marker"></div>'+
+                    '<div class="pointer_start_marker"></div></div>'
+            );
         }
         var jpmc = $("#pointer_marker_container");
         var jpsmc = $("#pointer_start_marker_container");
+        var jechl = $("#element_current_highlight_layers");
+        var jeshl = $("#element_start_highlight_layers");
         var pmc = jpmc[0];
         var psmc = jpsmc[0];
+        var echl = jechl[0];
+        var eshl = jeshl[0];
         var ppk = Object.keys(PLY.pointer_state);
         var ppl = ppk.length;
-        while (pmc.children.length < ppl) {
+        /* while (pmc.children.length < ppl) {
             var ne = document.createElement('DIV');
             ne.className = "pointer_marker";
             pmc.appendChild(ne);
@@ -104,11 +155,40 @@
         while (psmc.children.length > ppl) {
             psmc.removeChild(psmc.lastChild);
         }
+        while (ehl.children.length < ppl*2) {
+            var ne3 = document.createElement('DIV');
+            ne3.className = "element_highlight";
+            ehl.appendChild(ne3);
+        }
+        while (ehl.children.length > ppl*2) {
+            ehl.removeChild(ehl.lastChild);
+        } */
+
+        
         var i = 0;
         for (var p in PLY.pointer_state) {
+            if (i === 10) { alert("should not have this many pointers"); }
             var ppp = PLY.pointer_state[p];
+            var echli = echl.children[i];
+            var eshli = eshl.children[i];
             var pci = pmc.children[i];
-            var psci = psmc.children[i++];
+            var psci = psmc.children[i];
+            if (ppp.es === ppp.ec) {
+                eshli.style[transform_name] = hide_transform;
+            } else {
+                //eshli.style[transform_name] = "scale($(ppp.es).width();
+                var jpppes = $(ppp.es);
+                var jpppeso = jpppes.offset();
+                eshli.style.width = jpppes.outerWidth()+"px";
+                eshli.style.height = jpppes.outerHeight()+"px";
+                eshli.style[transform_name] = "translate3d("+jpppeso.left+"px,"+jpppeso.top+"px,0)";
+            }
+            var jpppec = $(ppp.ec);
+            var jpppeco = jpppec.offset();
+            echli.style.width = jpppec.outerWidth()+"px";
+            echli.style.height = jpppec.outerHeight()+"px";
+            echli.style[transform_name] = "translate3d("+jpppeco.left+"px,"+jpppeco.top+"px,0)";
+            //echli.style[transform_name] = 
             pci.style[transform_name] = "translate3d("+ppp.xc+"px,"+ppp.yc+"px,0)";
             psci.style[transform_name] = "translate3d("+ppp.xs+"px,"+ppp.ys+"px,0)";
             if (ppp.fatness) { 
@@ -116,6 +196,13 @@
                 pci.style.width = pci.style.height = rounded_fatness+"px";
                 pci.style.top = pci.style.left = -(rounded_fatness/2+2)+"px";
             }
+            ++i;
+        }
+        for (;i<10;++i) {
+            echl.children[i].style[transform_name] = hide_transform;
+            eshl.children[i].style[transform_name] = hide_transform;
+            pmc.children[i].style[transform_name] = hide_transform;
+            psmc.children[i].style[transform_name] = hide_transform;
         }
         // cleaning up the debug log 
         var now = Date.now();

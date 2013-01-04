@@ -166,7 +166,7 @@ var PLY = (function($) {
                 // the secondary mouse button interaction
                 return;
             exposed.pointer_state.m = {xs:evt.pageX, ys:evt.pageY, 
-                xc: evt.pageX, yc: evt.pageY, e: evt.target};
+                xc: evt.pageX, yc: evt.pageY, es: evt.target, ec: evt.target};
         },
         mouseup: function(evt) { console.log('mouseup',evt.pageX,evt.pageY);
             // this event may fail to fire by dragging mouse out of
@@ -178,12 +178,13 @@ var PLY = (function($) {
             var epm = exposed.pointer_state.m;
             if (epm) {
                 epm.xc = evt.pageX; epm.yc = evt.pageY;
+                epm.ec = evt.target;
             }
         }, 
-        mouseover: function(evt) { console.log("mouseover", evt.target);
+        mouseover: function(evt) { //console.log("mouseover", evt.target);
 
         },
-        mouseout: function (evt) { console.log("mouseout", evt.target);
+        mouseout: function (evt) { //console.log("mouseout", evt.target);
 
         },
         mousewheel: function (evt) { console.log("mousewheel", evt.wheelDeltaX, evt.wheelDeltaY); 
@@ -217,7 +218,7 @@ var PLY = (function($) {
                 if (seen_target) assert(eci.target === seen_target);
                 else seen_target = eci.target;
                 exposed.pointer_state[eci.identifier] = {xs: eci.pageX, 
-                    ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, e: evt.target};
+                    ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, es: evt.target, ec: evt.target};
             }
             if (exposed.allow_scroll && ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1)) {
                 exposed.allow_scroll = false;
@@ -251,6 +252,7 @@ var PLY = (function($) {
                 if (ep_ecid) {
                     ep_ecid.xc = eci.pageX;
                     ep_ecid.yc = eci.pageY;
+                    ep_ecid.ec = eci.target;
                     if (eci.webkitForce) { // curious bit of extra data on
                         // Android (why does iOS not provide this kind of thing?)
                         ep_ecid.fatness = eci.webkitForce;
