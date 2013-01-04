@@ -111,15 +111,11 @@ The behavior will be such that manipulating the list item element "list item 1" 
 - `ply-scale`: The overall scale described through the ply_scale event is automatically applied using CSS3 `transform` style with requestAnimationFrame. (not yet implemented)
 - `ply-rotate`: The overall rotation described through the ply_rotate event is automatically applied using CSS3 `transform` style with requestAnimationFrame. (not yet implemented)
 
-#### Configuration
+#### PC-specific input binding configuration classes (not yet implemented)
 
-Configuration classes should be applied in the body element of the HTML page. This is to mitigate conflict with classes assigned to the html element by Modernizr. 
+In all cases the primary mouse button drag will issue the `ply_translate` transform. If you do not want to move in response to drag (suppose you want primary button drag to scale only), just write your callback for the `ply_translate` event to perform scaling rather than translating. 
 
-#### PC-specific config classes (not yet implemented)
-
-In all cases the primary mouse button drag will issue the `ply_translate` transform. If you never want to move anything (suppose you want left drag to scale only) just write your callback for the `ply_translate` to perform scaling rather than translating. 
-
-These following configurations can be combined in any combination. 
+These following configurations can be combined in any combination to an element.
 
 - `ply-modifierkeys-scroll`: Modifier keys in conjunction with scroll (over a noscroll element) will produce scale and rotate transforms.
 - `ply-modifierkeys-drag`: Modifier keys in conjunction with dragging produces the transforms.
