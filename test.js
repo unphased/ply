@@ -141,6 +141,7 @@
         var eshl = jeshl[0];
         var scrollY = document.body.scrollTop;
         var scrollX = document.body.scrollLeft;
+        //console.log("scrollY"+scrollY);
         var ppk = Object.keys(PLY.pointer_state);
         var ppl = ppk.length;
         /* while (pmc.children.length < ppl) {
