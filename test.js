@@ -51,6 +51,8 @@
     var transform_name = Modernizr.prefixed('transform');
     var hide_transform = "translate3d(-99999px,-99999px,0)";
 
+    var has_bounding_client_rect = !!document.body.getBoundingClientRect;
+
     // be aware this routine sucks CPU a bit -- I use both rAF and window focus listening to make it friendlier
     // I am implementing this as a separate component rather than building it into the library. This is to decouple
     // the debug logic into the test page, and keep the library itself as lean and mean as it can reasonably be.
@@ -163,11 +165,10 @@
         while (ehl.children.length > ppl*2) {
             ehl.removeChild(ehl.lastChild);
         } */
-
         
         var i = 0;
         for (var p in PLY.pointer_state) {
-            if (i === 10) { alert("should not have this many pointers"); }
+            if (i === 10) { alert("I see more than 10 pointers. wat"); }
             var ppp = PLY.pointer_state[p];
             var echli = echl.children[i];
             var eshli = eshl.children[i];
@@ -176,22 +177,32 @@
             if (ppp.es === ppp.ec) {
                 eshli.style[transform_name] = hide_transform;
             } else {
-                //eshli.style[transform_name] = "scale($(ppp.es).width();
-                var jpppes = $(ppp.es);
-                var jpppeso = jpppes.offset();
-                eshli.style.width = jpppes.outerWidth()+"px";
-                eshli.style.height = jpppes.outerHeight()+"px";
-                eshli.style[transform_name] = "translate3d("+jpppeso.left+"px,"+jpppeso.top+"px,0)";
+                if (has_bounding_client_rect) {
+                    var sbcr = ppp.es.getBoundingClientRect();
+                    eshli.style.width = sbcr.width+"px";
+                    eshli.style.height = sbcr.height+"px";
+                    eshli.style[transform_name] = "translate3d("+sbcr.left+"px,"+sbcr.top+"px,0)";
+                } else {
+                    var jpppeso = $(ppp.es).offset();
+                    eshli.style.width = jpppes.outerWidth()+"px";
+                    eshli.style.height = jpppes.outerHeight()+"px";
+                    eshli.style[transform_name] = "translate3d("+jpppeso.left+"px,"+jpppeso.top+"px,0)";
+                }
             }
-            var jpppec = $(ppp.ec);
-            var jpppeco = jpppec.offset();
-            echli.style.width = jpppec.outerWidth()+"px";
-            echli.style.height = jpppec.outerHeight()+"px";
-            echli.style[transform_name] = "translate3d("+jpppeco.left+"px,"+jpppeco.top+"px,0)";
-            //echli.style[transform_name] = 
+            if (has_bounding_client_rect) {
+                var cbcr = ppp.ec.getBoundingClientRect();
+                echli.style.width = cbcr.width+"px";
+                echli.style.height = cbcr.height+"px";
+                echli.style[transform_name] = "translate3d("+cbcr.left+"px,"+cbcr.top+"px,0)";
+            } else {
+                var jpppeco = $(ppp.ec).offset();
+                echli.style.width = jpppec.outerWidth()+"px";
+                echli.style.height = jpppec.outerHeight()+"px";
+                echli.style[transform_name] = "translate3d("+jpppeco.left+"px,"+jpppeco.top+"px,0)";
+            }
             pci.style[transform_name] = "translate3d("+ppp.xc+"px,"+ppp.yc+"px,0)";
             psci.style[transform_name] = "translate3d("+ppp.xs+"px,"+ppp.ys+"px,0)";
-            if (ppp.fatness) { 
+            if (ppp.fatness) {
                 var rounded_fatness = Math.floor(ppp.fatness*100);
                 pci.style.width = pci.style.height = rounded_fatness+"px";
                 pci.style.top = pci.style.left = -(rounded_fatness/2+2)+"px";

@@ -53,7 +53,7 @@ div {
 }
 
 .element_start_highlight, .element_current_highlight {
-
+    position: absolute;
 }
 .element_current_highlight {
     background-color: rgba(0,255,0,0.3);
