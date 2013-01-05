@@ -39,9 +39,13 @@ The real power of ply comes from the intuitive JS events it generates.
 
 #### Transform Events (not yet implemented)
 
-- `ply_translate`: Event sent to any element which the user attempts to "drag" in any way. On a PC no declarative classes need to be specified for fully functional `ply_translate` events. On touch devices, a ply-class must be set on an element (or one of its ancestors) to disable default scrolling behavior in order for touchmove events to get processed. 
-- `ply_scale`: Event sent to any element which the user attempts to "pinch". 
-- `ply_rotate`: Event sent to any element which the user attmepts to "rotate". Realistically, on any touch device you are liable to see both `ply_scale` and `ply_rotate` events fire when two fingers are being used to manipulate an element. The reason for separating them into to events is that it makes it easier to process only the transformation type that you care about. 
+The three events specified encompass the full range of motion specified by up to two control points (touches). Three-finger interactions can be differentiated from two-finger interactions to enable 3-finger gestures. The third finger that interacts with an element is simply ignored for the purposes of producing transform events (as two is always sufficient).
+
+- `ply_translate`: Event sent to any element which the user attempts to "drag" in any way. On a PC no declarative classes need to be specified for fully functional `ply_translate` events. On touch devices, a ply-class must be set on an element (or one of its ancestors) to disable default scrolling behavior in order for touchmove events to get processed. The event will contain in its `x` and `y` properties the distance in pixels of the overall translation movement. With two fingers this will be the overall translation (average). 
+- `ply_rotate_scale`: Event sent to any element which the user manipulates with two fingers. 
+    - `angle`: angle in degrees rotated by the interaction
+    - `scale`: scale defined by distance between control points
+    - `x` and `y`: The initial average point of the two control points (note that movement of this is tracked through `ply_translate`)
 
 #### Termination Events (not yet implemented)
 
@@ -51,7 +55,7 @@ A common need when constructing UI interactions is a way to define behavior afte
 
 ### Declarative Classes
 
-ply recognizes a set of "declarative" HTML5 classes which prompt the library to change the interaction behavior of the element. 
+ply recognizes a set of "declarative" HTML5 classes which prompt the library to change the default interaction behavior of the element. This is what allows for creating tactile elements in a page without any coding. 
 
 #### General purpose 
 
@@ -111,7 +115,7 @@ The behavior will be such that manipulating the list item element "list item 1" 
 - `ply-scale`: The overall scale described through the ply_scale event is automatically applied using CSS3 `transform` style with requestAnimationFrame. (not yet implemented)
 - `ply-rotate`: The overall rotation described through the ply_rotate event is automatically applied using CSS3 `transform` style with requestAnimationFrame. (not yet implemented)
 
-#### PC-specific input binding configuration classes (not yet implemented)
+#### PC-specific input binding configuration classes (not yet implemented, todo: revise to configure left-drag behavior also)
 
 In all cases the primary mouse button drag will issue the `ply_translate` transform. If you do not want to move in response to drag (suppose you want primary button drag to scale only), just write your callback for the `ply_translate` event to perform scaling rather than translating. 
 
