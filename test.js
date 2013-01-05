@@ -67,14 +67,15 @@
         //console.log(Date.now());
         // the HTML debug dump of the data
         var str = "<ul>";
-        for (var prop in PLY) {
-            var s = JSON.stringify(PLY[prop],function(key,val) {
+        var json_handler = function(key,val) {
                 var cn = val.className;
                 var tn = val.tagName;
                 if (tn === "HTML") { cn = ""; } // too much due to Modernizr
                 if (val instanceof HTMLElement) return "DOMElement &lt;"+tn+" c="+cn+" id="+val.id+"&gt;";
                 return val;
-            });
+            };
+        for (var prop in PLY) {
+            var s = JSON.stringify(PLY[prop],json_handler);
             str += "<li>";
             str += prop + ": "; 
             str += s;

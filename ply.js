@@ -92,8 +92,7 @@ var PLY = (function($) {
         original_console_log.apply(console, arguments);
         if (!exposed.debug) return;
         var str = "";
-        for (var i=0;i<arguments.length;++i) {
-            str += JSON.stringify(arguments[i],function(key,val) {
+        var json_handler = function(key,val) {
                 if (val instanceof HTMLElement) {
                     var cn = val.className;
                     var tn = val.tagName;
@@ -101,7 +100,9 @@ var PLY = (function($) {
                     return "DOMElement<"+tn+" c="+cn+" id="+val.id+">";
                 }
                 return val;
-            });
+            };
+        for (var i=0;i<arguments.length;++i) {
+            str += JSON.stringify(arguments[i],json_handler);
             str += ", ";
         }
         str = str.slice(0,-2);
