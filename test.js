@@ -68,17 +68,20 @@
         // the HTML debug dump of the data
         var str = "<ul>";
         var json_handler = function(key,val) {
-                var cn = val.className;
-                var tn = val.tagName;
-                if (tn === "HTML") { cn = ""; } // too much due to Modernizr
-                if (val instanceof HTMLElement) return "DOMElement &lt;"+tn+" c="+cn+" id="+val.id+"&gt;";
-                return val;
-            };
+            if (Modernizr.touch && key === "ec") return;
+            //if (Modernizr.touch && key === "es") return;
+            var cn = val.className;
+            var tn = val.tagName;
+            if (tn === "HTML") { cn = ""; } // too much due to Modernizr
+            if (val instanceof HTMLElement) return "DOMElement &lt;"+tn+" c="+cn+" id="+val.id+"&gt;";
+            return val;
+        };
         for (var prop in PLY) {
+            if (prop === "touch_move_last_time") continue;
             var s = JSON.stringify(PLY[prop],json_handler);
             str += "<li>";
             str += prop + ": "; 
-            str += s;
+            str += s.replace(/\},"/g,'},</br>"').replace(/,"/g,', "');
             str += "</li>";
         }
         str += "</ul>";

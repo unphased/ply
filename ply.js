@@ -55,7 +55,7 @@ var PLY = (function($) {
         // actually))
         allow_scroll: true,
 
-        debug: true
+        debug: false
     };
 
     var AssertException, assert; 
@@ -117,8 +117,6 @@ var PLY = (function($) {
             f(i, obj[i]);
         }
     }
-
-    
 
     var class_set = {
         'ply-translate': function() {
@@ -205,7 +203,7 @@ var PLY = (function($) {
         keyup: function(evt) { console.log("keyup",key(evt));
             delete exposed.keys_depressed[key(evt)];
         },
-        touchstart: function(evt) { //console.log("touchstart", evt.touches);
+        touchstart: function(evt) { //console.log("touchstart", evt.targetTouches);
             // if allow scroll, then never prevent default: once you're
             // scrolling, touching anything else should never mess with the 
             // browser default scrolling. 
@@ -213,6 +211,7 @@ var PLY = (function($) {
             // off a complex interaction, so it will be the place that 
             // allow_scroll is directly assigned (when it is the first touch,
             // of course).
+
             var seen_target;
             for (var i=0;i<evt.changedTouches.length;++i) {
                 var eci = evt.changedTouches[i];
@@ -222,9 +221,11 @@ var PLY = (function($) {
                 exposed.pointer_state[eci.identifier] = {xs: eci.pageX, 
                     ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, es: evt.target, ec: evt.target};
             }
-            if (exposed.allow_scroll && ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1)) {
+
+            if (exposed.allow_scroll && (Object.keys(exposed.pointer_state).length) === 1 && ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1)) {
                 exposed.allow_scroll = false;
             }
+            
             if (!exposed.allow_scroll) 
                 evt.preventDefault();
         },
@@ -244,22 +245,44 @@ var PLY = (function($) {
                 exposed.allow_scroll = true;
             }
         },
-        touchmove: function(evt) { //console.log("touchmove",evt);
-            if (!exposed.allow_scroll) evt.preventDefault(); 
+        touchmove: exposed.debug ? function(evt) { //console.log("touchmove",evt);
+            if (!exposed.allow_scroll) evt.preventDefault(); // I am not sure if 
+                                                            // this is necessary
             var ec = evt.changedTouches;
             var ecl = ec.length;
+            var time = Date.now();
+            var diff = time - exposed.touch_move_last_time; 
+            if (!exposed.touch_move_last_time) exposed.touch_move_last_time = Date.now();
+            if (!exposed.touch_move_rate) exposed.touch_move_rate = 0;
+            exposed.touch_move_last_time = time;
+            exposed.touch_move_rate += (diff - exposed.touch_move_rate)*0.01;
+            exposed.touch_move_changedTouches_count = ecl;
+            exposed.touch_move_targetTouches_count = evt.targetTouches.length;
             for (var i=0; i<ecl; ++i) {
                 var eci = ec[i];
                 var ep_ecid = exposed.pointer_state[eci.identifier];
                 if (ep_ecid) {
                     ep_ecid.xc = eci.pageX;
                     ep_ecid.yc = eci.pageY;
-                    ep_ecid.ec = eci.target;
+                    //ep_ecid.ec = eci.target; // devices don't change this from original target. 
                     if (eci.webkitForce) { // curious bit of extra data on
                         // Android (why does iOS not provide this kind of thing?)
                         ep_ecid.fatness = eci.webkitForce;
                     }
                 }
+            }
+        } : function(evt) { //console.log("touchmove",evt);
+            //if (!exposed.allow_scroll) evt.preventDefault(); 
+            var et = evt.targetTouches;
+            var etl = et.length;
+            var target = evt.target;
+            for (var i=0;i<etl; ++i) {
+                var eti = et[i];
+                var ep_etid = exposed.pointer_state[eti.identifier];
+                //assert(ep_etid);
+                assert(target === ep_etid.es);
+                ep_etid.xc = eti.pageX;
+                ep_etid.yc = eti.pageY;
             }
         },
         touchcancel: function(evt) { console.log("touchcancel", evt.changedTouches, evt.touches);
@@ -279,7 +302,9 @@ var PLY = (function($) {
             try {
                 v.apply(this, arguments);
             } catch (e) {
+                // show the error to the DOM to help out for mobile (also cool on PC)
                 $("#debug_log").prepend($('<div class="error">').text(e.toString()+": "+e.stack));
+                throw e; // rethrow to give it to debugging safari, rather than be silent
             }
         }, true);
         //$(document).on(event_n, handlers_for_doc[event_n]);
