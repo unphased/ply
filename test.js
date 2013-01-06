@@ -185,7 +185,7 @@
                 // I defer the calling of elementFromPoint to here for performance reasons
                 // ply will never do this kind of heavy lifting without being told to
                 var detected_element;
-                if ((detected_element = document.elementFromPoint(ppp.xc,ppp.yc)) !== ppp.es) {
+                if ((detected_element = document.elementFromPoint(ppp.xc-scrollX,ppp.yc-scrollY)) !== ppp.es) {
                     var de = $(detected_element);
                     var deo = de.offset();
                     echli.style.width = de.outerWidth()+"px";
