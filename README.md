@@ -15,6 +15,8 @@ ply makes use of requestAnimationFrame to efficiently schedule transform style u
 
 ply attempts to be conservative about the way it overrides browser functionality with events.
 
+ply uses DOM2 Mutation Events or DOM4 Mutation Observers to ensure that if the DOM is dynamically modified, the classes managed by ply are correctly maintained, and that behavior will be consistent on newly created elements. 
+
 ## Dependencies
 
 - [jQuery](http://jquery.com/) 
@@ -33,7 +35,7 @@ None yet, the library is not yet in a functional state. But I have a Nexus 7 and
 
 ## Events
 
-ply defines an extended set of JavaScript events. Some of these events define and provide high-level transform information such as translation and scale, which conveniently correspond to input that is incident on those elements. Other events define (and are triggered by) useful user input actions which can be used to drive UI in a way that is identical to the built-in events (such as `click` or `touchstart`).
+ply defines an extended set of JavaScript events. Some of these events define and provide high-level transform information such as translation and scale, which conveniently correspond to input that is incident on those elements. Other events define (and are triggered by) useful user input actions which can be used to drive UI in a similar way to the built-in events (such as `click` or `touchstart`).
 
 The real power of ply comes from the intuitive JS events it generates. 
 

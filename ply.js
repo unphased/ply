@@ -26,7 +26,7 @@
 // IN THE SOFTWARE. 
 // ============================================================================
 
-var PLY = (function($) {
+var PLY = (function ($) {
     
     // all vars except the variable "exposed" are private variables 
 
@@ -60,7 +60,7 @@ var PLY = (function($) {
 
     var AssertException, assert; 
     
-    AssertException = function(message) { this.message = message; };
+    AssertException = function (message) { this.message = message; };
     AssertException.prototype.toString = function () {
         return 'AssertException: ' + this.message;
     };
@@ -92,7 +92,7 @@ var PLY = (function($) {
         original_console_log.apply(console, arguments);
         if (!exposed.debug) return;
         var str = "";
-        var json_handler = function(key,val) {
+        var json_handler = function (key,val) {
                 if (val instanceof HTMLElement) {
                     var cn = val.className;
                     var tn = val.tagName;
@@ -119,7 +119,7 @@ var PLY = (function($) {
     }
 
     var noscroll_class_set = {
-        'ply-translate': function() {
+        'ply-translate': function () {
 
         }
     };
@@ -132,7 +132,7 @@ var PLY = (function($) {
     };
 
     
-    $(function(){
+    $(function (){
         // propagate "umbrella" style classes through to their children, now and in
         // the future. 
         
@@ -146,7 +146,7 @@ var PLY = (function($) {
         
             // propagate the noscroll class to all children and apply it to all 
             // future children 
-            $(".ply-noscroll").on("DOMNodeInserted",function(evt){
+            $(".ply-noscroll").on("DOMNodeInserted",function (evt){
                 $(evt.target).addClass("ply-noscroll");
             }).addClassToChildren("ply-noscroll");
         }
@@ -158,7 +158,7 @@ var PLY = (function($) {
         // manipulation all those new events are being sent through an 
         // unnecessarily costly event pipeline. 
 
-        $(".ply-collect").on("DOMNodeInserted",function(evt){
+        $(".ply-collect").on("DOMNodeInserted",function (evt){
             $(evt.target).addClass("ply-cc");
         }).addClassToChildren("ply-cc");        
 
@@ -171,10 +171,10 @@ var PLY = (function($) {
 
     // entry point for code is the document's event handlers. 
     var handlers_for_doc = {
-        click: function(evt) { console.log('click', evt.pageX, evt.pageY); 
+        click: function (evt) { console.log('click', evt.pageX, evt.pageY); 
 
         },
-        mousedown: function(evt) { console.log('mousedown',evt.pageX,evt.pageY);
+        mousedown: function (evt) { console.log('mousedown',evt.pageX,evt.pageY);
             // need to trap drag-of-selection. Crap. You'll have to prevent 
             // selections entirely. Funny this stuff is quite
             // less problematic for touch events. 
@@ -187,20 +187,20 @@ var PLY = (function($) {
             exposed.pointer_state.m = {xs:evt.pageX, ys:evt.pageY, 
                 xc: evt.pageX, yc: evt.pageY, es: evt.target, ec: evt.target};
         },
-        mouseup: function(evt) { console.log('mouseup',evt.pageX,evt.pageY);
+        mouseup: function (evt) { console.log('mouseup',evt.pageX,evt.pageY);
             // this event may fail to fire by dragging mouse out of
             // window. This is less of a concern for touch since most touch
             // devices do not use window systems. 
             delete exposed.pointer_state.m;
         },
-        mousemove: function(evt) { 
+        mousemove: function (evt) { 
             var epm = exposed.pointer_state.m;
             if (epm) {
                 epm.xc = evt.pageX; epm.yc = evt.pageY;
                 epm.ec = evt.target;
             }
         }, 
-        mouseover: function(evt) { //console.log("mouseover", evt.target);
+        mouseover: function (evt) { //console.log("mouseover", evt.target);
 
         },
         mouseout: function (evt) { //console.log("mouseout", evt.target);
@@ -216,13 +216,13 @@ var PLY = (function($) {
             if (et.className && et.className.indexOf("ply-noscroll") !== -1) 
                 evt.preventDefault();
         },
-        keydown: function(evt) { console.log("keydown",key(evt));
+        keydown: function (evt) { console.log("keydown",key(evt));
             exposed.keys_depressed[key(evt)] = String.fromCharCode(key(evt));
         },
-        keyup: function(evt) { console.log("keyup",key(evt));
+        keyup: function (evt) { console.log("keyup",key(evt));
             delete exposed.keys_depressed[key(evt)];
         },
-        touchstart: function(evt) { //console.log("touchstart", evt.targetTouches);
+        touchstart: function (evt) { //console.log("touchstart", evt.targetTouches);
             // if allow scroll, then never prevent default: once you're
             // scrolling, touching anything else should never mess with the 
             // browser default scrolling. 
@@ -248,7 +248,7 @@ var PLY = (function($) {
             if (!exposed.allow_scroll) 
                 evt.preventDefault();
         },
-        touchend: function(evt) { //console.log("touchend", evt.changedTouches);
+        touchend: function (evt) { //console.log("touchend", evt.changedTouches);
             var ids_touches_hash = {};
             for (var i=0;i<evt.touches.length;++i) {
                 var eti = evt.touches[i];
@@ -264,7 +264,7 @@ var PLY = (function($) {
                 exposed.allow_scroll = true;
             }
         },
-        touchmove: exposed.debug ? function(evt) { //console.log("touchmove",evt);
+        touchmove: exposed.debug ? function (evt) { //console.log("touchmove",evt);
             if (!exposed.allow_scroll) evt.preventDefault(); // I am not sure if 
                                                             // this is necessary
             var ec = evt.changedTouches;
@@ -290,7 +290,7 @@ var PLY = (function($) {
                     }
                 }
             }
-        } : function(evt) { console.log("touchmove",evt);
+        } : function (evt) { console.log("touchmove",evt);
             //if (!exposed.allow_scroll) evt.preventDefault(); 
             var et = evt.targetTouches;
             var etl = et.length;
@@ -317,7 +317,7 @@ var PLY = (function($) {
             
             // compute and issue events to either target or stored parent collecting target
         },
-        touchcancel: function(evt) { console.log("touchcancel", evt.changedTouches, evt.touches);
+        touchcancel: function (evt) { console.log("touchcancel", evt.changedTouches, evt.touches);
             for (var i=0;i<evt.changedTouches.length; ++i) {
                 delete exposed.pointer_state[evt.changedTouches[i].identifier];
             }
@@ -325,6 +325,9 @@ var PLY = (function($) {
                 // should be safe to return to default allow_scroll mode
                 exposed.allow_scroll = true;
             }
+        },
+        DOMNodeInserted: function (evt) { console.log("DOMNodeInserted: ",evt.target);
+
         }
     };
 
