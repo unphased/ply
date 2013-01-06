@@ -119,7 +119,6 @@ var PLY = (function($) {
     }
 
     var noscroll_class_set = {
-
         'ply-translate': function() {
 
         }
@@ -132,9 +131,11 @@ var PLY = (function($) {
             c.addClass(class_name).addClassToChildren(class_name);
     };
 
-    // propagate "umbrella" style classes through to their children, now and in
-    // the future. 
+    
     $(function(){
+        // propagate "umbrella" style classes through to their children, now and in
+        // the future. 
+        
         // consolidate event handler behavior of marked elements by setting 
         // ply-noscroll on all of them, but only on touch devices because 
         // the PC allows you to drag just fine while scrolling.
@@ -142,12 +143,26 @@ var PLY = (function($) {
             for (var classname in noscroll_class_set) {
                 $("."+classname).addClass("ply-noscroll");
             }
-        }
-        // propagate the noscroll class to all children and apply it to all 
-        // future children 
-        $(".ply-noscroll").on("DOMNodeInserted",function(evt){
+        
+            // propagate the noscroll class to all children and apply it to all 
+            // future children 
+            $(".ply-noscroll").on("DOMNodeInserted",function(evt){
                 $(evt.target).addClass("ply-noscroll");
             }).addClassToChildren("ply-noscroll");
+        }
+
+        // handle ply-collect. 
+        // The change that needs to happen here is to simply update the target 
+        // of the fired event: While it might make some sense to just attach
+        // an event handler to the collect-elements, but that means that during
+        // manipulation all those new events are being sent through an 
+        // unnecessarily costly event pipeline. 
+
+        $(".ply-collect").on("DOMNodeInserted",function(evt){
+            $(evt.target).addClass("ply-cc");
+        }).addClassToChildren("ply-cc");        
+
+
     });
 
     function key(evt) {
@@ -215,7 +230,7 @@ var PLY = (function($) {
             // off a complex interaction, so it will be the place that 
             // allow_scroll is directly assigned (when it is the first touch,
             // of course).
-
+            var was_empty = !(Object.keys(exposed.pointer_state).length);
             var seen_target;
             for (var i=0;i<evt.changedTouches.length;++i) {
                 var eci = evt.changedTouches[i];
@@ -226,7 +241,7 @@ var PLY = (function($) {
                     ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, es: evt.target, ec: evt.target};
             }
 
-            if (exposed.allow_scroll && (Object.keys(exposed.pointer_state).length) === 1 && ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1)) {
+            if (exposed.allow_scroll && was_empty && ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1)) {
                 exposed.allow_scroll = false;
             }
             
@@ -275,19 +290,32 @@ var PLY = (function($) {
                     }
                 }
             }
-        } : function(evt) { //console.log("touchmove",evt);
+        } : function(evt) { console.log("touchmove",evt);
             //if (!exposed.allow_scroll) evt.preventDefault(); 
             var et = evt.targetTouches;
             var etl = et.length;
             var target = evt.target;
+            var diffs = [];
             for (var i=0;i<etl; ++i) {
                 var eti = et[i];
                 var ep_etid = exposed.pointer_state[eti.identifier];
                 //assert(ep_etid);
                 assert(target === ep_etid.es);
+                var to_push = {id: eti.identifier};
+                to_push.x = eti.pageX - ep_etid.xc;
+                to_push.y = eti.pageY - ep_etid.yc;
                 ep_etid.xc = eti.pageX;
                 ep_etid.yc = eti.pageY;
+                diffs.push(to_push);
             }
+            /* if (diffs.length >= 2) {
+                assert(diffs[0].id < diffs[1].id);
+            }
+            if (diffs.length >= 3) {
+                assert(diffs[1].id < diffs[2].id, "whoops");
+            } */
+            
+            // compute and issue events to either target or stored parent collecting target
         },
         touchcancel: function(evt) { console.log("touchcancel", evt.changedTouches, evt.touches);
             for (var i=0;i<evt.changedTouches.length; ++i) {
@@ -310,7 +338,7 @@ var PLY = (function($) {
                 $("#debug_log").prepend($('<div class="error">').text(e.toString()+": "+e.stack));
                 throw e; // rethrow to give it to debugging safari, rather than be silent
             }
-        }, true);
+        }, false);
         //$(document).on(event_n, handlers_for_doc[event_n]);
     });
     return exposed;
