@@ -30,8 +30,7 @@ None yet, the library is not yet in a functional state. But I have a Nexus 7 and
 
 1. Include this library in your webpage.
 2. Enable direct manipulation of page elements using hardware-accelerated transforms by simply marking those elements using `ply-` classes. 
-3. Write zero lines of code. 
-4. Enjoy the fresh and clean feeling. 
+3. Write zero lines of JavaScript for simple, straightforward interactions (such as draggable elements).
 
 ## Events
 
