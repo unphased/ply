@@ -106,7 +106,7 @@ var PLY = (function($) {
             str += ", ";
         }
         str = str.slice(0,-2);
-        $("#debug_log").prepend('<div class="log" data-time="'+Date.now()+'">'+escapeHtml(str)+'</div>');            
+        $("#debug_log").prepend('<div class="log" data-time="'+Date.now()+'">'+escapeHtml(str)+'</div>'); 
     };
     console.log = instrumented_log; 
     // this means all logs in your application get dumped into #debug_log if 
@@ -118,7 +118,8 @@ var PLY = (function($) {
         }
     }
 
-    var class_set = {
+    var noscroll_class_set = {
+
         'ply-translate': function() {
 
         }
@@ -135,9 +136,12 @@ var PLY = (function($) {
     // the future. 
     $(function(){
         // consolidate event handler behavior of marked elements by setting 
-        // ply-noscroll on all of them
-        for (var classname in class_set) {
-            $("."+classname).addClass("ply-noscroll");
+        // ply-noscroll on all of them, but only on touch devices because 
+        // the PC allows you to drag just fine while scrolling.
+        if (Modernizr.touch) {
+            for (var classname in noscroll_class_set) {
+                $("."+classname).addClass("ply-noscroll");
+            }
         }
         // propagate the noscroll class to all children and apply it to all 
         // future children 
