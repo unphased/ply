@@ -248,4 +248,5 @@
         console.log("Window got focus. Jumpstarting rAF");
         requestAnimationFrame(debug_refresh);
     });
+    $("h1").after($('<button id="debug_toggle">toggle debug</button>'));
 }());

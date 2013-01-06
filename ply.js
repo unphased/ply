@@ -54,9 +54,9 @@ var PLY = (function ($) {
         // on the second or later finger that goes down (messes up the scroll, 
         // actually))
         allow_scroll: true,
-
-        debug: false
+        debug: true
     };
+
 
     var AssertException, assert; 
     
@@ -97,7 +97,7 @@ var PLY = (function ($) {
                     var cn = val.className;
                     var tn = val.tagName;
                     if (tn === "HTML") { cn = ""; } // too much due to Modernizr
-                    return "DOMElement<"+tn+" c="+cn+" id="+val.id+">";
+                    return "<"+tn+" c="+cn+" id="+val.id+">";
                 }
                 return val;
             };
@@ -161,9 +161,7 @@ var PLY = (function ($) {
 
         $(".ply-collect").on("DOMNodeInserted",function (evt){
             $(evt.target).addClass("ply-cc");
-        }).addClassToChildren("ply-cc");        
-
-
+        }).addClassToChildren("ply-cc");
     });
 
     function key(evt) {
@@ -262,10 +260,10 @@ var PLY = (function ($) {
                 }
             }
             if (evt.touches.length === 0) { // this indicates no touches remain
-                exposed.allow_scroll = true;
+                exposed.allow_scroll = true;                
             }
         },
-        touchmove: exposed.debug ? function (evt) { //console.log("touchmove",evt);
+        touchmove: /*exposed.debug ? function (evt) { //console.log("touchmove",evt);
             if (!exposed.allow_scroll) evt.preventDefault(); // I am not sure if 
                                                             // this is necessary
             var ec = evt.changedTouches;
@@ -291,24 +289,29 @@ var PLY = (function ($) {
                     }
                 }
             }
-        } : function (evt) { console.log("touchmove",evt);
-            //if (!exposed.allow_scroll) evt.preventDefault(); 
-            var et = evt.targetTouches;
+        } :*/ function (evt) { if (!window.lastTM){window.lastTM = Date.now();} console.log("touchmove ",Date.now()-window.lastTM,evt.rotation,evt.scale); window.lastTM=Date.now();
+            if (exposed.allow_scroll) return; // since this is touch device, when scrolling we don't do ply-things
+            
+            //var et = evt.targetTouches; 
+            // We can't use targetTouches because I might want to specify an element with children which is 
+            // to be manipulated seamlessly even if I interact across different child elements. It is required to check all
+            // changedTouches
+            var et = evt.touches;
             var etl = et.length;
-            var target = evt.target;
-            var diffs = [];
             for (var i=0;i<etl; ++i) {
                 var eti = et[i];
                 var ep_etid = exposed.pointer_state[eti.identifier];
                 //assert(ep_etid);
-                assert(target === ep_etid.es);
-                var to_push = {id: eti.identifier};
-                to_push.x = eti.pageX - ep_etid.xc;
-                to_push.y = eti.pageY - ep_etid.yc;
+
+                // ep_etid.es is the actual element to be manipulated
+                var v = {id: eti.identifier, xs: ep_etid.xs, ys: ep_etid.ys, x: eti.pageX, y: eti.pageY};
                 ep_etid.xc = eti.pageX;
                 ep_etid.yc = eti.pageY;
-                diffs.push(to_push);
             }
+            
+            // translation is difference between xs,ys and x,y
+
+            
             /* if (diffs.length >= 2) {
                 assert(diffs[0].id < diffs[1].id);
             }
@@ -322,7 +325,8 @@ var PLY = (function ($) {
             for (var i=0;i<evt.changedTouches.length; ++i) {
                 delete exposed.pointer_state[evt.changedTouches[i].identifier];
             }
-            if (evt.touches.length === 0) { // this indicates no touches remain
+            if (evt.touches.length === 0) { // this indicates no touches remain: In all instances I've seen, 
+                // any touchcancel firing cancels *all* touches.
                 // should be safe to return to default allow_scroll mode
                 exposed.allow_scroll = true;
             }
