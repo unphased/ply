@@ -131,6 +131,7 @@ var PLY = (function ($) {
             c.addClass(class_name).addClassToChildren(class_name);
     };
 
+    var Mutation_Observer = (window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver);
     
     $(function (){
         // propagate "umbrella" style classes through to their children, now and in
@@ -326,13 +327,15 @@ var PLY = (function ($) {
                 exposed.allow_scroll = true;
             }
         },
-        DOMNodeInserted: function (evt) { console.log("DOMNodeInserted: ",evt.target);
-
+        DOMNodeInserted: Mutation_Observer ? null : function (evt) { //console.log("DOMNodeInserted: ",evt.target);
+            // handle specially new elements which have the classes we're 
+            // interested in
         }
     };
 
     // use each because we need a scoped loop
     each(handlers_for_doc, function (event_name,v) {
+        if (!v) return; 
         document.addEventListener(event_name, function () {
             try {
                 v.apply(this, arguments);
@@ -342,7 +345,6 @@ var PLY = (function ($) {
                 throw e; // rethrow to give it to debugging safari, rather than be silent
             }
         }, false);
-        //$(document).on(event_n, handlers_for_doc[event_n]);
     });
     return exposed;
 })(jQuery);
