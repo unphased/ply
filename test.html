@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>	
+	<meta charset="utf-8" />
+	
+	<title>ply says Hello World!</title>
+	
+	<!-- Enter a brief description of your page -->
+	<meta name="description" content="Test Page for ply.js">
+	
+	<!-- Define a viewport to mobile devices to use - telling the browser to assume that the page is as wide as the device (width=device-width) and setting the initial page zoom level to be 1 (initial-scale=1.0) -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		
+	<link href="css/test.css" rel="stylesheet" media="all" />
+</head>
+<body>
+	<h1>
+        <span class="ply_js_title">ply.js</span>
+    </h1>
+	<div id="debug">Debug div</div>
+	<div id="content">Content of page</div>
+	<div class="ply-translate">Containing div</br>more lines in containing
+		<div>level 1 div</br> still level 1
+            <div>level 2 div <a href="http://google.com">A link to Google</a></div>
+        </div>
+	</div>
+	<input type="text" value="text field" />
+    <div>
+        <p>console.log output follows</p>
+        <div id="debug_log"></div>
+    </div>
+</body>
+<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+<!-- The all-important --> 
+<script src="ply.js"></script>
+<script src="test.js"></script>
+</html>

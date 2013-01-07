@@ -1,0 +1,83 @@
+@font-face {
+    font-family: 'ChunkFiveRegular';
+    src: url('Chunkfive-webfont.eot');
+    src: url('Chunkfive-webfont.eot?#iefix') format('embedded-opentype'),
+         url('Chunkfive-webfont.svg#ChunkFiveRegular') format('svg'),
+         url('Chunkfive-webfont.woff') format('woff'),
+         url('Chunkfive-webfont.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+body {
+	font-family: sans-serif;  
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+div {
+    /*border: rgba(25,100,25,0.4) dotted 1px;*/
+}
+
+.ply-noscroll {
+    /* overriding iOS Safari behaviors */
+    -webkit-user-select: none;                /* disable cut copy paste */
+    -webkit-touch-callout: none;              /* disable callout, image save panel */
+    -webkit-tap-highlight-color: transparent; /* "turn off" link highlight */
+}
+
+.ply_js_title {
+	font-family: "ChunkFiveRegular", "Trebuchet MS", serif;
+    font-weight: bold;
+}
+
+#pointer_marker_container, #pointer_start_marker_container, #element_start_highlight_layers, #element_current_highlight_layers {
+    pointer-events: none;
+    border: none;
+    position: absolute;
+    top: 0; left: 0;
+}
+.pointer_marker,.pointer_start_marker {
+    pointer-events: none;
+    position: absolute;
+    background-color: #33f;
+    border: #009 2px solid;
+    top: -4px;
+    left: -4px;
+    width: 4px;
+    height: 4px;
+    border-radius: 300px;
+    box-shadow: 0 0 8px 0 #33f;
+}
+
+.element_start_highlight, .element_current_highlight {
+    position: absolute;
+}
+.element_current_highlight {
+    background-color: rgba(0,255,0,0.3);
+}
+.element_start_highlight {
+    background-color: rgba(255,185,80,0.3);
+}
+
+.pointer_start_marker {
+    background-color: #f33;
+    border: #900 2px solid;
+    box-shadow: 0 0 8px 0 #f33;
+}
+
+#debug {
+    pointer-events: none;
+    position: fixed;
+    top: 5px;
+    right: 5px;
+    left: 120px;
+}
+
+.error {
+    color: red;
+}
