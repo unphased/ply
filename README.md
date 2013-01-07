@@ -15,7 +15,7 @@ ply makes use of requestAnimationFrame to efficiently schedule transform style u
 
 ply attempts to be conservative about the way it overrides browser functionality with events.
 
-ply uses DOM3 Mutation Events or DOM4 Mutation Observers to ensure that if the DOM is dynamically modified, the classes managed by ply are correctly maintained, and that behavior will be consistent on newly created elements. 
+ply uses DOM2 Mutation Events (the ones deprecated in DOM3 but still found in Safari 5, IE, etc.) or DOM4 Mutation Observers to ensure that if the DOM is dynamically modified, the classes managed by ply are correctly maintained, and that behavior will be consistent on newly created elements. 
 
 ## Dependencies
 
