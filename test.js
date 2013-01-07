@@ -72,11 +72,13 @@
         var str = "<ul>";
         var json_handler = function(key,val) {
             if (Modernizr.touch && key === "ec") return;
-            //if (Modernizr.touch && key === "es") return;
-            var cn = val.className;
-            var tn = val.tagName;
-            if (tn === "HTML") { cn = ""; } // too much due to Modernizr
-            if (val instanceof HTMLElement) return "DOMElement &lt;"+tn+" c="+cn+" id="+val.id+"&gt;";
+            //if (Modernizr.touch && key === "es") return;            
+            if (val instanceof HTMLElement) {
+                var cn = val.className;
+                var tn = val.tagName;
+                if (tn === "HTML") { cn = ""; } // too much due to Modernizr
+                return "DOMElement &lt;"+tn+" c="+cn+" id="+val.id+"&gt;";
+            }
             return val;
         };
         for (var prop in PLY) {

@@ -46,6 +46,10 @@ var PLY = (function ($) {
         // the only member of the pointer list. 
         pointer_state: {}, 
 
+        // initial_pointer shall holds an index of a pointer that is held down
+        // right now. Any one.
+        initial_pointer: null,
+
         // allow_scroll is a global flag that (basically) triggers calling 
         // preventDefault on touch events. This is more or less geared toward 
         // Android because iOS already prevents scroll from triggering on 
@@ -108,7 +112,7 @@ var PLY = (function ($) {
                 return val;
             };
         for (var i=0;i<arguments.length;++i) {
-            str += JSON.stringify(arguments[i],json_handler);
+            str += JSON.stringify(arguments[i],json_handler).replace(/\},"/g,'},</br>"').replace(/,"/g,', "');
             str += ", ";
         }
         str = str.slice(0,-2);
@@ -244,6 +248,8 @@ var PLY = (function ($) {
                 else seen_target = eci.target;
                 exposed.pointer_state[eci.identifier] = {xs: eci.pageX, 
                     ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, es: evt.target, ec: evt.target};
+                if (was_empty && i===0) 
+                    exposed.initial_pointer = eci.identifier;
             }
 
             if (exposed.allow_scroll && was_empty && ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1)) {
@@ -263,10 +269,17 @@ var PLY = (function ($) {
             for (var id in exposed.pointer_state) {
                 if (!ids_touches_hash[id]) {
                     delete exposed.pointer_state[id];
+                    if (exposed.initial_pointer == id) {
+                        exposed.initial_pointer = 'next';
+                    }
+                } else if (exposed.initial_pointer === 'next') {
+                    exposed.initial_pointer = id; // keep this value set to an existing id (don't matter which one)
                 }
             }
             if (evt.touches.length === 0) { // this indicates no touches remain
-                exposed.allow_scroll = true;                
+                assert(exposed.initial_pointer === 'next' || exposed.initial_pointer === null, "exposed.initial_pointer is "+exposed.initial_pointer);
+                exposed.initial_pointer = null;
+                exposed.allow_scroll = true;
             }
         },
         touchmove: /*exposed.debug ? function (evt) { //console.log("touchmove",evt);
@@ -296,7 +309,7 @@ var PLY = (function ($) {
                 }
             }
         } :*/ 
-        function (evt) { if (!window.lastTM){window.lastTM = Date.now();} console.log("touchmove ",Date.now()-window.lastTM,evt.rotation,evt.scale); window.lastTM=Date.now();
+        function (evt) { if (!window.lastTM){window.lastTM = Date.now();} console.log("touchmove ",Date.now()-window.lastTM,evt.rotation,evt.scale,Object.keys(evt.touches[0])); window.lastTM=Date.now();
             if (exposed.allow_scroll) return; // since this is touch device, when scrolling we don't do ply-things
             evt.preventDefault(); // prevent the pinching (happens in Android: iOS does not require this)
             
@@ -304,17 +317,17 @@ var PLY = (function ($) {
             // We can't use targetTouches because I might want to specify an element with children which is 
             // to be manipulated seamlessly even if I interact across different child elements. It is required to check all
             // changedTouches
-            var et = evt.touches;
-            var etl = et.length;
-            for (var i=0;i<etl; ++i) {
-                var eti = et[i];
-                var ep_etid = exposed.pointer_state[eti.identifier];
-                //assert(ep_etid);
+            var ec = evt.changedTouches;
+            var ecl = ec.length;
+            for (var i=0;i<ecl; ++i) {
+                var eci = ec[i];
+                var ep_ecid = exposed.pointer_state[eci.identifier];
+                //assert(ep_ecid);
 
-                // ep_etid.es is the actual element to be manipulated
-                var v = {id: eti.identifier, xs: ep_etid.xs, ys: ep_etid.ys, x: eti.pageX, y: eti.pageY};
-                ep_etid.xc = eti.pageX;
-                ep_etid.yc = eti.pageY;
+                // ep_ecid.es is the actual element to be manipulated
+                var v = {id: eci.identifier, xs: ep_ecid.xs, ys: ep_ecid.ys, x: eci.pageX, y: eci.pageY};
+                ep_ecid.xc = eci.pageX;
+                ep_ecid.yc = eci.pageY;
             }
             
             // translation is difference between xs,ys and x,y
@@ -329,7 +342,7 @@ var PLY = (function ($) {
             
             // compute and issue events to either target or stored parent collecting target
         },
-        touchcancel: function (evt) { console.log("touchcancel", evt.changedTouches, evt.touches);
+        touchcancel: function (evt) { console.log("touchcancel", evt.changedTouches);
             for (var i=0;i<evt.changedTouches.length; ++i) {
                 delete exposed.pointer_state[evt.changedTouches[i].identifier];
             }
@@ -357,7 +370,7 @@ var PLY = (function ($) {
                 throw e; // rethrow to give it to debugging safari, rather than be silent
             }
             exposed.event_processed = true;
-        }, false);
+        }, true); // hook to capture phase to circumvent stopPropagation()
     });
     return exposed;
 })(jQuery);
