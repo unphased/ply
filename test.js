@@ -64,6 +64,9 @@
         if (document.hasFocus()) 
             requestAnimationFrame(debug_refresh);
         else console.log("document has lost focus. Stopping rAF");
+
+        if (!PLY.event_processed) return; // wait next tick 
+        PLY.event_processed = false; // mark it: we're gonna go update the stuff. 
         //console.log(Date.now());
         // the HTML debug dump of the data
         var str = "<ul>";
@@ -85,7 +88,9 @@
             str += "</li>";
         }
         str += "</ul>";
+        
         $("#debug").html(str);
+        
         // actual debug visualization of pointer locations
         if (!$('#pointer_marker_container').length) {
             $('body').append(
@@ -248,5 +253,5 @@
         console.log("Window got focus. Jumpstarting rAF");
         requestAnimationFrame(debug_refresh);
     });
-    $("h1").after($('<button id="debug_toggle">toggle debug</button>'));
+    $("h1").after($('<button id="debug_toggle">toggle debug</button>').on('touchstart',function(e){e.preventDefault(); PLY.debug = !PLY.debug;}).on('click',function(){PLY.debug = !PLY.debug;}));
 }());

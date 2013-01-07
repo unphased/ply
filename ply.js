@@ -54,6 +54,12 @@ var PLY = (function ($) {
         // on the second or later finger that goes down (messes up the scroll, 
         // actually))
         allow_scroll: true,
+
+        // This is just marked when any event makes its way through the primary
+        // event handlers so that the test site can be a bit more efficient about 
+        // re-updating the DOM. I will eventually let the events that don't 
+        // change the debugprints to also not set this either. 
+        event_processed: true, 
         debug: true
     };
 
@@ -289,8 +295,10 @@ var PLY = (function ($) {
                     }
                 }
             }
-        } :*/ function (evt) { if (!window.lastTM){window.lastTM = Date.now();} console.log("touchmove ",Date.now()-window.lastTM,evt.rotation,evt.scale); window.lastTM=Date.now();
+        } :*/ 
+        function (evt) { if (!window.lastTM){window.lastTM = Date.now();} console.log("touchmove ",Date.now()-window.lastTM,evt.rotation,evt.scale); window.lastTM=Date.now();
             if (exposed.allow_scroll) return; // since this is touch device, when scrolling we don't do ply-things
+            evt.preventDefault(); // prevent the pinching (happens in Android: iOS does not require this)
             
             //var et = evt.targetTouches; 
             // We can't use targetTouches because I might want to specify an element with children which is 
@@ -348,6 +356,7 @@ var PLY = (function ($) {
                 $("#debug_log").prepend($('<div class="error">').text(e.toString()+": "+e.stack));
                 throw e; // rethrow to give it to debugging safari, rather than be silent
             }
+            exposed.event_processed = true;
         }, false);
     });
     return exposed;
