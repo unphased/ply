@@ -309,7 +309,7 @@ var PLY = (function ($) {
                 }
             }
         } :*/ 
-        function (evt) { if (!window.lastTM){window.lastTM = Date.now();} console.log("touchmove ",Date.now()-window.lastTM,evt.rotation,evt.scale,Object.keys(evt.touches[0])); window.lastTM=Date.now();
+        function (evt) { if (!window.lastTM){window.lastTM = Date.now();} console.log("touchmove ",Date.now()-window.lastTM,evt.rotation,evt.scale); window.lastTM=Date.now();
             if (exposed.allow_scroll) return; // since this is touch device, when scrolling we don't do ply-things
             evt.preventDefault(); // prevent the pinching (happens in Android: iOS does not require this)
             
