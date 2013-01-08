@@ -275,7 +275,7 @@ var PLY = (function ($) {
                     delete exposed.pointer_state[id];
                     if (exposed.any_pointer == id) {
                         //exposed.any_pointer = 'next';
-                        for (var key in exposed.pointer_state);
+                        for (var key in exposed.pointer_state) break;
                         exposed.any_pointer = key;
                     }
                 }
