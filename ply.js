@@ -46,9 +46,9 @@ var PLY = (function ($) {
         // the only member of the pointer list. 
         pointer_state: {}, 
 
-        // initial_pointer shall holds an index of a pointer that is held down
+        // any_pointer shall hold an index of a pointer that is held down
         // right now. Any one.
-        initial_pointer: null,
+        any_pointer: null,
 
         // allow_scroll is a global flag that (basically) triggers calling 
         // preventDefault on touch events. This is more or less geared toward 
@@ -253,7 +253,7 @@ var PLY = (function ($) {
                 exposed.pointer_state[eci.identifier] = {xs: eci.pageX, 
                     ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, es: evt.target, ec: evt.target};
                 if (was_empty && i===0) 
-                    exposed.initial_pointer = eci.identifier;
+                    exposed.any_pointer = eci.identifier;
             }
 
             if (exposed.allow_scroll && was_empty && ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1)) {
@@ -273,16 +273,15 @@ var PLY = (function ($) {
             for (var id in exposed.pointer_state) {
                 if (!ids_touches_hash[id]) {
                     delete exposed.pointer_state[id];
-                    if (exposed.initial_pointer == id) {
-                        exposed.initial_pointer = 'next';
+                    if (exposed.any_pointer == id) {
+                        //exposed.any_pointer = 'next';
+                        for (var key in exposed.pointer_state);
+                        exposed.any_pointer = key;
                     }
-                } else if (exposed.initial_pointer === 'next') {
-                    exposed.initial_pointer = id; // keep this value set to an existing id (don't matter which one)
                 }
             }
             if (evt.touches.length === 0) { // this indicates no touches remain
-                assert(exposed.initial_pointer === 'next' || exposed.initial_pointer === null, "exposed.initial_pointer is "+exposed.initial_pointer);
-                exposed.initial_pointer = null;
+                exposed.any_pointer = null;
                 exposed.allow_scroll = true;
             }
         },
