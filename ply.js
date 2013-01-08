@@ -248,7 +248,8 @@ var PLY = (function ($) {
                 // this is to check that all touchstarts batch cT list based on target elem.
                 else seen_target = eci.target;
                 // here, we must determine the actual real target that this set of touches
-                // is destined to control. store that 
+                // is destined to control. store that... for right now it stores the immediate
+                // target which is fine to test that the thing works. 
                 exposed.pointer_state[eci.identifier] = {xs: eci.pageX, 
                     ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, es: evt.target, ec: evt.target};
                 if (was_empty && i===0) 
@@ -329,7 +330,8 @@ var PLY = (function ($) {
                 //assert(ep_ecid);
 
                 // ep_ecid.es is the actual element to be manipulated
-                elements_to_transform.push({e: ep_ecid.es, xs: ep_ecid.xs, ys: ep_ecid.ys, x: eci.pageX, y: eci.pageY});
+                //elements_to_transform.push({e: ep_ecid.es, xs: ep_ecid.xs, ys: ep_ecid.ys, x: eci.pageX, y: eci.pageY});
+                elements_to_transform.push({e: ep_ecid.es, x: eci.pageX-ep_ecid.xs, y: eci.pageY-ep_ecid.ys});
                 
                 // update this for display purposes
                 ep_ecid.xc = eci.pageX;
@@ -337,10 +339,20 @@ var PLY = (function ($) {
             }
 
             var len = elements_to_transform.length;
-            var this_elem = elements_to_transform[0].e;
-            for (var j=0;j<len;++j) {
-                // do a quick n^2 loop through the points 
-                
+            var first_offset;
+            var second_offset;
+            for (var this_elem = elements_to_transform[0].e; this_elem;) {
+                first_offset = undefined; 
+                second_offset = undefined;
+                for (var j=0;j<len;++j) {
+                    // do a quick destructive n^2 loop through the points 
+                    if (elements_to_transform[j].e === this_elem) {
+                        if (!first_offset) { 
+                        } else if (!second_offset) {
+
+                        } else break; // could short circuit inner loop but I actually *do* care about 3+ touches
+                    }
+                }
             }
             
             // translation is difference between xs,ys and x,y
