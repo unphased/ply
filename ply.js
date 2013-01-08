@@ -244,8 +244,11 @@ var PLY = (function ($) {
             for (var i=0;i<evt.changedTouches.length;++i) {
                 var eci = evt.changedTouches[i];
                 
-                if (seen_target) assert(eci.target === seen_target);
+                if (seen_target) assert(eci.target === seen_target); 
+                // this is to check that all touchstarts batch cT list based on target elem.
                 else seen_target = eci.target;
+                // here, we must determine the actual real target that this set of touches
+                // is destined to control. store that 
                 exposed.pointer_state[eci.identifier] = {xs: eci.pageX, 
                     ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, es: evt.target, ec: evt.target};
                 if (was_empty && i===0) 
@@ -319,15 +322,25 @@ var PLY = (function ($) {
             // changedTouches
             var ec = evt.changedTouches;
             var ecl = ec.length;
+            var elements_to_transform = [];
             for (var i=0;i<ecl; ++i) {
                 var eci = ec[i];
                 var ep_ecid = exposed.pointer_state[eci.identifier];
                 //assert(ep_ecid);
 
                 // ep_ecid.es is the actual element to be manipulated
-                var v = {id: eci.identifier, xs: ep_ecid.xs, ys: ep_ecid.ys, x: eci.pageX, y: eci.pageY};
+                elements_to_transform.push({e: ep_ecid.es, xs: ep_ecid.xs, ys: ep_ecid.ys, x: eci.pageX, y: eci.pageY});
+                
+                // update this for display purposes
                 ep_ecid.xc = eci.pageX;
                 ep_ecid.yc = eci.pageY;
+            }
+
+            var len = elements_to_transform.length;
+            var this_elem = elements_to_transform[0].e;
+            for (var j=0;j<len;++j) {
+                // do a quick n^2 loop through the points 
+                
             }
             
             // translation is difference between xs,ys and x,y
