@@ -344,10 +344,11 @@ var PLY = (function ($) {
             for (var this_elem = elements_to_transform[0].e; this_elem;) {
                 first_offset = undefined; 
                 second_offset = undefined;
-                for (var j=0;j<len;++j) {
+                for (var j=0;j<len;++j) { // todo: merge this j-loop with the i-loop above (they are the same loop...)
                     // do a quick destructive n^2 loop through the points 
                     if (elements_to_transform[j].e === this_elem) {
                         if (!first_offset) { 
+                            //first_offset = {x: elements_to_transform[j]
                         } else if (!second_offset) {
 
                         } else break; // could short circuit inner loop but I actually *do* care about 3+ touches
