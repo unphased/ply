@@ -324,6 +324,7 @@ var PLY = (function ($) {
             var ec = evt.changedTouches;
             var ecl = ec.length;
             var elements_to_transform = [];
+            // TODOTHISNEXTREALLY: have to use changedTouches to pick out the right time to do a full loop over touches!
             for (var i=0;i<ecl; ++i) {
                 var eci = ec[i];
                 var ep_ecid = exposed.pointer_state[eci.identifier];
