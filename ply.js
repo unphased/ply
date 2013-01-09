@@ -286,10 +286,11 @@ var PLY = (function ($) {
             }
         },
         // The majority of functionality is funneled through the (capturing) touchmove handler on the document. 
-        // Because of this, 
+        // It is quite possible for this to execute 180 times per second. 
+        // Because of this, extra effort is put toward optimizing this function. 
         touchmove: function (evt) { //if (!window.lastTM){window.lastTM = Date.now();} console.log("touchmove ",Date.now()-window.lastTM,evt.rotation,evt.scale); window.lastTM=Date.now();
             if (exposed.allow_scroll) return; // since this is touch device, when scrolling we don't do ply-things
-            evt.preventDefault(); // prevent the pinching (happens in Android: iOS does not require this)
+            evt.preventDefault(); // prevent the pinching (this is primarily for Android: on iOS a preventdefault on the touchstart is sufficient to suppress pinch)
             
             //var et = evt.targetTouches; 
             // We can't use targetTouches because I might want to specify an element with children which is 
@@ -363,11 +364,10 @@ var PLY = (function ($) {
                             // process 3+ fingers
                             for (var j=0;j<rest.length;++j) {
                                 console.log("finger #"+j+3);
-                            }                            
+                            }
                         }
-
                     }
-                    
+
                     break; // It is permissible to short-circuit the z loop since the entire purpose of it is to run this condition
                 }
             }
