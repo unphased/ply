@@ -350,6 +350,17 @@ var PLY = (function ($) {
                         }
                         if (!second) {
                             // only first is set: only one finger on this element
+                            // build and send out a translate event 
+                            var event = document.createEvent('HTMLEvents'); // this is for compatibility with DOM Level 2
+                            event.initEvent('ply_translate',true,true);
+                            event.deltaX = first.x;
+                            event.deltaY = first.y;
+                            var defaultPrevented = e.dispatchEvent(event);
+                        } else {
+                            // first and second are set 
+                            // do full two finger logic 
+                            
+                            // process 3+ fingers
 
                         }
 
