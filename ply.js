@@ -1,7 +1,7 @@
 //////////////////////////////
 /////////// ply.js ///////////
 //////////////////////////////
-// This is a jQuery library //
+//// A JavaScript library ////
 //////////////////////////////
 
 // ============================================================================
@@ -285,34 +285,9 @@ var PLY = (function ($) {
                 exposed.allow_scroll = true;
             }
         },
-        touchmove: /*exposed.debug ? function (evt) { //console.log("touchmove",evt);
-            if (!exposed.allow_scroll) evt.preventDefault(); // I am not sure if 
-                                                            // this is necessary
-            var ec = evt.changedTouches;
-            var ecl = ec.length;
-            var time = Date.now();
-            var diff = time - exposed.touch_move_last_time; 
-            if (!exposed.touch_move_last_time) exposed.touch_move_last_time = Date.now();
-            if (!exposed.touch_move_rate) exposed.touch_move_rate = 0;
-            exposed.touch_move_last_time = time;
-            exposed.touch_move_rate += (diff - exposed.touch_move_rate)*0.01;
-            exposed.touch_move_changedTouches_count = ecl;
-            exposed.touch_move_targetTouches_count = evt.targetTouches.length;
-            for (var i=0; i<ecl; ++i) {
-                var eci = ec[i];
-                var ep_ecid = exposed.pointer_state[eci.identifier];
-                if (ep_ecid) {
-                    ep_ecid.xc = eci.pageX;
-                    ep_ecid.yc = eci.pageY;
-                    //ep_ecid.ec = eci.target; // devices don't change this from original target. 
-                    if (eci.webkitForce) { // curious bit of extra data on
-                        // Android (why does iOS not provide this kind of thing?)
-                        ep_ecid.fatness = eci.webkitForce;
-                    }
-                }
-            }
-        } :*/ 
-        function (evt) { //if (!window.lastTM){window.lastTM = Date.now();} console.log("touchmove ",Date.now()-window.lastTM,evt.rotation,evt.scale); window.lastTM=Date.now();
+        // The majority of functionality is funneled through the (capturing) touchmove handler on the document. 
+        // Because of this, 
+        touchmove: function (evt) { //if (!window.lastTM){window.lastTM = Date.now();} console.log("touchmove ",Date.now()-window.lastTM,evt.rotation,evt.scale); window.lastTM=Date.now();
             if (exposed.allow_scroll) return; // since this is touch device, when scrolling we don't do ply-things
             evt.preventDefault(); // prevent the pinching (happens in Android: iOS does not require this)
             
@@ -322,37 +297,65 @@ var PLY = (function ($) {
             // changedTouches
             var ec = evt.changedTouches;
             var ecl = ec.length;
-            var elements_to_transform = [];
-            // TODOTHISNEXTREALLY: have to use changedTouches to pick out the right time to do a full loop over touches!
-            for (var i=0;i<ecl; ++i) {
-                var eci = ec[i];
-                var ep_ecid = exposed.pointer_state[eci.identifier];
-                //assert(ep_ecid);
-
-                // ep_ecid.es is the actual element to be manipulated
-                //elements_to_transform.push({e: ep_ecid.es, xs: ep_ecid.xs, ys: ep_ecid.ys, x: eci.pageX, y: eci.pageY});
-                elements_to_transform.push({e: ep_ecid.es, x: eci.pageX-ep_ecid.xs, y: eci.pageY-ep_ecid.ys});
-                
-                // update this for display purposes
-                ep_ecid.xc = eci.pageX;
-                ep_ecid.yc = eci.pageY;
-            }
-
-            var len = elements_to_transform.length;
-            var first_offset;
-            var second_offset;
-            for (var this_elem = elements_to_transform[0].e; this_elem;) {
-                first_offset = undefined; 
-                second_offset = undefined;
-                for (var j=0;j<len;++j) { // todo: merge this j-loop with the i-loop above (they are the same loop...)
-                    // do a quick destructive n^2 loop through the points 
-                    if (elements_to_transform[j].e === this_elem) {
-                        if (!first_offset) { 
-                            //first_offset = {x: elements_to_transform[j]
-                        } else if (!second_offset) {
-
-                        } else break; // could short circuit inner loop but I actually *do* care about 3+ touches
+            
+            for (var z=0;z<ecl;++z) {
+                var ecz = ec[z];
+                if (ecz.identifier === exposed.any_pointer) { 
+                    // Once we are processing *any particular* specific pointer
+                    // we perform the full input update loop (which reads off touches).
+                    // Essentially the idea is to read out the touches only once per 
+                    // timestep. The issue is of course that touchmove does not 
+                    // fire on a per-timestep basis. 
+                    var et = evt.touches;
+                    var etl = et.length;
+                    var elem_list = [];
+                    for (var i=0;i<etl;++i) { // loop over all pointers: assemble the elements to transform array 
+                        var eci = ec[i];
+                        var ep_ecid = exposed.pointer_state[eci.identifier];
+                        // ep_ecid.es is the actual element to be manipulated
+                        elem_list.push({e: ep_ecid.es, x: eci.pageX-ep_ecid.xs, y: eci.pageY-ep_ecid.ys});
+                        // update this for display purposes
+                        ep_ecid.xc = eci.pageX;
+                        ep_ecid.yc = eci.pageY;
                     }
+                    var el = elem_list;
+                    var ell = el.length;
+                    var first, second, rest;
+                    for (var e;;e = undefined) {
+                        first = undefined;
+                        second = undefined;
+                        rest = [];
+                        for (var j=0;j<ell;++j) {
+                            var elj = el[j];
+                            var v = {x: elj.x, y: elj.y};
+                            if (!elj.e && !e) { 
+                                // init e
+                                e = elj.e;
+                                elj.e = undefined;
+                                first = v;
+                            } else if (elj === e) {
+                                // a second (or third etc)
+                                if (!second) {
+                                    second = v;
+                                } else {
+                                    rest.push(v);
+                                }
+                                elj.e = undefined;
+                            } // else, is another element we'll come back for it later
+                        }
+                        // NOW we process element e
+                        if (!e) {
+                            // at this point we know we're done; all elements exhausted
+                            break;
+                        }
+                        if (!second) {
+                            // only first is set: only one finger on this element
+
+                        }
+
+                    }
+                    
+                    break; // It is permissible to short-circuit the z loop since the entire purpose of it is to run this condition
                 }
             }
             
@@ -367,6 +370,8 @@ var PLY = (function ($) {
             } */
             
             // compute and issue events to either target or stored parent collecting target
+
+
         },
         touchcancel: function (evt) { console.log("touchcancel", evt.changedTouches);
             for (var i=0;i<evt.changedTouches.length; ++i) {
@@ -390,6 +395,15 @@ var PLY = (function ($) {
         document.addEventListener(event_name, function () {
             try {
                 v.apply(this, arguments);
+                if (exposed.debug && event_name === "touchmove") { 
+                    // this is debug only consistency checks (ya, bad form, till I introduce a JS preprocessor)                    
+                    var flag = false;
+                    for (var id in exposed.pointer_state) {
+                        if (id === exposed.any_pointer)
+                            flag = true;
+                    }
+                    assert(flag, "one of the id's found in pointer_state matches any_pointer");
+                }
             } catch (e) {
                 // show the error to the DOM to help out for mobile (also cool on PC)
                 $("#debug_log").prepend($('<div class="error">').text(e.toString()+": "+e.stack));
