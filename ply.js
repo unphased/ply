@@ -359,9 +359,11 @@ var PLY = (function ($) {
                         } else {
                             // first and second are set 
                             // do full two finger logic 
-                            
+                            console.log("two fingers on",e);
                             // process 3+ fingers
-
+                            for (var j=0;j<rest.length;++j) {
+                                console.log("finger #"+j+3);
+                            }                            
                         }
 
                     }
