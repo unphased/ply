@@ -118,7 +118,7 @@ var PLY = (function ($) {
             };
         for (var i=0;i<arguments.length;++i) {
             str += escapeHtml(JSON.stringify(arguments[i],json_handler)).replace(/\},"/g,'},</br>"').replace(/,"/g,', "');
-            original_console_log("from >>",JSON.stringify(arguments[i],json_handler), "<< to >>", escapeHtml(JSON.stringify(arguments[i],json_handler)).replace(/\},"/g,'},</br>"').replace(/,"/g,', "'), "<<");
+            original_console_log.apply(console,["from >>",JSON.stringify(arguments[i],json_handler), "<< to >>", escapeHtml(JSON.stringify(arguments[i],json_handler)).replace(/\},"/g,'},</br>"').replace(/,"/g,', "'), "<<"]);
             str += ", ";
         }
         str = str.slice(0,-2);
