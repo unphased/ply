@@ -117,11 +117,11 @@ var PLY = (function ($) {
                 return val;
             };
         for (var i=0;i<arguments.length;++i) {
-            str += JSON.stringify(arguments[i],json_handler).replace(/\},"/g,'},</br>"').replace(/,"/g,', "');
+            str += escapeHtml(JSON.stringify(arguments[i],json_handler)).replace(/\},"/g,'},</br>"').replace(/,"/g,', "');
             str += ", ";
         }
         str = str.slice(0,-2);
-        $("#debug_log").prepend('<div class="log" data-time="'+Date.now()+'">'+escapeHtml(str)+'</div>'); 
+        $("#debug_log").prepend('<div class="log" data-time="'+Date.now()+'">'+str+'</div>'); 
     };
     console.log = instrumented_log; 
     // this means all logs in your application get dumped into #debug_log if 
