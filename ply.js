@@ -36,7 +36,7 @@ var PLY = (function ($) {
     var exposed = {
 
         // version string updated with git hash from scripts
-        revision: git_context.match(/#%(.*)%#/)[1],
+        revision: git_context.slice(2,git_context.length-2),
 
         // Never assume that keys is not filled with keys that were held down 
         // the last time the browser was in focus.
