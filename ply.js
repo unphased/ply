@@ -327,7 +327,7 @@ var PLY = (function ($) {
                     var el = full_pointer_list;
                     var ell = el.length;
 
-                    console.log("ell", ell, "fpl", el);
+                    console.log("ell", ell, "el", el);
                     var first, second, rest;
                     for (var e; true; e = undefined) {
                         first = undefined;
