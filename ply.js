@@ -29,7 +29,7 @@
 var PLY = (function ($) {
     
     // all vars except the variable "exposed" are private variables 
-    var git_context = "#% 17e0abc slow debugging but i do like this workflow %#";
+    var git_context = "#% 70c7a01 semi-automated test-debug-cycle commit %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
