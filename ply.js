@@ -133,7 +133,7 @@ var PLY = (function ($) {
         for (var i=0; i<list.length; ++i) {
             str += list[i].identifier + ", ";
         }
-        return str.slice(0,-1)+"]";
+        return str.slice(0,-2)+"]";
     }
 
     function each(obj, f) {
