@@ -29,7 +29,7 @@
 var PLY = (function ($) {
     
     // all vars except the variable "exposed" are private variables 
-    var git_context = "#% 4313b22 hopefully this properly updates the last index... unfortunately i just discovered that even having the last index helps us not at all because there is still no guarantee of any finger moving at all. %#";
+    var git_context = "#% 804273e a string-number issue %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
