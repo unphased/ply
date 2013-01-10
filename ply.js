@@ -36,7 +36,7 @@ var PLY = (function ($) {
     var exposed = {
 
         // version string updated with git hash from scripts
-        revision: git_context.slice(3,git_context.length-3),
+        revision: git_context.slice(3,-3),
 
         // Never assume that keys is not filled with keys that were held down 
         // the last time the browser was in focus.
@@ -126,6 +126,15 @@ var PLY = (function ($) {
     console.log = instrumented_log; 
     // this means all logs in your application get dumped into #debug_log if 
     // you've got one
+
+    // this is a helper for logging touchlists for debug purposes
+    function id_string_for_touch_list(list) {
+        var str = "[";
+        for (var i=0; i<list.length; ++i) {
+            str += list[i].identifier + ", ";
+        }
+        return str.slice(0,-1)+"]";
+    }
 
     function each(obj, f) {
         for (var i in obj) {
@@ -291,7 +300,7 @@ var PLY = (function ($) {
         // It is quite possible for this to execute 180 times per second. 
         // Because of this, extra effort is put toward optimizing this function. 
         touchmove: function (evt) { //if (!window.lastTM){window.lastTM = Date.now();} console.log("touchmove ",Date.now()-window.lastTM,evt.rotation,evt.scale); window.lastTM=Date.now(); 
-        console.log("touchmove ",evt.changedTouches,evt.touches);
+        console.log("touchmove ",id_string_for_touch_list(evt.changedTouches),id_string_for_touch_list(evt.touches));
             if (exposed.allow_scroll) return; // since this is touch device, when scrolling we don't do ply-things
             evt.preventDefault(); // prevent the pinching (this is primarily for Android: on iOS a preventdefault on the touchstart is sufficient to suppress pinch)
             
