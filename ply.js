@@ -314,20 +314,20 @@ var PLY = (function ($) {
                     // fire on a per-timestep basis. 
                     var et = evt.touches;
                     var etl = et.length;
-                    var elem_list = [];
+                    var full_pointer_list = [];
                     for (var i=0;i<etl;++i) { // loop over all pointers: assemble the elements to transform array 
                         var eti = et[i];
                         var ep_etid = exposed.pointer_state[eti.identifier];
                         // ep_etid.es is the actual element to be manipulated
-                        elem_list.push({e: ep_etid.es, x: eti.pageX-ep_etid.xs, y: eti.pageY-ep_etid.ys});
+                        full_pointer_list.push({e: ep_etid.es, x: eti.pageX-ep_etid.xs, y: eti.pageY-ep_etid.ys});
                         // update this for display purposes
                         ep_etid.xc = eti.pageX;
                         ep_etid.yc = eti.pageY;
                     }
-                    var el = elem_list;
+                    var el = full_pointer_list;
                     var ell = el.length;
 
-                    console.log("ell", ell, "el", elem_list);
+                    console.log("ell", ell, "fpl", el);
                     var first, second, rest;
                     for (var e; true; e = undefined) {
                         first = undefined;
