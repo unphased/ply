@@ -362,8 +362,8 @@ var PLY = (function ($) {
                             // do full two finger logic 
                             console.log("two fingers on",e);
                             // process 3+ fingers
-                            for (var j=0;j<rest.length;++j) {
-                                console.log("finger #"+j+3);
+                            for (var k=0;k<rest.length;++k) {
+                                console.log("finger #"+(k+3));
                             }
                         }
                     }
