@@ -33,6 +33,10 @@ var PLY = (function ($) {
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
     var exposed = {
+
+        // version string updated with git hash from scripts
+        revision: "#%REVISION%#",
+
         // Never assume that keys is not filled with keys that were held down 
         // the last time the browser was in focus.
 
@@ -345,7 +349,7 @@ var PLY = (function ($) {
                                     console.log("second finger for element ",e);
                                 } else {
                                     rest.push(v);
-                                    console.log("third(or more) finger for element ",e);
+                                    console.log("third(or more) finger for element ",e); 
                                 }
                                 elj.e = undefined;
                             } // else, is another element we'll come back for it later
