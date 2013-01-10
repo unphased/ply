@@ -326,7 +326,7 @@ var PLY = (function ($) {
                     }
                     var el = elem_list;
                     var ell = el.length;
-                    console.log("ell", ell);
+                    console.log("ell", ell, "el", elem_list);
                     var first, second, rest;
                     for (var e; true; e = undefined) {
                         first = undefined;
