@@ -312,13 +312,13 @@ var PLY = (function ($) {
                     console.log('etl '+etl);
                     var elem_list = [];
                     for (var i=0;i<etl;++i) { // loop over all pointers: assemble the elements to transform array 
-                        var eci = ec[i];
-                        var ep_ecid = exposed.pointer_state[eci.identifier];
-                        // ep_ecid.es is the actual element to be manipulated
-                        elem_list.push({e: ep_ecid.es, x: eci.pageX-ep_ecid.xs, y: eci.pageY-ep_ecid.ys});
+                        var eti = et[i];
+                        var ep_etid = exposed.pointer_state[eti.identifier];
+                        // ep_etid.es is the actual element to be manipulated
+                        elem_list.push({e: ep_etid.es, x: eti.pageX-ep_etid.xs, y: eti.pageY-ep_etid.ys});
                         // update this for display purposes
-                        ep_ecid.xc = eci.pageX;
-                        ep_ecid.yc = eci.pageY;
+                        ep_etid.xc = eti.pageX;
+                        ep_etid.yc = eti.pageY;
                     }
                     var el = elem_list;
                     var ell = el.length;
