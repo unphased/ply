@@ -317,7 +317,7 @@ var PLY = (function ($) {
             
             for (var z=0; z<ecl; ++z) {
                 var ecz = ec[z];
-                if (""+ecz.identifier === exposed.last_pointer_id) { 
+                if (ecz.identifier === exposed.last_pointer_id) { 
                     // Once we are processing *any particular* specific pointer
                     // we perform the full input update loop (which reads off touches).
                     // Essentially the idea is to read out the touches only once per 
@@ -434,7 +434,7 @@ var PLY = (function ($) {
                     // this is debug only consistency checks (ya, bad form, till I introduce a JS preprocessor)
                     var flag = false;
                     for (var id in exposed.pointer_state) {
-                        if (id === exposed.last_pointer_id)
+                        if (id === ""+exposed.last_pointer_id)
                             flag = true;
                     }
                     assert(flag, "none of the id's found in pointer_state matches last_pointer_id: "+exposed.last_pointer_id);
