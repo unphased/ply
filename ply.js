@@ -301,7 +301,7 @@ var PLY = (function ($) {
             
             for (var z=0;z<ecl;++z) {
                 var ecz = ec[z];
-                if (ecz.identifier === exposed.any_pointer) { 
+                if (""+ecz.identifier === exposed.any_pointer) { 
                     // Once we are processing *any particular* specific pointer
                     // we perform the full input update loop (which reads off touches).
                     // Essentially the idea is to read out the touches only once per 
