@@ -309,7 +309,6 @@ var PLY = (function ($) {
                     // fire on a per-timestep basis. 
                     var et = evt.touches;
                     var etl = et.length;
-                    console.log('etl '+etl);
                     var elem_list = [];
                     for (var i=0;i<etl;++i) { // loop over all pointers: assemble the elements to transform array 
                         var eti = et[i];
