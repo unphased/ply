@@ -333,6 +333,7 @@ var PLY = (function ($) {
                         first = undefined;
                         second = undefined;
                         rest = [];
+                        console.log("entering j-loop");
                         for (var j=0;j<ell;++j) {
                             var elj = el[j];
                             var v = {x: elj.x, y: elj.y};
