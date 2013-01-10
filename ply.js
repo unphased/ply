@@ -317,80 +317,80 @@ var PLY = (function ($) {
             
             for (var z=0; z<ecl; ++z) {
                 var ecz = ec[z];
-                if (ecz.identifier === exposed.last_pointer_id) { 
-                    // Once we are processing *any particular* specific pointer
-                    // we perform the full input update loop (which reads off touches).
-                    // Essentially the idea is to read out the touches only once per 
-                    // timestep. The issue is of course that touchmove does not 
-                    // fire on a per-timestep basis. 
-                    var et = evt.touches;
-                    var etl = et.length;
-                    var full_pointer_list = [];
-                    for (var i=0;i<etl;++i) { // loop over all pointers: assemble the elements to transform array 
-                        var eti = et[i];
-                        var ep_etid = exposed.pointer_state[eti.identifier];
-                        // ep_etid.es is the actual element to be manipulated
-                        full_pointer_list.push({e: ep_etid.es, x: eti.pageX-ep_etid.xs, y: eti.pageY-ep_etid.ys});
-                        // update this for display purposes
-                        ep_etid.xc = eti.pageX;
-                        ep_etid.yc = eti.pageY;
-                    }
-                    var el = full_pointer_list;
-                    var ell = el.length;
-                    var first, second, rest;
-                    for (var e; true; e = undefined) {
-                        first = undefined;
-                        second = undefined;
-                        rest = [];
-                        console.log("entering j-loop");
-                        for (var j=0;j<ell;++j) {
-                            var elj = el[j];
-                            var v = {x: elj.x, y: elj.y};
-                            if (!elj.e && !e) { 
-                                // init e
-                                e = elj.e;
-                                console.log("first finger for element ",e);
-                                elj.e = undefined;
-                                first = v;
-                            } else if (elj === e) {
-                                // a second (or third etc)
-                                if (!second) {
-                                    second = v;
-                                    console.log("second finger for element ",e);
-                                } else {
-                                    rest.push(v);
-                                    console.log("third(or more) finger for element ",e); 
-                                }
-                                elj.e = undefined;
-                            } // else, is another element we'll come back for it later
-                        }
-                        // NOW we process element e
-                        if (!e) {
-                            // at this point we know we're done; all elements exhausted
-                            break;
-                        }
-                        if (!second) {
-                            // only first is set: only one finger on this element
-                            // build and send out a translate event 
-                            var event = document.createEvent('HTMLEvents'); // this is for compatibility with DOM Level 2
-                            event.initEvent('ply_translate',true,true);
-                            event.deltaX = first.x;
-                            event.deltaY = first.y;
-                            var defaultPrevented = e.dispatchEvent(event);
-                        } else {
-                            // first and second are set 
-                            // do full two finger logic 
-                            console.log("two fingers on",e);
-                            // process 3+ fingers
-                            for (var k=0;k<rest.length;++k) {
-                                console.log("finger #"+(k+3));
-                            }
-                        }
-                    }
+                // looping through the cT list, updates pointer_state, only if an element in it 
+                // is updated with a new finger location (on one of its first 2 fingers) does the computation for its new transform occur. 
 
-                    break; // It is permissible to short-circuit the z loop since the entire purpose of it is to run this condition
-                }
             }
+
+
+            // loop through the exposed.pointer_state, messaging the elements that received updates in ct
+            // 
+            /* 
+
+            var et = evt.touches;
+            var etl = et.length;
+            var full_pointer_list = [];
+            for (var i=0;i<etl;++i) { // loop over all pointers: assemble the elements to transform array 
+                var eti = et[i];
+                var ep_etid = exposed.pointer_state[eti.identifier];
+                // ep_etid.es is the actual element to be manipulated
+                full_pointer_list.push({e: ep_etid.es, x: eti.pageX-ep_etid.xs, y: eti.pageY-ep_etid.ys});
+                // update this for display purposes
+                ep_etid.xc = eti.pageX;
+                ep_etid.yc = eti.pageY;
+            }
+            var el = full_pointer_list;
+            var ell = el.length;
+            var first, second, rest;
+            for (var e; true; e = undefined) {
+                first = undefined;
+                second = undefined;
+                rest = [];
+                console.log("entering j-loop");
+                for (var j=0;j<ell;++j) {
+                    var elj = el[j];
+                    var v = {x: elj.x, y: elj.y};
+                    if (!elj.e && !e) { 
+                        // init e
+                        e = elj.e;
+                        console.log("first finger for element ",e);
+                        elj.e = undefined;
+                        first = v;
+                    } else if (elj === e) {
+                        // a second (or third etc)
+                        if (!second) {
+                            second = v;
+                            console.log("second finger for element ",e);
+                        } else {
+                            rest.push(v);
+                            console.log("third(or more) finger for element ",e); 
+                        }
+                        elj.e = undefined;
+                    } // else, is another element we'll come back for it later
+                }
+                // NOW we process element e
+                if (!e) {
+                    // at this point we know we're done; all elements exhausted
+                    break;
+                }
+                if (!second) {
+                    // only first is set: only one finger on this element
+                    // build and send out a translate event 
+                    var event = document.createEvent('HTMLEvents'); // this is for compatibility with DOM Level 2
+                    event.initEvent('ply_translate',true,true);
+                    event.deltaX = first.x;
+                    event.deltaY = first.y;
+                    var defaultPrevented = e.dispatchEvent(event);
+                } else {
+                    // first and second are set 
+                    // do full two finger logic 
+                    console.log("two fingers on",e);
+                    // process 3+ fingers
+                    for (var k=0;k<rest.length;++k) {
+                        console.log("finger #"+(k+3));
+                    }
+                }
+            } */
             
             // translation is difference between xs,ys and x,y
 
