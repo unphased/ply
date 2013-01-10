@@ -29,7 +29,7 @@
 var PLY = (function ($) {
     
     // all vars except the variable "exposed" are private variables 
-    var git_context = "#% 804273e a string-number issue %#";
+    var git_context = "#% 70f9e5f realized i have to change the format of pointer storage %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
