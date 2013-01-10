@@ -34,7 +34,10 @@ var PLY = (function ($) {
     // accessible via window.PLY to allow debug display
     var exposed = {
         // Never assume that keys is not filled with keys that were held down 
-        // the last time the browser was in focus.      
+        // the last time the browser was in focus.
+
+        // this is a comment line that only exists on the gh-pages branch.
+
         keys_depressed: {}, 
 
         // The pointer_state array's order is important. It is maintained in
