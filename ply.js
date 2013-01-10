@@ -29,14 +29,14 @@
 var PLY = (function ($) {
     
     // all vars except the variable "exposed" are private variables 
-    var git_context = "#% fd7de65 for loop was never being entered %#";
+    var git_context = "#%REVISION%#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
     var exposed = {
 
         // version string updated with git hash from scripts
-        revision: git_context.match(/#% fd7de65 for loop was never being entered %#/)[1],
+        revision: git_context.match(/#%(.*)%#/)[1],
 
         // Never assume that keys is not filled with keys that were held down 
         // the last time the browser was in focus.
