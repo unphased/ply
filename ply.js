@@ -304,7 +304,7 @@ var PLY = (function ($) {
             var ec = evt.changedTouches;
             var ecl = ec.length;
             
-            for (var z=0;z<ecl;++z) {
+            for (var z=0; z<ecl; ++z) {
                 var ecz = ec[z];
                 if (""+ecz.identifier === exposed.any_pointer) { 
                     // Once we are processing *any particular* specific pointer
