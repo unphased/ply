@@ -332,14 +332,17 @@ var PLY = (function ($) {
                             if (!elj.e && !e) { 
                                 // init e
                                 e = elj.e;
+                                console.log("first finger for element ",e);
                                 elj.e = undefined;
                                 first = v;
                             } else if (elj === e) {
                                 // a second (or third etc)
                                 if (!second) {
                                     second = v;
+                                    console.log("second finger for element ",e);
                                 } else {
                                     rest.push(v);
+                                    console.log("third(or more) finger for element ",e);
                                 }
                                 elj.e = undefined;
                             } // else, is another element we'll come back for it later
