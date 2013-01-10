@@ -40,7 +40,6 @@ var PLY = (function ($) {
 
         // Never assume that keys is not filled with keys that were held down 
         // the last time the browser was in focus.
-
         keys_depressed: {}, 
 
         // The pointer_state array's order is important. It is maintained in
