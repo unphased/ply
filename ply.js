@@ -51,9 +51,9 @@ var PLY = (function ($) {
         // the only member of the pointer list. 
         pointer_state: {}, 
 
-        // any_pointer shall hold an index of a pointer that is held down
-        // right now. Any one.
-        any_pointer: null,
+        // last_pointer_id shall hold the id of the highest value of touches 
+        // that are currently present. 
+        last_pointer_id: null,
 
         // allow_scroll is a global flag that (basically) triggers calling 
         // preventDefault on touch events. This is more or less geared toward 
@@ -246,6 +246,7 @@ var PLY = (function ($) {
             // of course).
             var was_empty = !(Object.keys(exposed.pointer_state).length);
             var seen_target;
+            var last_added;
             for (var i=0;i<evt.changedTouches.length;++i) {
                 var eci = evt.changedTouches[i];
                 
@@ -257,9 +258,10 @@ var PLY = (function ($) {
                 // target which is fine to test that the thing works. 
                 exposed.pointer_state[eci.identifier] = {xs: eci.pageX, 
                     ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, es: evt.target, ec: evt.target};
-                if (was_empty && i===0) 
-                    exposed.any_pointer = ""+eci.identifier; // coerce to string 
+                last_added = eci.identifier;
             }
+            exposed.last_pointer_id = ""+last_added;
+            // OR!!! THE HIGHEST INDEX!! Curse you Android
 
             if (exposed.allow_scroll && was_empty && ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1)) {
                 exposed.allow_scroll = false;
@@ -278,15 +280,10 @@ var PLY = (function ($) {
             for (var id in exposed.pointer_state) {
                 if (!ids_touches_hash[id]) {
                     delete exposed.pointer_state[id];
-                    if (exposed.any_pointer == id) {
-                        //exposed.any_pointer = 'next';
-                        for (var key in exposed.pointer_state) break;
-                        exposed.any_pointer = key;
-                    }
                 }
             }
             if (evt.touches.length === 0) { // this indicates no touches remain
-                exposed.any_pointer = null;
+                exposed.last_pointer_id = null;
                 exposed.allow_scroll = true;
             }
         },
@@ -306,7 +303,7 @@ var PLY = (function ($) {
             
             for (var z=0; z<ecl; ++z) {
                 var ecz = ec[z];
-                if (""+ecz.identifier === exposed.any_pointer) { 
+                if (""+ecz.identifier === exposed.last_pointer_id) { 
                     // Once we are processing *any particular* specific pointer
                     // we perform the full input update loop (which reads off touches).
                     // Essentially the idea is to read out the touches only once per 
@@ -403,8 +400,10 @@ var PLY = (function ($) {
             }
             if (evt.touches.length === 0) { // this indicates no touches remain: In all instances I've seen, 
                 // any touchcancel firing cancels *all* touches.
-                // should be safe to return to default allow_scroll mode
+                // In any case, should be safe to return to default allow_scroll mode
                 exposed.allow_scroll = true;
+                // and also clear this out 
+                exposed.last_pointer_id = null;
             }
         },
         DOMNodeInserted: Mutation_Observer ? null : function (evt) { //console.log("DOMNodeInserted: ",evt.target);
@@ -420,13 +419,13 @@ var PLY = (function ($) {
             try {
                 v.apply(this, arguments);
                 if (exposed.debug && event_name === "touchmove") { 
-                    // this is debug only consistency checks (ya, bad form, till I introduce a JS preprocessor)                    
+                    // this is debug only consistency checks (ya, bad form, till I introduce a JS preprocessor)
                     var flag = false;
                     for (var id in exposed.pointer_state) {
-                        if (id === exposed.any_pointer)
+                        if (id === exposed.last_pointer_id)
                             flag = true;
                     }
-                    assert(flag, "none of the id's found in pointer_state matches any_pointer: "+exposed.any_pointer);
+                    assert(flag, "none of the id's found in pointer_state matches last_pointer_id: "+exposed.last_pointer_id);
                 }
             } catch (e) {
                 // show the error to the DOM to help out for mobile (also cool on PC)
