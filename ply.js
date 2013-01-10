@@ -192,6 +192,8 @@ var PLY = (function ($) {
         return evt.which || evt.keyCode || /*window.*/event.keyCode;
     }
 
+    var touchend_touchcancel;
+
     // entry point for code is the document's event handlers. 
     var handlers_for_doc = {
         click: function (evt) { console.log('click', evt.pageX, evt.pageY); 
@@ -255,7 +257,6 @@ var PLY = (function ($) {
             // of course).
             var was_empty = !(Object.keys(exposed.pointer_state).length);
             var seen_target;
-            var last_added;
             for (var i=0;i<evt.changedTouches.length;++i) {
                 var eci = evt.changedTouches[i];
                 
@@ -267,10 +268,10 @@ var PLY = (function ($) {
                 // target which is fine to test that the thing works. 
                 exposed.pointer_state[eci.identifier] = {xs: eci.pageX, 
                     ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, es: evt.target, ec: evt.target};
-                last_added = eci.identifier;
+                if(eci.identifier > exposed.last_pointer_id)
+                    exposed.last_pointer_id = eci.identifier;
             }
-            exposed.last_pointer_id = ""+last_added;
-            // OR!!! THE HIGHEST INDEX!! Curse you Android
+            // the value of the existing touch with the highest id number must be kept in this variable
 
             if (exposed.allow_scroll && was_empty && ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1)) {
                 exposed.allow_scroll = false;
@@ -279,11 +280,13 @@ var PLY = (function ($) {
             if (!exposed.allow_scroll) 
                 evt.preventDefault();
         },
-        touchend: function (evt) { //console.log("touchend", evt.changedTouches);
+        touchend: (touchend_touchcancel = function (evt) { //console.log("touchend", evt.changedTouches);
             var ids_touches_hash = {};
+            var highest = -1;
             for (var i=0;i<evt.touches.length;++i) {
                 var eti = evt.touches[i];
                 ids_touches_hash[eti.identifier] = true;
+                if (eti.identifier > highest) highest = eti.identifier;
             }
             //console.log("touchend", $.extend({},ids_touches_hash));
             for (var id in exposed.pointer_state) {
@@ -291,11 +294,12 @@ var PLY = (function ($) {
                     delete exposed.pointer_state[id];
                 }
             }
+            exposed.last_pointer_id = highest;
             if (evt.touches.length === 0) { // this indicates no touches remain
                 exposed.last_pointer_id = null;
                 exposed.allow_scroll = true;
             }
-        },
+        }),
         // The majority of functionality is funneled through the (capturing) touchmove handler on the document. 
         // It is quite possible for this to execute 180 times per second. 
         // Because of this, extra effort is put toward optimizing this function. 
@@ -402,7 +406,7 @@ var PLY = (function ($) {
 
 
         },
-        touchcancel: function (evt) { console.log("touchcancel", evt.changedTouches);
+        touchcancel: /*function (evt) { console.log("touchcancel", evt.changedTouches);
             for (var i=0;i<evt.changedTouches.length; ++i) {
                 delete exposed.pointer_state[evt.changedTouches[i].identifier];
             }
@@ -413,7 +417,7 @@ var PLY = (function ($) {
                 // and also clear this out 
                 exposed.last_pointer_id = null;
             }
-        },
+        }*/ touchend_touchcancel,
         DOMNodeInserted: Mutation_Observer ? null : function (evt) { //console.log("DOMNodeInserted: ",evt.target);
             // handle specially new elements which have the classes we're 
             // interested in
