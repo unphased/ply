@@ -253,7 +253,7 @@ var PLY = (function ($) {
                 exposed.pointer_state[eci.identifier] = {xs: eci.pageX, 
                     ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, es: evt.target, ec: evt.target};
                 if (was_empty && i===0) 
-                    exposed.any_pointer = eci.identifier;
+                    exposed.any_pointer = ""+eci.identifier; // coerce to string 
             }
 
             if (exposed.allow_scroll && was_empty && ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1)) {
