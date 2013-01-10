@@ -415,7 +415,7 @@ var PLY = (function ($) {
                         if (id === exposed.any_pointer)
                             flag = true;
                     }
-                    assert(flag, "one of the id's found in pointer_state matches any_pointer");
+                    assert(flag, "none of the id's found in pointer_state matches any_pointer: "+exposed.any_pointer);
                 }
             } catch (e) {
                 // show the error to the DOM to help out for mobile (also cool on PC)
