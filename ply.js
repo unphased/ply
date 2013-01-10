@@ -29,16 +29,17 @@
 var PLY = (function ($) {
     
     // all vars except the variable "exposed" are private variables 
+    var git_context = "#%REVISION%#",
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
     var exposed = {
 
         // version string updated with git hash from scripts
-        revision: "#%REVISION%#",
+        revision: git_context.match(/#%(.*)%#/)[1],
 
         // Never assume that keys is not filled with keys that were held down 
-        // the last time the browser was in focus.      
+        // the last time the browser was in focus.
         keys_depressed: {}, 
 
         // The pointer_state array's order is important. It is maintained in
