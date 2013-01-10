@@ -342,7 +342,7 @@ var PLY = (function ($) {
                                     console.log("second finger for element ",e);
                                 } else {
                                     rest.push(v);
-                                    console.log("third(or more) finger for element ",e);
+                                    console.log("third(or more) finger for element ",e); 
                                 }
                                 elj.e = undefined;
                             } // else, is another element we'll come back for it later
