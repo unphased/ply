@@ -303,8 +303,8 @@ var PLY = (function ($) {
         // The majority of functionality is funneled through the (capturing) touchmove handler on the document. 
         // It is quite possible for this to execute 180 times per second. 
         // Because of this, extra effort is put toward optimizing this function. 
-        touchmove: function (evt) { //if (!window.lastTM){window.lastTM = Date.now();} console.log("touchmove ",Date.now()-window.lastTM,evt.rotation,evt.scale); window.lastTM=Date.now(); 
-        console.log("touchmove ",id_string_for_touch_list(evt.changedTouches),id_string_for_touch_list(evt.touches));
+        touchmove: function (evt) { if (!window.lastTM){window.lastTM = Date.now();} console.log("touchmove ",Date.now()-window.lastTM,evt.rotation,evt.scale); window.lastTM=Date.now(); 
+        //console.log("touchmove ",id_string_for_touch_list(evt.changedTouches),id_string_for_touch_list(evt.touches));
             if (exposed.allow_scroll) return; // since this is touch device, when scrolling we don't do ply-things
             evt.preventDefault(); // prevent the pinching (this is primarily for Android: on iOS a preventdefault on the touchstart is sufficient to suppress pinch)
             
