@@ -29,7 +29,7 @@
 var PLY = (function ($) {
     
     // all vars except the variable "exposed" are private variables 
-    var git_context = "#% 70f9e5f realized i have to change the format of pointer storage %#";
+    var git_context = "#% 39d984d showing touchmove timing again to determine the right way to efficiently process these things (hopefully full movement data is available on the first touchmove of a timestep) %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
