@@ -32,7 +32,7 @@ var PLY = (function ($) {
 
     var log_buffer = [];
 
-    var git_context = "#%REVISION%#";
+    var git_context = "#% REVISION %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
