@@ -29,7 +29,10 @@
 var PLY = (function ($) {
     
     // all vars except the variable "exposed" are private variables 
-    var git_context = "#% 39d984d showing touchmove timing again to determine the right way to efficiently process these things (hopefully full movement data is available on the first touchmove of a timestep) %#";
+
+    var log_buffer = [];
+
+    var git_context = "#%REVISION%#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
@@ -69,7 +72,8 @@ var PLY = (function ($) {
         // re-updating the DOM. I will eventually let the events that don't 
         // change the debugprints to also not set this either. 
         event_processed: true, 
-        debug: true
+        debug: true,
+        append_logs_dom: true
     };
 
 
@@ -121,11 +125,29 @@ var PLY = (function ($) {
             str += ", ";
         }
         str = str.slice(0,-2);
-        $("#debug_log").prepend('<div class="log" data-time="'+Date.now()+'">'+str+'</div>'); 
+        var now = Date.now();
+        var html_str = '<div class="log" data-time="'+now+'">'+str+'</div>';
+        log_buffer.push(html_str);
+        if (!exposed.append_logs_dom) return;
+        $("#debug_log").prepend(html_str); 
+        // this means all logs in your application get dumped into #debug_log if 
+        // you've got one
     };
     console.log = instrumented_log; 
-    // this means all logs in your application get dumped into #debug_log if 
-    // you've got one
+
+    // set up a way to show the log buffer if debug mode 
+    // (note toggling the debug off will stop logs being written)
+    if (exposed.debug) {
+        var show = false;
+        $("#log_buffer_dump").before($('<button>toggle full log buffer snapshot</button>').on('click',function(){
+            show = !show;
+            if (show) {
+                $("#log_buffer_dump").html(log_buffer.join(''));
+            } else {
+                $("#log_buffer_dump").html("");
+            }
+        }));
+    }
 
     // this is a helper for logging touchlists for debug purposes
     function id_string_for_touch_list(list) {
