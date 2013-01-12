@@ -303,8 +303,9 @@ var PLY = (function ($) {
             var ec = evt.changedTouches;
             var ecl = ec.length;
             for (var i=0;i<ecl;++i) {
-                $.data(exposed.pointer_state[ecl.identifier].e,'ply',false);
-                delete exposed.pointer_state[ecl.identifier];
+                var eci = ec[i];
+                $.data(exposed.pointer_state[eci.identifier].e,'ply',false);
+                delete exposed.pointer_state[eci.identifier];
             }
             // if debug check the model in fact is correctly maintained by cT by comparing to touches
             if (exposed.debug) {
