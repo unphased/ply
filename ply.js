@@ -417,14 +417,6 @@ var PLY = (function ($) {
             } */
             
             // translation is difference between xs,ys and x,y
-
-            
-            /* if (diffs.length >= 2) {
-                assert(diffs[0].id < diffs[1].id);
-            }
-            if (diffs.length >= 3) {
-                assert(diffs[1].id < diffs[2].id, "whoops");
-            } */
             
             // compute and issue events to either target or stored parent collecting target
 
