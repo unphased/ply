@@ -277,7 +277,6 @@ var PLY = (function ($) {
             for (var x in exposed.pointer_state) {
                 if (x !== "m") ps_count++;
             }
-            console.log("psc",ps_count);
             var seen_target;
             for (var i=0;i<evt.changedTouches.length;++i) {
                 var eci = evt.changedTouches[i];
@@ -356,6 +355,9 @@ var PLY = (function ($) {
                 // update this for display purposes
                 ep_etid.xc = eti.pageX;
                 ep_etid.yc = eti.pageY;
+                if (eti.webkitForce) {
+                    ep_etid.fatness = eti.webkitForce;
+                }
             }
 
             exposed.tmTime = Date.now(); // update this last
