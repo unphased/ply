@@ -288,8 +288,11 @@ var PLY = (function ($) {
 
                 exposed.pointer_state[eci.identifier] = pointer_data; 
             }
-            if (exposed.allow_scroll && 
-                exposed.pointer_state.touches.length === 0 && 
+            var ps_count = 0;
+            for (var x in exposed.pointer_state) {
+                if (x !== "m") ps_count++;
+            }
+            if (exposed.allow_scroll && ps_count === 0 && 
                 ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1)) 
             {
                 exposed.allow_scroll = false;
