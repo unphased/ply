@@ -50,7 +50,10 @@ var PLY = (function ($) {
         // and touches will be in an array called "touch", one for each element
         // that is marked by ply to be a manipulable element, and that will contain
         // a hash of touch id's that control it. 
-        pointer_state: {touches: []}, 
+        pointer_state: {}, 
+
+        // used by touchmove event to run code only when necessary
+        tmTime: Date.now(),
 
         // allow_scroll is a global flag that (basically) triggers calling 
         // preventDefault on touch events. This is more or less geared toward 
@@ -127,7 +130,7 @@ var PLY = (function ($) {
         // this means all logs in your application get dumped into #debug_log if 
         // you've got one
     };
-    console.log = instrumented_log; 
+    console.log = instrumented_log;
 
     // set up a way to show the log buffer if debug mode 
     // (note toggling the debug off will stop logs being written)
@@ -281,16 +284,10 @@ var PLY = (function ($) {
                 // is destined to control. store that... for right now it stores the immediate
                 // target which is fine to test that the thing works. 
 
-                // Without a straightforward way to hash page elements I use a slightly slow
-                // but fast overall loop over the ept
-                var ept = exposed.pointer_state.touches;
-                for (var j=0;j<ept.length;++j) {
-                    var eptj = ept[j];
-                    if (eptj.e===seen_target) {
-                        eptj.t[eci.identifier] = {xs: eci.pageX, ys: eci.pageY, xc: eci.pageX, yc: eci.pageY};
-                        break;
-                    }
-                } 
+                var pointer_data = {xs: eci.pageX, ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, e: seen_target};
+                $.data(seen_target,"ply",pointer_data);
+
+                exposed.pointer_state[eci.identifier] = pointer_data; 
             }
             if (exposed.allow_scroll && 
                 exposed.pointer_state.touches.length === 0 && 
@@ -303,22 +300,27 @@ var PLY = (function ($) {
             }
         },
         touchend: (touchend_touchcancel = function (evt) { //console.log("touchend", evt.changedTouches);
-            var ids_touches_hash = {};
-            var highest = -1;
-            for (var i=0;i<evt.touches.length;++i) {
-                var eti = evt.touches[i];
-                ids_touches_hash[eti.identifier] = true;
-                if (eti.identifier > highest) highest = eti.identifier;
+            // clean out the touches that got removed 
+            var ec = evt.changedTouches;
+            var ecl = ec.length;
+            for (var i=0;i<ecl;++i) {
+                $.data(exposed.pointer_state[ecl.identifier].e,'ply',false);
+                delete exposed.pointer_state[ecl.identifier];
             }
-            //console.log("touchend", $.extend({},ids_touches_hash));
-            for (var id in exposed.pointer_state) {
-                if (!ids_touches_hash[id]) {
-                    delete exposed.pointer_state[id];
+            // if debug check the model in fact is correctly maintained by cT by comparing to touches
+            if (exposed.debug) {
+                var touches_hash = {};
+                for (var t in evt.touches) {
+                    touches_hash[t] = true;
+                    assert(exposed.pointer_state[t],"this element should be in the pointer_state because it is in the touches: "+t);
+                }
+                for (var x in exposed.pointer_state) {
+                    assert(touches_hash[x],"this element should be in the touches in the event because it is in the pointer state: "+x);
+                    assert($.data(exposed.pointer_state[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
+                    assert($.data(exposed.pointer_state[x].e) === exposed.pointer_state[x], "pointer_state["+x+"] is exactly equal to the data of its e property");
                 }
             }
-            exposed.last_pointer_id = highest;
             if (evt.touches.length === 0) { // this indicates no touches remain
-                exposed.last_pointer_id = null;
                 exposed.allow_scroll = true;
             }
         }),
@@ -333,8 +335,10 @@ var PLY = (function ($) {
                      
             // if updates are sent faster than 7ms they are ignored!
             // This should work reliably up until devices provide faster than 120Hz touch events
-            // and gives ply about 7 ms of grace-period to process transforms (which is way more than it should take)
-            if (Date.now() - evt.tmTime < 7) return; // discard the event                
+            // and gives browser about 7 ms of grace-period between touchmove events
+            // (which is way more than it should be taking esp. since I start the timing after
+            // completing ply transform tasks)
+            if (Date.now() - exposed.tmTime < 7) return; // discard the event                
             
             var et = evt.touches;
             var etl = et.length;
@@ -347,6 +351,8 @@ var PLY = (function ($) {
                 ep_etid.xc = eti.pageX;
                 ep_etid.yc = eti.pageY;
             }
+
+            exposed.tmTime = Date.now(); // update this last
 
             // loop through the exposed.pointer_state, messaging the elements that received updates in ct
             // 

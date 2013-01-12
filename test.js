@@ -138,7 +138,7 @@
             var eshli = eshl.children[i];
             var pci = pmc.children[i];
             var psci = psmc.children[i];
-            if (ppp.es === ppp.ec) {
+            if (ppp.e || ppp.es === ppp.ec) {
                 // I defer the calling of elementFromPoint to here for performance reasons
                 // ply will never do this kind of heavy lifting without being told to
                 var detected_element;
