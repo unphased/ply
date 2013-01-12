@@ -29,14 +29,10 @@
 var PLY = (function ($) {
     
     // all vars except the variable "exposed" are private variables 
-<<<<<<< HEAD
-    var git_context = "#% 8928d5e some large changes, i am actually not going to change the layout of pointer_state %#";
-=======
-
     var log_buffer = [];
 
     var git_context = "#% 8928d5e some large changes, i am actually not going to change the layout of pointer_state %#";
->>>>>>> master
+
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
