@@ -273,6 +273,11 @@ var PLY = (function ($) {
             // off a complex interaction, so it will be the place that 
             // allow_scroll is directly assigned (when it is the first touch,
             // of course).
+            var ps_count = 0;
+            for (var x in exposed.pointer_state) {
+                if (x !== "m") ps_count++;
+            }
+            console.log("psc",ps_count);
             var seen_target;
             for (var i=0;i<evt.changedTouches.length;++i) {
                 var eci = evt.changedTouches[i];
@@ -288,11 +293,7 @@ var PLY = (function ($) {
 
                 exposed.pointer_state[eci.identifier] = pointer_data; 
             }
-            var ps_count = 0;
-            for (var x in exposed.pointer_state) {
-                if (x !== "m") ps_count++;
-            }
-            console.log("psc",ps_count);
+           
             if (exposed.allow_scroll && ps_count === 0 && 
                 ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1))
             {
