@@ -29,7 +29,6 @@
 var PLY = (function ($) {
     
     // all vars except the variable "exposed" are private variables 
-
     var log_buffer = [];
 
     var git_context = "#% REVISION %#";
