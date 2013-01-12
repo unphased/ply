@@ -313,9 +313,10 @@ var PLY = (function ($) {
             // if debug check the model in fact is correctly maintained by cT by comparing to touches
             if (exposed.debug) {
                 var touches_hash = {};
-                for (var t in evt.touches) {
-                    touches_hash[t] = true;
-                    assert(exposed.pointer_state[t.identifier],"this element should be in the pointer_state because it is in the touches: "+t);
+                for (var t=0;t<evt.touches.length;++t) {
+                    var etti = evt.touches[t].identifier;
+                    touches_hash[etti] = true;
+                    assert(exposed.pointer_state[etti],"this element should be in the pointer_state because it is in the touches: "+t);
                 }
                 for (var x in exposed.pointer_state) {
                     assert(touches_hash[x],"this element should be in the touches in the event because it is in the pointer state: "+x);
