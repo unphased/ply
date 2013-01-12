@@ -101,23 +101,27 @@ var PLY = (function ($) {
         });
     }
 
+    var json_handler = function (key,val) {
+        if (val instanceof HTMLElement) {
+            var cn = val.className;
+            var tn = val.tagName;
+            if (tn === "HTML") { cn = ""; } // too much due to Modernizr
+            return "<"+tn+" c="+cn+" id="+val.id+">";
+        }
+        return val;
+    };
+    function serialize(arg) {
+        return JSON.stringify(arg,json_handler);
+    }
+
     var original_console_log = console.log;
     // echo console logs to the debug 
     window.instrumented_log = function () {
         original_console_log.apply(console, arguments);
         if (!exposed.debug) return;
         var str = "";
-        var json_handler = function (key,val) {
-                if (val instanceof HTMLElement) {
-                    var cn = val.className;
-                    var tn = val.tagName;
-                    if (tn === "HTML") { cn = ""; } // too much due to Modernizr
-                    return "<"+tn+" c="+cn+" id="+val.id+">";
-                }
-                return val;
-            };
         for (var i=0;i<arguments.length;++i) {
-            str += escapeHtml(JSON.stringify(arguments[i],json_handler)).replace(/\},&quot;/g,'},</br>&quot;').replace(/,&quot;/g,', &quot;');
+            str += escapeHtml(serialize(arguments[i])).replace(/\},&quot;/g,'},</br>&quot;').replace(/,&quot;/g,', &quot;');
             str += ", ";
         }
         str = str.slice(0,-2);
@@ -322,7 +326,7 @@ var PLY = (function ($) {
                 for (var x in exposed.pointer_state) {
                     assert(touches_hash[x],"this element should be in the touches in the event because it is in the pointer state: "+x);
                     assert($.data(exposed.pointer_state[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
-                    assert($.data(exposed.pointer_state[x].e) === exposed.pointer_state[x], "pointer_state["+x+"] is exactly equal to the data of its e property");
+                    assert($.data(exposed.pointer_state[x].e) === exposed.pointer_state[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(exposed.pointer_state[x])+"; "+serialize($.data(exposed.pointer_state[x].e)));
                 }
             }
             if (evt.touches.length === 0) { // this indicates no touches remain
