@@ -29,7 +29,14 @@
 var PLY = (function ($) {
     
     // all vars except the variable "exposed" are private variables 
-    var git_context = "#% 39d984d showing touchmove timing again to determine the right way to efficiently process these things (hopefully full movement data is available on the first touchmove of a timestep) %#";
+<<<<<<< HEAD
+    var git_context = "#% 8928d5e some large changes, i am actually not going to change the layout of pointer_state %#";
+=======
+
+    var log_buffer = [];
+
+    var git_context = "#% 8928d5e some large changes, i am actually not going to change the layout of pointer_state %#";
+>>>>>>> master
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
@@ -42,18 +49,15 @@ var PLY = (function ($) {
         // the last time the browser was in focus.
         keys_depressed: {}, 
 
-        // The pointer_state array's order is important. It is maintained in
-        // the order that touches are created. If you lift a finger it is 
-        // removed and the rest of the array's ordering remains. 
-        // all mouse-pointer activity is mapped onto the first pointer. This is 
-        // not terribly complicated because on a mouse system in all likelihood
-        // (barring strange IE10 touch-notebook situations) the mouse will be 
-        // the only member of the pointer list. 
+        // pointer_state stores state of mouse and/or touches. It will treat 
+        // the mouse somewhat differently by storing it into the "m" property,
+        // and touches will be in an array called "touch", one for each element
+        // that is marked by ply to be a manipulable element, and that will contain
+        // a hash of touch id's that control it. 
         pointer_state: {}, 
 
-        // last_pointer_id shall hold the id of the highest value of touches 
-        // that are currently present. 
-        last_pointer_id: null,
+        // used by touchmove event to run code only when necessary
+        tmTime: Date.now(),
 
         // allow_scroll is a global flag that (basically) triggers calling 
         // preventDefault on touch events. This is more or less geared toward 
@@ -69,7 +73,8 @@ var PLY = (function ($) {
         // re-updating the DOM. I will eventually let the events that don't 
         // change the debugprints to also not set this either. 
         event_processed: true, 
-        debug: true
+        debug: true,
+        append_logs_dom: true
     };
 
 
@@ -121,11 +126,29 @@ var PLY = (function ($) {
             str += ", ";
         }
         str = str.slice(0,-2);
-        $("#debug_log").prepend('<div class="log" data-time="'+Date.now()+'">'+str+'</div>'); 
+        var now = Date.now();
+        var html_str = '<div class="log" data-time="'+now+'">'+str+'</div>';
+        log_buffer.push(html_str);
+        if (!exposed.append_logs_dom) return;
+        $("#debug_log").prepend(html_str); 
+        // this means all logs in your application get dumped into #debug_log if 
+        // you've got one
     };
-    console.log = instrumented_log; 
-    // this means all logs in your application get dumped into #debug_log if 
-    // you've got one
+    console.log = instrumented_log;
+
+    // set up a way to show the log buffer if debug mode 
+    // (note toggling the debug off will stop logs being written)
+    if (exposed.debug) {
+        var show = false;
+        $("#log_buffer_dump").before($('<button>toggle full log buffer snapshot</button>').on('click',function(){
+            show = !show;
+            if (show) {
+                $("#log_buffer_dump").html(log_buffer.join(''));
+            } else {
+                $("#log_buffer_dump").html("");
+            }
+        }));
+    }
 
     // this is a helper for logging touchlists for debug purposes
     function id_string_for_touch_list(list) {
@@ -247,7 +270,7 @@ var PLY = (function ($) {
         keyup: function (evt) { console.log("keyup",key(evt));
             delete exposed.keys_depressed[key(evt)];
         },
-        touchstart: function (evt) { //console.log("touchstart", evt.targetTouches);
+        touchstart: function (evt) { //console.log("touchstart", evt.targetTouches);            
             // if allow scroll, then never prevent default: once you're
             // scrolling, touching anything else should never mess with the 
             // browser default scrolling. 
@@ -255,90 +278,92 @@ var PLY = (function ($) {
             // off a complex interaction, so it will be the place that 
             // allow_scroll is directly assigned (when it is the first touch,
             // of course).
-            var was_empty = !(Object.keys(exposed.pointer_state).length);
             var seen_target;
             for (var i=0;i<evt.changedTouches.length;++i) {
                 var eci = evt.changedTouches[i];
-                
-                if (seen_target) assert(eci.target === seen_target); 
-                // this is to check that all touchstarts batch cT list based on target elem.
+                // this assertion is to check my assumption that all touchstarts batch cT list based on target elem.
+                if (seen_target) assert(eci.target === seen_target);
                 else seen_target = eci.target;
                 // here, we must determine the actual real target that this set of touches
                 // is destined to control. store that... for right now it stores the immediate
                 // target which is fine to test that the thing works. 
-                exposed.pointer_state[eci.identifier] = {xs: eci.pageX, 
-                    ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, es: evt.target, ec: evt.target};
-                if(eci.identifier > exposed.last_pointer_id)
-                    exposed.last_pointer_id = eci.identifier;
-            }
-            // the value of the existing touch with the highest id number must be kept in this variable
 
-            if (exposed.allow_scroll && was_empty && ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1)) {
+                var pointer_data = {xs: eci.pageX, ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, e: seen_target};
+                $.data(seen_target,"ply",pointer_data);
+
+                exposed.pointer_state[eci.identifier] = pointer_data; 
+            }
+            if (exposed.allow_scroll && 
+                exposed.pointer_state.touches.length === 0 && 
+                ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1)) 
+            {
                 exposed.allow_scroll = false;
             }
-            
-            if (!exposed.allow_scroll) 
+            if (!exposed.allow_scroll) {
                 evt.preventDefault();
+            }
         },
         touchend: (touchend_touchcancel = function (evt) { //console.log("touchend", evt.changedTouches);
-            var ids_touches_hash = {};
-            var highest = -1;
-            for (var i=0;i<evt.touches.length;++i) {
-                var eti = evt.touches[i];
-                ids_touches_hash[eti.identifier] = true;
-                if (eti.identifier > highest) highest = eti.identifier;
+            // clean out the touches that got removed 
+            var ec = evt.changedTouches;
+            var ecl = ec.length;
+            for (var i=0;i<ecl;++i) {
+                $.data(exposed.pointer_state[ecl.identifier].e,'ply',false);
+                delete exposed.pointer_state[ecl.identifier];
             }
-            //console.log("touchend", $.extend({},ids_touches_hash));
-            for (var id in exposed.pointer_state) {
-                if (!ids_touches_hash[id]) {
-                    delete exposed.pointer_state[id];
+            // if debug check the model in fact is correctly maintained by cT by comparing to touches
+            if (exposed.debug) {
+                var touches_hash = {};
+                for (var t in evt.touches) {
+                    touches_hash[t] = true;
+                    assert(exposed.pointer_state[t],"this element should be in the pointer_state because it is in the touches: "+t);
+                }
+                for (var x in exposed.pointer_state) {
+                    assert(touches_hash[x],"this element should be in the touches in the event because it is in the pointer state: "+x);
+                    assert($.data(exposed.pointer_state[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
+                    assert($.data(exposed.pointer_state[x].e) === exposed.pointer_state[x], "pointer_state["+x+"] is exactly equal to the data of its e property");
                 }
             }
-            exposed.last_pointer_id = highest;
             if (evt.touches.length === 0) { // this indicates no touches remain
-                exposed.last_pointer_id = null;
                 exposed.allow_scroll = true;
             }
         }),
+        touchcancel: touchend_touchcancel,
         // The majority of functionality is funneled through the (capturing) touchmove handler on the document. 
         // It is quite possible for this to execute 180 times per second. 
         // Because of this, extra effort is put toward optimizing this function. 
-        touchmove: function (evt) { if (!window.lastTM){window.lastTM = Date.now();} console.log("touchmove ",Date.now()-window.lastTM,evt.rotation,evt.scale); window.lastTM=Date.now(); 
+        touchmove: function (evt) { //if (!window.lastTM){window.lastTM = Date.now();} console.log("touchmove ",Date.now()-window.lastTM,evt.rotation,evt.scale); window.lastTM=Date.now(); 
         //console.log("touchmove ",id_string_for_touch_list(evt.changedTouches),id_string_for_touch_list(evt.touches));
             if (exposed.allow_scroll) return; // since this is touch device, when scrolling we don't do ply-things
-            evt.preventDefault(); // prevent the pinching (this is primarily for Android: on iOS a preventdefault on the touchstart is sufficient to suppress pinch)
+            evt.preventDefault(); // prevent the pinching (this is primarily for Android: on iOS a preventdefault on the touchstart is sufficient to suppress pinch)            
+                     
+            // if updates are sent faster than 7ms they are ignored!
+            // This should work reliably up until devices provide faster than 120Hz touch events
+            // and gives browser about 7 ms of grace-period between touchmove events
+            // (which is way more than it should be taking esp. since I start the timing after
+            // completing ply transform tasks)
+            if (Date.now() - exposed.tmTime < 7) return; // discard the event                
             
-            //var et = evt.targetTouches; 
-            // We can't use targetTouches because I might want to specify an element with children which is 
-            // to be manipulated seamlessly even if I interact across different child elements. It is required to check all
-            // changedTouches
-            var ec = evt.changedTouches;
-            var ecl = ec.length;
-            
-            for (var z=0; z<ecl; ++z) {
-                var ecz = ec[z];
-                // looping through the cT list, updates pointer_state, only if an element in it 
-                // is updated with a new finger location (on one of its first 2 fingers) does the computation for its new transform occur. 
-
+            var et = evt.touches;
+            var etl = et.length;
+            for (var i=0;i<etl;++i) { // loop over all pointers: assemble the elements to transform array 
+                var eti = et[i];
+                var ep_etid = exposed.pointer_state[eti.identifier];
+                // ep_etid.es is the actual element to be manipulated
+                // full_pointer_list.push({e: ep_etid.es, x: eti.pageX-ep_etid.xs, y: eti.pageY-ep_etid.ys});
+                // update this for display purposes
+                ep_etid.xc = eti.pageX;
+                ep_etid.yc = eti.pageY;
             }
 
+            exposed.tmTime = Date.now(); // update this last
 
             // loop through the exposed.pointer_state, messaging the elements that received updates in ct
             // 
             /* 
 
-            var et = evt.touches;
-            var etl = et.length;
             var full_pointer_list = [];
-            for (var i=0;i<etl;++i) { // loop over all pointers: assemble the elements to transform array 
-                var eti = et[i];
-                var ep_etid = exposed.pointer_state[eti.identifier];
-                // ep_etid.es is the actual element to be manipulated
-                full_pointer_list.push({e: ep_etid.es, x: eti.pageX-ep_etid.xs, y: eti.pageY-ep_etid.ys});
-                // update this for display purposes
-                ep_etid.xc = eti.pageX;
-                ep_etid.yc = eti.pageY;
-            }
+            
             var el = full_pointer_list;
             var ell = el.length;
             var first, second, rest;
@@ -406,7 +431,7 @@ var PLY = (function ($) {
 
 
         },
-        touchcancel: /*function (evt) { console.log("touchcancel", evt.changedTouches);
+        /*touchcancel: function (evt) { console.log("touchcancel", evt.changedTouches);
             for (var i=0;i<evt.changedTouches.length; ++i) {
                 delete exposed.pointer_state[evt.changedTouches[i].identifier];
             }
@@ -417,7 +442,7 @@ var PLY = (function ($) {
                 // and also clear this out 
                 exposed.last_pointer_id = null;
             }
-        }*/ touchend_touchcancel,
+        }*/ 
         DOMNodeInserted: Mutation_Observer ? null : function (evt) { //console.log("DOMNodeInserted: ",evt.target);
             // handle specially new elements which have the classes we're 
             // interested in
