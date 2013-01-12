@@ -292,8 +292,9 @@ var PLY = (function ($) {
             for (var x in exposed.pointer_state) {
                 if (x !== "m") ps_count++;
             }
+            console.log("psc",ps_count);
             if (exposed.allow_scroll && ps_count === 0 && 
-                ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1)) 
+                ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1))
             {
                 exposed.allow_scroll = false;
             }
