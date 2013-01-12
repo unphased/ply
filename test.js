@@ -164,13 +164,14 @@
                     echli.style[transform_name] = "translate3d("+jpppeco.left+"px,"+jpppeco.top+"px,0)";
                 }
             }
+            var pppe = ppp.e || ppp.es;
             if (has_bounding_client_rect) {
-                var sbcr = ppp.es.getBoundingClientRect();
+                var sbcr = pppe.getBoundingClientRect();
                 eshli.style.width = sbcr.width+"px";
                 eshli.style.height = sbcr.height+"px";
                 eshli.style[transform_name] = "translate3d("+(scrollX+sbcr.left)+"px,"+(scrollY+sbcr.top)+"px,0)";
             } else {
-                var jpppes = $(ppp.es);
+                var jpppes = $(pppe);
                 var jpppeso = jpppes.offset();
                 eshli.style.width = jpppes.outerWidth()+"px";
                 eshli.style.height = jpppes.outerHeight()+"px";
