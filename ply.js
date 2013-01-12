@@ -315,7 +315,7 @@ var PLY = (function ($) {
                 var touches_hash = {};
                 for (var t in evt.touches) {
                     touches_hash[t] = true;
-                    assert(exposed.pointer_state[t],"this element should be in the pointer_state because it is in the touches: "+t);
+                    assert(exposed.pointer_state[t.identifier],"this element should be in the pointer_state because it is in the touches: "+t);
                 }
                 for (var x in exposed.pointer_state) {
                     assert(touches_hash[x],"this element should be in the touches in the event because it is in the pointer state: "+x);
