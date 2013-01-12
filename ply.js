@@ -31,7 +31,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% b0887f2 fixing touchstart %#";
+    var git_context = "#% 36a9a29 fixing my bad assert message, next time do not use slashes. basically just beware that the commit msg gets piped through sed without sanitation %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
