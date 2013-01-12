@@ -447,15 +447,6 @@ var PLY = (function ($) {
         document.addEventListener(event_name, function () {
             try {
                 v.apply(this, arguments);
-                if (exposed.debug && event_name === "touchmove") { 
-                    // this is debug only consistency checks (ya, bad form, till I introduce a JS preprocessor)
-                    var flag = false;
-                    for (var id in exposed.pointer_state) {
-                        if (id === ""+exposed.last_pointer_id)
-                            flag = true;
-                    }
-                    assert(flag, "none of the id's found in pointer_state matches last_pointer_id: "+exposed.last_pointer_id);
-                }
             } catch (e) {
                 // show the error to the DOM to help out for mobile (also cool on PC)
                 $("#debug_log").prepend($('<div class="error">').text(e.toString()+": "+e.stack));
