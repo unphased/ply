@@ -294,12 +294,9 @@ var PLY = (function ($) {
 
                 var pointer_data = {xs: eci.pageX, ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, e: seen_target};
                 if (!$.data(seen_target,"ply")) {
-                    var to_add = {};
-                    to_add[eci.identifier] = pointer_data;
-                    $.data(seen_target,"ply",to_add);
-                } else {
-                    $.data(seen_target,"ply")[eci.identifier] = pointer_data;
-                }
+                    $.data(seen_target,"ply",{});
+                } 
+                $.data(seen_target,"ply")[eci.identifier] = pointer_data;
                 exposed.pointer_state[eci.identifier] = pointer_data; 
             }
            
@@ -318,7 +315,7 @@ var PLY = (function ($) {
             var ecl = ec.length;
             for (var i=0;i<ecl;++i) {
                 var eci = ec[i];
-                $.data(exposed.pointer_state[eci.identifier].e,'ply',false);
+                delete $.data(ep_ecid.e,'ply')[eci.identifier];
                 delete exposed.pointer_state[eci.identifier];
             }
             // if debug check the model in fact is correctly maintained by cT by comparing to touches
