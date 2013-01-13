@@ -318,7 +318,7 @@ var PLY = (function ($) {
                 var eci = ec[i];
                 delete $.data(exposed.pointer_state[eci.identifier].e,'ply')[eci.identifier];
                 delete exposed.pointer_state[eci.identifier];
-                console.log('removed ',eci.identifier, " now pointer_state is ",serialize(exposed.pointer_state));
+                console.log('removed ',eci.identifier, " now pointer_state is ",exposed.pointer_state);
             }
             // if debug check the model in fact is correctly maintained by cT by comparing to touches
             if (exposed.debug) {
