@@ -21,32 +21,6 @@
         window.cancelAnimationFrame = function(id) {
             clearTimeout(id);
         };
-
-    /* function flatten(obj, levels) {
-        if (levels === 0) return '';
-        var empty = true;
-        if (obj instanceof Array) {
-            str = '[';
-            empty = true;
-            for (var i=0;i<obj.length;i++) {
-               empty = false;
-               str += flatten(obj[i],levels-1)+', ';
-            }
-            return (empty?str:str.slice(0,-2))+']';
-        } else if (obj instanceof Function) {
-            str += 'function';
-        } else if (obj instanceof Object) {
-            str = '{'; 
-            empty = true;
-            for (var j in obj) { 
-                empty = false;
-                str += j + ':' + flatten(obj[j],levels-1)+', '; 
-            } 
-            return (empty?str:str.slice(0,-2))+'}';
-        } else {
-            return obj.toString(); 
-        }
-    } */
     
     var transform_name = Modernizr.prefixed('transform');
     var hide_transform = "translate3d(-99999px,-99999px,0)";
@@ -155,30 +129,6 @@
         //console.log("scrollY"+scrollY);
         var ppk = Object.keys(PLY.pointer_state);
         var ppl = ppk.length;
-        /* while (pmc.children.length < ppl) {
-            var ne = document.createElement('DIV');
-            ne.className = "pointer_marker";
-            pmc.appendChild(ne);
-        }
-        while (pmc.children.length > ppl) {
-            pmc.removeChild(pmc.lastChild);
-        }
-        while (psmc.children.length < ppl) {
-            var ne2 = document.createElement('DIV');
-            ne2.className = "pointer_start_marker";
-            psmc.appendChild(ne2);
-        }
-        while (psmc.children.length > ppl) {
-            psmc.removeChild(psmc.lastChild);
-        }
-        while (ehl.children.length < ppl*2) {
-            var ne3 = document.createElement('DIV');
-            ne3.className = "element_highlight";
-            ehl.appendChild(ne3);
-        }
-        while (ehl.children.length > ppl*2) {
-            ehl.removeChild(ehl.lastChild);
-        } */
         
         var i = 0;
         for (var p in PLY.pointer_state) {
@@ -188,7 +138,7 @@
             var eshli = eshl.children[i];
             var pci = pmc.children[i];
             var psci = psmc.children[i];
-            if (ppp.es === ppp.ec) {
+            if (ppp.e || ppp.es === ppp.ec) {
                 // I defer the calling of elementFromPoint to here for performance reasons
                 // ply will never do this kind of heavy lifting without being told to
                 var detected_element;
@@ -214,13 +164,14 @@
                     echli.style[transform_name] = "translate3d("+jpppeco.left+"px,"+jpppeco.top+"px,0)";
                 }
             }
+            var pppe = ppp.e || ppp.es;
             if (has_bounding_client_rect) {
-                var sbcr = ppp.es.getBoundingClientRect();
+                var sbcr = pppe.getBoundingClientRect();
                 eshli.style.width = sbcr.width+"px";
                 eshli.style.height = sbcr.height+"px";
                 eshli.style[transform_name] = "translate3d("+(scrollX+sbcr.left)+"px,"+(scrollY+sbcr.top)+"px,0)";
             } else {
-                var jpppes = $(ppp.es);
+                var jpppes = $(pppe);
                 var jpppeso = jpppes.offset();
                 eshli.style.width = jpppes.outerWidth()+"px";
                 eshli.style.height = jpppes.outerHeight()+"px";
@@ -255,5 +206,6 @@
         console.log("Window got focus. Jumpstarting rAF");
         requestAnimationFrame(debug_refresh);
     });
-    $("h1").after($('<button id="debug_toggle">toggle debug</button>').on('touchstart',function(e){e.preventDefault(); PLY.debug = !PLY.debug;}).on('click',function(){PLY.debug = !PLY.debug;}));
+    $("h1").after('<button id="append_logs_dom_toggle" onclick="PLY.append_logs_dom = !PLY.append_logs_dom">toggle realtime log display</button>')
+        .after('<button id="debug_toggle" onclick="PLY.debug = !PLY.debug">toggle all debug</button>');
 }());
