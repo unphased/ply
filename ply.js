@@ -297,6 +297,7 @@ var PLY = (function ($) {
                 } 
                 $.data(seen_target,"ply")[eci.identifier] = pointer_data;
                 exposed.pointer_state[eci.identifier] = pointer_data; 
+                console.log("added "+eci.identifier);
             }
            
             if (exposed.allow_scroll && ps_count === 0 && 
