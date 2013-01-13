@@ -314,8 +314,9 @@ var PLY = (function ($) {
             var ecl = ec.length;
             for (var i=0;i<ecl;++i) {
                 var eci = ec[i];
-                delete $.data(ep_ecid.e,'ply')[eci.identifier];
+                delete $.data(exposed.pointer_state[eci.identifier].e,'ply')[eci.identifier];
                 delete exposed.pointer_state[eci.identifier];
+                console.log('removing ',eci.identifier);
             }
             // if debug check the model in fact is correctly maintained by cT by comparing to touches
             if (exposed.debug) {
