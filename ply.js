@@ -316,7 +316,7 @@ var PLY = (function ($) {
                 var eci = ec[i];
                 delete $.data(exposed.pointer_state[eci.identifier].e,'ply')[eci.identifier];
                 delete exposed.pointer_state[eci.identifier];
-                console.log('removing ',eci.identifier);
+                console.log('removed ',eci.identifier, " now pointer_state is ",exposed.pointer_state);
             }
             // if debug check the model in fact is correctly maintained by cT by comparing to touches
             if (exposed.debug) {
@@ -328,7 +328,9 @@ var PLY = (function ($) {
                 }
                 for (var x in exposed.pointer_state) {
                     if (x === "m") continue; // skip the mouse
-                    assert(touches_hash[x],"this element should be in the touches in the event because it is in the pointer state: "+x+" in "+serialize(touches_hash));
+                    //assert(touches_hash[x],"this element should be in the touches in the event because it is in the pointer state: "+x+" in "+serialize(touches_hash));
+                    // looks like sometimes something can be taken out of touches list before a touchend
+                    // for it is sent out!
                     assert($.data(exposed.pointer_state[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
                     assert($.data(exposed.pointer_state[x].e,'ply')[x] === exposed.pointer_state[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(exposed.pointer_state[x])+"; "+serialize($.data(exposed.pointer_state[x].e,'ply')));
                 }
