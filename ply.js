@@ -31,7 +31,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% REVISION %#";
+    var git_context = "#% 275915b looking at the ply prop of data %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
@@ -42,7 +42,10 @@ var PLY = (function ($) {
 
         // Never assume that keys is not filled with keys that were held down 
         // the last time the browser was in focus.
+<<<<<<< HEAD
 
+=======
+>>>>>>> c34e0b93342a12bd46a198539dac2701f67cadf4
         keys_depressed: {}, 
 
         // pointer_state stores state of mouse and/or touches. It will treat 
