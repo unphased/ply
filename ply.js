@@ -326,7 +326,9 @@ var PLY = (function ($) {
                 for (var t=0;t<evt.touches.length;++t) {
                     var etti = evt.touches[t].identifier;
                     touches_hash[etti] = true;
-                    assert(exposed.pointer_state[etti],"this element should be in the pointer_state because it is in the touches: "+etti+" in "+serialize(exposed.pointer_state));
+                    //assert(exposed.pointer_state[etti],"this element should be in the pointer_state because it is in the touches: "+etti+" in "+serialize(exposed.pointer_state));
+                    // this assertion also trips because it is possible for the touches to produce a touch that is new
+                    // while running the touchend of a previous touch. Not surprising, really.
                 }
                 for (var x in exposed.pointer_state) {
                     if (x === "m") continue; // skip the mouse
