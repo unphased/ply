@@ -212,73 +212,6 @@ var PLY = (function ($) {
         return evt.which || evt.keyCode || /*window.*/event.keyCode;
     }
 
-    var touchend_touchcancel;
-
-    // After extensive testing on devices it became clear that the tracking of state
-    // based on the API of changedTouches and differentiating between events is clearly
-    // suboptimal.
-    // 1) It is possible for the touches list to include a touch that is new
-    // while running the touchend of a previous touch. 
-    // 2) It is possible for the touches list to exclude a touch that has been removed
-    // while running the touchend of a previous touch. 
-    // There are likely even more similar cases with touchstart and touchcancel.
-    // My conclusion is that the `touches` property found in these events is likely 
-    // to be a reference to a much more reliable source of information and thus 
-    // the goal should be to simply use that list to determine and update ply's state.
-    // This following funtion shall be executed from touchstart, touchend, and 
-    // touchcancel events alike and performs no logic on changedTouches.
-    /* function touchupdate(evt, isTouchStart) {
-        var et = evt.touches;
-        var etl = et.length;
-        var ep = exposed.pointer_state;
-        var new_touches = [];
-        var hash = {};
-        var ep_empty = true;
-        for (var epi in ep) {
-            if (epi !== "m") {
-                ep_empty = false; break;
-            }
-        }
-        for (var i=0;i<etl;++i) {
-            var eti = et[i];
-            var etii = eti.identifier;
-            if (!ep[etii]) {
-                // new touch
-                var target = eti.target;
-                if (ep_empty && ((' '+target.className+' ').indexOf(" ply-noscroll ") !== -1)) { 
-                    // if we find a new touch during zero touch state,
-                    // check it is a noscroll element and if so flip allow scroll
-                    exposed.allow_scroll = false;
-                }
-                // add our touch 
-                var pointer_data = {xs: eti.pageX, ys: eti.pageY, xc: eti.pageX, yc: eti.pageY, e: target};
-                if (!$.data(target,'ply')) { $.data(target,'ply',{}); } // this might be optimizable
-                $.data(target,'ply')[etii] = pointer_data;
-                ep[etii] = pointer_data;
-                ep_empty = false;
-            }
-            hash[etii] = true;
-        }
-        // now touches is subset of ep 
-        for (var id in ep) {
-            if (id === "m") continue;
-            if (!hash[id]) {
-                // removed touch
-            }
-        }
-        if (isTouchStart) {
-            if (!exposed.allow_scroll)
-                evt.preventDefault();
-        }
-    } */
-    // well i am abandoning that attempt because it screws with preventDefault on touchstart. Dammit. Waste of time.
-
-    // touchmove will be a somewhat tweaked (extra optimized) version of the above since
-    // it is not concerned about the addition/removal of touches. 
-    function touchmove(evt) {
-
-    }
-
     // entry point for code is the document's event handlers. 
     var handlers_for_doc = {
         click: function (evt) { console.log('click', evt.pageX, evt.pageY); 
@@ -372,6 +305,22 @@ var PLY = (function ($) {
                 evt.preventDefault();
             }
         },
+
+        // After extensive testing on devices it became clear that the tracking of state
+        // based on the API of changedTouches and differentiating between events is clearly
+        // suboptimal.
+        // 1) It is possible for the touches list to include a touch that is new
+        // while running the touchend of a previous touch. 
+        // 2) It is possible for the touches list to exclude a touch that has been removed
+        // while running the touchend of a previous touch. 
+        // There are likely even more similar cases with touchstart and touchcancel.
+        // My conclusion is that the `touches` property found in these events is likely 
+        // to be a reference to a much more reliable source of information and thus 
+        // the goal should be to simply use that list to determine and update ply's state.
+        // unfortunately I can't simply assign the same handler to touchstart and touchend
+        // and touchcancel so i will have independent touchstart but touchend and touchcancel
+        // will use the same handler which uses the touches list.
+
         touchend: (touchend_touchcancel = function (evt) { console.log("touchend", id_string_for_touch_list(evt.changedTouches));
             // clean out the touches that got removed 
             /* var ec = evt.changedTouches;
@@ -398,7 +347,7 @@ var PLY = (function ($) {
                     // no longer present
                     delete $.data(ep[id].e,'ply')[id];
                     delete ep[id];
-                    console.log('removed ',etii," now ep is ",ep);
+                    console.log('removed ',id," now ep is ",ep);
                 }
             }
             if (etl === 0) { // this indicates no touches remain
