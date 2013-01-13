@@ -327,7 +327,7 @@ var PLY = (function ($) {
                 for (var t=0;t<evt.touches.length;++t) {
                     var etti = evt.touches[t].identifier;
                     touches_hash[etti] = true;
-                    assert(exposed.pointer_state[etti],"this element should be in the pointer_state because it is in the touches: "+t);
+                    assert(exposed.pointer_state[etti],"this element should be in the pointer_state because it is in the touches: "+etti);
                 }
                 for (var x in exposed.pointer_state) {
                     if (x === "m") continue; // skip the mouse
