@@ -333,7 +333,7 @@ var PLY = (function ($) {
                     if (x === "m") continue; // skip the mouse
                     assert(touches_hash[x],"this element should be in the touches in the event because it is in the pointer state: "+x);
                     assert($.data(exposed.pointer_state[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
-                    assert($.data(exposed.pointer_state[x].e,'ply') === exposed.pointer_state[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(exposed.pointer_state[x])+"; "+serialize($.data(exposed.pointer_state[x].e,'ply')));
+                    assert($.data(exposed.pointer_state[x].e,'ply')[x] === exposed.pointer_state[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(exposed.pointer_state[x])+"; "+serialize($.data(exposed.pointer_state[x].e,'ply')));
                 }
             }
             if (evt.touches.length === 0) { // this indicates no touches remain
