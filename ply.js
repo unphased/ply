@@ -46,10 +46,8 @@ var PLY = (function ($) {
         keys_depressed: {}, 
 
         // pointer_state stores state of mouse and/or touches. It will treat 
-        // the mouse somewhat differently by storing it into the "m" property,
-        // and touches will be in an array called "touch", one for each element
-        // that is marked by ply to be a manipulable element, and that will contain
-        // a hash of touch id's that control it. 
+        // the mouse somewhat differently by storing it into the "m" property
+        // touches are stored under their id as key.
         pointer_state: {}, 
 
         // used by touchmove event to run code only when necessary
@@ -216,6 +214,67 @@ var PLY = (function ($) {
     }
 
     var touchend_touchcancel;
+
+    // After extensive testing on devices it became clear that the tracking of state
+    // based on the API of changedTouches and differentiating between events is clearly
+    // suboptimal.
+    // 1) It is possible for the touches list to include a touch that is new
+    // while running the touchend of a previous touch. 
+    // 2) It is possible for the touches list to exclude a touch that has been removed
+    // while running the touchend of a previous touch. 
+    // There are likely even more similar cases with touchstart and touchcancel.
+    // My conclusion is that the `touches` property found in these events is likely 
+    // to be a reference to a much more reliable source of information and thus 
+    // the goal should be to simply use that list to determine and update ply's state.
+    // This following funtion shall be executed from touchstart, touchend, and 
+    // touchcancel events alike and performs no logic on changedTouches.
+    function touchupdate(evt) {
+        var et = evt.touches;
+        var etl = et.length;
+        var ep = exposed.pointer_state;
+        var new_touches = [];
+        var hash = {};
+        var ep_empty = true;
+        for (var epi in ep) {
+            if (epi !== "m") {
+                ep_empty = false;
+                break;
+            }
+        }
+        for (var i=0;i<etl;++i) {
+            var eti = et[i];
+            var etii = eti.identifier;
+            if (!ep[etii]) {
+                // new touch
+                var target = eti.target;
+                if (ep_empty && ((' '+target.className+' ').indexOf(" ply-noscroll ") !== -1)) { 
+                    // if we find a new touch during zero touch state,
+                    // check it is a noscroll element and if so flip allow scroll
+                    exposed.allow_scroll = false;
+                }
+                // add our touch 
+                var pointer_data = {xs: eti.pageX, ys: eti.pageY, xc: eti.pageX, yc: eti.pageY, e: target};
+                if (!$.data(target,'ply')) { $.data(target,'ply',{}); } // this might be optimizable
+                $.data(target,'ply')[etii] = pointer_data;
+                ep[etii] = pointer_data;
+                ep_empty = false;
+            }
+            hash[etii] = true;
+        }
+        // now touches is subset of ep 
+        for (var id in ep) {
+            if (id === "m") continue;
+            if (!hash[id]) {
+                // removed touch
+            }
+        }
+    }
+
+    // touchmove will be a somewhat tweaked (extra optimized) version of the above since
+    // it is not concerned about the addition/removal of touches. 
+    function touchmove(evt) {
+
+    }
 
     // entry point for code is the document's event handlers. 
     var handlers_for_doc = {
