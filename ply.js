@@ -324,11 +324,11 @@ var PLY = (function ($) {
                 for (var t=0;t<evt.touches.length;++t) {
                     var etti = evt.touches[t].identifier;
                     touches_hash[etti] = true;
-                    assert(exposed.pointer_state[etti],"this element should be in the pointer_state because it is in the touches: "+etti+"in "+serialize(exposed.pointer_state));
+                    assert(exposed.pointer_state[etti],"this element should be in the pointer_state because it is in the touches: "+etti+" in "+serialize(exposed.pointer_state));
                 }
                 for (var x in exposed.pointer_state) {
                     if (x === "m") continue; // skip the mouse
-                    assert(touches_hash[x],"this element should be in the touches in the event because it is in the pointer state: "+x);
+                    assert(touches_hash[x],"this element should be in the touches in the event because it is in the pointer state: "+x+" in "+serialize(touches_hash));
                     assert($.data(exposed.pointer_state[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
                     assert($.data(exposed.pointer_state[x].e,'ply')[x] === exposed.pointer_state[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(exposed.pointer_state[x])+"; "+serialize($.data(exposed.pointer_state[x].e,'ply')));
                 }
