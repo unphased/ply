@@ -266,6 +266,9 @@ var PLY = (function ($) {
             delete exposed.keys_depressed[key(evt)];
         },
         touchstart: function (evt) { console.log("touchstart", id_string_for_touch_list(evt.targetTouches));
+
+            exposed.tmTime = 0; // reset touchmove timer
+
             // if allow scroll, then never prevent default: once you're
             // scrolling, touching anything else should never mess with the 
             // browser default scrolling. 
@@ -273,16 +276,18 @@ var PLY = (function ($) {
             // off a complex interaction, so it will be the place that 
             // allow_scroll is directly assigned (when it is the first touch,
             // of course).
+            var ep = exposed.pointer_state;
             var ps_count = 0;
-            for (var x in exposed.pointer_state) {
+            for (var x in ep) {
                 if (x !== "m") ps_count++;
             }
             var seen_target;
             for (var i=0;i<evt.changedTouches.length;++i) {
                 var eci = evt.changedTouches[i];
+                var ecii = eci.identifier;
                 // this assertion is to check my assumption that all touchstarts batch cT list based on target elem.
-                if (seen_target) assert(eci.target === seen_target);
-                else seen_target = eci.target;
+                // if (seen_target) assert(eci.target === seen_target);
+                seen_target = eci.target;
                 // here, we must determine the actual real target that this set of touches
                 // is destined to control. store that... for right now it stores the immediate
                 // target which is fine to test that the thing works. 
@@ -290,15 +295,13 @@ var PLY = (function ($) {
                 var pointer_data = {xs: eci.pageX, ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, e: seen_target};
                 if (!$.data(seen_target,"ply")) {
                     $.data(seen_target,"ply",{});
-                } 
-                $.data(seen_target,"ply")[eci.identifier] = pointer_data;
-                exposed.pointer_state[eci.identifier] = pointer_data; 
-                console.log("added "+eci.identifier);
+                }
+                $.data(seen_target,"ply")[ecii] = pointer_data;
+                ep[ecii] = pointer_data; 
+                console.log("added "+ecii);
             }
            
-            if (exposed.allow_scroll && ps_count === 0 && 
-                ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1))
-            {
+            if (ps_count === 0 && ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1)) {
                 exposed.allow_scroll = false;
             }
             if (!exposed.allow_scroll) {
@@ -322,6 +325,9 @@ var PLY = (function ($) {
         // will use the same handler which uses the touches list.
 
         touchend: (touchend_touchcancel = function (evt) { console.log("touchend", id_string_for_touch_list(evt.changedTouches));
+
+            exposed.tmTime = 0; // reset touchmove timer
+
             // clean out the touches that got removed 
             /* var ec = evt.changedTouches;
             var ecl = ec.length;
@@ -371,7 +377,7 @@ var PLY = (function ($) {
                     assert($.data(exposed.pointer_state[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
                     assert($.data(exposed.pointer_state[x].e,'ply')[x] === exposed.pointer_state[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(exposed.pointer_state[x])+"; "+serialize($.data(exposed.pointer_state[x].e,'ply')));
                 }
-            }            
+            }
         }),
         touchcancel: touchend_touchcancel,
         // The majority of functionality is funneled through the (capturing) touchmove handler on the document. 
