@@ -269,7 +269,7 @@ var PLY = (function ($) {
         keyup: function (evt) { console.log("keyup",key(evt));
             delete exposed.keys_depressed[key(evt)];
         },
-        touchstart: function (evt) { //console.log("touchstart", evt.targetTouches);            
+        touchstart: function (evt) { console.log("touchstart", id_string_for_touch_list(evt.targetTouches));
             // if allow scroll, then never prevent default: once you're
             // scrolling, touching anything else should never mess with the 
             // browser default scrolling. 
