@@ -354,7 +354,7 @@ var PLY = (function ($) {
                 if (!hash[id] && id !== "m") {
                     // no longer present
                     delete $.data(ep[id].e,'ply')[id];
-                    delete ep[id].ed; // just in case
+                    // delete ep[id].ed; // just in case
                     delete ep[id];
                     console.log('removed ',id," now ep is ",ep);
                 }
