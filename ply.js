@@ -114,8 +114,8 @@ var PLY = (function ($) {
 
     var original_console_log = console.log;
     // echo console logs to the debug 
-    window.instrumented_log = function () {
-        original_console_log.apply(console, arguments);
+    var instrumented_log = function () {
+        original_console_log.apply(window.console, arguments);
         if (!exposed.debug) return;
         var str = "";
         for (var i=0;i<arguments.length;++i) {
@@ -131,11 +131,12 @@ var PLY = (function ($) {
         // this means all logs in your application get dumped into #debug_log if 
         // you've got one
     };
-    console.log = instrumented_log;
-
-    // set up a way to show the log buffer if debug mode 
-    // (note toggling the debug off will stop logs being written)
     if (exposed.debug) {
+        console.log = instrumented_log; // pre-empt usage of this if starting off not debug
+
+        // set up a way to show the log buffer if debug mode 
+        // (note toggling the debug off will stop logs being written)
+        // (and if debug is not true to begin with, no button is made)
         var show = false;
         $("#log_buffer_dump").before($('<button>toggle full log buffer snapshot</button>').on('click',function(){
             show = !show;
@@ -503,10 +504,12 @@ var PLY = (function ($) {
                 v.apply(this, arguments);
             } catch (e) {
                 // show the error to the DOM to help out for mobile (also cool on PC)
-                $("#debug_log").prepend($('<div class="error">').text(e.toString()+": "+e.stack));
+                var html = '<div class="error">'+e.toString()+" at "+e.stack;
+                $("#debug_log").prepend(html);
+                log_buffer.push(html);
                 throw e; // rethrow to give it to debugging safari, rather than be silent
             }
-            exposed.event_processed = true;
+            exposed.event_processed = true; 
         }, true); // hook to capture phase to circumvent stopPropagation()
     });
     return exposed;
