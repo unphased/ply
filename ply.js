@@ -298,6 +298,7 @@ var PLY = (function ($) {
                     $.data(seen_target,"ply",{});
                 }
                 $.data(seen_target,"ply")[ecii] = pointer_data;
+                //pointer_data.ed = $.data(seen_target,"ply");
                 ep[ecii] = pointer_data; 
                 console.log("added "+ecii);
             }
@@ -353,6 +354,7 @@ var PLY = (function ($) {
                 if (!hash[id] && id !== "m") {
                     // no longer present
                     delete $.data(ep[id].e,'ply')[id];
+                    delete ep[id].ed; // just in case
                     delete ep[id];
                     console.log('removed ',id," now ep is ",ep);
                 }
@@ -398,17 +400,28 @@ var PLY = (function ($) {
             
             var et = evt.touches;
             var etl = et.length;
-            for (var i=0;i<etl;++i) { // loop over all pointers: assemble the elements to transform array 
+            var ep = exposed.pointer_state;
+            var elems = [];
+            for (var i=0; i<etl; ++i) { // loop over all pointers: assemble the elements to transform array 
                 var eti = et[i];
-                var ep_etid = exposed.pointer_state[eti.identifier];
+                var ep_etid = ep[eti.identifier];
                 // ep_etid.es is the actual element to be manipulated
                 // full_pointer_list.push({e: ep_etid.es, x: eti.pageX-ep_etid.xs, y: eti.pageY-ep_etid.ys});
                 // update this for display purposes
-                ep_etid.xc = eti.pageX;
-                ep_etid.yc = eti.pageY;
+                if (ep_etid.xc !== eti.pageX || ep_etid.yc !== eti.pageY) {
+                    // do not mark change based on force
+                    ep_etid.xc = eti.pageX;
+                    ep_etid.yc = eti.pageY;
+                    //ep_etid.ed.changed = true;
+                    elems.push({e: ep_etipd.e, x: eti.pageX-ep_etid.xs, y: eti.pageY-ep_etid.ys});
+                }
                 if (eti.webkitForce) {
                     ep_etid.fatness = eti.webkitForce;
                 }
+            }
+
+            for (var j=0; j<elems.length; ++j) {
+                elems[j] 
             }
 
             exposed.tmTime = Date.now(); // update this last
