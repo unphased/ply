@@ -42,10 +42,7 @@ var PLY = (function ($) {
 
         // Never assume that keys is not filled with keys that were held down 
         // the last time the browser was in focus.
-<<<<<<< HEAD
 
-=======
->>>>>>> c34e0b93342a12bd46a198539dac2701f67cadf4
         keys_depressed: {}, 
 
         // pointer_state stores state of mouse and/or touches. It will treat 
