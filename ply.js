@@ -292,8 +292,13 @@ var PLY = (function ($) {
                 // target which is fine to test that the thing works. 
 
                 var pointer_data = {xs: eci.pageX, ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, e: seen_target};
-                $.data(seen_target,"ply",pointer_data);
-
+                if (!$.data(seen_target,"ply")) {
+                    var to_add = {};
+                    to_add[eci.identifier] = pointer_data;
+                    $.data(seen_target,"ply",to_add);
+                } else {
+                    $.data(seen_target,"ply")[eci.identifier] = pointer_data;
+                }
                 exposed.pointer_state[eci.identifier] = pointer_data; 
             }
            
@@ -321,7 +326,7 @@ var PLY = (function ($) {
                 for (var t=0;t<evt.touches.length;++t) {
                     var etti = evt.touches[t].identifier;
                     touches_hash[etti] = true;
-                    assert(exposed.pointer_state[etti],"this element should be in the pointer_state because it is in the touches: "+t);
+                    assert(exposed.pointer_state[etti],"this element should be in the pointer_state because it is in the touches: "+etti);
                 }
                 for (var x in exposed.pointer_state) {
                     if (x === "m") continue; // skip the mouse
