@@ -145,9 +145,13 @@
                 if ((detected_element = document.elementFromPoint(ppp.xc-scrollX,ppp.yc-scrollY)) !== ppp.es) {
                     var de = $(detected_element);
                     var deo = de.offset();
-                    echli.style.width = de.outerWidth()+"px";
-                    echli.style.height = de.outerHeight()+"px";
-                    echli.style[transform_name] = "translate3d("+deo.left+"px,"+deo.top+"px,0)";
+                    if (deo) {
+                        echli.style.width = de.outerWidth()+"px";
+                        echli.style.height = de.outerHeight()+"px";
+                        echli.style[transform_name] = "translate3d("+deo.left+"px,"+deo.top+"px,0)";
+                    } else {
+                        echli.style[transform_name] = hide_transform;    
+                    }
                 } else
                     echli.style[transform_name] = hide_transform;
             } else {
