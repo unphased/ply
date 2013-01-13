@@ -227,7 +227,7 @@ var PLY = (function ($) {
     // the goal should be to simply use that list to determine and update ply's state.
     // This following funtion shall be executed from touchstart, touchend, and 
     // touchcancel events alike and performs no logic on changedTouches.
-    function touchupdate(evt) {
+    /* function touchupdate(evt, isTouchStart) {
         var et = evt.touches;
         var etl = et.length;
         var ep = exposed.pointer_state;
@@ -236,8 +236,7 @@ var PLY = (function ($) {
         var ep_empty = true;
         for (var epi in ep) {
             if (epi !== "m") {
-                ep_empty = false;
-                break;
+                ep_empty = false; break;
             }
         }
         for (var i=0;i<etl;++i) {
@@ -267,7 +266,12 @@ var PLY = (function ($) {
                 // removed touch
             }
         }
-    }
+        if (isTouchStart) {
+            if (!exposed.allow_scroll)
+                evt.preventDefault();
+        }
+    } */
+    // well i am abandoning that attempt because it screws with preventDefault on touchstart. Dammit. Waste of time.
 
     // touchmove will be a somewhat tweaked (extra optimized) version of the above since
     // it is not concerned about the addition/removal of touches. 
@@ -370,13 +374,35 @@ var PLY = (function ($) {
         },
         touchend: (touchend_touchcancel = function (evt) { console.log("touchend", id_string_for_touch_list(evt.changedTouches));
             // clean out the touches that got removed 
-            var ec = evt.changedTouches;
+            /* var ec = evt.changedTouches;
             var ecl = ec.length;
             for (var i=0;i<ecl;++i) {
                 var eci = ec[i];
                 delete $.data(exposed.pointer_state[eci.identifier].e,'ply')[eci.identifier];
                 delete exposed.pointer_state[eci.identifier];
                 console.log('removed ',eci.identifier, " now pointer_state is ",exposed.pointer_state);
+            } */
+            
+            // using touches (because it is more reliable) to determine which touches have been removed
+            var et = evt.touches;
+            var etl = et.length;
+            var hash = {};
+            var ep = exposed.pointer_state;
+            for (var i=0;i<etl;++i) {
+                var eti = et[i];
+                var etii = eti.identifier;
+                hash[etii] = true;
+            }
+            for (var id in ep) {
+                if (!hash[id] && id !== "m") {
+                    // no longer present
+                    delete $.data(ep[id].e,'ply')[id];
+                    delete ep[id];
+                    console.log('removed ',etii," now ep is ",ep);
+                }
+            }
+            if (etl === 0) { // this indicates no touches remain
+                exposed.allow_scroll = true;
             }
             // if debug check the model in fact is correctly maintained by cT by comparing to touches
             if (exposed.debug) {
@@ -396,10 +422,7 @@ var PLY = (function ($) {
                     assert($.data(exposed.pointer_state[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
                     assert($.data(exposed.pointer_state[x].e,'ply')[x] === exposed.pointer_state[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(exposed.pointer_state[x])+"; "+serialize($.data(exposed.pointer_state[x].e,'ply')));
                 }
-            }
-            if (evt.touches.length === 0) { // this indicates no touches remain
-                exposed.allow_scroll = true;
-            }
+            }            
         }),
         touchcancel: touchend_touchcancel,
         // The majority of functionality is funneled through the (capturing) touchmove handler on the document. 
