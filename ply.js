@@ -308,7 +308,7 @@ var PLY = (function ($) {
                 evt.preventDefault();
             }
         },
-        touchend: (touchend_touchcancel = function (evt) { //console.log("touchend", evt.changedTouches);
+        touchend: (touchend_touchcancel = function (evt) { console.log("touchend", id_string_for_touch_list(evt.changedTouches));
             // clean out the touches that got removed 
             var ec = evt.changedTouches;
             var ecl = ec.length;
