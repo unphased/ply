@@ -329,7 +329,7 @@ var PLY = (function ($) {
                 var nid = en.length;
                 console.log('nid',nid);
                 if (!dt) {
-                    dt = $.data(seen_target,"ply",{node_id: nid});                    
+                    dt = $.data(seen_target,"ply",{node_id: nid});
                     en.push(seen_target);
                     console.log('en '+serialize(en));
                 } else {
@@ -436,10 +436,12 @@ var PLY = (function ($) {
                     //assert(touches_hash[x],"this element should be in the touches in the event because it is in the pointer state: "+x+" in "+serialize(touches_hash));
                     // looks like sometimes something can be taken out of touches list before a touchend
                     // for it is sent out!
-                    assert($.data(ep[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
-                    assert($.data(ep[x].e,'ply')[x] === ep[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(ep[x])+"; "+serialize($.data(ep[x].e,'ply')));
-                    assert(ep[x].ni === $.data(ep[x].e,'ply').node_id, "node id check "+ep[x].ni+", "+$.data(ep[x].e,'ply').node_id);
-                    assert(en[ep[x].ni] === ep[x].e, "check element with id");
+                    if (ep[x].hasOwnProperty('ni')) {
+                        assert($.data(ep[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
+                        assert($.data(ep[x].e,'ply')[x] === ep[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(ep[x])+"; "+serialize($.data(ep[x].e,'ply')));
+                        assert(ep[x].ni === $.data(ep[x].e,'ply').node_id, "node id check "+ep[x].ni+", "+$.data(ep[x].e,'ply').node_id);
+                        assert(en[ep[x].ni] === ep[x].e, "check element with id");
+                    }                    
                 }
                 for (var j=0;j<en.length;++j) {
                     // check consistency of node_ids by verifying with data contents
