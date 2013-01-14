@@ -52,6 +52,7 @@ var PLY = (function ($) {
 
         // used by touchmove event to run code only when necessary
         tmTime: Date.now(),
+        tmProfile: 10,
 
         // allow_scroll is a global flag that (basically) triggers calling 
         // preventDefault on touch events. This is more or less geared toward 
@@ -70,6 +71,8 @@ var PLY = (function ($) {
         // cannot be spliced out because it would mess with the indexing)
         // tl;dr: node_ids array is so we can have O(1) lookup DOM node sets.
         node_ids: [],
+        // what will be necessary, however, is for mutation events/observer to 
+        // clear out the values in here so as to not leak DOM nodes. 
 
         // This is just marked when any event makes its way through the primary
         // event handlers so that the test site can be a bit more efficient about 
@@ -423,7 +426,8 @@ var PLY = (function ($) {
             // and gives browser about 7 ms of grace-period between touchmove events
             // (which is way more than it should be taking esp. since I start the timing after
             // completing ply transform tasks)
-            if (Date.now() - exposed.tmTime < 7) return; // discard the event                
+            var start = Date.now();
+            if (start - exposed.tmTime < 7) return; // discard the event                
             
             var et = evt.touches;
             var etl = et.length;
@@ -501,6 +505,9 @@ var PLY = (function ($) {
             }
 
             exposed.tmTime = Date.now(); // update this last
+            var profile = exposed.tmTime - start;
+            exposed.tmProfile += (profile - exposed.tmProfile) * 0.02;
+
 
             // loop through the exposed.pointer_state, messaging the elements that received updates in ct
             // 
