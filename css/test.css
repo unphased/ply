@@ -70,14 +70,14 @@ div {
     box-shadow: 0 0 8px 0 #f33;
 }
 
-#debug {
-    pointer-events: none;
+#debug {    
     position: fixed;
     top: 5px;
     right: 5px;
-    left: 120px;
+    left: 200px;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
+    max-height: 400px;
 }
 
 .error {
