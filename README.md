@@ -24,7 +24,23 @@ ply uses DOM2 Mutation Events (the ones deprecated in DOM3 but still found in Sa
 
 ## Devices Supported
 
-None yet, the library is not yet in a functional state. But I have a Nexus 7 and iOS4, 5, and 6 devices to make everything work on. 
+None yet, the library is not yet in a functional state. 
+
+The goal is to support any platforrm which does not place unreasonable requirements on code change to the library. This means that IE9 support is tentative 
+
+To be thoroughly incomplete and in rough order of dev priority: 
+
+- iOS6 Mobile Safari 6
+- iOS5 Mobile Safari 5
+- Android Browsers pending testing (Chrome 18) this includes as many of the myriad Android devices out there as possible
+- OS X Safari 5
+- OS X Safari 6
+- Google Chrome 10+ (OS X, Linux, Windows 32- and 64-bit)
+- IE10 (32- and 64-bit Windows 8, Windows RT)
+- Mozilla Firefox 6+ (OS X, Linux, Windows 32- and 64-bit)
+- Opera 10+ (OS X, Linux, Windows 32- and 64-bit)
+- Konqueror (and related) Linux browsers
+- Safari 5 on Windows
 
 ## How to use
 
