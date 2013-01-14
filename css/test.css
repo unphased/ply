@@ -77,8 +77,9 @@ ul {
 
 #debug {    
     position: fixed;
+    opacity: 0.6;
     border: 2px solid #117;    
-    background-color: rgba(30,30,150,0.7);
+    background-color: #22a;
     color: white;
     top: 5px;
     right: 5px;
@@ -86,6 +87,7 @@ ul {
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     max-height: 320px;
+    -webkit-transition: -webkit-transform 1s;
 }
 
 .error {
