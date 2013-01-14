@@ -323,12 +323,13 @@ var PLY = (function ($) {
                 console.log('enl',enl);
                 if (!dt) {
                     $.data(seen_target,"ply",{node_id: enl});
-                    en.push(seen_target);
+                    en.push(seen_target);                    
                 }
                 var dl = data_list.length;
                 for (var j=0;j<dl;++j) { // go and insert the 
                     var dj = data_list[j];
                     dj.ni = enl;
+                    console.log('set dj.ni to enl=',enl);
                     dt[dj.id] = dj;
                     ep[dj.id] = dj;
                 }
