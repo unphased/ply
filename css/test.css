@@ -82,7 +82,7 @@ ul {
     color: white;
     top: 5px;
     right: 5px;
-    left: 150px;
+    width: 200px;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     max-height: 320px;
