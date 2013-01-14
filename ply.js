@@ -587,7 +587,7 @@ var PLY = (function ($) {
                 v.apply(this, arguments);
             } catch (e) {
                 // show the error to the DOM to help out for mobile (also cool on PC)
-                var html = '<div class="error">'+e.toString()+" at "+e.stack;
+                var html = '<div class="error">'+e.toString()+" at "+e.stack+"</div>";
                 $("#debug_log").prepend(html);
                 log_buffer.push(html);
                 throw e; // rethrow to give it to debugging safari, rather than be silent
