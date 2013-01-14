@@ -201,7 +201,8 @@
         var debuglog = $("#debug_log")[0];
         var dc = debuglog.children;
         for (i = dc.length-1; dc.length > 50 && i >= 0; --i) {
-            if (dc[i].getAttribute('data-time') < (now - 15000))
+            var timestamp = dc[i].getAttribute('data-time');
+            if (timestamp && timestamp < (now - 15000))
                 debuglog.removeChild(dc[i]);
         }
     }
