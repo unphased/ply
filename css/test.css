@@ -70,8 +70,16 @@ div {
     box-shadow: 0 0 8px 0 #f33;
 }
 
+ul {
+    margin: 10px 0;
+    padding-left: 25px;
+}
+
 #debug {    
     position: fixed;
+    border: 2px solid #117;    
+    background-color: rgba(30,30,150,0.7);
+    color: white;
     top: 5px;
     right: 5px;
     left: 150px;
