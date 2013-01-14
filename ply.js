@@ -321,6 +321,7 @@ var PLY = (function ($) {
                 // i-loop) is a no-scroll, then go and set up $.data stuff
                 var dt = $.data(seen_target,"ply");
                 var enl = en.length;
+                console.log('enl',enl);
                 if (!dt) {
                     $.data(seen_target,"ply",{node_id: enl});
                     en.push(seen_target);
