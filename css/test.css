@@ -87,6 +87,7 @@ ul {
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     max-height: 320px;
+    -webkit-transition: -webkit-transform 1s;
 }
 
 .error {
