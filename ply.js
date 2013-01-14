@@ -304,10 +304,14 @@ var PLY = (function ($) {
                 // target which is fine to test that the thing works. 
 
                 var pointer_data = {xs: eci.pageX, ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, e: seen_target, ni: en.length};
-                if (!$.data(seen_target,"ply")) {                    
+                var dt = $.data(seen_target,"ply");
+                if (!dt) {
                     $.data(seen_target,"ply",{node_id: en.length});
                     en.push(seen_target);
+                } else {
+                    pointer_data.ni = dt.node_id;
                 }
+
                 $.data(seen_target,"ply")[ecii] = pointer_data;
                 //pointer_data.ed = $.data(seen_target,"ply");
                 ep[ecii] = pointer_data; 
