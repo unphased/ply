@@ -472,8 +472,8 @@ var PLY = (function ($) {
                     console.log("one touch on "+en[ni]);
                     var event = document.createEvent('HTMLEvents'); // this is for compatibility with DOM Level 2
                     event.initEvent('ply_translate',true,true);
-                    event.deltaX = first.x;
-                    event.deltaY = first.y;
+                    event.deltaX = one.x;
+                    event.deltaY = one.y;
                     // What we do here is if the element has been specified to react automatically
                     // the default behavior will be the direct application (via rAF) of the transform, 
                     // which is probably about as efficient as we can get given what is available (early 2013).
