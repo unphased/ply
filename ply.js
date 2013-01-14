@@ -299,7 +299,9 @@ var PLY = (function ($) {
                 if (x !== "m") ps_count++;
             }
             var seen_target;
-            for (var i=0;i<evt.changedTouches.length;++i) {
+            var data_list = [];
+            assert(evt.changedTouches.length > 0, "evt.changedTouches length > 0 on touchstart: "+evt.changedTouches.length);
+            for (var i=0; i<evt.changedTouches.length; ++i) {
                 var eci = evt.changedTouches[i];
                 var ecii = eci.identifier;
                 // this assertion is to check my assumption that all touchstarts batch cT list based on target elem.
@@ -308,6 +310,9 @@ var PLY = (function ($) {
                 // here, we must determine the actual real target that this set of touches
                 // is destined to control. store that... for right now it stores the immediate
                 // target which is fine to test that the thing works. 
+                
+                var v = {xs: eci.pageX, ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, e: seen_target};
+                data_list.push(v);
 
                 var pointer_data = {xs: eci.pageX, ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, e: seen_target, ni: en.length};
                 var dt = $.data(seen_target,"ply");
@@ -323,8 +328,34 @@ var PLY = (function ($) {
                 ep[ecii] = pointer_data; 
                 console.log("added "+ecii);
             }
+
+            if ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1) {
+                // if the target (which I am fairly certain from the 
+                // commented out assertion above is the same across this 
+                // i-loop) is a no-scroll, then go and set up $.data stuff
+                var dt = $.data(seen_target,"ply");
+                var enl = en.length;
+                if (!dt) {
+                    $.data(seen_target,"ply",{node_id: enl});
+                    en.push(seen_target);
+                }
+                var dl = data_list.length;
+                for (var j=0;j<dl;++j) { // go and insert the 
+                    var dj = data_list[j];
+                    dj.ni = enl;
+                }
+
+                if (ps_count === 0) {
+                    // this is so that if you start scrolling and then with 2nd
+                    // finger touch a ply-noscroll element it will not 
+                    // preventDefault on the touchstart on this 2nd touch (which
+                    // produces strange stuff, trust me)
+                    exposed.allow_scroll = false;
+                }
+            }
+
            
-            if (ps_count === 0 && ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1)) {
+            if (ps_count === 0 && ) {
                 exposed.allow_scroll = false;
             }
             if (!exposed.allow_scroll) {
@@ -505,76 +536,11 @@ var PLY = (function ($) {
                     console.log("two touches on "+en[ni]);
                 }
             }
-
             exposed.tmTime = Date.now(); // update this last
-            var profile = exposed.tmTime - start;
-            exposed.tmProfile += (profile - exposed.tmProfile) * 0.02;
-
-
-            // loop through the exposed.pointer_state, messaging the elements that received updates in ct
-            // 
-            /* 
-
-            var full_pointer_list = [];
-            
-            var el = full_pointer_list;
-            var ell = el.length;
-            var first, second, rest;
-            for (var e; true; e = undefined) {
-                first = undefined;
-                second = undefined;
-                rest = [];
-                console.log("entering j-loop");
-                for (var j=0;j<ell;++j) {
-                    var elj = el[j];
-                    var v = {x: elj.x, y: elj.y};
-                    if (!elj.e && !e) { 
-                        // init e
-                        e = elj.e;
-                        console.log("first finger for element ",e);
-                        elj.e = undefined;
-                        first = v;
-                    } else if (elj === e) {
-                        // a second (or third etc)
-                        if (!second) {
-                            second = v;
-                            console.log("second finger for element ",e);
-                        } else {
-                            rest.push(v);
-                            console.log("third(or more) finger for element ",e); 
-                        }
-                        elj.e = undefined;
-                    } // else, is another element we'll come back for it later
-                }
-                // NOW we process element e
-                if (!e) {
-                    // at this point we know we're done; all elements exhausted
-                    break;
-                }
-                if (!second) {
-                    // only first is set: only one finger on this element
-                    // build and send out a translate event 
-                    var event = document.createEvent('HTMLEvents'); // this is for compatibility with DOM Level 2
-                    event.initEvent('ply_translate',true,true);
-                    event.deltaX = first.x;
-                    event.deltaY = first.y;
-                    var defaultPrevented = e.dispatchEvent(event);
-                } else {
-                    // first and second are set 
-                    // do full two finger logic 
-                    console.log("two fingers on",e);
-                    // process 3+ fingers
-                    for (var k=0;k<rest.length;++k) {
-                        console.log("finger #"+(k+3));
-                    }
-                }
-            } */
-            
-            // translation is difference between xs,ys and x,y
-            
-            // compute and issue events to either target or stored parent collecting target
-
-
+            if (exposed.debug) {
+                var profile = exposed.tmTime - start;
+                exposed.tmProfile += (profile - exposed.tmProfile) * 0.02;
+            }
         },
         /*touchcancel: function (evt) { console.log("touchcancel", evt.changedTouches);
             for (var i=0;i<evt.changedTouches.length; ++i) {
