@@ -52,7 +52,9 @@ var PLY = (function ($) {
 
         // used by touchmove event to run code only when necessary
         tmTime: Date.now(),
-        tmProfile: 10,
+        tmProfile: 3, 
+        // just for reference purposes: my iPhone 5 appears to execute the 
+        // touchmove, when debug is off, within 200 microseconds (one touch)
 
         // allow_scroll is a global flag that (basically) triggers calling 
         // preventDefault on touch events. This is more or less geared toward 
