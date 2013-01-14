@@ -62,6 +62,15 @@ var PLY = (function ($) {
         // actually))
         allow_scroll: true,
 
+        // node_ids is my approach to assigning unique IDs to elements of 
+        // interest to ply. When the user starts manipulating an element it is 
+        // added to the end of this list, and when stopping it is removed. 
+        // Some performance testing must be done to determine if it is worth the
+        // effort of re-allocating/re-ordering this to save space (as elements
+        // cannot be spliced out because it would mess with the indexing)
+        // tl;dr: node_ids array is so we can have O(1) lookup DOM node sets.
+        node_ids: [],
+
         // This is just marked when any event makes its way through the primary
         // event handlers so that the test site can be a bit more efficient about 
         // re-updating the DOM. I will eventually let the events that don't 
@@ -279,6 +288,7 @@ var PLY = (function ($) {
             // allow_scroll is directly assigned (when it is the first touch,
             // of course).
             var ep = exposed.pointer_state;
+            var en = exposed.node_ids;
             var ps_count = 0;
             for (var x in ep) {
                 if (x !== "m") ps_count++;
@@ -294,11 +304,13 @@ var PLY = (function ($) {
                 // is destined to control. store that... for right now it stores the immediate
                 // target which is fine to test that the thing works. 
 
-                var pointer_data = {xs: eci.pageX, ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, e: seen_target};
-                if (!$.data(seen_target,"ply")) {
-                    $.data(seen_target,"ply",{});
+                var pointer_data = {xs: eci.pageX, ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, e: seen_target, ni: en.length};
+                if (!$.data(seen_target,"ply")) {                    
+                    $.data(seen_target,"ply",{node_id: en.length});
+                    en.push(seen_target);
                 }
                 $.data(seen_target,"ply")[ecii] = pointer_data;
+                //pointer_data.ed = $.data(seen_target,"ply");
                 ep[ecii] = pointer_data; 
                 console.log("added "+ecii);
             }
@@ -345,6 +357,7 @@ var PLY = (function ($) {
             var etl = et.length;
             var hash = {};
             var ep = exposed.pointer_state;
+            var en = exposed.node_ids;
             for (var i=0;i<etl;++i) {
                 var eti = et[i];
                 var etii = eti.identifier;
@@ -352,8 +365,13 @@ var PLY = (function ($) {
             }
             for (var id in ep) {
                 if (!hash[id] && id !== "m") {
-                    // no longer present
+                    // this touch is no longer valid so remove from element's touch hash
                     delete $.data(ep[id].e,'ply')[id];
+                    
+                    // en[ep[id].ni] = null; // clear out reference to node
+                    // no! don't clear out ref to node. If same node re-touched, reuse id!
+                    
+                    // delete the other ref to this touch's state object 
                     delete ep[id];
                     console.log('removed ',id," now ep is ",ep);
                 }
@@ -364,20 +382,26 @@ var PLY = (function ($) {
             // if debug check the model in fact is correctly maintained by cT by comparing to touches
             if (exposed.debug) {
                 var touches_hash = {};
-                for (var t=0;t<evt.touches.length;++t) {
-                    var etti = evt.touches[t].identifier;
+                for (var t=0;t<et.length;++t) {
+                    var etti = et[t].identifier;
                     touches_hash[etti] = true;
                     //assert(exposed.pointer_state[etti],"this element should be in the pointer_state because it is in the touches: "+etti+" in "+serialize(exposed.pointer_state));
                     // this assertion also trips because it is possible for the touches to produce a touch that is new
                     // while running the touchend of a previous touch. Not surprising, really.
                 }
-                for (var x in exposed.pointer_state) {
+                for (var x in ep) {
                     if (x === "m") continue; // skip the mouse
                     //assert(touches_hash[x],"this element should be in the touches in the event because it is in the pointer state: "+x+" in "+serialize(touches_hash));
                     // looks like sometimes something can be taken out of touches list before a touchend
                     // for it is sent out!
-                    assert($.data(exposed.pointer_state[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
-                    assert($.data(exposed.pointer_state[x].e,'ply')[x] === exposed.pointer_state[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(exposed.pointer_state[x])+"; "+serialize($.data(exposed.pointer_state[x].e,'ply')));
+                    assert($.data(ep[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
+                    assert($.data(ep[x].e,'ply')[x] === ep[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(ep[x])+"; "+serialize($.data(ep[x].e,'ply')));
+                    assert(ep[x].ni === $.data(ep[x].e,'ply').node_id, "node id check "+ep[x].ni+", "+$.data(ep[x].e,'ply').node_id);
+                    assert(en[ep[x].ni] === ep[x].e, "check element with id");
+                }
+                for (var j=0;j<en.length;++j) {
+                    // check consistency of node_ids by verifying with data contents
+                    assert($.data(en[j],'ply').node_id === j, "node_id "+j+" should be equal to $.data(en["+j+"],'ply').node_id");                    
                 }
             }
         }),
@@ -399,16 +423,74 @@ var PLY = (function ($) {
             
             var et = evt.touches;
             var etl = et.length;
-            for (var i=0;i<etl;++i) { // loop over all pointers: assemble the elements to transform array 
+            var ep = exposed.pointer_state;
+            var en = exposed.node_ids;
+            var elems = {};
+            for (var i=0; i<etl; ++i) { // loop over all pointers: assemble the elements to transform array 
                 var eti = et[i];
-                var ep_etid = exposed.pointer_state[eti.identifier];
+                var ep_etid = ep[eti.identifier];
                 // ep_etid.es is the actual element to be manipulated
                 // full_pointer_list.push({e: ep_etid.es, x: eti.pageX-ep_etid.xs, y: eti.pageY-ep_etid.ys});
                 // update this for display purposes
-                ep_etid.xc = eti.pageX;
-                ep_etid.yc = eti.pageY;
+                if (ep_etid.xc !== eti.pageX || ep_etid.yc !== eti.pageY) { // must update this id
+                    // do not mark change based on force
+                    ep_etid.xc = eti.pageX;
+                    ep_etid.yc = eti.pageY;
+                    
+                    // Assembles a hash of node_id's to get an efficient DOM node list 
+                    elems[ep_etid.ni] = true;
+                }
                 if (eti.webkitForce) {
                     ep_etid.fatness = eti.webkitForce;
+                }
+            }
+
+            // for each element 
+            for (var ni in elems) {
+                var nd = $.data(en[ni],'ply');
+                var one, two; 
+                var more = [];
+                // var tc = Object.keys(nd)-1; // touch count (on this node) // (assumes there is always one prop "node_id")
+                var tc = 0; 
+                for (var t in nd) {
+                    if (t !== "node_id") {
+                        var ndt = nd[t];
+                        // this is a touch 
+                        var v = {x: ndt.xc-ndt.xs, y: ndt.yc-ndt.ys};
+                        if (!one) {
+                            one = v;
+                        } else if (!two) {
+                            two = v;
+                        } else {
+                            // this one is more than 2
+                            more.push(v);
+                        }
+                    }
+                    tc++;
+                }
+                // at long last ready to parse our element's manipulating touches
+                if (!two) { // only one!
+                    console.log("one touch on "+en[ni]);
+                    var event = document.createEvent('HTMLEvents'); // this is for compatibility with DOM Level 2
+                    event.initEvent('ply_translate',true,true);
+                    event.deltaX = first.x;
+                    event.deltaY = first.y;
+                    // What we do here is if the element has been specified to react automatically
+                    // the default behavior will be the direct application (via rAF) of the transform, 
+                    // which is probably about as efficient as we can get given what is available (early 2013).
+                    // Since this is the single finger case there is no transform computation so the event
+                    // will be sent like usual
+                    var defaultPrevented = e.dispatchEvent(event);
+                } else {
+                    // we need to do the transform
+                    // If the element has been specified to react automatically to the two finger 
+                    // transforms, the default behavior will be the direct application (via rAF) of the
+                    // transform, and thus the transform event will only be sent when rAF deems it 
+                    // to be appropriate. This is to eliminate the inefficiency of having to use an
+                    // input sampling dependent update scheme, because in all likelihood the computation of
+                    // the new transform *need* *not* *occur* unless rAF indicates for us that our
+                    // system can handle another one. 
+                    console.log("two touches on "+en[ni]);
                 }
             }
 
