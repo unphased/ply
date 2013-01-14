@@ -424,7 +424,7 @@ var PLY = (function ($) {
             var etl = et.length;
             var ep = exposed.pointer_state;
             var en = exposed.node_ids;
-            var elems = {};
+            var elems = {}; // this is a hash of integers
             for (var i=0; i<etl; ++i) { // loop over all pointers: assemble the elements to transform array 
                 var eti = et[i];
                 var ep_etid = ep[eti.identifier];
@@ -448,7 +448,7 @@ var PLY = (function ($) {
 
             // for each element 
             for (var ni in elems) {
-                var nd = $.data(en[ni],'ply');
+                var nd = $.data(en[Number(ni)],'ply');
                 var one, two; 
                 var more = [];
                 // var tc = Object.keys(nd)-1; // touch count (on this node) // (assumes there is always one prop "node_id")
