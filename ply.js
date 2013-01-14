@@ -480,7 +480,7 @@ var PLY = (function ($) {
                     // which is probably about as efficient as we can get given what is available (early 2013).
                     // Since this is the single finger case there is no transform computation so the event
                     // will be sent like usual
-                    var defaultPrevented = e.dispatchEvent(event);
+                    var defaultPrevented = en[ni].dispatchEvent(event);
                 } else {
                     // we need to do the transform
                     // If the element has been specified to react automatically to the two finger 
