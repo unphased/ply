@@ -444,6 +444,8 @@ var PLY = (function ($) {
                 }
             }
 
+            console.log("elems="+elems);
+
             // for each element 
             for (var ni in elems) {
                 var nd = $.data(en[ni],'ply');
