@@ -31,7 +31,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% c174dcf touchmove work %#";
+    var git_context = "#% a6f5f20 touchmove work. %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
