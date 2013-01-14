@@ -29,9 +29,10 @@
 
     var debug_show_hide = true;
     $('#debug').on('mousedown touchstart',function(e) { // must hook these events and not up or click or end because the contents are ephemeral
+        e.preventDefault();
         debug_show_hide = !debug_show_hide;
         var w = $(this).width();
-        $(this).css('WebkitTransform','translate3d('+(debug_show_hide?w-20:0)+'px,0,0)');
+        $(this).css('WebkitTransform','translate3d('+(debug_show_hide?w-16:0)+'px,0,0)');
     });
 
     // be aware this routine sucks CPU a bit -- I use both rAF and window focus listening to make it friendlier
