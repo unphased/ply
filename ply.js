@@ -126,6 +126,7 @@ var PLY = (function ($) {
         return val;
     };
     function serialize(arg) {
+        if (typeof arg === "function") return "function";
         return JSON.stringify(arg,json_handler).replace(/\},"/g,'},  "').replace(/,"/g,', "');
     }
 
