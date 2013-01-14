@@ -483,7 +483,10 @@ var PLY = (function ($) {
                     ep_etid.yc = eti.pageY;
                     
                     // Assembles a hash of node_id's to get an efficient DOM node list 
-                    elems[ep_etid.ni] = true;
+                    // does not set this if the current changed touch is not on a tracked node
+                    if (ep_etid.hasOwnProperty('ni')) {
+                        elems[ep_etid.ni] = true;
+                    }
                 }
                 if (eti.webkitForce) {
                     ep_etid.fatness = eti.webkitForce;
