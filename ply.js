@@ -350,6 +350,12 @@ var PLY = (function ($) {
                     // produces strange stuff, trust me)
                     exposed.allow_scroll = false;
                 }
+            } else {
+                var dl = data_list.length;
+                for (var k=0;k<dl;++k) { // go and insert the
+                    var dk = data_list[k];
+                    ep[dk.id] = dk;
+                }
             }
             if (!exposed.allow_scroll) {
                 evt.preventDefault();
@@ -412,7 +418,7 @@ var PLY = (function ($) {
             if (etl === 0) { // this indicates no touches remain
                 exposed.allow_scroll = true;
             }
-            // if debug check the model in fact is correctly maintained by cT by comparing to touches
+            // debug check the model for consistency here
             if (exposed.debug) {
                 var touches_hash = {};
                 for (var t=0;t<et.length;++t) {
