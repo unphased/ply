@@ -31,7 +31,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 476566a correcting assertions based on change in what is being stored %#";
+    var git_context = "#% c248478 cannot specify to be processed the nodes that are not tracked %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
