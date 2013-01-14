@@ -447,10 +447,49 @@ var PLY = (function ($) {
             // for each element 
             for (var ni in elems) {
                 var nd = $.data(en[ni],'ply');
+                var one, two; 
+                var more = [];
+                // var tc = Object.keys(nd)-1; // touch count (on this node) // (assumes there is always one prop "node_id")
+                var tc = 0; 
                 for (var t in nd) {
                     if (t !== "node_id") {
-
+                        var ndt = nd[t];
+                        // this is a touch 
+                        var v = {x: ndt.xc-ndt.xs, y: ndt.yc-ndt.ys};
+                        if (!one) {
+                            one = v;
+                        } else if (!two) {
+                            two = v;
+                        } else {
+                            // this one is more than 2
+                            more.push(v);
+                        }
                     }
+                    tc++;
+                }
+                // at long last ready to parse our element's manipulating touches
+                if (!two) { // only one!
+                    console.log("one touch on "+en[ni]);
+                    var event = document.createEvent('HTMLEvents'); // this is for compatibility with DOM Level 2
+                    event.initEvent('ply_translate',true,true);
+                    event.deltaX = first.x;
+                    event.deltaY = first.y;
+                    // What we do here is if the element has been specified to react automatically
+                    // the default behavior will be the direct application (via rAF) of the transform, 
+                    // which is probably about as efficient as we can get given what is available (early 2013).
+                    // Since this is the single finger case there is no transform computation so the event
+                    // will be sent like usual
+                    var defaultPrevented = e.dispatchEvent(event);
+                } else {
+                    // we need to do the transform
+                    // If the element has been specified to react automatically to the two finger 
+                    // transforms, the default behavior will be the direct application (via rAF) of the
+                    // transform, and thus the transform event will only be sent when rAF deems it 
+                    // to be appropriate. This is to eliminate the inefficiency of having to use an
+                    // input sampling dependent update scheme, because in all likelihood the computation of
+                    // the new transform *need* *not* *occur* unless rAF indicates for us that our
+                    // system can handle another one. 
+                    console.log("two touches on "+en[ni]);
                 }
             }
 
