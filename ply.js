@@ -82,7 +82,9 @@ var PLY = (function ($) {
         // change the debugprints to also not set this either. 
         event_processed: true, 
         debug: true,
-        append_logs_dom: true
+        append_logs_dom: true, 
+        escape: escapeHtml,
+        serialize: serialize // exposed helper functions
     };
 
 
@@ -124,7 +126,7 @@ var PLY = (function ($) {
         return val;
     };
     function serialize(arg) {
-        return JSON.stringify(arg,json_handler);
+        return JSON.stringify(arg,json_handler).replace(/\},"/g,'},  "').replace(/,"/g,', "');
     }
 
     var original_console_log = console.log;
@@ -134,7 +136,7 @@ var PLY = (function ($) {
         if (!exposed.debug) return;
         var str = "";
         for (var i=0;i<arguments.length;++i) {
-            str += escapeHtml(serialize(arguments[i])).replace(/\},&quot;/g,'},</br>&quot;').replace(/,&quot;/g,', &quot;');
+            str += escapeHtml(serialize(arguments[i])).replace(/  /g,'</br>');
             str += ", ";
         }
         str = str.slice(0,-2);
@@ -148,6 +150,9 @@ var PLY = (function ($) {
     };
     if (exposed.debug) {
         console.log = instrumented_log; // pre-empt usage of this if starting off not debug
+        // if the previous line is not conditional on debug then it will be always
+        // possible to "turn on debug" but with this here like this debug is never instrumented
+        // when debug is initially off.
 
         // set up a way to show the log buffer if debug mode 
         // (note toggling the debug off will stop logs being written)
