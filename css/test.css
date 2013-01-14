@@ -74,10 +74,10 @@ div {
     position: fixed;
     top: 5px;
     right: 5px;
-    left: 200px;
+    left: 150px;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
-    max-height: 400px;
+    max-height: 320px;
 }
 
 .error {
