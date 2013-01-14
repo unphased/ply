@@ -310,22 +310,8 @@ var PLY = (function ($) {
                 // is destined to control. store that... for right now it stores the immediate
                 // target which is fine to test that the thing works. 
                 
-                var v = {xs: eci.pageX, ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, e: seen_target};
+                var v = {id: ecii, xs: eci.pageX, ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, e: seen_target};
                 data_list.push(v);
-
-                var pointer_data = {xs: eci.pageX, ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, e: seen_target, ni: en.length};
-                var dt = $.data(seen_target,"ply");
-                if (!dt) {
-                    $.data(seen_target,"ply",{node_id: en.length});
-                    en.push(seen_target);
-                } else {
-                    pointer_data.ni = dt.node_id;
-                }
-
-                $.data(seen_target,"ply")[ecii] = pointer_data;
-                //pointer_data.ed = $.data(seen_target,"ply");
-                ep[ecii] = pointer_data; 
-                console.log("added "+ecii);
             }
 
             if ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1) {
@@ -342,6 +328,8 @@ var PLY = (function ($) {
                 for (var j=0;j<dl;++j) { // go and insert the 
                     var dj = data_list[j];
                     dj.ni = enl;
+                    dt[dj.id] = dj;
+                    ep[dj.id] = dj;
                 }
 
                 if (ps_count === 0) {
@@ -351,11 +339,6 @@ var PLY = (function ($) {
                     // produces strange stuff, trust me)
                     exposed.allow_scroll = false;
                 }
-            }
-
-           
-            if (ps_count === 0 && ) {
-                exposed.allow_scroll = false;
             }
             if (!exposed.allow_scroll) {
                 evt.preventDefault();
