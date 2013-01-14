@@ -323,8 +323,8 @@ var PLY = (function ($) {
                 var enl = en.length;
                 console.log('enl',enl);
                 if (!dt) {
-                    $.data(seen_target,"ply",{node_id: enl});
-                    en.push(seen_target);                    
+                    dt = $.data(seen_target,"ply",{node_id: enl});
+                    en.push(seen_target);
                 }
                 var dl = data_list.length;
                 for (var j=0;j<dl;++j) { // go and insert the 
