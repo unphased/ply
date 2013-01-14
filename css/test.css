@@ -76,6 +76,8 @@ div {
     top: 5px;
     right: 5px;
     left: 120px;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .error {
