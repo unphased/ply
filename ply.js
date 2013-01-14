@@ -319,17 +319,20 @@ var PLY = (function ($) {
                 // commented out assertion above is the same across this 
                 // i-loop) is a no-scroll, then go and set up $.data stuff
                 var dt = $.data(seen_target,"ply");
-                var enl = en.length;
-                console.log('enl',enl);
+                var nid = en.length;
+                console.log('nid',nid);
                 if (!dt) {
-                    dt = $.data(seen_target,"ply",{node_id: enl});
+                    dt = $.data(seen_target,"ply",{node_id: nid});                    
                     en.push(seen_target);
-                }
+                    console.log('en '+serialize(en));
+                } else {
+                    nid = dt.node_id;
+                }   
                 var dl = data_list.length;
                 for (var j=0;j<dl;++j) { // go and insert the 
                     var dj = data_list[j];
-                    dj.ni = enl;
-                    console.log('set dj.ni to enl=',enl);
+                    dj.ni = nid;
+                    console.log('set dj.ni to nid=',nid);
                     dt[dj.id] = dj;
                     ep[dj.id] = dj;
                 }
