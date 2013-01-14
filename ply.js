@@ -31,7 +31,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% aaf57c7 using a more realistic profile starting value %#";
+    var git_context = "#% 3c55951 wrote supported platforms in readme (it is a scary list) %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
