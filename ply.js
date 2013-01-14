@@ -404,12 +404,14 @@ var PLY = (function ($) {
                 hash[etii] = true;
             }
             for (var id in ep) {
-                if (!hash[id] && id !== "m") {
-                    // this touch is no longer valid so remove from element's touch hash
-                    delete $.data(ep[id].e,'ply')[id];
-                    
+                if (!hash[id] && id !== "m") { 
+                    if (ep[id].hasOwnProperty('ni')) { // if is a touch that requires removing from data
+                        // this touch is no longer valid so remove from element's touch hash
+                        delete $.data(ep[id].e,'ply')[id];
+                    }
+
                     // en[ep[id].ni] = null; // clear out reference to node
-                    // no! don't clear out ref to node. If same node re-touched, reuse id!
+                    // no! don't clear out ref to node. If same node re-touched, reuse id
                     
                     // delete the other ref to this touch's state object 
                     delete ep[id];
