@@ -203,7 +203,7 @@
     });
 
     var debug_show_hide = false;
-    $('#debug_view_toggle_btn').on('mousedown touchstart',function(e) { 
+    $('.ply_js_title').parent().on('mousedown touchstart',function(e) { 
         e.preventDefault();
         debug_show_hide = !debug_show_hide;
         var w = $("#debug").width();
