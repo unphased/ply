@@ -563,6 +563,10 @@ var PLY = (function ($) {
         DOMNodeInserted: Mutation_Observer ? null : function (evt) { //console.log("DOMNodeInserted: ",evt.target);
             // handle specially new elements which have the classes we're 
             // interested in
+        },
+        DOMNodeRemoved: Mutation_Observer ? null : function (evt) {
+            // removed nodes need to clean up their pointers. Pointers must be made to point to the new thing they are 
+            // over now or to be removed. 
         }
     };
 
@@ -580,7 +584,7 @@ var PLY = (function ($) {
                 throw e; // rethrow to give it to debugging safari, rather than be silent
             }
             exposed.event_processed = true; 
-        }, true); // hook to capture phase to circumvent stopPropagation()
+        }, true); // hook to capture phase to catch in the event of stopPropagation()
     });
     return exposed;
 })(jQuery);
