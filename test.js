@@ -43,11 +43,14 @@
             // we're getting new-style sub-ms time stamp
         }
         // schedule 
-        if (PLY.debug && document.hasFocus()) 
+        if (document.hasFocus()) 
             requestAnimationFrame(debug_refresh);
         else console.log("document has lost focus. Stopping rAF");
 
+        if (!PLY.debug) return; // wait next tick (iOS does not issue window focus
+                                // rAF start/restart won't work with toggling debug)
         if (!PLY.event_processed) return; // wait next tick 
+
         PLY.event_processed = false; // mark it: we're gonna go update the stuff. 
         //console.log(Date.now());
         // the HTML debug dump of the data
