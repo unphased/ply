@@ -51,9 +51,14 @@ var PLY = (function ($) {
 
         // used by touchmove event to run code only when necessary
         tmTime: Date.now(),
+
+        // converges on the time it takes to run touchmove
         tmProfile: 3, 
         // just for reference purposes: my iPhone 5 appears to execute the 
         // touchmove, when debug is off, within 200 microseconds (one touch)
+
+        // converges on the rate touchmove is run 
+        tmRate: 16,
 
         // allow_scroll is a global flag that (basically) triggers calling 
         // preventDefault on touch events. This is more or less geared toward 
@@ -456,7 +461,7 @@ var PLY = (function ($) {
         // The majority of functionality is funneled through the (capturing) touchmove handler on the document. 
         // It is quite possible for this to execute 180 times per second. 
         // Because of this, extra effort is put toward optimizing this function. 
-        touchmove: function (evt) { //if (!window.lastTM){window.lastTM = Date.now();} console.log("touchmove ",Date.now()-window.lastTM,evt.rotation,evt.scale); window.lastTM=Date.now(); 
+        touchmove: function (evt) { 
         //console.log("touchmove ",id_string_for_touch_list(evt.changedTouches),id_string_for_touch_list(evt.touches));
             if (exposed.allow_scroll) return; // since this is touch device, when scrolling we don't do ply-things
             evt.preventDefault(); // prevent the pinching (this is primarily for Android: on iOS a preventdefault on the touchstart is sufficient to suppress pinch)
@@ -549,10 +554,13 @@ var PLY = (function ($) {
                     }
                 }
             }
-            exposed.tmTime = Date.now(); // update this last
+            var now = Date.now();
+            var diff = now - start;
+            exposed.tmTime = now; // update this last
             if (exposed.debug) {
-                var profile = exposed.tmTime - start;
+                var profile = now - start;
                 exposed.tmProfile += (profile - exposed.tmProfile) * 0.02;
+                exposed.tmRate += (diff - exposed.tmRate) * 0.02;
             }
         },
         /*touchcancel: function (evt) { console.log("touchcancel", evt.changedTouches);
