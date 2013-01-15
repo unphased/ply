@@ -82,7 +82,9 @@ var PLY = (function ($) {
         // change the debugprints to also not set this either. 
         event_processed: true, 
         debug: true,
-        append_logs_dom: true
+        append_logs_dom: true, 
+        escape: escapeHtml,
+        serialize: serialize // exposed helper functions
     };
 
 
@@ -124,7 +126,8 @@ var PLY = (function ($) {
         return val;
     };
     function serialize(arg) {
-        return JSON.stringify(arg,json_handler);
+        if (typeof arg === "function") return "function";
+        return JSON.stringify(arg,json_handler).replace(/\},"/g,'},  "').replace(/,"/g,', "');
     }
 
     var original_console_log = console.log;
@@ -134,7 +137,7 @@ var PLY = (function ($) {
         if (!exposed.debug) return;
         var str = "";
         for (var i=0;i<arguments.length;++i) {
-            str += escapeHtml(serialize(arguments[i])).replace(/\},&quot;/g,'},</br>&quot;').replace(/,&quot;/g,', &quot;');
+            str += escapeHtml(serialize(arguments[i])).replace(/ {2}/g,'</br>');
             str += ", ";
         }
         str = str.slice(0,-2);
@@ -148,6 +151,9 @@ var PLY = (function ($) {
     };
     if (exposed.debug) {
         console.log = instrumented_log; // pre-empt usage of this if starting off not debug
+        // if the previous line is not conditional on debug then it will be always
+        // possible to "turn on debug" but with this here like this debug is never instrumented
+        // when debug is initially off.
 
         // set up a way to show the log buffer if debug mode 
         // (note toggling the debug off will stop logs being written)
@@ -320,15 +326,20 @@ var PLY = (function ($) {
                 // commented out assertion above is the same across this 
                 // i-loop) is a no-scroll, then go and set up $.data stuff
                 var dt = $.data(seen_target,"ply");
-                var enl = en.length;
+                var nid = en.length;
+                console.log('nid',nid);
                 if (!dt) {
-                    $.data(seen_target,"ply",{node_id: enl});
+                    dt = $.data(seen_target,"ply",{node_id: nid});
                     en.push(seen_target);
-                }
+                    console.log('en '+serialize(en));
+                } else {
+                    nid = dt.node_id;
+                }   
                 var dl = data_list.length;
                 for (var j=0;j<dl;++j) { // go and insert the 
                     var dj = data_list[j];
-                    dj.ni = enl;
+                    dj.ni = nid;
+                    console.log('set dj.ni to nid=',nid);
                     dt[dj.id] = dj;
                     ep[dj.id] = dj;
                 }
@@ -339,6 +350,12 @@ var PLY = (function ($) {
                     // preventDefault on the touchstart on this 2nd touch (which
                     // produces strange stuff, trust me)
                     exposed.allow_scroll = false;
+                }
+            } else {
+                var d_l = data_list.length;
+                for (var k=0;k<d_l;++k) { // go and insert the
+                    var dk = data_list[k];
+                    ep[dk.id] = dk;
                 }
             }
             if (!exposed.allow_scroll) {
@@ -387,12 +404,14 @@ var PLY = (function ($) {
                 hash[etii] = true;
             }
             for (var id in ep) {
-                if (!hash[id] && id !== "m") {
-                    // this touch is no longer valid so remove from element's touch hash
-                    delete $.data(ep[id].e,'ply')[id];
-                    
+                if (!hash[id] && id !== "m") { 
+                    if (ep[id].hasOwnProperty('ni')) { // if is a touch that requires removing from data
+                        // this touch is no longer valid so remove from element's touch hash
+                        delete $.data(ep[id].e,'ply')[id];
+                    }
+
                     // en[ep[id].ni] = null; // clear out reference to node
-                    // no! don't clear out ref to node. If same node re-touched, reuse id!
+                    // no! don't clear out ref to node. If same node re-touched, reuse id
                     
                     // delete the other ref to this touch's state object 
                     delete ep[id];
@@ -402,7 +421,7 @@ var PLY = (function ($) {
             if (etl === 0) { // this indicates no touches remain
                 exposed.allow_scroll = true;
             }
-            // if debug check the model in fact is correctly maintained by cT by comparing to touches
+            // debug check the model for consistency here
             if (exposed.debug) {
                 var touches_hash = {};
                 for (var t=0;t<et.length;++t) {
@@ -417,10 +436,12 @@ var PLY = (function ($) {
                     //assert(touches_hash[x],"this element should be in the touches in the event because it is in the pointer state: "+x+" in "+serialize(touches_hash));
                     // looks like sometimes something can be taken out of touches list before a touchend
                     // for it is sent out!
-                    assert($.data(ep[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
-                    assert($.data(ep[x].e,'ply')[x] === ep[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(ep[x])+"; "+serialize($.data(ep[x].e,'ply')));
-                    assert(ep[x].ni === $.data(ep[x].e,'ply').node_id, "node id check "+ep[x].ni+", "+$.data(ep[x].e,'ply').node_id);
-                    assert(en[ep[x].ni] === ep[x].e, "check element with id");
+                    if (ep[x].hasOwnProperty('ni')) {
+                        assert($.data(ep[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
+                        assert($.data(ep[x].e,'ply')[x] === ep[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(ep[x])+"; "+serialize($.data(ep[x].e,'ply')));
+                        assert(ep[x].ni === $.data(ep[x].e,'ply').node_id, "node id check "+ep[x].ni+", "+$.data(ep[x].e,'ply').node_id);
+                        assert(en[ep[x].ni] === ep[x].e, "check element with id");
+                    }                    
                 }
                 for (var j=0;j<en.length;++j) {
                     // check consistency of node_ids by verifying with data contents
@@ -462,7 +483,10 @@ var PLY = (function ($) {
                     ep_etid.yc = eti.pageY;
                     
                     // Assembles a hash of node_id's to get an efficient DOM node list 
-                    elems[ep_etid.ni] = true;
+                    // does not set this if the current changed touch is not on a tracked node
+                    if (ep_etid.hasOwnProperty('ni')) {
+                        elems[ep_etid.ni] = true;
+                    }
                 }
                 if (eti.webkitForce) {
                     ep_etid.fatness = eti.webkitForce;

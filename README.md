@@ -26,7 +26,7 @@ ply uses DOM2 Mutation Events (the ones deprecated in DOM3 but still found in Sa
 
 None yet, the library is not yet in a functional state. 
 
-The goal is to support any platforrm which does not place unreasonable requirements on code change to the library. This means that IE9 support is tentative 
+The goal is to support any platforrm which does not place unreasonable requirements on code change to the library. This means that IE9 support is tentative and IE<=8 support is out of the question.
 
 To be thoroughly incomplete and in rough order of dev priority: 
 

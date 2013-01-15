@@ -27,6 +27,14 @@
 
     var has_bounding_client_rect = !!document.body.getBoundingClientRect;
 
+    var debug_show_hide = true;
+    $('#debug_toggle_btn').on('mousedown touchstart',function(e) { 
+        e.preventDefault();
+        debug_show_hide = !debug_show_hide;
+        var w = $("#debug").width();
+        $("#debug").css('WebkitTransform','translate3d('+(debug_show_hide?w+10:0)+'px,0,0)');
+    });
+
     // be aware this routine sucks CPU a bit -- I use both rAF and window focus listening to make it friendlier
     // I am implementing this as a separate component rather than building it into the library. This is to decouple
     // the debug logic into the test page, and keep the library itself as lean and mean as it can reasonably be.
@@ -44,23 +52,10 @@
         //console.log(Date.now());
         // the HTML debug dump of the data
         var str = "<ul>";
-        var json_handler = function(key,val) {
-            if (Modernizr.touch && key === "ec") return;
-            //if (Modernizr.touch && key === "es") return;            
-            if (val instanceof HTMLElement) {
-                var cn = val.className;
-                var tn = val.tagName;
-                if (tn === "HTML") { cn = ""; } // too much due to Modernizr
-                return "DOMElement &lt;"+tn+" c="+cn+" id="+val.id+"&gt;";
-            }
-            return val;
-        };
-        for (var prop in PLY) {
-            if (prop === "touch_move_last_time") continue;
-            var s = JSON.stringify(PLY[prop],json_handler);
+        for (var prop in PLY) {            
             str += "<li>";
             str += prop + ": "; 
-            str += s.replace(/\},"/g,'},</br>"').replace(/,"/g,', "');
+            str += PLY.escape(PLY.serialize(PLY[prop]));
             str += "</li>";
         }
         str += "</ul>";

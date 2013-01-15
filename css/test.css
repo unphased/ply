@@ -70,12 +70,24 @@ div {
     box-shadow: 0 0 8px 0 #f33;
 }
 
-#debug {
-    pointer-events: none;
+ul {
+    margin: 10px 0;
+    padding-left: 25px;
+}
+
+#debug {    
     position: fixed;
+    opacity: 0.8;
+    border: 2px solid #117;    
+    background-color: #22a;
+    color: white;
     top: 5px;
     right: 5px;
-    left: 120px;
+    width: 200px;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    max-height: 320px;
+    -webkit-transition: -webkit-transform 1s;
 }
 
 .error {
