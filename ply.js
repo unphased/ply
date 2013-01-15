@@ -31,7 +31,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% e48566a improved serialize html dom node index print (non-text-node index) %#";
+    var git_context = "#% 4129bbd fix using undefined variable %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
