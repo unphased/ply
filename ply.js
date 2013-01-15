@@ -330,7 +330,7 @@ var PLY = (function ($) {
                 if (!dt) { // new element to put in our node index buffer
                     dt = $.data(seen_target,"ply",{node_id: nid});
                     en.push(seen_target);
-                    console.log('en extended '+serialize(en));
+                    console.log('en extended ',en);
                 } else { // otherwise look node up and use its index
                     nid = dt.node_id;
                 }   
