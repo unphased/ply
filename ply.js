@@ -442,11 +442,11 @@ var PLY = (function ($) {
                         assert($.data(ep[x].e,'ply')[x] === ep[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(ep[x])+"; "+serialize($.data(ep[x].e,'ply')));
                         assert(ep[x].ni === $.data(ep[x].e,'ply').node_id, "node id check "+ep[x].ni+", "+$.data(ep[x].e,'ply').node_id);
                         assert(en[ep[x].ni] === ep[x].e, "check element with id");
-                    }                    
+                    }
                 }
                 for (var j=0;j<en.length;++j) {
                     // check consistency of node_ids by verifying with data contents
-                    assert($.data(en[j],'ply').node_id === j, "node_id "+j+" should be equal to $.data(en["+j+"],'ply').node_id");                    
+                    assert($.data(en[j],'ply').node_id === j, "node_id "+j+" should be equal to $.data(en["+j+"],'ply').node_id");
                 }
             }
         }),
@@ -457,15 +457,15 @@ var PLY = (function ($) {
         touchmove: function (evt) { //if (!window.lastTM){window.lastTM = Date.now();} console.log("touchmove ",Date.now()-window.lastTM,evt.rotation,evt.scale); window.lastTM=Date.now(); 
         //console.log("touchmove ",id_string_for_touch_list(evt.changedTouches),id_string_for_touch_list(evt.touches));
             if (exposed.allow_scroll) return; // since this is touch device, when scrolling we don't do ply-things
-            evt.preventDefault(); // prevent the pinching (this is primarily for Android: on iOS a preventdefault on the touchstart is sufficient to suppress pinch)            
-                     
+            evt.preventDefault(); // prevent the pinching (this is primarily for Android: on iOS a preventdefault on the touchstart is sufficient to suppress pinch)
+            
             // if updates are sent faster than 7ms they are ignored!
             // This should work reliably up until devices provide faster than 120Hz touch events
             // and gives browser about 7 ms of grace-period between touchmove events
             // (which is way more than it should be taking esp. since I start the timing after
             // completing ply transform tasks)
             var start = Date.now();
-            if (start - exposed.tmTime < 7) return; // discard the event                
+            if (start - exposed.tmTime < 7) return; // discard the event
             
             var et = evt.touches;
             var etl = et.length;
