@@ -86,7 +86,7 @@ ul {
     width: 200px;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
-    max-height: 320px;
+    max-height: 306px; /* account for border */
     -webkit-transition: -webkit-transform 1s;
 }
 

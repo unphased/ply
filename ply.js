@@ -51,9 +51,14 @@ var PLY = (function ($) {
 
         // used by touchmove event to run code only when necessary
         tmTime: Date.now(),
+
+        // converges on the time it takes to run touchmove
         tmProfile: 3, 
         // just for reference purposes: my iPhone 5 appears to execute the 
         // touchmove, when debug is off, within 200 microseconds (one touch)
+
+        // converges on the rate touchmove is run 
+        tmRate: 16,
 
         // allow_scroll is a global flag that (basically) triggers calling 
         // preventDefault on touch events. This is more or less geared toward 
@@ -117,7 +122,8 @@ var PLY = (function ($) {
 
     var json_handler = function (key,val) {
         if (val instanceof HTMLElement) {
-            for (var k=0,e=val; (e = e.previousSibling); ++k); // tells us which child we are
+            //for (var k=0,e=val; (e = e.previousSibling); ++k); // tells us which child we are (incl. textnodes)
+            var k = Array.prototype.indexOf.call(e.parentNode.children,e); // tells us which (real node) index it is
             var cn = val.className;
             var tn = val.tagName;
             var id = val.id;
@@ -295,6 +301,8 @@ var PLY = (function ($) {
             // if allow scroll, then never prevent default: once you're
             // scrolling, touching anything else should never mess with the 
             // browser default scrolling. 
+
+
             // On touch devices the touchstart is the critical event that keys 
             // off a complex interaction, so it will be the place that 
             // allow_scroll is directly assigned (when it is the first touch,
@@ -308,11 +316,12 @@ var PLY = (function ($) {
             var seen_target;
             var data_list = [];
             assert(evt.changedTouches.length > 0, "evt.changedTouches length > 0 on touchstart: "+evt.changedTouches.length);
+            // process list of new fingers
             for (var i=0; i<evt.changedTouches.length; ++i) {
                 var eci = evt.changedTouches[i];
                 var ecii = eci.identifier;
                 // this assertion is to check my assumption that all touchstarts batch cT list based on target elem.
-                // if (seen_target) assert(eci.target === seen_target);
+                if (seen_target) assert(eci.target === seen_target);
                 seen_target = eci.target;
                 // here, we must determine the actual real target that this set of touches
                 // is destined to control. store that... for right now it stores the immediate
@@ -322,10 +331,9 @@ var PLY = (function ($) {
                 data_list.push(v);
             }
 
-            if ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1) {
-                // if the target (which I am fairly certain from the 
-                // commented out assertion above is the same across this 
-                // i-loop) is a no-scroll, then go and set up $.data stuff on it
+            // only when element is a noscroll (interesting element) AND in noscroll mode (or could initiate it) do we track element's touches
+            if ((ps_count === 0 || !exposed.allow_scroll) && (' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1) {
+                // set up $.data stuff on element
                 var dt = $.data(seen_target,"ply");
                 var nid = en.length;
                 //console.log('nid',nid);
@@ -416,7 +424,7 @@ var PLY = (function ($) {
                     
                     // delete the other ref to this touch's state object 
                     delete ep[id];
-                    console.log('removed ',id," now ep is ",ep);
+                    //console.log('removed ',id," now ep is ",ep);
                 }
             }
             if (etl === 0) { // this indicates no touches remain
@@ -442,11 +450,11 @@ var PLY = (function ($) {
                         assert($.data(ep[x].e,'ply')[x] === ep[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(ep[x])+"; "+serialize($.data(ep[x].e,'ply')));
                         assert(ep[x].ni === $.data(ep[x].e,'ply').node_id, "node id check "+ep[x].ni+", "+$.data(ep[x].e,'ply').node_id);
                         assert(en[ep[x].ni] === ep[x].e, "check element with id");
-                    }                    
+                    }
                 }
                 for (var j=0;j<en.length;++j) {
                     // check consistency of node_ids by verifying with data contents
-                    assert($.data(en[j],'ply').node_id === j, "node_id "+j+" should be equal to $.data(en["+j+"],'ply').node_id");                    
+                    assert($.data(en[j],'ply').node_id === j, "node_id "+j+" should be equal to $.data(en["+j+"],'ply').node_id");
                 }
             }
         }),
@@ -454,18 +462,18 @@ var PLY = (function ($) {
         // The majority of functionality is funneled through the (capturing) touchmove handler on the document. 
         // It is quite possible for this to execute 180 times per second. 
         // Because of this, extra effort is put toward optimizing this function. 
-        touchmove: function (evt) { //if (!window.lastTM){window.lastTM = Date.now();} console.log("touchmove ",Date.now()-window.lastTM,evt.rotation,evt.scale); window.lastTM=Date.now(); 
+        touchmove: function (evt) { 
         //console.log("touchmove ",id_string_for_touch_list(evt.changedTouches),id_string_for_touch_list(evt.touches));
             if (exposed.allow_scroll) return; // since this is touch device, when scrolling we don't do ply-things
-            evt.preventDefault(); // prevent the pinching (this is primarily for Android: on iOS a preventdefault on the touchstart is sufficient to suppress pinch)            
-                     
+            evt.preventDefault(); // prevent the pinching (this is primarily for Android: on iOS a preventdefault on the touchstart is sufficient to suppress pinch)
+
             // if updates are sent faster than 7ms they are ignored!
             // This should work reliably up until devices provide faster than 120Hz touch events
             // and gives browser about 7 ms of grace-period between touchmove events
             // (which is way more than it should be taking esp. since I start the timing after
             // completing ply transform tasks)
             var start = Date.now();
-            if (start - exposed.tmTime < 7) return; // discard the event                
+            if (start - exposed.tmTime < 7) return; // discard the event
             
             var et = evt.touches;
             var etl = et.length;
@@ -494,7 +502,7 @@ var PLY = (function ($) {
                 }
             }
 
-            //console.log("elems=",elems);
+            console.log("elems=",elems);
 
             // for each element 
             for (var ni in elems) {
@@ -521,7 +529,7 @@ var PLY = (function ($) {
                 }
                 // at long last ready to parse our element's manipulating touches
                 if (!two) { // only one!
-                    console.log("one touch on "+en[ni]);
+                    console.log("touch",one,"on",en[ni]);
                     var event = document.createEvent('HTMLEvents'); // this is for compatibility with DOM Level 2
                     event.initEvent('ply_translate',true,true);
                     event.deltaX = one.x;
@@ -541,13 +549,19 @@ var PLY = (function ($) {
                     // input sampling dependent update scheme, because in all likelihood the computation of
                     // the new transform *need* *not* *occur* unless rAF indicates for us that our
                     // system can handle another one. 
-                    console.log("two touches on "+en[ni]);
+                    console.log("two touches",one,two,"on",en[ni]);
+                    if (more.length > 0) {
+                        console.log("total "+(2+more.length)+" touches:",more);
+                    }
                 }
             }
-            exposed.tmTime = Date.now(); // update this last
+            var now = Date.now();
+            var diff = Math.min(now - exposed.tmTime,200);
+            exposed.tmTime = now; // update this last
             if (exposed.debug) {
-                var profile = exposed.tmTime - start;
+                var profile = now - start;
                 exposed.tmProfile += (profile - exposed.tmProfile) * 0.02;
+                exposed.tmRate += (diff - exposed.tmRate) * 0.02;
             }
         },
         /*touchcancel: function (evt) { console.log("touchcancel", evt.changedTouches);
