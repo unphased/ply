@@ -286,7 +286,7 @@ var PLY = (function ($) {
         keyup: function (evt) { console.log("keyup",key(evt));
             delete exposed.keys_depressed[key(evt)];
         },
-        touchstart: function (evt) { console.log("touchstart", id_string_for_touch_list(evt.targetTouches));
+        touchstart: function (evt) { //console.log("touchstart", id_string_for_touch_list(evt.targetTouches));
 
             exposed.tmTime = 0; // reset touchmove timer
 
@@ -323,22 +323,22 @@ var PLY = (function ($) {
             if ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1) {
                 // if the target (which I am fairly certain from the 
                 // commented out assertion above is the same across this 
-                // i-loop) is a no-scroll, then go and set up $.data stuff
+                // i-loop) is a no-scroll, then go and set up $.data stuff on it
                 var dt = $.data(seen_target,"ply");
                 var nid = en.length;
-                console.log('nid',nid);
-                if (!dt) {
+                //console.log('nid',nid);
+                if (!dt) { // new element to put in our node index buffer
                     dt = $.data(seen_target,"ply",{node_id: nid});
                     en.push(seen_target);
-                    console.log('en '+serialize(en));
-                } else {
+                    console.log('en extended '+serialize(en));
+                } else { // otherwise look node up and use its index
                     nid = dt.node_id;
                 }   
                 var dl = data_list.length;
-                for (var j=0;j<dl;++j) { // go and insert the 
+                for (var j=0;j<dl;++j) { // go and insert the new touches into our element and ep
                     var dj = data_list[j];
                     dj.ni = nid;
-                    console.log('set dj.ni to nid=',nid);
+                    //console.log('set dj.ni to nid=',nid);
                     dt[dj.id] = dj;
                     ep[dj.id] = dj;
                 }
@@ -350,14 +350,14 @@ var PLY = (function ($) {
                     // produces strange stuff, trust me)
                     exposed.allow_scroll = false;
                 }
-            } else {
+            } else { // not a no-scroll, means only need to track touch data
                 var d_l = data_list.length;
-                for (var k=0;k<d_l;++k) { // go and insert the
+                for (var k=0;k<d_l;++k) { // go and insert the new touches into ep
                     var dk = data_list[k];
                     ep[dk.id] = dk;
                 }
             }
-            if (!exposed.allow_scroll) {
+            if (!exposed.allow_scroll) { // never allow scroll once you start manipulating something 
                 evt.preventDefault();
             }
         },
@@ -377,7 +377,7 @@ var PLY = (function ($) {
         // and touchcancel so i will have independent touchstart but touchend and touchcancel
         // will use the same handler which uses the touches list.
 
-        touchend: (touchend_touchcancel = function (evt) { console.log("touchend", id_string_for_touch_list(evt.changedTouches));
+        touchend: (touchend_touchcancel = function (evt) { //console.log("touchend", id_string_for_touch_list(evt.changedTouches));
 
             exposed.tmTime = 0; // reset touchmove timer
 
@@ -492,7 +492,7 @@ var PLY = (function ($) {
                 }
             }
 
-            console.log("elems=",elems);
+            //console.log("elems=",elems);
 
             // for each element 
             for (var ni in elems) {
