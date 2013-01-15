@@ -122,7 +122,8 @@ var PLY = (function ($) {
 
     var json_handler = function (key,val) {
         if (val instanceof HTMLElement) {
-            for (var k=0,e=val; (e = e.previousSibling); ++k); // tells us which child we are
+            //for (var k=0,e=val; (e = e.previousSibling); ++k); // tells us which child we are (incl. textnodes)
+            var k = Array.prototype.indexOf.call(e.parentNode.children,e); // tells us which (real node) index it is
             var cn = val.className;
             var tn = val.tagName;
             var id = val.id;
