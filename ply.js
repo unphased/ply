@@ -31,7 +31,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 9977d41 seems like using serialize with escape is overkill %#";
+    var git_context = "#% 20cbe32 more informative string in serialization of DOM elements %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
