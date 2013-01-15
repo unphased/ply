@@ -31,7 +31,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 701e130 meh %#";
+    var git_context = "#% 37fc434 moved debug view toggle button %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
