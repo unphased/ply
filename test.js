@@ -27,14 +27,6 @@
 
     var has_bounding_client_rect = !!document.body.getBoundingClientRect;
 
-    var debug_show_hide = true;
-    $('#debug_toggle_btn').on('mousedown touchstart',function(e) { 
-        e.preventDefault();
-        debug_show_hide = !debug_show_hide;
-        var w = $("#debug").width();
-        $("#debug").css('WebkitTransform','translate3d('+(debug_show_hide?w+10:0)+'px,0,0)');
-    });
-
     // be aware this routine sucks CPU a bit -- I use both rAF and window focus listening to make it friendlier
     // I am implementing this as a separate component rather than building it into the library. This is to decouple
     // the debug logic into the test page, and keep the library itself as lean and mean as it can reasonably be.
@@ -209,6 +201,15 @@
         console.log("Window got focus. Jumpstarting rAF");
         requestAnimationFrame(debug_refresh);
     });
+
+    var debug_show_hide = true;
+    $('#debug_view_toggle_btn').on('mousedown touchstart',function(e) { 
+        e.preventDefault();
+        debug_show_hide = !debug_show_hide;
+        var w = $("#debug").width();
+        $("#debug").css('WebkitTransform','translate3d('+(debug_show_hide?w+10:0)+'px,0,0)');
+    });
+
     $("h1").after('<button id="append_logs_dom_toggle" onclick="PLY.append_logs_dom = !PLY.append_logs_dom">toggle realtime log display</button>')
         .after('<button id="debug_toggle" onclick="PLY.debug = !PLY.debug">toggle all debug</button>');
 }());
