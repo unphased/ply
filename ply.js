@@ -136,7 +136,7 @@ var PLY = (function ($) {
         if (!exposed.debug) return;
         var str = "";
         for (var i=0;i<arguments.length;++i) {
-            str += escapeHtml(serialize(arguments[i])).replace(/  /g,'</br>');
+            str += escapeHtml(serialize(arguments[i])).replace(/ {2}/g,'</br>');
             str += ", ";
         }
         str = str.slice(0,-2);
