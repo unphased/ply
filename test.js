@@ -202,7 +202,7 @@
         requestAnimationFrame(debug_refresh);
     });
 
-    var debug_show_hide = true;
+    var debug_show_hide = false;
     $('#debug_view_toggle_btn').on('mousedown touchstart',function(e) { 
         e.preventDefault();
         debug_show_hide = !debug_show_hide;
