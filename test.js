@@ -44,18 +44,20 @@
         if (!PLY.event_processed) return; // wait next tick 
 
         PLY.event_processed = false; // mark it: we're gonna go update the stuff. 
-        //console.log(Date.now());
-        // the HTML debug dump of the data
-        var str = "<ul>";
-        for (var prop in PLY) {            
-            str += "<li>";
-            str += prop + ": "; 
-            str += PLY.escape(PLY.serialize(PLY[prop]));
-            str += "</li>";
-        }
-        str += "</ul>";
         
-        $("#debug").html(str);
+        if (debug_show_hide) {
+            // skip the HTML debug dump of the data if its view is hidden
+            var str = "<ul>";
+            for (var prop in PLY) {
+                str += "<li>";
+                str += prop + ": "; 
+                str += PLY.escape(PLY.serialize(PLY[prop]));
+                str += "</li>";
+            }
+            str += "</ul>";
+            
+            $("#debug").html(str);
+        }
         
         // actual debug visualization of pointer locations
         if (!$('#pointer_marker_container').length) {
