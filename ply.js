@@ -416,7 +416,7 @@ var PLY = (function ($) {
                     
                     // delete the other ref to this touch's state object 
                     delete ep[id];
-                    console.log('removed ',id," now ep is ",ep);
+                    //console.log('removed ',id," now ep is ",ep);
                 }
             }
             if (etl === 0) { // this indicates no touches remain
