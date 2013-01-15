@@ -28,15 +28,11 @@
     var has_bounding_client_rect = !!document.body.getBoundingClientRect;
 
     var debug_show_hide = true;
-    var debug_touch_id; 
-    $('#debug').on('mousedown touchstart',function(e) { // must hook these events and not up or click or end because the contents are ephemeral
-        if (e.changedTouches[0].identifier === debug_touch_id) { return; }
+    $('#debug_toggle_btn').on('mousedown touchstart',function(e) { 
         e.preventDefault();
         debug_show_hide = !debug_show_hide;
-        var w = $(this).width();
-        $(this).css('WebkitTransform','translate3d('+(debug_show_hide?w-16:0)+'px,0,0)');
-    }).on('mouseup touchend',function(e) {
-        console.log("mouseup touchend on #debug");
+        var w = $("#debug").width();
+        $("#debug").css('WebkitTransform','translate3d('+(debug_show_hide?w+10:0)+'px,0,0)');
     });
 
     // be aware this routine sucks CPU a bit -- I use both rAF and window focus listening to make it friendlier
