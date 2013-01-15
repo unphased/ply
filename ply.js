@@ -117,10 +117,12 @@ var PLY = (function ($) {
 
     var json_handler = function (key,val) {
         if (val instanceof HTMLElement) {
+            for (var k=0,e=val; (e = e.previousSibling); ++k); // tells us which child we are
             var cn = val.className;
             var tn = val.tagName;
-            if (tn === "HTML") { cn = ""; } // too much due to Modernizr
-            return "<"+tn+" c="+cn+" id="+val.id+">";
+            var id = val.id;
+            if (tn === "HTML") { cn = ""; } // too much output due to Modernizr
+            return "<"+tn+" #"+k+(cn?" c="+cn:"")+(id?" id="+id:"")+">";
         }
         return val;
     };
