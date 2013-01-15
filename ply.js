@@ -31,7 +31,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% e8c53ee fix an oopsie in regex %#";
+    var git_context = "#% 67caca3 add a space after colon (if the bit before colon was in quotes) %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
