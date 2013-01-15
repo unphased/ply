@@ -351,8 +351,8 @@ var PLY = (function ($) {
                     exposed.allow_scroll = false;
                 }
             } else {
-                var dl = data_list.length;
-                for (var k=0;k<dl;++k) { // go and insert the
+                var d_l = data_list.length;
+                for (var k=0;k<d_l;++k) { // go and insert the
                     var dk = data_list[k];
                     ep[dk.id] = dk;
                 }
