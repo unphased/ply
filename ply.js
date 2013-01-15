@@ -295,6 +295,8 @@ var PLY = (function ($) {
             // if allow scroll, then never prevent default: once you're
             // scrolling, touching anything else should never mess with the 
             // browser default scrolling. 
+
+
             // On touch devices the touchstart is the critical event that keys 
             // off a complex interaction, so it will be the place that 
             // allow_scroll is directly assigned (when it is the first touch,
@@ -308,11 +310,12 @@ var PLY = (function ($) {
             var seen_target;
             var data_list = [];
             assert(evt.changedTouches.length > 0, "evt.changedTouches length > 0 on touchstart: "+evt.changedTouches.length);
+            // process list of new fingers
             for (var i=0; i<evt.changedTouches.length; ++i) {
                 var eci = evt.changedTouches[i];
                 var ecii = eci.identifier;
                 // this assertion is to check my assumption that all touchstarts batch cT list based on target elem.
-                // if (seen_target) assert(eci.target === seen_target);
+                if (seen_target) assert(eci.target === seen_target);
                 seen_target = eci.target;
                 // here, we must determine the actual real target that this set of touches
                 // is destined to control. store that... for right now it stores the immediate
@@ -322,10 +325,9 @@ var PLY = (function ($) {
                 data_list.push(v);
             }
 
-            if ((' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1) {
-                // if the target (which I am fairly certain from the 
-                // commented out assertion above is the same across this 
-                // i-loop) is a no-scroll, then go and set up $.data stuff on it
+            // only when element is a noscroll (interesting element) AND in noscroll mode do we track element's touches
+            if (!exposed.allow_scroll && (' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1) {
+                // set up $.data stuff on element
                 var dt = $.data(seen_target,"ply");
                 var nid = en.length;
                 //console.log('nid',nid);
