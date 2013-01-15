@@ -204,12 +204,12 @@
         requestAnimationFrame(debug_refresh);
     });
 
-    var debug_show_hide = false;
+    var debug_show_hide = true;
     $('.ply_js_title').parent().on('mousedown touchstart',function(e) { 
-        e.preventDefault();
-        debug_show_hide = !debug_show_hide;
+        e.preventDefault();        
         var w = $("#debug").width();
         $("#debug").css('WebkitTransform','translate3d('+(debug_show_hide?w+10:0)+'px,0,0)');
+        debug_show_hide = !debug_show_hide;
     });
 
     $("h1").after('<button id="append_logs_dom_toggle" onclick="PLY.append_logs_dom = !PLY.append_logs_dom">toggle realtime log display</button>')
