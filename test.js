@@ -43,7 +43,7 @@
             // we're getting new-style sub-ms time stamp
         }
         // schedule 
-        if (document.hasFocus()) 
+        if (PLY.debug && document.hasFocus()) 
             requestAnimationFrame(debug_refresh);
         else console.log("document has lost focus. Stopping rAF");
 
