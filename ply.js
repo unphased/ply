@@ -458,7 +458,7 @@ var PLY = (function ($) {
         //console.log("touchmove ",id_string_for_touch_list(evt.changedTouches),id_string_for_touch_list(evt.touches));
             if (exposed.allow_scroll) return; // since this is touch device, when scrolling we don't do ply-things
             evt.preventDefault(); // prevent the pinching (this is primarily for Android: on iOS a preventdefault on the touchstart is sufficient to suppress pinch)
-            
+
             // if updates are sent faster than 7ms they are ignored!
             // This should work reliably up until devices provide faster than 120Hz touch events
             // and gives browser about 7 ms of grace-period between touchmove events
@@ -521,7 +521,7 @@ var PLY = (function ($) {
                 }
                 // at long last ready to parse our element's manipulating touches
                 if (!two) { // only one!
-                    console.log("one touch on "+en[ni]);
+                    console.log("touch",one,"on",en[ni]);
                     var event = document.createEvent('HTMLEvents'); // this is for compatibility with DOM Level 2
                     event.initEvent('ply_translate',true,true);
                     event.deltaX = one.x;
@@ -541,7 +541,10 @@ var PLY = (function ($) {
                     // input sampling dependent update scheme, because in all likelihood the computation of
                     // the new transform *need* *not* *occur* unless rAF indicates for us that our
                     // system can handle another one. 
-                    console.log("two touches on "+en[ni]);
+                    console.log("two touches",one,two,"on",en[ni]);
+                    if (more.length > 0) {
+                        console.log("total "+(2+more.length)+" touches:",more);
+                    }
                 }
             }
             exposed.tmTime = Date.now(); // update this last
