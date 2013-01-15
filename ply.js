@@ -555,7 +555,7 @@ var PLY = (function ($) {
                 }
             }
             var now = Date.now();
-            var diff = now - start;
+            var diff = now - exposed.tmTime;
             exposed.tmTime = now; // update this last
             if (exposed.debug) {
                 var profile = now - start;
