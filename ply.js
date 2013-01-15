@@ -325,8 +325,8 @@ var PLY = (function ($) {
                 data_list.push(v);
             }
 
-            // only when element is a noscroll (interesting element) AND in noscroll mode do we track element's touches
-            if (!exposed.allow_scroll && (' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1) {
+            // only when element is a noscroll (interesting element) AND in noscroll mode (or could initiate it) do we track element's touches
+            if ((ps_count === 0 || !exposed.allow_scroll) && (' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1) {
                 // set up $.data stuff on element
                 var dt = $.data(seen_target,"ply");
                 var nid = en.length;
