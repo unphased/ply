@@ -95,3 +95,10 @@ ul {
 .error {
     color: red;
 }
+
+/* delete me- this is temporary for demo */
+.ply-noscroll {
+    background-color: rgba(0,200,0,0.2);
+    border: 2px rgb(0,100,0,0.7) solid;
+    padding: 5px;
+}
