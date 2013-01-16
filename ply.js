@@ -522,6 +522,7 @@ var PLY = (function ($) {
             for (var ni in elems) {
                 var nd = $.data(en[Number(ni)],'ply');
                 var one, two; 
+                one = undefined; two = undefined;
                 var more = [];
                 // var tc = Object.keys(nd)-1; // touch count (on this node) // (assumes there is always one prop "node_id")
                 var tc = 0; 
