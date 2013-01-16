@@ -31,7 +31,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 0452f6f allowing a finger not to exist in pointer_state (if it is canceled for or by ply) %#";
+    var git_context = "#% c57bd6b bizarre. printing tc %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
