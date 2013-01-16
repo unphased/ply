@@ -581,7 +581,7 @@ var PLY = (function ($) {
             }
         },
         ply_translate: function(evt) {
-            evt.target.style.webkitTransform = "transform3d("+evt.deltaX+"px,"+evt.deltaY+"px,0)";
+            evt.target.style.webkitTransform = "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0)";
         },
         // only assign these deprecated mutation events to the document when absolutely necessary (perf reasons)
         DOMNodeInserted: Mutation_Observer ? null : function (evt) { //console.log("DOMNodeInserted: ",evt.target);
