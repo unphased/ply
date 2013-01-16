@@ -27,6 +27,8 @@
 
     var has_bounding_client_rect = !!document.body.getBoundingClientRect;
 
+    var no_events_processed_for = 0;
+
     // be aware this routine sucks CPU a bit -- I use both rAF and window focus listening to make it friendlier
     // I am implementing this as a separate component rather than building it into the library. This is to decouple
     // the debug logic into the test page, and keep the library itself as lean and mean as it can reasonably be.
@@ -41,7 +43,13 @@
 
         if (!PLY.debug) return; // wait next tick (iOS does not issue window focus
                                 // rAF start/restart won't work with toggling debug)
-        if (!PLY.event_processed) return; // wait next tick 
+        if (!PLY.event_processed) {
+            if (no_events_processed_for++ > 2) {
+                return; // wait next tick 
+            }
+        } else {
+            no_events_processed_for = 0;
+        }
 
         PLY.event_processed = false; // mark it: we're gonna go update the stuff. 
         
