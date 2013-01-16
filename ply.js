@@ -613,7 +613,7 @@ var PLY = (function ($) {
         },
         ply_transform: function(evt) {
             evt.target.style.webkitTransformOrigin = evt.originX+"px "+evt.originY+"px";
-            evt.target.style.webkitTransform = "translate3d("+evt.translateX+"px,"+evt.translateY+"px,0) rotate("+evt.rotate+"deg) scale("+evt.scale+")";
+            evt.target.style.webkitTransform = "translate3d("+evt.translateX+"px,"+evt.translateY+"px,0) rotate("+evt.rotate+"rad) scale("+evt.scale+")";
         },
         // only assign these deprecated mutation events to the document when absolutely necessary (perf reasons)
         DOMNodeInserted: Mutation_Observer ? null : function (evt) { //console.log("DOMNodeInserted: ",evt.target);
