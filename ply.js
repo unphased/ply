@@ -88,7 +88,8 @@ var PLY = (function ($) {
         debug: true,
         append_logs_dom: true, 
         escape: escapeHtml,
-        serialize: serialize // exposed helper functions
+        serialize: serialize, // exposed helper functions
+        isInDOM: isInDOM
     };
 
 
@@ -137,6 +138,15 @@ var PLY = (function ($) {
     function serialize(arg) {
         if (typeof arg === "function") return "function";
         return JSON.stringify(arg,json_handler).replace(/"([^"]*)":/g,"$1: ").replace(/\},([^ ])/g,'},  $1').replace(/,([^ ])/g,', $1');
+    }
+
+    function isInDOM(e) {
+        while ((e = e.parentNode)) {
+            if (e == document) {
+                return true;
+            }
+        }
+        return false;
     }
 
     var original_console_log = console.log;
@@ -206,7 +216,8 @@ var PLY = (function ($) {
             c.addClass(class_name).addClassToChildren(class_name);
     };
 
-    var Mutation_Observer = (window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver);
+    var Mutation_Observer = true;
+    //(window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver);
     
     $(function (){
         // propagate "umbrella" style classes through to their children, now and in
@@ -578,6 +589,7 @@ var PLY = (function ($) {
                 exposed.last_pointer_id = null;
             }
         }*/ 
+        // only assign these deprecated mutation events to the document when absolutely necessary (perf reasons)
         DOMNodeInserted: Mutation_Observer ? null : function (evt) { //console.log("DOMNodeInserted: ",evt.target);
             // handle specially new elements which have the classes we're 
             // interested in
@@ -585,6 +597,20 @@ var PLY = (function ($) {
         DOMNodeRemoved: Mutation_Observer ? null : function (evt) {
             // removed nodes need to clean up their pointers. Pointers must be made to point to the new thing they are 
             // over now or to be removed. 
+
+            console.log("a node has been removed: ",evt.target);
+
+            // I actually don't know what the consequences of using a mutation observer will be when it comes to
+            // cleaning up data. Hopefully getting a ref to the removed element after-the-fact allows me to still
+            // access the $.data of it. 
+            // this whole step may be unnecessary and jQuery may already do auto-cleanup. But while I can't be sure I'll go do some manual clean up.
+            var data = $.data(evt.target,'ply');
+            if (data) {
+                for (var x in data) {
+                    data[x] = null; // just indiscriminately clear out references from this object to prevent it leaking
+                }
+            }
+
         }
     };
 

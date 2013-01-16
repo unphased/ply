@@ -65,12 +65,20 @@
             }
             str += "</ul>";
             
-            $("#debug").html(str);
+            // A mess in PLY.pointer_state is caused by subsequent .html()
+            // we're gonna clean that up here
+            var pp = PLY.pointer_state;
+            for (var id in pp) {
+                if (!PLY.isInDOM(pp[id].e)) {
+                    delete pp[id];
+                }
+            }
+            $("#debug").html(str); 
         }
         
         // actual debug visualization of pointer locations
         if (!$('#pointer_marker_container').length) {
-            $('body').append(
+            $('#debug').before(
                 '<div id="element_current_highlight_layers">'+
                     '<div class="element_current_highlight"></div>'+
                     '<div class="element_current_highlight"></div>'+
@@ -215,7 +223,7 @@
 
     var debug_show_hide = true;
     $('.ply_js_title').parent().on('mousedown touchstart',function(e) { 
-        e.preventDefault();        
+        e.preventDefault();
         var w = $("#debug").innerWidth();
         $("#debug").css('WebkitTransform','translate3d('+(debug_show_hide?w+10:0)+'px,0,0)');
         debug_show_hide = !debug_show_hide;
