@@ -84,10 +84,11 @@ ul {
     top: 5px;
     right: 5px;
     width: 200px;
+    bottom: 5px;
     padding: 5px;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
-    max-height: 296px; /* account for border */
+    /* max-height: 296px; /* account for border */
     -webkit-transition: -webkit-transform 1s;
 }
 
