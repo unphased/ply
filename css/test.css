@@ -71,11 +71,11 @@ div {
 }
 
 ul {
-    margin: 10px 0;
+    margin: 0 0;
     padding-left: 25px;
 }
 
-#debug {    
+#debug {
     position: fixed;
     opacity: 0.8;
     border: 2px solid #117;    
@@ -84,6 +84,7 @@ ul {
     top: 5px;
     right: 5px;
     width: 200px;
+    padding: 5px;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     max-height: 306px; /* account for border */
