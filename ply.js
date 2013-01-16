@@ -542,7 +542,7 @@ var PLY = (function ($) {
                         tc++;
                     }
                 }
-                console.log("tc "+tc);
+                //console.log("tc "+tc);
                 // at long last ready to parse our element's manipulating touches
                 if (!two) { // only one!
                     //console.log("touch",one,"on",en[ni]);
@@ -575,6 +575,23 @@ var PLY = (function ($) {
                     var yc_bar = 0.5*(one.yc + two.yc);
                     event2.originX = xs_bar; // the origin point around which to scale+rotate.
                     event2.originY = ys_bar;
+                    // TODO: reduce to a single sqrt, and otherwise optimize the crap out of this
+                    var xs_diff = one.xs - two.xs;
+                    var ys_diff = one.ys - two.ys;
+                    var xc_diff = one.xc - two.xc;
+                    var yc_diff = one.yc - two.yc;
+                    var xs_dist = Math.abs(xs_diff);
+                    var ys_dist = Math.abs(ys_diff);
+                    var xc_dist = Math.abs(xc_diff);
+                    var yc_dist = Math.abs(yc_diff); 
+                    var start_dist = Math.sqrt(xs_dist*xs_dist + ys_dist*ys_dist);
+                    var currt_dist = Math.sqrt(xc_dist*xc_dist + yc_dist*yc_dist);
+                    event2.scale = currt_dist / start_dist;
+                    var start_angle = Math.atan2(ys_diff, xs_diff);
+                    var currt_angle = Math.atan2(yc_diff, xc_diff);
+                    event2.rotate = currt_angle - start_angle;
+                    event2.translateX = xc_bar - xs_bar;
+                    event2.translateY = yc_bar - ys_bar;
                     var defaultPrevented2 = en[ni].dispatchEvent(event2);
 
                     if (more.length > 0) {
@@ -596,7 +613,7 @@ var PLY = (function ($) {
         },
         ply_transform: function(evt) {
             evt.target.style.webkitTransformOrigin = evt.originX+"px "+evt.originY+"px";
-            evt.target.style.webkitTransform = "";
+            evt.target.style.webkitTransform = "translate3d("+evt.translateX+"px,"+evt.translateY+"px,0) rotate("+evt.rotate+"deg) scale("+evt.scale+")";
         },
         // only assign these deprecated mutation events to the document when absolutely necessary (perf reasons)
         DOMNodeInserted: Mutation_Observer ? null : function (evt) { //console.log("DOMNodeInserted: ",evt.target);
