@@ -495,7 +495,8 @@ var PLY = (function ($) {
             var elems = {}; // this is a hash of integers
             for (var i=0; i<etl; ++i) { // loop over all pointers: assemble the elements to transform array 
                 var eti = et[i];
-                var ep_etid = ep[eti.identifier];
+                var ep_etid = ep[eti.identifier]; 
+                if (!ep_etid) continue;
                 // ep_etid.es is the actual element to be manipulated
                 // full_pointer_list.push({e: ep_etid.es, x: eti.pageX-ep_etid.xs, y: eti.pageY-ep_etid.ys});
                 // update this for display purposes
