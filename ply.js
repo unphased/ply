@@ -580,18 +580,9 @@ var PLY = (function ($) {
                 exposed.tmRate += (diff - exposed.tmRate) * 0.02;
             }
         },
-        /*touchcancel: function (evt) { console.log("touchcancel", evt.changedTouches);
-            for (var i=0;i<evt.changedTouches.length; ++i) {
-                delete exposed.pointer_state[evt.changedTouches[i].identifier];
-            }
-            if (evt.touches.length === 0) { // this indicates no touches remain: In all instances I've seen, 
-                // any touchcancel firing cancels *all* touches.
-                // In any case, should be safe to return to default allow_scroll mode
-                exposed.allow_scroll = true;
-                // and also clear this out 
-                exposed.last_pointer_id = null;
-            }
-        }*/ 
+        ply_translate: function(evt) {
+            this.style.webkitTransform = "transform3d("+evt.deltaX+"px,"+evt.deltaY+"px,0)";
+        },
         // only assign these deprecated mutation events to the document when absolutely necessary (perf reasons)
         DOMNodeInserted: Mutation_Observer ? null : function (evt) { //console.log("DOMNodeInserted: ",evt.target);
             // handle specially new elements which have the classes we're 
