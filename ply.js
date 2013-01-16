@@ -125,12 +125,12 @@ var PLY = (function ($) {
             // tells us which child we are (incl. textnodes)
             // for (var k=0,e=val; (e = e.previousSibling); ++k); 
             // tells us which (real node) index it is
-            var k = Array.prototype.indexOf.call(val.parentNode.children,val); 
+            var k = val.parentNode.children?Array.prototype.indexOf.call(val.parentNode.children,val):undefined;
             var cn = val.className;
             var tn = val.tagName;
             var id = val.id;
             if (tn === "HTML") { cn = ""; } // too much output due to Modernizr
-            return "<"+tn+" #"+k+(cn?" c="+cn:"")+(id?" id="+id:"")+">";
+            return "<"+tn+(k?" #"+k:"")+(cn?" c="+cn:"")+(id?" id="+id:"")+">";
         }
         return val;
     };
