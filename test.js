@@ -77,7 +77,7 @@
             // we're gonna clean that up here
             var pp = PLY.pointer_state;
             for (var id in pp) {
-                if (!PLY.isInDOM(pp[id].e)) {
+                if (pp[id].e && !PLY.isInDOM(pp[id].e)) { // if not touch don't worry about it
                     delete pp[id];
                 }
             }
