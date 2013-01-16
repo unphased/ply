@@ -541,6 +541,7 @@ var PLY = (function ($) {
                     }
                     tc++;
                 }
+                console.log("tc "+tc);
                 // at long last ready to parse our element's manipulating touches
                 if (!two) { // only one!
                     console.log("touch",one,"on",en[ni]);
