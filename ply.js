@@ -568,7 +568,7 @@ var PLY = (function ($) {
                     
                     //console.log("two touches",one,two,"on",en[ni]);
                     var event2 = document.createEvent('HTMLEvents'); // this is for compatibility with DOM Level 2
-                    event2.initEvent('ply_translate',true,true);
+                    event2.initEvent('ply_transform',true,true);
                     var xs_bar = 0.5*(one.xs + two.xs);
                     var ys_bar = 0.5*(one.ys + two.ys);
                     var xc_bar = 0.5*(one.xc + two.xc);
