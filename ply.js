@@ -538,8 +538,8 @@ var PLY = (function ($) {
                             // this one is more than 2
                             more.push(v);
                         }
+                        tc++;
                     }
-                    tc++;
                 }
                 console.log("tc "+tc);
                 // at long last ready to parse our element's manipulating touches
