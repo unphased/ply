@@ -44,7 +44,7 @@
         if (!PLY.debug) return; // wait next tick (iOS does not issue window focus
                                 // rAF start/restart won't work with toggling debug)
         if (!PLY.event_processed) {
-            if (no_events_processed_for++ > 2) {
+            if (no_events_processed_for++ > 1) {
                 return; // wait next tick 
             }
         } else {
