@@ -48,6 +48,7 @@
         if (debug_show_hide) {
             // skip the HTML debug dump of the data if its view is hidden
             var str = "<ul>";
+            // dump the contents of exposed
             for (var prop in PLY) {
                 str += "<li>";
                 str += prop + ": "; 
@@ -55,6 +56,13 @@
                 str += "</li>";
             }
             str += "</ul>";
+
+            str += "<p>node_ids:</p><ol>";
+            // dump the contents of $.data(e,'ply') for e in exposed.node_ids
+            for (var j=0;j<PLY.node_ids.length;++j) {
+                str += "<li>"+PLY.escape(PLY.serialize($.data(PLY.node_ids[j],'ply')))+"</li>";
+            }
+            str += "</ol>";
             
             $("#debug").html(str);
         }
