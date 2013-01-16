@@ -516,7 +516,7 @@ var PLY = (function ($) {
                 }
             }
 
-            console.log("elems=",elems);
+            //console.log("elems=",elems);
 
             // for each element 
             for (var ni in elems) {
@@ -530,7 +530,7 @@ var PLY = (function ($) {
                     if (t !== "node_id") {
                         var ndt = nd[t];
                         // this is a touch 
-                        var v = {x: ndt.xc-ndt.xs, y: ndt.yc-ndt.ys};
+                        var v = {xc: ndt.xc, xs: ndt.xs, yc: ndt.yc, ys:ndt.ys};
                         if (!one) {
                             one = v;
                         } else if (!two) {
@@ -545,11 +545,11 @@ var PLY = (function ($) {
                 console.log("tc "+tc);
                 // at long last ready to parse our element's manipulating touches
                 if (!two) { // only one!
-                    console.log("touch",one,"on",en[ni]);
+                    //console.log("touch",one,"on",en[ni]);
                     var event = document.createEvent('HTMLEvents'); // this is for compatibility with DOM Level 2
                     event.initEvent('ply_translate',true,true);
-                    event.deltaX = one.x;
-                    event.deltaY = one.y;
+                    event.deltaX = one.xc-one.xs;
+                    event.deltaY = one.yc-one.ys;
                     // What we do here is if the element has been specified to react automatically
                     // the default behavior will be the direct application (via rAF) of the transform, 
                     // which is probably about as efficient as we can get given what is available (early 2013).
@@ -560,12 +560,23 @@ var PLY = (function ($) {
                     // we need to do the transform
                     // If the element has been specified to react automatically to the two finger 
                     // transforms, the default behavior will be the direct application (via rAF) of the
-                    // transform, and thus the transform event will only be sent when rAF deems it 
-                    // to be appropriate. This is to eliminate the inefficiency of having to use an
+                    // transform, and thus the transform event will only be produced when rAF is idle.
+                    // This is to eliminate the inefficiency of having to use an
                     // input sampling dependent update scheme, because in all likelihood the computation of
                     // the new transform *need* *not* *occur* unless rAF indicates for us that our
-                    // system can handle another one. 
-                    console.log("two touches",one,two,"on",en[ni]);
+                    // system can handle "more things". 
+                    
+                    //console.log("two touches",one,two,"on",en[ni]);
+                    var event2 = document.createEvent('HTMLEvents'); // this is for compatibility with DOM Level 2
+                    event2.initEvent('ply_translate',true,true);
+                    var xs_bar = 0.5*(one.xs + two.xs);
+                    var ys_bar = 0.5*(one.ys + two.ys);
+                    var xc_bar = 0.5*(one.xc + two.xc);
+                    var yc_bar = 0.5*(one.yc + two.yc);
+                    event2.originX = xs_bar; // the origin point around which to scale+rotate.
+                    event2.originY = ys_bar;
+                    var defaultPrevented2 = en[ni].dispatchEvent(event2);
+
                     if (more.length > 0) {
                         console.log("total "+(2+more.length)+" touches:",more);
                     }
@@ -582,6 +593,10 @@ var PLY = (function ($) {
         },
         ply_translate: function(evt) {
             evt.target.style.webkitTransform = "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0)";
+        },
+        ply_transform: function(evt) {
+            evt.target.style.webkitTransformOrigin = evt.originX+"px "+evt.originY+"px";
+            evt.target.style.webkitTransform = "";
         },
         // only assign these deprecated mutation events to the document when absolutely necessary (perf reasons)
         DOMNodeInserted: Mutation_Observer ? null : function (evt) { //console.log("DOMNodeInserted: ",evt.target);
@@ -604,7 +619,6 @@ var PLY = (function ($) {
                     data[x] = null; // just indiscriminately clear out references from this object to prevent it leaking
                 }
             }
-
         }
     };
 
