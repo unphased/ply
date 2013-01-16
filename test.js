@@ -51,7 +51,15 @@
             no_events_processed_for = 0;
         }
 
-        PLY.event_processed = false; // mark it: we're gonna go update the stuff. 
+        PLY.event_processed = false; // mark it updated: we're gonna go update the stuff. 
+
+        // Preventing a mess in PLY.pointer_state caused by .html() setting #debug
+        var pp = PLY.pointer_state;
+        for (var id in pp) {
+            if (pp[id].e && !PLY.isInDOM(pp[id].e)) { // if not touch don't worry about it
+                delete pp[id];
+            }
+        }
         
         if (debug_show_hide) {
             // skip the HTML debug dump of the data if its view is hidden
@@ -72,15 +80,7 @@
                 str += "</li>";
             }
             str += "</ul>";
-            
-            // A mess in PLY.pointer_state is caused by subsequent .html()
-            // we're gonna clean that up here
-            var pp = PLY.pointer_state;
-            for (var id in pp) {
-                if (pp[id].e && !PLY.isInDOM(pp[id].e)) { // if not touch don't worry about it
-                    delete pp[id];
-                }
-            }
+
             $("#debug").html(str); 
         }
         
