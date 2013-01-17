@@ -25,8 +25,6 @@
     var transform_name = Modernizr.prefixed('transform');
     var hide_transform = "translate3d(-99999px,-99999px,0)";
 
-    var has_bounding_client_rect = !!document.body.getBoundingClientRect;
-
     var no_events_processed_for = 0;
 
     // be aware this routine sucks CPU a bit -- I use both rAF and window focus listening to make it friendlier
@@ -172,32 +170,20 @@
                 } else
                     echli.style[transform_name] = hide_transform;
             } else {
-                if (has_bounding_client_rect) {
-                    var cbcr = ppp.ec.getBoundingClientRect();
-                    echli.style.width = cbcr.width+"px";
-                    echli.style.height = cbcr.height+"px";
-                    echli.style[transform_name] = "translate3d("+(scrollX+cbcr.left)+"px,"+(scrollY+cbcr.top)+"px,0)";
-                } else {
-                    var jpppec = $(ppp.ec);
-                    var jpppeco = jpppec.offset();
-                    echli.style.width = jpppec.outerWidth()+"px";
-                    echli.style.height = jpppec.outerHeight()+"px";
-                    echli.style[transform_name] = "translate3d("+jpppeco.left+"px,"+jpppeco.top+"px,0)";
-                }
+                var jpppec = $(ppp.ec);
+                var jpppeco = jpppec.offset();
+                echli.style.width = jpppec.outerWidth()+"px";
+                echli.style.height = jpppec.outerHeight()+"px";
+                echli.style[transform_name] = "translate3d("+jpppeco.left+"px,"+jpppeco.top+"px,0)";
             }
+
             var pppe = ppp.e || ppp.es;
-            if (has_bounding_client_rect) {
-                var sbcr = pppe.getBoundingClientRect();
-                eshli.style.width = sbcr.width+"px";
-                eshli.style.height = sbcr.height+"px";
-                eshli.style[transform_name] = "translate3d("+(scrollX+sbcr.left)+"px,"+(scrollY+sbcr.top)+"px,0)";
-            } else {
-                var jpppes = $(pppe);
-                var jpppeso = jpppes.offset();
-                eshli.style.width = jpppes.outerWidth()+"px";
-                eshli.style.height = jpppes.outerHeight()+"px";
-                eshli.style[transform_name] = "translate3d("+jpppeso.left+"px,"+jpppeso.top+"px,0)";
-            }
+            var jpppes = $(pppe);
+            var jpppeso = jpppes.offset();
+            eshli.style.width = jpppes.outerWidth()+"px";
+            eshli.style.height = jpppes.outerHeight()+"px";
+            eshli.style[transform_name] = "translate3d("+jpppeso.left+"px,"+jpppeso.top+"px,0)";
+
             pci.style[transform_name] = "translate3d("+ppp.xc+"px,"+ppp.yc+"px,0)";
             psci.style[transform_name] = "translate3d("+ppp.xs+"px,"+ppp.ys+"px,0)";
             if (ppp.fatness) {
