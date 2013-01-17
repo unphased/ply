@@ -348,8 +348,6 @@ var PLY = (function ($) {
             if ((ps_count === 0 || !exposed.allow_scroll) && (' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1) {
                 // set up $.data stuff on element
                 var dt = $.data(seen_target,"ply");
-                // update element's page offset 
-                dt.offset = $(seen_target).offset(); // page offset of element (at start)
                 var nid = en.length;
                 //console.log('nid',nid);
                 if (!dt) { // new element to put in our node index buffer
@@ -359,6 +357,8 @@ var PLY = (function ($) {
                 } else { // otherwise look node up and use its index
                     nid = dt.node_id;
                 }
+                // update element's page offset 
+                dt.offset = $(seen_target).offset(); // page offset of element (at start)                
                 var dl = data_list.length;
                 for (var j=0;j<dl;++j) { // go and insert the new touches into our element and ep
                     var dj = data_list[j];
