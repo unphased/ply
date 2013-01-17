@@ -31,7 +31,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 6a697ea testing these new touch events i didnt' know about %#";
+    var git_context = "#% bbdc8bd removing getboundingclientrect calls because jquery offset does a nice job  normalizing it %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
