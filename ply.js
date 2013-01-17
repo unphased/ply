@@ -608,6 +608,12 @@ var PLY = (function ($) {
                 exposed.tmRate += (diff - exposed.tmRate) * 0.02;
             }
         },
+        touchenter: function(evt) {
+            console.log("touchenter");
+        },
+        touchleave: function(evt) {
+            console.log("touchleave");
+        },
         ply_translate: function(evt) {
             evt.target.style.webkitTransform = "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0)";
         },
