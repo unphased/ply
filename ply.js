@@ -529,7 +529,7 @@ var PLY = (function ($) {
                 // var tc = Object.keys(nd)-1; // touch count (on this node) // (assumes there is always one prop "node_id")
                 var tc = 0; 
                 for (var t in nd) {
-                    if (t !== "node_id") { // only the touches
+                    if (t !== "node_id" && t!== "offset") { // only the touches
                         var ndt = nd[t];                        
                         var v = {xc: ndt.xc, xs: ndt.xs, yc: ndt.yc, ys:ndt.ys};
                         if (!one) {
