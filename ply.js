@@ -662,5 +662,7 @@ var PLY = (function ($) {
             exposed.event_processed = true; 
         }, true); // hook to capture phase to catch in the event of stopPropagation()
     });
+    console.log("window.devicePixelRatio:", window.devicePixelRatio);
+
     return exposed;
 })(jQuery);
