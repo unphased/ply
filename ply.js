@@ -31,7 +31,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 1ad0a3c printing out devicepixelratio to look at its output on android %#";
+    var git_context = "#% 282c901 adding user agent debug %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
