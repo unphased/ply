@@ -618,7 +618,7 @@ var PLY = (function ($) {
                 // here, we must determine the actual real target that this set of touches
                 // is destined to control. store that... for right now it stores the immediate
                 // target which is fine to test that the thing works. 
-                
+
                 var v = {id: ecii, xs: eci.pageX, ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, e: seen_target};
                 data_list.push(v);
             }
@@ -635,7 +635,9 @@ var PLY = (function ($) {
                     console.log('en extended ',en);
                 } else { // otherwise look node up and use its index
                     nid = dt.node_id;
-                }   
+                }
+                // update element's page offset 
+                dt.offset = $(seen_target).offset(); // page offset of element (at start)                
                 var dl = data_list.length;
                 for (var j=0;j<dl;++j) { // go and insert the new touches into our element and ep
                     var dj = data_list[j];
@@ -780,7 +782,7 @@ var PLY = (function ($) {
                 // full_pointer_list.push({e: ep_etid.es, x: eti.pageX-ep_etid.xs, y: eti.pageY-ep_etid.ys});
                 // update this for display purposes
                 if (ep_etid.xc !== eti.pageX || ep_etid.yc !== eti.pageY) { // must update this id
-                    // do not mark change based on force
+                    // do not mark change if only force changes
                     ep_etid.xc = eti.pageX;
                     ep_etid.yc = eti.pageY;
                     
@@ -806,9 +808,8 @@ var PLY = (function ($) {
                 // var tc = Object.keys(nd)-1; // touch count (on this node) // (assumes there is always one prop "node_id")
                 var tc = 0; 
                 for (var t in nd) {
-                    if (t !== "node_id") {
-                        var ndt = nd[t];
-                        // this is a touch 
+                    if (t !== "node_id" && t!== "offset") { // only the touches
+                        var ndt = nd[t];                        
                         var v = {xc: ndt.xc, xs: ndt.xs, yc: ndt.yc, ys:ndt.ys};
                         if (!one) {
                             one = v;
@@ -827,8 +828,8 @@ var PLY = (function ($) {
                     //console.log("touch",one,"on",en[ni]);
                     var event = document.createEvent('HTMLEvents'); // this is for compatibility with DOM Level 2
                     event.initEvent('ply_translate',true,true);
-                    event.deltaX = one.xc-one.xs;
-                    event.deltaY = one.yc-one.ys;
+                    event.deltaX = one.xc - one.xs;
+                    event.deltaY = one.yc - one.ys;
                     // What we do here is if the element has been specified to react automatically
                     // the default behavior will be the direct application (via rAF) of the transform, 
                     // which is probably about as efficient as we can get given what is available (early 2013).
@@ -852,8 +853,8 @@ var PLY = (function ($) {
                     var ys_bar = 0.5*(one.ys + two.ys);
                     var xc_bar = 0.5*(one.xc + two.xc);
                     var yc_bar = 0.5*(one.yc + two.yc);
-                    event2.originX = xs_bar; // the origin point around which to scale+rotate.
-                    event2.originY = ys_bar;
+                    event2.originX = xs_bar - nd.offset.left; // the origin point around which to scale+rotate.
+                    event2.originY = ys_bar - nd.offset.top;
                     // TODO: reduce to a single sqrt, and otherwise optimize the crap out of this
                     var xs_diff = one.xs - two.xs;
                     var ys_diff = one.ys - two.ys;
@@ -863,8 +864,8 @@ var PLY = (function ($) {
                     var ys_dist = Math.abs(ys_diff);
                     var xc_dist = Math.abs(xc_diff);
                     var yc_dist = Math.abs(yc_diff); 
-                    var start_dist = Math.sqrt(xs_dist*xs_dist + ys_dist*ys_dist);
-                    var currt_dist = Math.sqrt(xc_dist*xc_dist + yc_dist*yc_dist);
+                    var start_dist = Math.sqrt(xs_dist * xs_dist + ys_dist * ys_dist);
+                    var currt_dist = Math.sqrt(xc_dist * xc_dist + yc_dist * yc_dist);
                     event2.scale = currt_dist / start_dist;
                     var start_angle = Math.atan2(ys_diff, xs_diff);
                     var currt_angle = Math.atan2(yc_diff, xc_diff);
@@ -940,5 +941,8 @@ var PLY = (function ($) {
             exposed.event_processed = true; 
         }, true); // hook to capture phase to catch in the event of stopPropagation()
     });
+    console.log("UA: "+navigator.userAgent);
+    console.log("window.devicePixelRatio:", window.devicePixelRatio);
+
     return exposed;
 })(jQuery);
