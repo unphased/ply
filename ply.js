@@ -919,7 +919,7 @@ var PLY = (function ($) {
             var data = $.data(evt.target,'ply');
             if (data) {
                 for (var x in data) {
-                    data[x] = null; // just indiscriminately clear out references from this object to prevent it leaking
+                    data[x] = null; // just indiscriminately clear out references from this object to prevent it leaking anything
                 }
             }
         }
