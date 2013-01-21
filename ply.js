@@ -907,8 +907,8 @@ var PLY = (function ($) {
             console.log("touchleave");
         },
         ply_translate: function(evt) {
-            evt.target.style[TransformStyle] = "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0)" + $.data(evt.target,"ply").trans;
-            console.log("transform set to: "+"translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0)" + $.data(evt.target,"ply").trans);
+            evt.target.style[TransformStyle] = "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans;
+            console.log("transform set to: "+"translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans);
             console.log("transform retrieved: "+$(evt.target).css(TransformStyle));
         },
         ply_transform: function(evt) {
