@@ -425,6 +425,8 @@ var PLY = (function ($) {
         return false;
     }
 
+    var TransformStyle = Modernizr.prefixed("transform"); 
+
     var original_console_log = console.log;
     // echo console logs to the debug 
     var instrumented_log = function () {
@@ -637,7 +639,12 @@ var PLY = (function ($) {
                     nid = dt.node_id;
                 }
                 // update element's page offset 
-                dt.offset = $(seen_target).offset(); // page offset of element (at start)                
+                dt.offset = $(seen_target).offset(); // page offset of element (at start)
+                // update element's transform
+                dt.trans = seen_target.style[TransformStyle]; // hold on to this because it can be very helpful
+                if (dt.trans) {
+                    console.log("Existing transform on newly touched element: ",dt.trans,seen_target);
+                }
                 var dl = data_list.length;
                 for (var j=0;j<dl;++j) { // go and insert the new touches into our element and ep
                     var dj = data_list[j];
@@ -646,6 +653,7 @@ var PLY = (function ($) {
                     dt[dj.id] = dj;
                     ep[dj.id] = dj;
                 }
+
 
                 if (ps_count === 0) {
                     // this is so that if you start scrolling and then with 2nd
