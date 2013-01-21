@@ -908,6 +908,8 @@ var PLY = (function ($) {
         },
         ply_translate: function(evt) {
             evt.target.style[TransformStyle] = "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0)" + $.data(evt.target,"ply").trans;
+            console.log("transform set to: "+"translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0)" + $.data(evt.target,"ply").trans;
+            console.log("transform retrieved: "+$(evt.target).css(TransformStyle));
         },
         ply_transform: function(evt) {
             evt.target.style[TransformOriginStyle] = evt.originX+"px "+evt.originY+"px";
