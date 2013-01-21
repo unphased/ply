@@ -307,7 +307,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% ffe3273 revert to hopefully more stable jquery %#";
+    var git_context = "#% 318fced testing the extraction of transform style from css %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
