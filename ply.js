@@ -905,7 +905,7 @@ var PLY = (function ($) {
             console.log("touchleave");
         },
         ply_translate: function(evt) {
-            evt.target.style.webkitTransform = $.data(evt.target,"ply").trans + "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0)";
+            evt.target.style.webkitTransform = "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0)" + $.data(evt.target,"ply").trans;
         },
         ply_transform: function(evt) {
             evt.target.style.webkitTransformOrigin = evt.originX+"px "+evt.originY+"px";
