@@ -307,7 +307,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 4d3cea1 using modernizr to get transform styles now and changed some readme and maybe it will produce matrices now %#";
+    var git_context = "#% c4d1a9b adding a space %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
