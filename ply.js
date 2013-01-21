@@ -911,9 +911,9 @@ var PLY = (function ($) {
         },
         ply_transform: function(evt) {
             evt.target.style[TransformOriginStyle] = evt.originX+"px "+evt.originY+"px";
-            evt.target.style[TransformStyle] = "translate3d("+evt.translateX+"px,"+evt.translateY+"px,0) rotate("+evt.rotate+"rad) scale("+evt.scale+")" + $.data(evt.target,"ply").trans;
+            evt.target.style[TransformStyle] = "translate3d("+evt.translateX+"px,"+evt.translateY+"px,0) rotate("+evt.rotate+"rad) scale("+evt.scale+") " + $.data(evt.target,"ply").trans;
             console.log("transform origin: "+evt.originX+"px "+evt.originY+"px");
-            console.log("transform set to: "+"translate3d("+evt.translateX+"px,"+evt.translateY+"px,0) rotate("+evt.rotate+"rad) scale("+evt.scale+")" + $.data(evt.target,"ply").trans);
+            console.log("transform set to: "+"translate3d("+evt.translateX+"px,"+evt.translateY+"px,0) rotate("+evt.rotate+"rad) scale("+evt.scale+") " + $.data(evt.target,"ply").trans);
             console.log("transform retrieved: "+$(evt.target).css(TransformStyle));
         },
         // only assign these deprecated mutation events to the document when absolutely necessary (perf reasons)
