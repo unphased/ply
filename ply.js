@@ -426,6 +426,7 @@ var PLY = (function ($) {
     }
 
     var TransformStyle = Modernizr.prefixed("transform"); 
+    var TransformOriginStyle = Modernizr.prefixed("transformOrigin");
 
     var original_console_log = console.log;
     // echo console logs to the debug 
@@ -654,7 +655,6 @@ var PLY = (function ($) {
                     ep[dj.id] = dj;
                 }
 
-
                 if (ps_count === 0) {
                     // this is so that if you start scrolling and then with 2nd
                     // finger touch a ply-noscroll element it will not 
@@ -687,7 +687,9 @@ var PLY = (function ($) {
         // the goal should be to simply use that list to determine and update ply's state.
         // unfortunately I can't simply assign the same handler to touchstart and touchend
         // and touchcancel so i will have independent touchstart but touchend and touchcancel
-        // will use the same handler which uses the touches list.
+        // will use the same handler which uses the touches list. This is because I must use 
+        // preventDefault on touchstart in order to force behavior reliably and running the 
+        // same routine off of all three of these events is probably overkill 
 
         touchend: (touchend_touchcancel = function (evt) { //console.log("touchend", id_string_for_touch_list(evt.changedTouches));
 
@@ -905,14 +907,14 @@ var PLY = (function ($) {
             console.log("touchleave");
         },
         ply_translate: function(evt) {
-            evt.target.style.webkitTransform = "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0)" + $.data(evt.target,"ply").trans;
+            evt.target.style[TransformStyle] = "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0)" + $.data(evt.target,"ply").trans;
         },
         ply_transform: function(evt) {
-            evt.target.style.webkitTransformOrigin = evt.originX+"px "+evt.originY+"px";
-            evt.target.style.webkitTransform = "translate3d("+evt.translateX+"px,"+evt.translateY+"px,0) rotate("+evt.rotate+"rad) scale("+evt.scale+")" + $.data(evt.target,"ply").trans;
+            evt.target.style[TransformOriginStyle] = evt.originX+"px "+evt.originY+"px";
+            evt.target.style[TransformStyle] = "translate3d("+evt.translateX+"px,"+evt.translateY+"px,0) rotate("+evt.rotate+"rad) scale("+evt.scale+")" + $.data(evt.target,"ply").trans;
             console.log("transform origin: "+evt.originX+"px "+evt.originY+"px");
             console.log("transform set to: "+"translate3d("+evt.translateX+"px,"+evt.translateY+"px,0) rotate("+evt.rotate+"rad) scale("+evt.scale+")" + $.data(evt.target,"ply").trans);
-            console.log("transform retrieved: "+evt.target.style.webkitTransform);
+            console.log("transform retrieved: "+$(evt.target).css(TransformStyle));
         },
         // only assign these deprecated mutation events to the document when absolutely necessary (perf reasons)
         DOMNodeInserted: Mutation_Observer ? null : function (evt) { //console.log("DOMNodeInserted: ",evt.target);

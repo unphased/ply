@@ -26,9 +26,11 @@ ply uses DOM2 Mutation Events (the ones deprecated in DOM3 but still found in Sa
 
 None yet, the library is not yet in a functional state. 
 
-The goal is to support any platforrm which does not place unreasonable requirements on code change to the library. This means that IE9 support is tentative and IE<=8 support is out of the question.
+The goal is to support any platform which does not place unreasonable requirements for platform-specific code to the library. This means that IE9 support is tentative and IE<=8 support is out of the question.
 
-To be thoroughly incomplete and in rough order of dev priority: 
+It goes without saying that browsers built with Webkit is the primary target. 
+
+Here is an incomplete full list of platforms:
 
 - iOS6 Mobile Safari 6
 - iOS5 Mobile Safari 5
