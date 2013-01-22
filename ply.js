@@ -731,10 +731,15 @@ var PLY = (function ($) {
                 hash[etii] = true;
             }
             for (var id in ep) {
-                if (!hash[id] && id !== "m") { 
+                if (!hash[id] && id !== "m") {
                     if (ep[id].hasOwnProperty('ni')) { // if is a touch that requires removing from data
+                        var ed = $.data(ep[id].e, 'ply');
                         // this touch is no longer valid so remove from element's touch hash
-                        delete $.data(ep[id].e,'ply')[id];
+                        delete ed[id];
+                        
+                        // we reset the transform on the data for the element while leaving 
+                        // touch info the same (as I want to preserve the semantics of pointer_state)
+                        ed.trans = ep[id].e.style[TransformStyle];
                     }
 
                     // en[ep[id].ni] = null; // clear out reference to node
@@ -742,11 +747,7 @@ var PLY = (function ($) {
                     
                     // delete the other ref to this touch's state object 
                     delete ep[id];
-                    //console.log('removed ',id," now ep is ",ep);
-
-                    // we reset the transform on the data for the element while leaving 
-                    // touch info the same (as it is preferred to track all touches independently)
-                    
+                    //console.log('removed ',id," now ep is ",ep);                    
                 }
             }
             if (etl === 0) { // this indicates no touches remain
