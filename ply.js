@@ -307,7 +307,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% affe77c resetting the trasnform only in the correct situation now.. lets see if remaining finger offset is applied right %#";
+    var git_context = "#% 64d5c3e Almost ready to put in the last bit of logic for this %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
