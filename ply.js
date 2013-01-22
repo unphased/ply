@@ -743,6 +743,10 @@ var PLY = (function ($) {
                     // delete the other ref to this touch's state object 
                     delete ep[id];
                     //console.log('removed ',id," now ep is ",ep);
+
+                    // we reset the transform on the data for the element while leaving 
+                    // touch info the same (as it is preferred to track all touches independently)
+                    
                 }
             }
             if (etl === 0) { // this indicates no touches remain
@@ -921,9 +925,9 @@ var PLY = (function ($) {
             console.log("touchleave");
         },
         ply_translate: function(evt) {
+            console.log("transform before setting translate: "+$(evt.target).css(TransformStyle));
             evt.target.style[TransformStyle] = "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans;
-            console.log("transform set to: "+"translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans);
-            console.log("transform retrieved: "+$(evt.target).css(TransformStyle));
+            console.log("transform set to: "+"translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans);            
         },
 
         ply_transform: function(evt) {
