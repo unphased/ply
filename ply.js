@@ -926,6 +926,10 @@ var PLY = (function ($) {
             console.log("transform retrieved: "+$(evt.target).css(TransformStyle));
         },
         ply_transform: function(evt) {
+            // ensure zeroing xformorigin CSS
+            if (evt.target.style[TransformOriginStyle] !== "0 0")
+                evt.target.style[TransformOriginStyle] = "0 0";
+
             // transform := T * T_o * R * S * T_o^-1 * transform
             var final_style = "";
             // T * T_o can be combined so we do so
