@@ -937,7 +937,7 @@ var PLY = (function ($) {
             // all premult'd to original transform
             final_style += $.data(evt.target,"ply").trans;
             evt.target.style[TransformStyle] = final_style;
-            console.log("transform set to: "+final);
+            console.log("transform set to: "+final_style);
             console.log("transform retrieved: "+$(evt.target).css(TransformStyle));
         },
         // only assign these deprecated mutation events to the document when absolutely necessary (perf reasons)
