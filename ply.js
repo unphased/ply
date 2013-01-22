@@ -656,10 +656,26 @@ var PLY = (function ($) {
                 } else { // otherwise look node up and use its index
                     nid = dt.node_id;
                 }
-                dt.trans = seen_target.style[TransformStyle]; // hold on to this because it can be very helpful
+                dt.trans = seen_target.style[TransformStyle]; // hold on to this because it is helpful later on
                 if (dt.trans) {
                     console.log("Existing transform on newly touched element: ",dt.trans,seen_target);
                 }
+                var touches_on_e = 0;
+                var touch; 
+                for (var x in dt) {
+                    var c = x.charCodeAt(0);
+                    if (c < 58 && c > 47) { // fast is-number check
+                        touch = dt[x];
+                        touches_on_e++;
+                        if (touches_on_e > 1) break; // short-circuit (take note c_t will be either 0, 1, or 2)
+                    }
+                }
+                if (touches_on_e === 1) {
+                    // insert a special marker property in the data to use the fresh value for transforming. The original 
+                    // pointerstate properties tracking the raw touch input shall not be trampled. 
+                    console.log("Here I am about to add new xs/ys props to ptr state", touch);
+                }
+
                 var dl = data_list.length;
                 for (var j=0;j<dl;++j) { // go and insert the new touches into our element and ep
                     var dj = data_list[j];
@@ -749,6 +765,7 @@ var PLY = (function ($) {
                             if (c < 58 && c > 47) { // fast is-number check
                                 touch = ed[x];
                                 count_touches++;
+                                if (count_touches > 1) break; // short-circuit (take note c_t will be either 0, 1, or 2)
                             }
                         }
                         if (count_touches === 1) {
@@ -851,9 +868,8 @@ var PLY = (function ($) {
                 // var tc = Object.keys(nd)-1; // touch count (on this node) // (assumes there is always one prop "node_id")
                 var tc = 0; 
                 for (var t in nd) {
-                    var int_of_t = parseInt(t,10);
-                    //assert(int_of_t === int_of_t);
-                    if (int_of_t === int_of_t) { // only the touches
+                    var c = t.charCodeAt(0);
+                    if (c < 58 && c > 47) { // only the touches using fast number check
                         var ndt = nd[t];                        
                         var v = {xc: ndt.xc, xs: ndt.xs, yc: ndt.yc, ys:ndt.ys};
                         if (!one) {
