@@ -307,7 +307,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 6e799e9 this is it here %#";
+    var git_context = "#% 4760d34 changed some readme and also now checking touchend behavior in preparation for getting touchend to update the transform data properly as well %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
