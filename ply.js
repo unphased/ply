@@ -933,7 +933,7 @@ var PLY = (function ($) {
             // next line takes care of R and S
             final_style += "rotate("+evt.rotate+"rad) scale("+evt.scale+") ";
             // T_o^-1
-            final_style += "translate3d("+(-evt.originX+"px,"+(-evt.originY)+"px,0) ";
+            final_style += "translate3d("+(-evt.originX)+"px,"+(-evt.originY)+"px,0) ";
             // all premult'd to original transform
             final_style += $.data(evt.target,"ply").trans;
             evt.target.style[TransformStyle] = final_style;
