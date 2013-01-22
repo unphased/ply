@@ -929,7 +929,7 @@ var PLY = (function ($) {
             // transform := T * T_o * R * S * T_o^-1 * transform
             var final_style = "";
             // T * T_o can be combined so we do so
-            final_style += "translate3d("+(evt.translateX+evt.originX)+"px,"+(evt.translateY+evt.originY)+"px,0) ";
+            final_style += "translate3d("+(evt.translateX-evt.originX)+"px,"+(evt.translateY-evt.originY)+"px,0) ";
             // next line takes care of R and S
             final_style += "rotate("+evt.rotate+"rad) scale("+evt.scale+") ";
             // T_o^-1
