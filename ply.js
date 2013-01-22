@@ -307,7 +307,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 7010909 debug-displaying the transform prior to setting for translate %#";
+    var git_context = "#% e7fc9ce now to test two-to-one finger transition %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
