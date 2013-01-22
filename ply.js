@@ -705,7 +705,7 @@ var PLY = (function ($) {
         // preventDefault on touchstart in order to force behavior reliably and running the 
         // same routine off of all three of these events is probably overkill 
 
-        touchend: (touchend_touchcancel = function (evt) { //console.log("touchend", id_string_for_touch_list(evt.changedTouches));
+        touchend: (touchend_touchcancel = function (evt) { console.log("touchend", id_string_for_touch_list(evt.changedTouches));
 
             exposed.tmTime = 0; // reset touchmove timer
 
@@ -925,6 +925,7 @@ var PLY = (function ($) {
             console.log("transform set to: "+"translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans);
             console.log("transform retrieved: "+$(evt.target).css(TransformStyle));
         },
+
         ply_transform: function(evt) {
             // ensure zeroing xformorigin CSS
             if (evt.target.style[TransformOriginStyle] !== "0 0")
@@ -942,7 +943,6 @@ var PLY = (function ($) {
             final_style += $.data(evt.target,"ply").trans;
             evt.target.style[TransformStyle] = final_style;
             console.log("transform set to: "+final_style);
-            console.log("on the style: "+evt.target.style[TransformStyle]);
             console.log("transform retrieved: "+$(evt.target).css(TransformStyle));
         },
         // only assign these deprecated mutation events to the document when absolutely necessary (perf reasons)

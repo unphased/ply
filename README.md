@@ -11,11 +11,9 @@ On top of this, ply implements intuitive auto-transform functionality by simply 
 
 Collision-detection logic is outside of the scope of this library, but primitive tools (e.g. events to signal the completion of a manipulation, from which CSS3 transitions can be queued off of) for accomplishing common UI visual needs are provided.
 
-ply makes use of requestAnimationFrame to efficiently schedule transform style updates, and performs these updates only when necessary.
+ply makes use of requestAnimationFrame to efficiently schedule transform style updates and computations.
 
-ply attempts to be conservative about the way it overrides browser functionality with events.
-
-ply uses DOM2 Mutation Events (the ones deprecated in DOM3 but still found in Safari 5, IE, etc.) or DOM4 Mutation Observers to ensure that if the DOM is dynamically modified, the classes managed by ply are correctly maintained, and that behavior will be consistent on newly created elements. 
+An API is provided to control behavior, and it is possible to control behavior with no code on a browser supporting DOM4 Mutation Observers. 
 
 ## Dependencies
 
@@ -24,25 +22,7 @@ ply uses DOM2 Mutation Events (the ones deprecated in DOM3 but still found in Sa
 
 ## Devices Supported
 
-None yet, the library is not yet in a functional state. 
-
-The goal is to support any platform which does not place unreasonable requirements for platform-specific code to the library. This means that IE9 support is tentative and IE<=8 support is out of the question.
-
-It goes without saying that browsers built with Webkit is the primary target. 
-
-Here is an incomplete full list of platforms:
-
-- iOS6 Mobile Safari 6
-- iOS5 Mobile Safari 5
-- Android Browsers pending testing (Chrome 18) this includes as many of the myriad Android devices out there as possible
-- OS X Safari 5
-- OS X Safari 6
-- Google Chrome 10+ (OS X, Linux, Windows 32- and 64-bit)
-- IE10 (32- and 64-bit Windows 8, Windows RT)
-- Mozilla Firefox 6+ (OS X, Linux, Windows 32- and 64-bit)
-- Opera 10+ (OS X, Linux, Windows 32- and 64-bit)
-- Konqueror (and related) Linux browsers
-- Safari 5 on Windows
+If ply fails to function properly (Webkit on iOS shall be the benchmark) with your device please put in a ticket for it.
 
 ## How to use
 
