@@ -476,6 +476,7 @@ var PLY = (function ($) {
         return str.slice(0,-2)+"]";
     }
 
+    // for scoped iteration over an object
     function each(obj, f) {
         for (var i in obj) {
             f(i, obj[i]);
@@ -494,6 +495,22 @@ var PLY = (function ($) {
         if (c.length)
             c.addClass(class_name).addClassToChildren(class_name);
     };
+
+    // this is used to obtain the true offset within the page to get the authoritative 
+    // origin point (which is used along with clientX/Y from input)
+    function untransformed_offset(e) {
+        var currentTransform = e.style[TransformStyle];
+        e.style[TransformStyle] = "none"; // clear it out
+        assert(getComputedStyle(e)[TransformStyle] === "none"); // this assert should as a side effect ensure the clearing out occurs
+        // use an appropriate method to obtain the offset after clearing out transform
+        // taking the easy way out with jQuery is probably the best way to go 
+        // (1.9.0(+?) will use fast method, but DOM walking method is also legit)
+        var jeo = $(e).offset();
+        var jeoc = {x: jeo.left, y: jeo.top};
+        // set our style back 
+        e.style[TransformStyle] = currentTransform;
+        return jeoc;
+    }
 
     var Mutation_Observer = true;
     //(window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver);
@@ -633,15 +650,12 @@ var PLY = (function ($) {
                 var nid = en.length;
                 //console.log('nid',nid);
                 if (!dt) { // new element to put in our node index buffer
-                    dt = $.data(seen_target,"ply",{node_id: nid});
+                    dt = $.data(seen_target,"ply",{node_id: nid, offset: untransformed_offset(seen_target)});
                     en.push(seen_target);
                     console.log('en extended ',en);
                 } else { // otherwise look node up and use its index
                     nid = dt.node_id;
                 }
-                // update element's page offset 
-                dt.offset = $(seen_target).offset(); // page offset of element (at start)
-                // update element's transform
                 dt.trans = seen_target.style[TransformStyle]; // hold on to this because it can be very helpful
                 if (dt.trans) {
                     console.log("Existing transform on newly touched element: ",dt.trans,seen_target);
@@ -861,12 +875,12 @@ var PLY = (function ($) {
                     //console.log("two touches",one,two,"on",en[ni]);
                     var event2 = document.createEvent('HTMLEvents'); // this is for compatibility with DOM Level 2
                     event2.initEvent('ply_transform',true,true);
-                    var xs_bar = 0.5*(one.xs + two.xs);
-                    var ys_bar = 0.5*(one.ys + two.ys);
-                    var xc_bar = 0.5*(one.xc + two.xc);
-                    var yc_bar = 0.5*(one.yc + two.yc);
-                    event2.originX = xs_bar - nd.offset.left; // the origin point around which to scale+rotate.
-                    event2.originY = ys_bar - nd.offset.top;
+                    var xs_bar = 0.5 * (one.xs + two.xs);
+                    var ys_bar = 0.5 * (one.ys + two.ys);
+                    var xc_bar = 0.5 * (one.xc + two.xc);
+                    var yc_bar = 0.5 * (one.yc + two.yc);
+                    event2.originX = xs_bar - nd.offset.x; // the origin point around which to scale+rotate.
+                    event2.originY = ys_bar - nd.offset.y;
                     // TODO: reduce to a single sqrt, and otherwise optimize the crap out of this
                     var xs_diff = one.xs - two.xs;
                     var ys_diff = one.ys - two.ys;
@@ -887,7 +901,7 @@ var PLY = (function ($) {
                     var defaultPrevented2 = en[ni].dispatchEvent(event2);
 
                     if (more.length > 0) {
-                        console.log("total "+(2+more.length)+" touches:",more);
+                        console.log("total " + (2 + more.length) + " touches:", more);
                     }
                 }
             }
@@ -912,10 +926,18 @@ var PLY = (function ($) {
             console.log("transform retrieved: "+$(evt.target).css(TransformStyle));
         },
         ply_transform: function(evt) {
-            evt.target.style[TransformOriginStyle] = evt.originX+"px "+evt.originY+"px";
-            evt.target.style[TransformStyle] = "translate3d("+evt.translateX+"px,"+evt.translateY+"px,0) rotate("+evt.rotate+"rad) scale("+evt.scale+") " + $.data(evt.target,"ply").trans;
-            console.log("transform origin: "+evt.originX+"px "+evt.originY+"px");
-            console.log("transform set to: "+"translate3d("+evt.translateX+"px,"+evt.translateY+"px,0) rotate("+evt.rotate+"rad) scale("+evt.scale+") " + $.data(evt.target,"ply").trans);
+            // transform := T * T_o * R * S * T_o^-1 * transform
+            var final_style = "";
+            // T * T_o can be combined so we do so
+            final_style += "translate3d("+(evt.translateX+evt.originX)+"px,"+(evt.translateY+evt.originY)+"px,0) ";
+            // next line takes care of R and S
+            final_style += "rotate("+evt.rotate+"rad) scale("+evt.scale+") ";
+            // T_o^-1
+            final_style += "translate3d("+(-evt.originX+"px,"+(-evt.originY)+"px,0) ";
+            // all premult'd to original transform
+            final_style += $.data(evt.target,"ply").trans;
+            evt.target.style[TransformStyle] = final_style;
+            console.log("transform set to: "+final);
             console.log("transform retrieved: "+$(evt.target).css(TransformStyle));
         },
         // only assign these deprecated mutation events to the document when absolutely necessary (perf reasons)
