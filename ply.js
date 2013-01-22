@@ -307,7 +307,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% e7fc9ce now to test two-to-one finger transition %#";
+    var git_context = "#% affe77c resetting the trasnform only in the correct situation now.. lets see if remaining finger offset is applied right %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
