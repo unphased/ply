@@ -737,9 +737,23 @@ var PLY = (function ($) {
                         // this touch is no longer valid so remove from element's touch hash
                         delete ed[id];
                         
-                        // we reset the transform on the data for the element while leaving 
+                        // we set the transform on the data for the element while leaving 
                         // touch info the same (as I want to preserve the semantics of pointer_state)
-                        ed.trans = ep[id].e.style[TransformStyle];
+                        // to the value that would achieve the correct positioning
+                        // it then follows that this is only necessary in the case where the number of 
+                        // remaining touches is 1: 
+                        var count_touches = 0;
+                        var touch; 
+                        for (var x in ed) {
+                            var c = x.charCodeAt(0);
+                            if (c < 58 && c > 47) { // fast is-number check
+                                touch = ed[x];
+                                count_touches++;
+                            }
+                        }
+                        if (count_touches === 1) {
+                            ed.trans = "translate3d("+(touch.xs-touch.xc)+"px,"+(touch.ys-touch.yc)+"px,0) " + ep[id].e.style[TransformStyle];
+                        }
                     }
 
                     // en[ep[id].ni] = null; // clear out reference to node
