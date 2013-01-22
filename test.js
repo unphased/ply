@@ -217,7 +217,7 @@
 
     var debug_show_hide = true;
     $('.ply_js_title').parent().on('mousedown touchstart',function(e) { 
-        e.preventDefault();
+        //e.preventDefault();
         var w = $("#debug").innerWidth();
         $("#debug").css('WebkitTransform','translate3d('+(debug_show_hide?w+10:0)+'px,0,0)');
         debug_show_hide = !debug_show_hide;
