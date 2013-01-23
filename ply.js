@@ -659,10 +659,10 @@ var PLY = (function ($) {
                 }
                 dt.trans = seen_target.style[TransformStyle]; // hold on to this because it is helpful later on
                 //seen_target.style[PerspectiveStyle] = "1000";
-                if (!dt.trans || dt.trans === "none") {
+                //if (!dt.trans || dt.trans === "none") {
                     //console.log("Existing transform on newly touched element: ",dt.trans,seen_target);
-                    dt.trans = "scale3d(1,1,2)"; // this is to force 3d matrix (testing)
-                }
+                    //dt.trans = "scale3d(1,1,2)"; // this is to force 3d matrix (testing)
+                //}
                 var touches_on_e = 0;
                 var touch; 
                 for (var x in dt) {
@@ -670,7 +670,7 @@ var PLY = (function ($) {
                     if (c < 58 && c > 47) { // fast is-number check
                         touch = dt[x];
                         touches_on_e++;
-                        if (touches_on_e > 1) break; // short-circuit (take note c_t will be either 0, 1, or 2)
+                        if (touches_on_e > 1) break; // short-circuit (take note count will be either 0, 1, or 2)
                     }
                 }
                 if (touches_on_e === 1) {
@@ -800,6 +800,7 @@ var PLY = (function ($) {
                 for (var x in ep) {
                     if (x === "m") continue; // skip the mouse
                     //assert(touches_hash[x],"this element should be in the touches in the event because it is in the pointer state: "+x+" in "+serialize(touches_hash));
+                    // this above assert fails:
                     // looks like sometimes something can be taken out of touches list before a touchend
                     // for it is sent out!
                     if (ep[x].hasOwnProperty('ni')) {
