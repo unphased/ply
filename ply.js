@@ -428,6 +428,8 @@ var PLY = (function ($) {
     var TransformStyle = Modernizr.prefixed("transform"); 
     var TransformOriginStyle = Modernizr.prefixed("transformOrigin");
     var PerspectiveStyle = Modernizr.prefixed("perspective");
+    var BackfaceVisibilityStyle = Modernizr.prefixed("backfaceVisibility");
+    console.log("bfvs: "+BackfaceVisibilityStyle);
 
     var original_console_log = console.log;
     // echo console logs to the debug 
@@ -972,6 +974,9 @@ var PLY = (function ($) {
             // ensure zeroing xformorigin CSS
             if (evt.target.style[TransformOriginStyle] !== "0 0")
                 evt.target.style[TransformOriginStyle] = "0 0";
+            // ensure backface visibility 
+            if (evt.target.style[BackfaceVisibilityStyle] !== "hidden") 
+                evt.target.style[BackfaceVisibilityStyle] = "hidden";
 
             // transform := T * T_o * R * S * T_o^-1 * transform
             var final_style = "";
