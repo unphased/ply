@@ -658,10 +658,10 @@ var PLY = (function ($) {
                     nid = dt.node_id;
                 }
                 dt.trans = seen_target.style[TransformStyle]; // hold on to this because it is helpful later on
-                seen_target.style[PerspectiveStyle] = "1000";
+                //seen_target.style[PerspectiveStyle] = "1000";
                 if (!dt.trans || dt.trans === "none") {
                     //console.log("Existing transform on newly touched element: ",dt.trans,seen_target);
-                    dt.trans = "scale3d(1,1,1)";
+                    dt.trans = "scale3d(1,1,2)"; // this is to force 3d matrix (testing)
                 }
                 var touches_on_e = 0;
                 var touch; 
