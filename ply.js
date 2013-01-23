@@ -425,12 +425,7 @@ var PLY = (function ($) {
         return false;
     }
 
-    var TransformStyle = Modernizr.prefixed("transform"); 
-    var TransformOriginStyle = Modernizr.prefixed("transformOrigin");
-    var PerspectiveStyle = Modernizr.prefixed("perspective");
-    var BackfaceVisibilityStyle = Modernizr.prefixed("backfaceVisibility");
-    console.log("bfvs: "+BackfaceVisibilityStyle);
-
+    
     var original_console_log = console.log;
     // echo console logs to the debug 
     var instrumented_log = function () {
@@ -498,6 +493,13 @@ var PLY = (function ($) {
         if (c.length)
             c.addClass(class_name).addClassToChildren(class_name);
     };
+
+    var TransformStyle = Modernizr.prefixed("transform"); 
+    var TransformOriginStyle = Modernizr.prefixed("transformOrigin");
+    var PerspectiveStyle = Modernizr.prefixed("perspective");
+    var BackfaceVisibilityStyle = Modernizr.prefixed("backfaceVisibility");
+    console.log("bfvs: "+BackfaceVisibilityStyle);
+
 
     // this is used to obtain the true offset within the page to get the authoritative 
     // origin point (which is used along with clientX/Y from input)
