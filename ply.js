@@ -979,6 +979,9 @@ var PLY = (function ($) {
             // ensure backface visibility 
             if (evt.target.style[BackfaceVisibilityStyle] !== "hidden") 
                 evt.target.style[BackfaceVisibilityStyle] = "hidden";
+            // ensure perspective
+            if (evt.target.style[PerspectiveStyle] !== "1000")
+                evt.target.style[PerspectiveStyle] = "1000";
 
             // transform := T * T_o * R * S * T_o^-1 * transform
             var final_style = "";
