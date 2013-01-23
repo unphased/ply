@@ -663,10 +663,10 @@ var PLY = (function ($) {
                 }
                 dt.trans = seen_target.style[TransformStyle]; // hold on to this because it is helpful later on
                 //seen_target.style[PerspectiveStyle] = "1000";
-                //if (!dt.trans || dt.trans === "none") {
+                if (!dt.trans || dt.trans === "none") {
                     //console.log("Existing transform on newly touched element: ",dt.trans,seen_target);
-                    //dt.trans = "scale3d(1,1,2)"; // this is to force 3d matrix (testing)
-                //}
+                    dt.trans = "scale3d(1,1,2)"; // this is to force 3d matrix (testing)
+                }
                 var touches_on_e = 0;
                 var touch; 
                 for (var x in dt) {
@@ -977,15 +977,14 @@ var PLY = (function ($) {
             if (evt.target.style[TransformOriginStyle] !== "0 0") {
                 evt.target.style[TransformOriginStyle] = "0 0";
             }
-             
+            /* 
             // ensure backface visibility 
             if (evt.target.style[BackfaceVisibilityStyle] !== "hidden") 
                 evt.target.style[BackfaceVisibilityStyle] = "hidden";
-            
             // ensure perspective
             if (evt.target.style[PerspectiveStyle] !== "1000")
                 evt.target.style[PerspectiveStyle] = "1000";
-            
+            */
             if (evt.target.style.outline !== "1px solid transparent") {
                 evt.target.style.outline = "1px solid transparent";
             }            
