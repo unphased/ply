@@ -427,6 +427,7 @@ var PLY = (function ($) {
 
     var TransformStyle = Modernizr.prefixed("transform"); 
     var TransformOriginStyle = Modernizr.prefixed("transformOrigin");
+    var PerspectiveStyle = Modernizr.prefixed("perspective");
 
     var original_console_log = console.log;
     // echo console logs to the debug 
@@ -657,6 +658,7 @@ var PLY = (function ($) {
                     nid = dt.node_id;
                 }
                 dt.trans = seen_target.style[TransformStyle]; // hold on to this because it is helpful later on
+                seen_target.style[PerspectiveStyle] = "1000";
                 if (!dt.trans || dt.trans === "none") {
                     //console.log("Existing transform on newly touched element: ",dt.trans,seen_target);
                     dt.trans = "scale3d(1,1,1)";
