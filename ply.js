@@ -962,15 +962,10 @@ var PLY = (function ($) {
         ply_translate: function(evt) {
             console.log("transform before setting translate: "+$(evt.target).css(TransformStyle));
             evt.target.style[TransformStyle] = "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans;
-            console.log("transform set to: "+"translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans);
+            console.log("transform set to: "+evt.target.style[TransformStyle]);
             
-            //var me_func = arguments.callee;
-            //me_func.call_counter = me_func.call_counter || 1;
-            //if (me_func.call_counter > 9) {
-                // consolidate the style using getcomputedstyle to keep it from getting appended too much
-                evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
-            //    me_func.call_counter = 0;
-            //}
+            evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
+            console.log("transform after: "+evt.target.style[TransformStyle]);            
         },
 
         ply_transform: function(evt) {
@@ -990,16 +985,8 @@ var PLY = (function ($) {
             final_style += $.data(evt.target,"ply").trans;
             evt.target.style[TransformStyle] = final_style;
             console.log("transform set to: "+evt.target.style[TransformStyle]);
-            console.log("transform retrieved: "+$(evt.target).css(TransformStyle));
-
-            //var me_func = arguments.callee;
-            //me_func.call_counter = me_func.call_counter || 1;
-            //if (me_func.call_counter > 9) {
-                // consolidate the style using getcomputedstyle to keep it from getting appended too much
-                evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
-                console.log("transform after: "+evt.target.style[TransformStyle]);
-            //    me_func.call_counter = 0;
-            //}            
+            evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
+            console.log("transform after: "+evt.target.style[TransformStyle]);
         },
         // only assign these deprecated mutation events to the document when absolutely necessary (perf reasons)
         DOMNodeInserted: Mutation_Observer ? null : function (evt) { //console.log("DOMNodeInserted: ",evt.target);
