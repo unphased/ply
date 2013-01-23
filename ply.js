@@ -997,6 +997,7 @@ var PLY = (function ($) {
             //if (me_func.call_counter > 9) {
                 // consolidate the style using getcomputedstyle to keep it from getting appended too much
                 evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
+                console.log("transform after: "+evt.target.style[TransformStyle]);
             //    me_func.call_counter = 0;
             //}            
         },
