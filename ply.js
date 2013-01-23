@@ -977,11 +977,11 @@ var PLY = (function ($) {
             if (evt.target.style[TransformOriginStyle] !== "0 0") {
                 evt.target.style[TransformOriginStyle] = "0 0";
             }
-            /* 
+             
             // ensure backface visibility 
             if (evt.target.style[BackfaceVisibilityStyle] !== "hidden") 
                 evt.target.style[BackfaceVisibilityStyle] = "hidden";
-            */
+            
             // ensure perspective
             if (evt.target.style[PerspectiveStyle] !== "1000")
                 evt.target.style[PerspectiveStyle] = "1000";
