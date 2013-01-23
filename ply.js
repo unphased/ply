@@ -661,12 +661,8 @@ var PLY = (function ($) {
                 } else { // otherwise look node up and use its index
                     nid = dt.node_id;
                 }
-                dt.trans = seen_target.style[TransformStyle]; // hold on to this because it is helpful later on
-                //seen_target.style[PerspectiveStyle] = "1000";
-                if (!dt.trans || dt.trans === "none") {
-                    //console.log("Existing transform on newly touched element: ",dt.trans,seen_target);
-                    dt.trans = "scale3d(1,1,2)"; // this is to force 3d matrix (testing)
-                }
+                dt.trans = seen_target.style[TransformStyle]; // hold on to this because it is helpful later on                
+                
                 var touches_on_e = 0;
                 var touch; 
                 for (var x in dt) {
@@ -985,9 +981,17 @@ var PLY = (function ($) {
             if (evt.target.style[PerspectiveStyle] !== "1000")
                 evt.target.style[PerspectiveStyle] = "1000";
             */
+
+            // This gives us beautiful prefiltered antialiasing via texture sampling
             if (evt.target.style.outline !== "1px solid transparent") {
                 evt.target.style.outline = "1px solid transparent";
-            }            
+            } 
+
+            var starting_trans = $.data(evt.target,"ply").trans; 
+            if (!starting_trans || starting_trans === "none") {
+                //console.log("Existing transform on newly touched element: ",dt.trans,seen_target);
+                starting_trans = "scale3d(1,1,2)"; // this is to force 3d matrix (testing)
+            }
 
             // transform := T * T_o * R * S * T_o^-1 * transform
             var final_style = "";
@@ -998,7 +1002,7 @@ var PLY = (function ($) {
             // T_o^-1
             final_style += "translate3d("+(-evt.originX)+"px,"+(-evt.originY)+"px,0) ";
             // all premult'd to original transform
-            final_style += $.data(evt.target,"ply").trans;
+            final_style += starting_trans;
             evt.target.style[TransformStyle] = final_style;
             console.log("transform set to: "+evt.target.style[TransformStyle]);
             evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
