@@ -981,10 +981,11 @@ var PLY = (function ($) {
             // ensure backface visibility 
             if (evt.target.style[BackfaceVisibilityStyle] !== "hidden") 
                 evt.target.style[BackfaceVisibilityStyle] = "hidden";
+            */
             // ensure perspective
             if (evt.target.style[PerspectiveStyle] !== "1000")
                 evt.target.style[PerspectiveStyle] = "1000";
-            */
+            
             if (evt.target.style.outline !== "1px solid transparent") {
                 evt.target.style.outline = "1px solid transparent";
             }            
