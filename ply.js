@@ -307,7 +307,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 1e27cbb taking out the test transform style %#";
+    var git_context = "#% e3ade52 collapsing transform styles hopefully to the matrix style %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
