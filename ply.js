@@ -497,7 +497,7 @@ var PLY = (function ($) {
     var TransformStyle = Modernizr.prefixed("transform"); 
     var TransformOriginStyle = Modernizr.prefixed("transformOrigin");
     var PerspectiveStyle = Modernizr.prefixed("perspective");
-    var BackfaceVisibilityStyle = Modernizr.prefixed("backfaceVisibility");
+    var BackfaceVisibilityStyle = Modernizr.prefixed("backfaceVisibility");    
     console.log("bfvs: "+BackfaceVisibilityStyle);
 
 
@@ -982,6 +982,9 @@ var PLY = (function ($) {
             // ensure perspective
             if (evt.target.style[PerspectiveStyle] !== "1000")
                 evt.target.style[PerspectiveStyle] = "1000";
+            if (evt.target.style.outline !== "1px solid transparent") {
+                evt.target.style.outline = "1px solid transparent";
+            }            
 
             // transform := T * T_o * R * S * T_o^-1 * transform
             var final_style = "";
