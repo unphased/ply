@@ -867,7 +867,9 @@ var PLY = (function ($) {
 
             //console.log("elems=",elems);
 
-            // for each element 
+            var beforeDispatch = Date.now();
+
+            // for each element             
             for (var ni in elems) {
                 var nd = $.data(en[Number(ni)],'ply');
                 var one, two; 
@@ -890,8 +892,7 @@ var PLY = (function ($) {
                         }
                         tc++;
                     }
-                }
-                var beforeDispatch = Date.now();
+                }                
                 //console.log("tc "+tc);
                 // at long last ready to parse our element's manipulating touches
                 if (!two) { // only one!
@@ -952,13 +953,13 @@ var PLY = (function ($) {
             var now = Date.now();
             var diff = Math.min(now - exposed.tmTime,200);
             exposed.tmTime = now; // update this last
-            //if (exposed.debug) {
+            if (exposed.debug) {
                 var profile = now - start;
                 var dispatchProfile = now - beforeDispatch;
                 exposed.tmProfile += (profile - exposed.tmProfile) * 0.02;
                 exposed.tmProfileDispatch += (dispatchProfile - exposed.tmProfileDispatch) * 0.02;
                 exposed.tmRate += (diff - exposed.tmRate) * 0.02;
-            //}
+            }
         },
         touchenter: function(evt) {
             console.log("touchenter");
