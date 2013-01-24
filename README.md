@@ -41,7 +41,7 @@ The real power of ply comes from the intuitive JS events it generates.
 The three events specified encompass the full range of motion specified by up to two control points (touches). Three-finger interactions can be differentiated from two-finger interactions to enable 3-finger gestures. The third finger that interacts with an element is simply ignored for the purposes of producing transform events (as two is always sufficient).
 
 - `ply_translate`: Event sent to any element which the user attempts to "drag" in any way. On a PC no declarative classes need to be specified for fully functional `ply_translate` events. On touch devices, a ply-class must be set on an element (or one of its ancestors) to disable default scrolling behavior in order for touchmove events to get processed. The event will contain in its `x` and `y` properties the distance in pixels of the overall translation movement. With two fingers this will be the overall translation (average). 
-- `ply_rotate_scale`: Event sent to any element which the user manipulates with two fingers. 
+- `ply_transform`: Event sent to any element which the user manipulates with two fingers. 
     - `angle`: angle in degrees rotated by the interaction
     - `scale`: scale defined by distance between control points
     - `x` and `y`: The initial average point of the two control points (note that movement of this is tracked through `ply_translate`)
