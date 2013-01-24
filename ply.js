@@ -947,11 +947,11 @@ var PLY = (function ($) {
             var now = Date.now();
             var diff = Math.min(now - exposed.tmTime,200);
             exposed.tmTime = now; // update this last
-            if (exposed.debug) {
+            //if (exposed.debug) {
                 var profile = now - start;
                 exposed.tmProfile += (profile - exposed.tmProfile) * 0.02;
                 exposed.tmRate += (diff - exposed.tmRate) * 0.02;
-            }
+            //}
         },
         touchenter: function(evt) {
             console.log("touchenter");
