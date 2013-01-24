@@ -307,7 +307,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% da1a4ad okay now taking out the getcomputedstyles on trasnlate %#";
+    var git_context = "#% 2d23f33 doing a getcomputedstyles only once style is 2000 chars long %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
