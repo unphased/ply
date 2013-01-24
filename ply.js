@@ -962,9 +962,11 @@ var PLY = (function ($) {
         ply_translate: function(evt) {
             //console.log("transform before setting translate: "+$(evt.target).css(TransformStyle));
             evt.target.style[TransformStyle] = "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans;
-            //console.log("transform set to: "+evt.target.style[TransformStyle]);
+            console.log("transform set to: "+evt.target.style[TransformStyle]);
             
-            //evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
+            if (evt.target.style[TransformStyle].length > 2000) {
+                evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
+            }
             //console.log("transform after: "+evt.target.style[TransformStyle]);            
         },
 
@@ -1004,8 +1006,10 @@ var PLY = (function ($) {
             // all premult'd to original transform
             final_style += starting_trans;
             evt.target.style[TransformStyle] = final_style;
-            //console.log("transform set to: "+evt.target.style[TransformStyle]);
-            evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
+            console.log("transform set to: "+evt.target.style[TransformStyle]);
+            if (evt.target.style[TransformStyle].length > 2000) {
+                evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
+            }
             //console.log("transform after: "+evt.target.style[TransformStyle]);
         },
         // only assign these deprecated mutation events to the document when absolutely necessary (perf reasons)
