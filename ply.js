@@ -972,7 +972,7 @@ var PLY = (function ($) {
             evt.target.style[TransformStyle] = "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans;
             console.log("transform set to: "+evt.target.style[TransformStyle]);
             
-            if (evt.target.style[TransformStyle].length > 2000) {
+            if (evt.target.style[TransformStyle].length > 300) {
                 evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
             }
             //console.log("transform after: "+evt.target.style[TransformStyle]);            
@@ -1015,7 +1015,7 @@ var PLY = (function ($) {
             final_style += starting_trans;
             evt.target.style[TransformStyle] = final_style;
             console.log("transform set to: "+evt.target.style[TransformStyle]);
-            if (evt.target.style[TransformStyle].length > 2000) {
+            if (evt.target.style[TransformStyle].length > 300) {
                 evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
             }
             //console.log("transform after: "+evt.target.style[TransformStyle]);
