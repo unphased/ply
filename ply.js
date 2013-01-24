@@ -330,8 +330,12 @@ var PLY = (function ($) {
 
         // converges on the time it takes to run touchmove
         tmProfile: 3, 
-        // just for reference purposes: my iPhone 5 appears to execute the 
+        // just for reference purposes: my iPhone 5 appears to execute (not 
+        // including the dispatch/computation stage)
         // touchmove, when debug is off, within 200 microseconds (one touch)
+        tmProfileDispatch: 3,
+        // converges on the time it takes to run only the block that computes
+        // and dispatches (and executes) the ply manipulation events 
 
         // converges on the rate touchmove is run 
         tmRate: 16,
@@ -887,6 +891,7 @@ var PLY = (function ($) {
                         tc++;
                     }
                 }
+                var beforeDispatch = Date.now();
                 //console.log("tc "+tc);
                 // at long last ready to parse our element's manipulating touches
                 if (!two) { // only one!
@@ -949,7 +954,9 @@ var PLY = (function ($) {
             exposed.tmTime = now; // update this last
             //if (exposed.debug) {
                 var profile = now - start;
+                var dispatchProfile = now - beforeDispatch;
                 exposed.tmProfile += (profile - exposed.tmProfile) * 0.02;
+                exposed.tmProfileDispatch += (dispatchProfile - exposed.tmProfileDispatch) * 0.02;
                 exposed.tmRate += (diff - exposed.tmRate) * 0.02;
             //}
         },
