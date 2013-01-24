@@ -964,7 +964,7 @@ var PLY = (function ($) {
             evt.target.style[TransformStyle] = "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans;
             //console.log("transform set to: "+evt.target.style[TransformStyle]);
             
-            evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
+            //evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
             //console.log("transform after: "+evt.target.style[TransformStyle]);            
         },
 
