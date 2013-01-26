@@ -330,8 +330,12 @@ var PLY = (function ($) {
 
         // converges on the time it takes to run touchmove
         tmProfile: 3, 
-        // just for reference purposes: my iPhone 5 appears to execute the 
+        // just for reference purposes: my iPhone 5 appears to execute (not 
+        // including the dispatch/computation stage)
         // touchmove, when debug is off, within 200 microseconds (one touch)
+        tmProfileDispatch: 3,
+        // converges on the time it takes to run only the block that computes
+        // and dispatches (and executes) the ply manipulation events 
 
         // converges on the rate touchmove is run 
         tmRate: 16,
@@ -502,7 +506,7 @@ var PLY = (function ($) {
 
 
     // this is used to obtain the true offset within the page to get the authoritative 
-    // origin point (which is used along with clientX/Y from input)
+    // origin point (which is used along with pageX/Y from input)
     function untransformed_offset(e) {
         var currentTransform = e.style[TransformStyle];
         e.style[TransformStyle] = "none"; // clear it out
@@ -655,13 +659,14 @@ var PLY = (function ($) {
                 var nid = en.length;
                 //console.log('nid',nid);
                 if (!dt) { // new element to put in our node index buffer
-                    dt = $.data(seen_target,"ply",{node_id: nid, offset: untransformed_offset(seen_target)});
+                    dt = $.data(seen_target,"ply",{node_id: nid});
                     en.push(seen_target);
                     console.log('en extended ',en);
                 } else { // otherwise look node up and use its index
                     nid = dt.node_id;
                 }
-                dt.trans = seen_target.style[TransformStyle]; // hold on to this because it is helpful later on                
+                dt.offset = untransformed_offset(seen_target); // only set this on creation of first touch! 
+                dt.trans = seen_target.style[TransformStyle]; // this should be tracked by the user not by ply's data. It must be set on start 
                 
                 var touches_on_e = 0;
                 var touch; 
@@ -772,7 +777,8 @@ var PLY = (function ($) {
                             }
                         }
                         if (count_touches === 1) {
-                            ed.trans = "translate3d("+(touch.xs-touch.xc)+"px,"+(touch.ys-touch.yc)+"px,0) " + ep[id].e.style[TransformStyle];
+                            // this also needs to be moved out of ply's domain 
+                            //## ed.trans = "translate3d("+(touch.xs-touch.xc)+"px,"+(touch.ys-touch.yc)+"px,0) " + ep[id].e.style[TransformStyle];
                         }
                     }
 
@@ -863,7 +869,9 @@ var PLY = (function ($) {
 
             //console.log("elems=",elems);
 
-            // for each element 
+            var beforeDispatch = Date.now();
+
+            // for each element             
             for (var ni in elems) {
                 var nd = $.data(en[Number(ni)],'ply');
                 var one, two; 
@@ -886,7 +894,7 @@ var PLY = (function ($) {
                         }
                         tc++;
                     }
-                }
+                }                
                 //console.log("tc "+tc);
                 // at long last ready to parse our element's manipulating touches
                 if (!two) { // only one!
@@ -949,7 +957,9 @@ var PLY = (function ($) {
             exposed.tmTime = now; // update this last
             if (exposed.debug) {
                 var profile = now - start;
+                var dispatchProfile = now - beforeDispatch;
                 exposed.tmProfile += (profile - exposed.tmProfile) * 0.02;
+                exposed.tmProfileDispatch += (dispatchProfile - exposed.tmProfileDispatch) * 0.02;
                 exposed.tmRate += (diff - exposed.tmRate) * 0.02;
             }
         },
@@ -960,12 +970,14 @@ var PLY = (function ($) {
             console.log("touchleave");
         },
         ply_translate: function(evt) {
-            console.log("transform before setting translate: "+$(evt.target).css(TransformStyle));
+            //console.log("transform before setting translate: "+$(evt.target).css(TransformStyle));
             evt.target.style[TransformStyle] = "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans;
             console.log("transform set to: "+evt.target.style[TransformStyle]);
             
-            evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
-            console.log("transform after: "+evt.target.style[TransformStyle]);            
+            if (evt.target.style[TransformStyle].length > 300) {
+                evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
+            }
+            //console.log("transform after: "+evt.target.style[TransformStyle]);            
         },
 
         ply_transform: function(evt) {
@@ -1005,8 +1017,10 @@ var PLY = (function ($) {
             final_style += starting_trans;
             evt.target.style[TransformStyle] = final_style;
             console.log("transform set to: "+evt.target.style[TransformStyle]);
-            evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
-            console.log("transform after: "+evt.target.style[TransformStyle]);
+            if (evt.target.style[TransformStyle].length > 300) {
+                evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
+            }
+            //console.log("transform after: "+evt.target.style[TransformStyle]);
         },
         // only assign these deprecated mutation events to the document when absolutely necessary (perf reasons)
         DOMNodeInserted: Mutation_Observer ? null : function (evt) { //console.log("DOMNodeInserted: ",evt.target);
