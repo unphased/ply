@@ -641,7 +641,7 @@ var PLY = (function ($) {
                 if (seen_target) assert(eci.target === seen_target);
                 seen_target = eci.target;
                 // here, we must determine the actual real target that this set of touches
-                // is destined to control. store that... for right now it stores the immediate
+                // is destined to control. for right now it uses the immediate
                 // target which is fine to test that the thing works. 
 
                 var v = {id: ecii, xs: eci.pageX, ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, e: seen_target};
