@@ -650,7 +650,7 @@ var PLY = (function ($) {
                 data_list.push(v);
             }
 
-            // only when element is a noscroll (interesting element) AND in noscroll mode (or could initiate it) do we track element's touches
+            // only when element is a noscroll (interesting element) AND in noscroll mode (or could initiate it) do we track touches on the element's data (on a per element basis) -- this runs at least once on each element AFAIK
             if ((ps_count === 0 || !exposed.allow_scroll) && (' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1) {
                 // set up $.data stuff on element
                 var dt = $.data(seen_target,"ply");
@@ -663,8 +663,8 @@ var PLY = (function ($) {
                 } else { // otherwise look node up and use its index
                     nid = dt.node_id;
                 }
-                dt.offset = untransformed_offset(seen_target); // only set this on creation of first touch! 
-                dt.trans = seen_target.style[TransformStyle]; // this should be tracked by the user not by ply's data. It must be set on start 
+                //dt.offset = untransformed_offset(seen_target); // only set this on creation of first touch! 
+                //dt.trans = seen_target.style[TransformStyle]; // this should be tracked by the user not by ply's data. It must be set on start 
                 
                 /* 
                 var touches_on_e = 0;
@@ -684,15 +684,13 @@ var PLY = (function ($) {
                 }*/
 
                 var dl = data_list.length;
-                for (var j=0;j<dl;++j) { // go and insert the new touches into our element and ep
+                for (var j=0;j<dl;++j) { // go and insert the new touches into our element (ep is done outside this conditional)
                     var dj = data_list[j];
                     dj.ni = nid;
                     if (!dt.t.hasOwnProperty(dj.id)) {
                         dt.count++;
                     }
-                    //console.log('set dj.ni to nid=',nid);
                     dt.t[dj.id] = dj;
-                    ep[dj.id] = dj;
                 }
                 //if (ps_count === 0) {
                     // this is so that if you start scrolling and then with 2nd
@@ -701,12 +699,12 @@ var PLY = (function ($) {
                     // produces strange stuff, trust me)
                     exposed.allow_scroll = false;
                 //}
-            } else { // not a no-scroll, means only need to track touch data
-                var d_l = data_list.length;
-                for (var k=0;k<d_l;++k) { // go and insert the new touches into ep
-                    var dk = data_list[k];
-                    ep[dk.id] = dk;
-                }
+            } 
+            // always track touch data (ep)
+            var d_l = data_list.length;
+            for (var k=0;k<d_l;++k) { // go and insert the new touches into ep
+                var dk = data_list[k];
+                ep[dk.id] = dk;
             }
             if (!exposed.allow_scroll) { // never allow scroll once you start manipulating something 
                 evt.preventDefault();
@@ -974,7 +972,7 @@ var PLY = (function ($) {
                     var defaultPrevented2 = en[ni].dispatchEvent(event2);
 
                     if (nd.count > 2) {
-                        console.log("total " + nd.count + " touches:", more);
+                        console.log("total " + nd.count + " touches:", nd.t);
                         // do more things on these touches
                     }
                 }
