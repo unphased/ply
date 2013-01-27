@@ -502,7 +502,7 @@ var PLY = (function ($) {
     var TransformOriginStyle = Modernizr.prefixed("transformOrigin");
     var PerspectiveStyle = Modernizr.prefixed("perspective");
     var BackfaceVisibilityStyle = Modernizr.prefixed("backfaceVisibility");    
-    console.log("bfvs: "+BackfaceVisibilityStyle);
+    //console.log("bfvs: "+BackfaceVisibilityStyle);
 
 
     // this is used to obtain the true offset within the page to get the authoritative 
@@ -624,10 +624,6 @@ var PLY = (function ($) {
             // browser default scrolling. 
 
 
-            // On touch devices the touchstart is the critical event that keys 
-            // off a complex interaction, so it will be the place that 
-            // allow_scroll is directly assigned (when it is the first touch,
-            // of course).
             var ep = exposed.pointer_state;
             var en = exposed.node_ids;
             var ps_count = 0;
@@ -659,7 +655,7 @@ var PLY = (function ($) {
                 var nid = en.length;
                 //console.log('nid',nid);
                 if (!dt) { // new element to put in our node index buffer
-                    dt = $.data(seen_target,"ply",{node_id: nid});
+                    dt = $.data(seen_target,"ply",{node_id: nid, count: 0, t: {}});
                     en.push(seen_target);
                     console.log('en extended ',en);
                 } else { // otherwise look node up and use its index
@@ -668,6 +664,7 @@ var PLY = (function ($) {
                 dt.offset = untransformed_offset(seen_target); // only set this on creation of first touch! 
                 dt.trans = seen_target.style[TransformStyle]; // this should be tracked by the user not by ply's data. It must be set on start 
                 
+                /* 
                 var touches_on_e = 0;
                 var touch; 
                 for (var x in dt) {
@@ -681,25 +678,27 @@ var PLY = (function ($) {
                 if (touches_on_e === 1) {
                     // insert a special marker property in the data to use the fresh value for transforming. The original 
                     // pointerstate properties tracking the raw touch input shall not be trampled. 
-                    console.log("Here I am about to add new xs/ys props to ptr state", touch);
-                }
+                    //console.log("Here I am about to add new xs/ys props to ptr state", touch);
+                }*/
 
                 var dl = data_list.length;
                 for (var j=0;j<dl;++j) { // go and insert the new touches into our element and ep
                     var dj = data_list[j];
                     dj.ni = nid;
+                    if (!dt.t.hasOwnProperty(dj.id)) {
+                        dt.count++;
+                    }
                     //console.log('set dj.ni to nid=',nid);
-                    dt[dj.id] = dj;
+                    dt.t[dj.id] = dj;
                     ep[dj.id] = dj;
                 }
-
-                if (ps_count === 0) {
+                //if (ps_count === 0) {
                     // this is so that if you start scrolling and then with 2nd
                     // finger touch a ply-noscroll element it will not 
                     // preventDefault on the touchstart on this 2nd touch (which
                     // produces strange stuff, trust me)
                     exposed.allow_scroll = false;
-                }
+                //}
             } else { // not a no-scroll, means only need to track touch data
                 var d_l = data_list.length;
                 for (var k=0;k<d_l;++k) { // go and insert the new touches into ep
@@ -729,7 +728,7 @@ var PLY = (function ($) {
         // preventDefault on touchstart in order to force behavior reliably and running the 
         // same routine off of all three of these events is probably overkill 
 
-        touchend: (touchend_touchcancel = function (evt) { console.log("touchend", id_string_for_touch_list(evt.changedTouches));
+        touchend: (touchend_touchcancel = function (evt) { //console.log("touchend", id_string_for_touch_list(evt.changedTouches));
 
             exposed.tmTime = 0; // reset touchmove timer
 
@@ -759,8 +758,11 @@ var PLY = (function ($) {
                     if (ep[id].hasOwnProperty('ni')) { // if is a touch that requires removing from data
                         var ed = $.data(ep[id].e, 'ply');
                         // this touch is no longer valid so remove from element's touch hash
-                        delete ed[id];
+                        delete ed.t[id];
+                        // update count
+                        ed.count--;
                         
+                        /* *** this stuff gotta move out of ply domain -- also wont be needing count loop since i track count now (duuuh)
                         // we set the transform on the data for the element while leaving 
                         // touch info the same (as I want to preserve the semantics of pointer_state)
                         // to the value that would achieve the correct positioning
@@ -768,18 +770,18 @@ var PLY = (function ($) {
                         // remaining touches is 1: 
                         var count_touches = 0;
                         var touch; 
-                        for (var x in ed) {
-                            var c = x.charCodeAt(0);
+                        for (var z in ed) {
+                            var c = z.charCodeAt(0);
                             if (c < 58 && c > 47) { // fast is-number check
-                                touch = ed[x];
+                                touch = ed[z];
                                 count_touches++;
                                 if (count_touches > 1) break; // short-circuit (take note c_t will be either 0, 1, or 2)
                             }
                         }
                         if (count_touches === 1) {
                             // this also needs to be moved out of ply's domain 
-                            //## ed.trans = "translate3d("+(touch.xs-touch.xc)+"px,"+(touch.ys-touch.yc)+"px,0) " + ep[id].e.style[TransformStyle];
-                        }
+                            ed.trans = "translate3d("+(touch.xs-touch.xc)+"px,"+(touch.ys-touch.yc)+"px,0) " + ep[id].e.style[TransformStyle];
+                        } */
                     }
 
                     // en[ep[id].ni] = null; // clear out reference to node
@@ -793,7 +795,7 @@ var PLY = (function ($) {
             if (etl === 0) { // this indicates no touches remain
                 exposed.allow_scroll = true;
             }
-            // debug check the model for consistency here
+            // debug check the model for consistency -- should be running this in an async loop I think
             if (exposed.debug) {
                 var touches_hash = {};
                 for (var t=0;t<et.length;++t) {
@@ -811,14 +813,20 @@ var PLY = (function ($) {
                     // for it is sent out!
                     if (ep[x].hasOwnProperty('ni')) {
                         assert($.data(ep[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
-                        assert($.data(ep[x].e,'ply')[x] === ep[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(ep[x])+"; "+serialize($.data(ep[x].e,'ply')));
+                        assert($.data(ep[x].e,'ply').t[x] === ep[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(ep[x])+"; "+serialize($.data(ep[x].e,'ply')));
                         assert(ep[x].ni === $.data(ep[x].e,'ply').node_id, "node id check "+ep[x].ni+", "+$.data(ep[x].e,'ply').node_id);
                         assert(en[ep[x].ni] === ep[x].e, "check element with id");
                     }
                 }
                 for (var j=0;j<en.length;++j) {
-                    // check consistency of node_ids by verifying with data contents
+                    // check internal consistency of touches container by verifying with data contents
                     assert($.data(en[j],'ply').node_id === j, "node_id "+j+" should be equal to $.data(en["+j+"],'ply').node_id");
+                    // check the count matches 
+                    var touch_count = 0;
+                    for (var y in $.data(en[j],'ply').t) {
+                        touch_count ++;
+                    }
+                    assert(touch_count === $.data(en[j],'ply').count, "count checks out for touches on element "); 
                 }
             }
         }),
@@ -871,9 +879,10 @@ var PLY = (function ($) {
 
             var beforeDispatch = Date.now();
 
-            // for each element             
+            // for each element
             for (var ni in elems) {
                 var nd = $.data(en[Number(ni)],'ply');
+                /* 
                 var one, two; 
                 one = undefined; two = undefined;
                 var more = [];
@@ -894,10 +903,13 @@ var PLY = (function ($) {
                         }
                         tc++;
                     }
-                }                
+                }*/
                 //console.log("tc "+tc);
                 // at long last ready to parse our element's manipulating touches
-                if (!two) { // only one!
+                assert(nd.count > 0);
+                var one;
+                if (nd.count === 1) {
+                    for (one in nd.t); // set to the only value in nd.t (technically not a loop)
                     //console.log("touch",one,"on",en[ni]);
                     var event = document.createEvent('HTMLEvents'); // this is for compatibility with DOM Level 2
                     event.initEvent('ply_translate',true,true);
@@ -910,6 +922,13 @@ var PLY = (function ($) {
                     // will be sent like usual
                     var defaultPrevented = en[ni].dispatchEvent(event);
                 } else {
+                    var two, j;
+                    j=0; 
+                    for (two in nd.t) { // a two iteration loop
+                        if (j === 0) one = two;
+                        else break; // if j !== 0, then j must be 1
+                        j++;
+                    }
                     // we need to do the transform
                     // If the element has been specified to react automatically to the two finger 
                     // transforms, the default behavior will be the direct application (via rAF) of the
@@ -947,8 +966,9 @@ var PLY = (function ($) {
                     event2.translateY = yc_bar - ys_bar;
                     var defaultPrevented2 = en[ni].dispatchEvent(event2);
 
-                    if (more.length > 0) {
-                        console.log("total " + (2 + more.length) + " touches:", more);
+                    if (nd.count > 2) {
+                        console.log("total " + nd.count + " touches:", more);
+                        // do more things on these touches
                     }
                 }
             }
@@ -963,11 +983,30 @@ var PLY = (function ($) {
                 exposed.tmRate += (diff - exposed.tmRate) * 0.02;
             }
         },
+        // these two apparently don't bubble according to MDN.
         touchenter: function(evt) {
             console.log("touchenter");
         },
         touchleave: function(evt) {
             console.log("touchleave");
+        },
+        ply_firsttouchstart: function() {
+            console.log("1TS");
+        },
+        ply_secondtouchstart: function() {
+            console.log("2TS");
+        },
+        ply_thirdtouchstart: function() {
+            console.log("3TS");
+        },        
+        ply_firsttouchend: function() {
+            console.log("1TE");
+        },
+        ply_secondtouchend: function() {
+            console.log("2TE");
+        },
+        ply_thirdtouchend: function() {
+            console.log("3TE");
         },
         ply_translate: function(evt) {
             //console.log("transform before setting translate: "+$(evt.target).css(TransformStyle));
