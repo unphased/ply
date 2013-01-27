@@ -449,6 +449,7 @@ var PLY = (function ($) {
         // this means all logs in your application get dumped into #debug_log if 
         // you've got one
     };
+
     if (exposed.debug) {
         console.log = instrumented_log; // pre-empt usage of this if starting off not debug
         // if the previous line is not conditional on debug then it will be always
@@ -458,15 +459,16 @@ var PLY = (function ($) {
         // set up a way to show the log buffer if debug mode 
         // (note toggling the debug off will stop logs being written)
         // (and if debug is not true to begin with, no button is made)
-        var show = false;
+        var show_log_buffer = false;
         $("#log_buffer_dump").before($('<button>toggle full log buffer snapshot</button>').on('click',function(){
-            show = !show;
-            if (show) {
+            show_log_buffer = !show_log_buffer;
+            if (show_log_buffer) {
                 $("#log_buffer_dump").html(log_buffer.join(''));
             } else {
                 $("#log_buffer_dump").html("");
             }
-        }));
+        })).on("touchenter",function(){console.log("touchenter on toggle buffer dump button");}).on('touchleave',function(){console.log("touchleave on toggle buffer dump button");});
+
     }
 
     // this is a helper for logging touchlists for debug purposes
@@ -988,13 +990,13 @@ var PLY = (function ($) {
                 exposed.tmRate += (diff - exposed.tmRate) * 0.02;
             }
         },
-        // these two apparently don't bubble according to MDN.
-        touchenter: function(evt) {
+        // these two don't bubble according to MDN. So it'd be useless putting them on document. 
+        /* touchenter: function(evt) {
             console.log("touchenter");
         },
         touchleave: function(evt) {
             console.log("touchleave");
-        },
+        }, */
         ply_firsttouchstart: function() {
             console.log("1TS");
         },
