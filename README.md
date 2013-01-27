@@ -3,17 +3,15 @@ ply.js
 
 > (tr. v.) to use or wield diligently
 
-A cross-browser input abstraction layer and event framework for modern HTML5 implemented in JavaScript.
+### A JavaScript browser event expansion pack
 
 ply implements a comprehensive set of responsive and accurate multitouch gestures using the standard JavaScript event paradigm.
 
-On top of this, ply implements intuitive auto-transform functionality by simply checking class attributes.
+On top of this, ply makes it easy to automatically implements intuitive auto-transform using accelerated CSS3 3D transforms.
 
-Collision-detection logic is outside of the scope of this library, but primitive tools (e.g. events to signal the completion of a manipulation, from which CSS3 transitions can be queued off of) for accomplishing common UI visual needs are provided.
+(Not sure if this is going to happen or is in scope) ply makes use of requestAnimationFrame to efficiently schedule transform style updates and computations.
 
-ply makes use of requestAnimationFrame to efficiently schedule transform style updates and computations.
-
-An API is provided to control behavior, and it is possible to control behavior with no code on a browser supporting DOM4 Mutation Observers. 
+An API is provided to control behavior (also not sure if mutation observation is within scope of library either:), and it is possible to control behavior with no code on a browser supporting DOM4 Mutation Observers. 
 
 ## Dependencies
 
