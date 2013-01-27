@@ -909,7 +909,9 @@ var PLY = (function ($) {
                 assert(nd.count > 0);
                 var one;
                 if (nd.count === 1) {
-                    for (one in nd.t); // set to the only value in nd.t (technically not a loop)
+                    for (var z in nd.t) { // set to the only value in nd.t (technically not a loop)
+                        one = nd.t[z];
+                    }
                     //console.log("touch",one,"on",en[ni]);
                     var event = document.createEvent('HTMLEvents'); // this is for compatibility with DOM Level 2
                     event.initEvent('ply_translate',true,true);
@@ -924,9 +926,12 @@ var PLY = (function ($) {
                 } else {
                     var two, j;
                     j=0; 
-                    for (two in nd.t) { // a two iteration loop
-                        if (j === 0) one = two;
-                        else break; // if j !== 0, then j must be 1
+                    for (var y in nd.t) { // a two iteration loop
+                        if (j === 0) one = nd.t[y];
+                        else {
+                            two = nd.t[y]; // if j !== 0, then j must be 1
+                            break;
+                        }
                         j++;
                     }
                     // we need to do the transform
