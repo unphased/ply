@@ -646,7 +646,7 @@ var PLY = (function ($) {
                 // is destined to control. for right now it uses the immediate
                 // target which is fine to test that the thing works. 
 
-                var v = {id: ecii, xs: eci.pageX, ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, e: seen_target};
+                var v = {t: eci, id: ecii, xs: eci.pageX, ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, e: seen_target};
                 data_list.push(v);
             }
 
@@ -689,8 +689,26 @@ var PLY = (function ($) {
                     dj.ni = nid;
                     if (!dt.t.hasOwnProperty(dj.id)) {
                         dt.count++;
+                        dt.t[dj.id] = dj;
+                        var event = document.createEvent('HTMLEvents'); 
+                        switch (dt.count) {
+                            case 1: 
+                                event.initEvent('ply_firsttouchstart',true,true);
+                                break;
+                            case 2: 
+                                event.initEvent('ply_secondtouchstart',true,true);
+                                break;
+                            case 3: 
+                                event.initEvent('ply_thirdtouchstart',true,true);
+                                break;
+                            default: 
+                                console.log("zero or fourth or fifth or... touchstart (unimplemented) n="+dt.count);
+                        }
+                        // set some helpful touch specific info into the event
+                        // "touch" is a nod at "touches" but here we only give the one Touch this event refers to
+                        event.touch = dj.t;
+                        var defPrevented = seen_target.dispatchEvent(event);
                     }
-                    dt.t[dj.id] = dj;
                 }
                 //if (ps_count === 0) {
                     // this is so that if you start scrolling and then with 2nd
@@ -700,7 +718,8 @@ var PLY = (function ($) {
                     exposed.allow_scroll = false;
                 //}
             } 
-            // always track touch data (ep)
+            // always track touch data (ep) 
+            // The values in our data_list are now referenced by two DS's: the $.data(e) and the ep
             var d_l = data_list.length;
             for (var k=0;k<d_l;++k) { // go and insert the new touches into ep
                 var dk = data_list[k];
@@ -752,6 +771,11 @@ var PLY = (function ($) {
                 var eti = et[i];
                 var etii = eti.identifier;
                 hash[etii] = true;
+
+                // "sanity" check (more like implementation consistency/spec check)
+                // make sure the touch object stored with the touchstart from before 
+                // is the same obj as the one seen at this point within the touches list 
+                assert(!ep[etii] || ep[etii].t === eti,"Touch is same object as saved from touchstart");
             }
             for (var id in ep) {
                 if (!hash[id] && id !== "m") {
