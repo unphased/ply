@@ -58,6 +58,9 @@
                 delete pp[id];
             }
         }
+
+        // gonna do our check impl in ply that got exposed
+        PLY.internalCheck();
         
         if (debug_show_hide) {
             // skip the HTML debug dump of the data if its view is hidden

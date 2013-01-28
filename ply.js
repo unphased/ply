@@ -369,7 +369,8 @@ var PLY = (function ($) {
         append_logs_dom: true, 
         escape: escapeHtml,
         serialize: serialize, // exposed helper functions
-        isInDOM: isInDOM
+        isInDOM: isInDOM, 
+        internalCheck: internalCheck
     };
 
 
@@ -529,22 +530,17 @@ var PLY = (function ($) {
     $(function (){
         // propagate "umbrella" style classes through to their children, now and in
         // the future. 
-        
-        // consolidate event handler behavior of marked elements by setting 
-        // ply-noscroll on all of them, but only on touch devices because 
-        // the PC allows you to drag just fine while scrolling.
-        if (Modernizr.touch) {
-            for (var classname in noscroll_class_set) {
-                $("."+classname).addClass("ply-noscroll");
-            }
-        
-            // propagate the noscroll class to all children and apply it to all 
-            // future children 
-            $(".ply-noscroll").on("DOMNodeInserted",function (evt){
-                $(evt.target).addClass("ply-noscroll");
-            }).addClassToChildren("ply-noscroll");
+    
+        for (var classname in noscroll_class_set) {
+            $("."+classname).addClass("ply-noscroll");
         }
-
+    
+        // propagate the noscroll class to all children and apply it to all 
+        // future children 
+        $(".ply-noscroll").on("DOMNodeInserted",function (evt){
+            $(evt.target).addClass("ply-noscroll");
+        }).addClassToChildren("ply-noscroll");
+    
         // handle ply-collect. 
         // The change that needs to happen here is to simply update the target 
         // of the fired event: While it might make some sense to just attach
@@ -557,8 +553,44 @@ var PLY = (function ($) {
         }).addClassToChildren("ply-cc");
     });
 
-    // dynamic CSS. This is for setting global behavioral CSS styles
-
+    // routine that should be run for debug sanity checking at any point in time that you desire or are able to
+    function internalCheck() {
+        console.log("running internalcheck");
+        // check the model for consistency 
+        /* var touches_hash = {};
+        for (var t=0;t<et.length;++t) {
+            var etti = et[t].identifier;
+            touches_hash[etti] = true;
+            //assert(exposed.pointer_state[etti],"this element should be in the pointer_state because it is in the touches: "+etti+" in "+serialize(exposed.pointer_state));
+            // this assertion also trips because it is possible for the touches to produce a touch that is new
+            // while running the touchend of a previous touch. Not surprising, really.
+        } */
+        var ep = exposed.pointer_state;
+        for (var x in ep) {
+            if (x === "m") continue; // skip the mouse
+            //assert(touches_hash[x],"this element should be in the touches in the event because it is in the pointer state: "+x+" in "+serialize(touches_hash));
+            // this above assert fails:
+            // looks like sometimes something can be taken out of touches list before a touchend
+            // for it is sent out!
+            if (ep[x].hasOwnProperty('ni')) {
+                assert($.data(ep[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
+                assert($.data(ep[x].e,'ply').t[x] === ep[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(ep[x])+"; "+serialize($.data(ep[x].e,'ply')));
+                assert(ep[x].ni === $.data(ep[x].e,'ply').node_id, "node id check "+ep[x].ni+", "+$.data(ep[x].e,'ply').node_id);
+                assert(en[ep[x].ni] === ep[x].e, "check element with id");
+            }
+        }
+        var en = exposed.node_ids;
+        for (var j=0;j<en.length;++j) {
+            // check internal consistency of touches container by verifying with data contents
+            assert($.data(en[j],'ply').node_id === j, "node_id "+j+" should be equal to $.data(en["+j+"],'ply').node_id");
+            // check the count matches 
+            var touch_count = 0;
+            for (var y in $.data(en[j],'ply').t) {
+                touch_count ++;
+            }
+            assert(touch_count === $.data(en[j],'ply').count, "count checks out for touches on element "); 
+        }   
+    }
 
     function key(evt) {
         return evt.which || evt.keyCode || /*window.*/event.keyCode;
@@ -821,40 +853,6 @@ var PLY = (function ($) {
             if (etl === 0) { // this indicates no touches remain
                 exposed.allow_scroll = true;
             }
-            // debug check the model for consistency -- should be running this in an async loop I think
-            if (exposed.debug) {
-                var touches_hash = {};
-                for (var t=0;t<et.length;++t) {
-                    var etti = et[t].identifier;
-                    touches_hash[etti] = true;
-                    //assert(exposed.pointer_state[etti],"this element should be in the pointer_state because it is in the touches: "+etti+" in "+serialize(exposed.pointer_state));
-                    // this assertion also trips because it is possible for the touches to produce a touch that is new
-                    // while running the touchend of a previous touch. Not surprising, really.
-                }
-                for (var x in ep) {
-                    if (x === "m") continue; // skip the mouse
-                    //assert(touches_hash[x],"this element should be in the touches in the event because it is in the pointer state: "+x+" in "+serialize(touches_hash));
-                    // this above assert fails:
-                    // looks like sometimes something can be taken out of touches list before a touchend
-                    // for it is sent out!
-                    if (ep[x].hasOwnProperty('ni')) {
-                        assert($.data(ep[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
-                        assert($.data(ep[x].e,'ply').t[x] === ep[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(ep[x])+"; "+serialize($.data(ep[x].e,'ply')));
-                        assert(ep[x].ni === $.data(ep[x].e,'ply').node_id, "node id check "+ep[x].ni+", "+$.data(ep[x].e,'ply').node_id);
-                        assert(en[ep[x].ni] === ep[x].e, "check element with id");
-                    }
-                }
-                for (var j=0;j<en.length;++j) {
-                    // check internal consistency of touches container by verifying with data contents
-                    assert($.data(en[j],'ply').node_id === j, "node_id "+j+" should be equal to $.data(en["+j+"],'ply').node_id");
-                    // check the count matches 
-                    var touch_count = 0;
-                    for (var y in $.data(en[j],'ply').t) {
-                        touch_count ++;
-                    }
-                    assert(touch_count === $.data(en[j],'ply').count, "count checks out for touches on element "); 
-                }
-            }
         }),
         touchcancel: touchend_touchcancel,
         // The majority of functionality is funneled through the (capturing) touchmove handler on the document. 
@@ -1045,8 +1043,9 @@ var PLY = (function ($) {
             var etst = evt.target.style[TransformStyle];
             if (!etst || etst === "none") {
                 dt.trans = "scale3d(1,1,0.5) scale3d(1,1,2)"; // a roundabout way of forcing 3d matrix
-            } else
+            } else {
                 dt.trans = etst;
+            }
 
             if (etst.length > 140) { // bigger than a tweet means probably will convert to a shorter matrix() format
                 evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
