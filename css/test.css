@@ -16,6 +16,7 @@ html, body {
 }
 
 body {
+    padding: 8px;
 	font-family: sans-serif;  
     -webkit-user-select: none;
     -moz-user-select: none;
