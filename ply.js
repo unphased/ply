@@ -1023,12 +1023,13 @@ var PLY = (function ($) {
         }, */
         ply_firsttouchstart: function(evt) {
             console.log("1TS", evt.touch.identifier, "all touches: ", evt.touches_active_on_element);
-            assert(this === evt.touch.target, "this is evt.touch.target (firsttouchstart)");
-            var dt = $.data(this,"ply");
+            //assert(this === evt.touch.target, "this is evt.touch.target (firsttouchstart)");
+            assert(evt.target === evt.touch.target, "this is evt.touch.target (firsttouchstart)");
+            var dt = $.data(evt.target,"ply");
             assert(dt,"dt exists");
-            dt.offset = untransformed_offset(this);
+            dt.offset = untransformed_offset(evt.target);
             // set the initial styles 
-            this.style[TransformOriginStyle] = "0 0"; 
+            evt.target.style[TransformOriginStyle] = "0 0"; 
 
             /* 
             // ensure backface visibility 
@@ -1040,8 +1041,8 @@ var PLY = (function ($) {
             */
             
             // This gives us beautiful prefiltered antialiasing via texture sampling (helps on pretty much all browsers)
-            this.style.outline = "1px solid transparent";
-            this.style[TransformStyle] = "scale3D (1,1,0.5) scale3d(1,1,2)"; // a roundabout way of forcing 3d matrix
+            evt.target.style.outline = "1px solid transparent";
+            evt.target.style[TransformStyle] = "scale3D (1,1,0.5) scale3d(1,1,2)"; // a roundabout way of forcing 3d matrix
         },
         ply_firsttouchend: function(evt) {
             console.log("1TE");
