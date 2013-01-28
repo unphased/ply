@@ -1080,9 +1080,8 @@ var PLY = (function ($) {
         },
 
         ply_transform: function(evt) {
-
             // todo: make this not require a per-input run of $.data
-            var o = $.data(this,"ply").offset; 
+            var o = $.data(evt.target,"ply").offset; 
             startX = evt.startX - o.x;
             startY = evt.startY - o.y;
 
