@@ -555,7 +555,7 @@ var PLY = (function ($) {
 
     // routine that should be run for debug sanity checking at any point in time that you desire or are able to
     function internalCheck() {
-        console.log("running internalcheck");
+        //console.log("running internalcheck");
         // check the model for consistency 
         /* var touches_hash = {};
         for (var t=0;t<et.length;++t) {
@@ -820,6 +820,20 @@ var PLY = (function ($) {
                         // update count
                         ed.count--;
                         
+                        var event = document.createEvent('HTMLEvents'); 
+                        switch (ed.count) {
+                            case 0: event.initEvent('ply_onetouchend',true,true);
+                            break;
+                            case 1: event.initEvent('ply_twotouchesend',true,true);
+                            break;
+                            case 2: event.initEvent('ply_threetouchesend',true,true);
+                            break;
+                            default:
+                            console.log("nthtouchend n="+ed.count);
+                        }
+                        event.touch = ep[id].t;
+                        event.touches_active_on_element = ed.t;
+                        var defaultPrevented = ep[id].e.dispatchEvent(event);
                         /* *** this stuff gotta move out of ply domain -- also wont be needing count loop since i track count now (duuuh)
                         // we set the transform on the data for the element while leaving 
                         // touch info the same (as I want to preserve the semantics of pointer_state)
@@ -1013,6 +1027,7 @@ var PLY = (function ($) {
             }
         },
         // these two don't bubble according to MDN. So it'd be useless putting them on document. 
+        // also fairly certain that no browser implements them yet. 
         /* touchenter: function(evt) {
             console.log("touchenter");
         },
