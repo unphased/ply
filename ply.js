@@ -1042,7 +1042,7 @@ var PLY = (function ($) {
             
             // This gives us beautiful prefiltered antialiasing via texture sampling (helps on pretty much all browsers)
             evt.target.style.outline = "1px solid transparent";
-            dt.trans = "scale3D (1,1,0.5) scale3d(1,1,2)"; // a roundabout way of forcing 3d matrix
+            dt.trans = "scale3d(1,1,0.5) scale3d(1,1,2)"; // a roundabout way of forcing 3d matrix
         },
         ply_firsttouchend: function(evt) {
             console.log("1TE");
