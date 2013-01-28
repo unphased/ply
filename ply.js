@@ -1042,10 +1042,15 @@ var PLY = (function ($) {
             
             // This gives us beautiful prefiltered antialiasing via texture sampling (helps on pretty much all browsers)
             evt.target.style.outline = "1px solid transparent";
-            if (!evt.target.style[TransformStyle] || evt.target.style[TransformStyle] === "none") {
+            var etst = evt.target.style[TransformStyle];
+            if (!etst || etst === "none") {
                 dt.trans = "scale3d(1,1,0.5) scale3d(1,1,2)"; // a roundabout way of forcing 3d matrix
             } else
-                dt.trans = evt.target.style[TransformStyle];
+                dt.trans = etst;
+
+            if (etst.length > 140) { // bigger than a tweet means probably will convert to a shorter matrix() format
+                evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
+            }
         },
         ply_firsttouchend: function(evt) {
             console.log("1TE");
@@ -1102,9 +1107,6 @@ var PLY = (function ($) {
             final_style += t;
             evt.target.style[TransformStyle] = final_style;
             console.log("transform set to: "+evt.target.style[TransformStyle]);
-            if (evt.target.style[TransformStyle].length > 300) {
-                evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
-            }
             //console.log("transform after: "+evt.target.style[TransformStyle]);
         },
         // only assign these deprecated mutation events to the document when absolutely necessary (perf reasons)
