@@ -1024,19 +1024,19 @@ var PLY = (function ($) {
         ply_firsttouchstart: function(evt) {
             console.log("1TS", evt.touch.identifier);
         },
-        ply_secondtouchstart: function() {
+        ply_secondtouchstart: function(evt) {
             console.log("2TS", evt.touch.identifier, "all touches: ", evt.touches_active_on_element);
         },
-        ply_thirdtouchstart: function() {
+        ply_thirdtouchstart: function(evt) {
             console.log("3TS", evt.touch.identifier, "all touches: ", evt.touches_active_on_element);
         },        
-        ply_firsttouchend: function() {
+        ply_firsttouchend: function(evt) {
             console.log("1TE");
         },
-        ply_secondtouchend: function() {
+        ply_secondtouchend: function(evt) {
             console.log("2TE");
         },
-        ply_thirdtouchend: function() {
+        ply_thirdtouchend: function(evt) {
             console.log("3TE");
         },
         ply_translate: function(evt) {
