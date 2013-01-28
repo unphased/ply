@@ -1022,22 +1022,50 @@ var PLY = (function ($) {
             console.log("touchleave");
         }, */
         ply_firsttouchstart: function(evt) {
-            console.log("1TS", evt.touch.identifier);
+            console.log("1TS", evt.touch.identifier, "all touches: ", evt.touches_active_on_element);
+            assert(this === evt.touch.target, "this is evt.touch.target (firsttouchstart)");
+            var dt = $.data(this,"ply");
+            assert(dt),"dt exists");
+            dt.trans = 
+            // set the initial styles 
+            this.style[TransformOriginStyle] = "0 0"; 
+
+            /* 
+            // ensure backface visibility 
+            if (evt.target.style[BackfaceVisibilityStyle] !== "hidden") 
+                evt.target.style[BackfaceVisibilityStyle] = "hidden";
+            // ensure perspective
+            if (evt.target.style[PerspectiveStyle] !== "1000")
+                evt.target.style[PerspectiveStyle] = "1000";
+            */
+            
+            // This gives us beautiful prefiltered antialiasing via texture sampling (helps on pretty much all browsers)
+            this.style.outline = "1px solid transparent";
+            this.style[TransformStyle] = "scale3D (1,1,0.5) scale3d(1,1,2)"; // a roundabout way of forcing 3d matrix
+        },
+        ply_firsttouchend: function(evt) {
+            console.log("1TE");
         },
         ply_secondtouchstart: function(evt) {
             console.log("2TS", evt.touch.identifier, "all touches: ", evt.touches_active_on_element);
         },
-        ply_thirdtouchstart: function(evt) {
-            console.log("3TS", evt.touch.identifier, "all touches: ", evt.touches_active_on_element);
-        },        
-        ply_firsttouchend: function(evt) {
-            console.log("1TE");
-        },
         ply_secondtouchend: function(evt) {
             console.log("2TE");
         },
+        ply_thirdtouchstart: function(evt) {
+            console.log("3TS", evt.touch.identifier, "all touches: ", evt.touches_active_on_element);
+        },
         ply_thirdtouchend: function(evt) {
             console.log("3TE");
+        },
+        ply_onetouchend: function(evt) {
+            console.log("OneTE");
+        },
+        ply_twotouchesend: function(evt) {
+            console.log("TwoTE");
+        },
+        ply_threetouchesend: function(evt) {
+            console.log("ThreeTE");
         },
         ply_translate: function(evt) {
             //console.log("transform before setting translate: "+$(evt.target).css(TransformStyle));
@@ -1051,29 +1079,6 @@ var PLY = (function ($) {
         },
 
         ply_transform: function(evt) {
-            // ensure zeroing xformorigin CSS
-            if (evt.target.style[TransformOriginStyle] !== "0 0") {
-                evt.target.style[TransformOriginStyle] = "0 0";
-            }
-            /* 
-            // ensure backface visibility 
-            if (evt.target.style[BackfaceVisibilityStyle] !== "hidden") 
-                evt.target.style[BackfaceVisibilityStyle] = "hidden";
-            // ensure perspective
-            if (evt.target.style[PerspectiveStyle] !== "1000")
-                evt.target.style[PerspectiveStyle] = "1000";
-            */
-
-            // This gives us beautiful prefiltered antialiasing via texture sampling
-            if (evt.target.style.outline !== "1px solid transparent") {
-                evt.target.style.outline = "1px solid transparent";
-            } 
-
-            var starting_trans = $.data(evt.target,"ply").trans; 
-            if (!starting_trans || starting_trans === "none") {
-                //console.log("Existing transform on newly touched element: ",dt.trans,seen_target);
-                starting_trans = "scale3d(1,1,2)"; // this is to force 3d matrix (testing)
-            }
 
             // transform := T * T_o * R * S * T_o^-1 * transform
             var final_style = "";
