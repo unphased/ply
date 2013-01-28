@@ -307,7 +307,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 4aa8401 remembered have to save trans in the data %#";
+    var git_context = "#% 6a81934 atrocious megatypo %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
