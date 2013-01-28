@@ -566,6 +566,7 @@ var PLY = (function ($) {
             // while running the touchend of a previous touch. Not surprising, really.
         } */
         var ep = exposed.pointer_state;
+        var en = exposed.node_ids;
         for (var x in ep) {
             if (x === "m") continue; // skip the mouse
             //assert(touches_hash[x],"this element should be in the touches in the event because it is in the pointer state: "+x+" in "+serialize(touches_hash));
@@ -579,7 +580,6 @@ var PLY = (function ($) {
                 assert(en[ep[x].ni] === ep[x].e, "check element with id");
             }
         }
-        var en = exposed.node_ids;
         for (var j=0;j<en.length;++j) {
             // check internal consistency of touches container by verifying with data contents
             assert($.data(en[j],'ply').node_id === j, "node_id "+j+" should be equal to $.data(en["+j+"],'ply').node_id");
