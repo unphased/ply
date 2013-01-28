@@ -1025,8 +1025,8 @@ var PLY = (function ($) {
             console.log("1TS", evt.touch.identifier, "all touches: ", evt.touches_active_on_element);
             assert(this === evt.touch.target, "this is evt.touch.target (firsttouchstart)");
             var dt = $.data(this,"ply");
-            assert(dt),"dt exists");
-            dt.trans = 
+            assert(dt,"dt exists");
+            dt.offset = untransformed_offset(this);
             // set the initial styles 
             this.style[TransformOriginStyle] = "0 0"; 
 
@@ -1080,14 +1080,19 @@ var PLY = (function ($) {
 
         ply_transform: function(evt) {
 
+            // todo: make this not require a per-input run of $.data
+            var o = $.data(this,"ply").offset; 
+            startX = evt.startX - o.x;
+            startY = evt.startY - o.y;
+
             // transform := T * T_o * R * S * T_o^-1 * transform
             var final_style = "";
             // T * T_o can be combined so we do so
-            final_style += "translate3d("+(evt.originX+evt.translateX)+"px,"+(evt.originY+evt.translateY)+"px,0) ";
+            final_style += "translate3d("+(startX+evt.translateX)+"px,"+(startY+evt.translateY)+"px,0) ";
             // next line takes care of R and S
             final_style += "rotate("+evt.rotate+"rad) scale("+evt.scale+") ";
             // T_o^-1
-            final_style += "translate3d("+(-evt.originX)+"px,"+(-evt.originY)+"px,0) ";
+            final_style += "translate3d("+(-startX)+"px,"+(-startY)+"px,0) ";
             // all premult'd to original transform
             final_style += starting_trans;
             evt.target.style[TransformStyle] = final_style;
