@@ -1042,7 +1042,7 @@ var PLY = (function ($) {
             
             // This gives us beautiful prefiltered antialiasing via texture sampling (helps on pretty much all browsers)
             evt.target.style.outline = "1px solid transparent";
-            evt.target.style[TransformStyle] = "scale3D (1,1,0.5) scale3d(1,1,2)"; // a roundabout way of forcing 3d matrix
+            dt.trans = "scale3D (1,1,0.5) scale3d(1,1,2)"; // a roundabout way of forcing 3d matrix
         },
         ply_firsttouchend: function(evt) {
             console.log("1TE");
@@ -1080,8 +1080,10 @@ var PLY = (function ($) {
         },
 
         ply_transform: function(evt) {
-            // todo: make this not require a per-input run of $.data
-            var o = $.data(evt.target,"ply").offset; 
+            // todo: make this not require a per-input run of $.data (actually it may be unavoidable.. sigh)
+            var dt = $.data(evt.target,"ply");
+            var o = dt.offset; 
+            var t = dt.trans;
             startX = evt.startX - o.x;
             startY = evt.startY - o.y;
 
@@ -1094,7 +1096,7 @@ var PLY = (function ($) {
             // T_o^-1
             final_style += "translate3d("+(-startX)+"px,"+(-startY)+"px,0) ";
             // all premult'd to original transform
-            final_style += starting_trans;
+            final_style += t;
             evt.target.style[TransformStyle] = final_style;
             console.log("transform set to: "+evt.target.style[TransformStyle]);
             if (evt.target.style[TransformStyle].length > 300) {
