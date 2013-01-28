@@ -822,14 +822,17 @@ var PLY = (function ($) {
                         
                         var event = document.createEvent('HTMLEvents'); 
                         switch (ed.count) {
-                            case 0: event.initEvent('ply_onetouchend',true,true);
-                            break;
-                            case 1: event.initEvent('ply_twotouchesend',true,true);
-                            break;
-                            case 2: event.initEvent('ply_threetouchesend',true,true);
-                            break;
+                            case 0: 
+                                event.initEvent('ply_onetouchend',true,true);
+                                break;
+                            case 1: 
+                                event.initEvent('ply_twotouchesend',true,true);
+                                break;
+                            case 2: 
+                                event.initEvent('ply_threetouchesend',true,true);
+                                break;
                             default:
-                            console.log("nthtouchend n="+ed.count);
+                                console.log("nthtouchend n="+ed.count);
                         }
                         event.touch = ep[id].t;
                         event.touches_active_on_element = ed.t;
@@ -1071,6 +1074,7 @@ var PLY = (function ($) {
         },
         ply_secondtouchstart: function(evt) {
             console.log("2TS", evt.touch.identifier, "all touches: ", evt.touches_active_on_element);
+            // must properly update the transform (trans) on initiation of second touch 
         },
         ply_secondtouchend: function(evt) {
             console.log("2TE");
@@ -1086,6 +1090,7 @@ var PLY = (function ($) {
         },
         ply_twotouchesend: function(evt) {
             console.log("TwoTE");
+            // must properly update trans on termination of second touch 
         },
         ply_threetouchesend: function(evt) {
             console.log("ThreeTE");
