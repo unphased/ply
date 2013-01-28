@@ -707,6 +707,8 @@ var PLY = (function ($) {
                         // set some helpful touch specific info into the event
                         // "touch" is a nod at "touches" but here we only give the one Touch this event refers to
                         event.touch = dj.t;
+                        // also allow the event handler to inspect the other touches (this is not a full blown TouchList and if you modify this structure from your handler things may end badly)
+                        event.touches_active_on_element = dt.t;
                         var defPrevented = seen_target.dispatchEvent(event);
                     }
                 }
@@ -974,8 +976,8 @@ var PLY = (function ($) {
                     var ys_bar = 0.5 * (one.ys + two.ys);
                     var xc_bar = 0.5 * (one.xc + two.xc);
                     var yc_bar = 0.5 * (one.yc + two.yc);
-                    event2.originX = xs_bar - nd.offset.x; // the origin point around which to scale+rotate.
-                    event2.originY = ys_bar - nd.offset.y;
+                    event2.startX = xs_bar; // the originating origin point around which scale+rotate happens
+                    event2.startY = ys_bar;
                     // TODO: reduce to a single sqrt, and otherwise optimize the crap out of this
                     var xs_diff = one.xs - two.xs;
                     var ys_diff = one.ys - two.ys;
@@ -1019,14 +1021,14 @@ var PLY = (function ($) {
         touchleave: function(evt) {
             console.log("touchleave");
         }, */
-        ply_firsttouchstart: function() {
-            console.log("1TS");
+        ply_firsttouchstart: function(evt) {
+            console.log("1TS", evt.touch.identifier);
         },
         ply_secondtouchstart: function() {
-            console.log("2TS");
+            console.log("2TS", evt.touch.identifier, "all touches: ", evt.touches_active_on_element);
         },
         ply_thirdtouchstart: function() {
-            console.log("3TS");
+            console.log("3TS", evt.touch.identifier, "all touches: ", evt.touches_active_on_element);
         },        
         ply_firsttouchend: function() {
             console.log("1TE");
