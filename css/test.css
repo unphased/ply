@@ -17,6 +17,7 @@ body {
     user-select: none;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
+    overflow: hidden;
 }
 
 div {
