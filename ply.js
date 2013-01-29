@@ -725,20 +725,20 @@ var PLY = (function ($) {
                         var event = document.createEvent('HTMLEvents'); 
                         switch (dt.count) {
                             case 1: 
-                                event.initEvent('ply_firsttouchstart',true,true);
+                                event.initEvent('ply_onetouchstart',true,true);
                                 break;
                             case 2: 
-                                event.initEvent('ply_secondtouchstart',true,true);
+                                event.initEvent('ply_twotouchesstart',true,true);
                                 break;
                             case 3: 
-                                event.initEvent('ply_thirdtouchstart',true,true);
+                                event.initEvent('ply_threetouchesstart',true,true);
                                 break;
                             default: 
                                 console.log("zero or fourth or fifth or... touchstart (unimplemented) n="+dt.count);
                         }
                         // set some helpful touch specific info into the event
                         // "touch" is a nod at "touches" but here we only give the one Touch this event refers to
-                        event.touch = dj.t;
+                        event.changedTouch = dj.t;
                         // also allow the event handler to inspect the other touches (this is not a full blown TouchList and if you modify this structure from your handler things may end badly)
                         event.touches_active_on_element = dt.t;
                         var defPrevented = seen_target.dispatchEvent(event);
@@ -834,7 +834,7 @@ var PLY = (function ($) {
                             default:
                                 console.log("nthtouchend n="+ed.count);
                         }
-                        event.touch = ep[id].t;
+                        event.changedTouch = ep[id].t;
                         event.touches_active_on_element = ed.t;
                         var defaultPrevented = ep[id].e.dispatchEvent(event);
                         /* *** this stuff gotta move out of ply domain -- also wont be needing count loop since i track count now (duuuh)
@@ -1037,10 +1037,10 @@ var PLY = (function ($) {
         touchleave: function(evt) {
             console.log("touchleave");
         }, */
-        ply_firsttouchstart: function(evt) {
-            console.log("1TS", evt.touch.identifier, "all touches: ", evt.touches_active_on_element);
-            //assert(this === evt.touch.target, "this is evt.touch.target (firsttouchstart)");
-            assert(evt.target === evt.touch.target, "this is evt.touch.target (firsttouchstart)");
+        ply_onetouchstart: function(evt) {
+            console.log("1TS", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
+            //assert(this === evt.changedTouch.target, "this is evt.ct.target (firsttouchstart)");
+            assert(evt.target === evt.changedTouch.target, "this is evt.ct.target (firsttouchstart)");
             var dt = $.data(evt.target,"ply");
             assert(dt,"dt exists");
             dt.offset = untransformed_offset(evt.target);
@@ -1069,28 +1069,24 @@ var PLY = (function ($) {
                 evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
             }
         },
-        ply_firsttouchend: function(evt) {
-            console.log("1TE");
-        },
-        ply_secondtouchstart: function(evt) {
-            console.log("2TS", evt.touch.identifier, "all touches: ", evt.touches_active_on_element);
+        ply_twotouchesstart: function(evt) {
+            console.log("2TS", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
             // must properly update the transform (trans) on initiation of second touch 
         },
-        ply_secondtouchend: function(evt) {
-            console.log("2TE");
-        },
-        ply_thirdtouchstart: function(evt) {
-            console.log("3TS", evt.touch.identifier, "all touches: ", evt.touches_active_on_element);
-        },
-        ply_thirdtouchend: function(evt) {
-            console.log("3TE");
-        },
+        ply_threetouchesstart: function(evt) {
+            console.log("3TS", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
+        },        
         ply_onetouchend: function(evt) {
             console.log("OneTE");
         },
         ply_twotouchesend: function(evt) {
             console.log("TwoTE");
             // must properly update trans on termination of second touch 
+            // append to my transform the offset of the remaining touch 
+            var ed = $.data(evt.target);
+            // evt.touches_active_on_element should have length 1            
+            for (var touch in evt.touches_active_on_element);
+            ed.trans = "translate3d(" + (touch.xs-touch.yc);
         },
         ply_threetouchesend: function(evt) {
             console.log("ThreeTE");
