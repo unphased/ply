@@ -31,7 +31,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% cb404a4 silly noob mistake %#";
+    var git_context = "#% 3745256 don't need jss just yet. I think I can purify ply's scope of functionality to a point where even transforms are not directly modified. %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
