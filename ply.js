@@ -888,7 +888,7 @@ var PLY = (function ($) {
                 throw e; // rethrow to give it to debugging safari, rather than be silent
             }
             exposed.event_processed = true; 
-        }, true); // hook to capture phase to catch in the event of stopPropagation()
+        }, false); // hook to capture phase to catch in the event of stopPropagation()
     });
     console.log("UA: "+navigator.userAgent);
     console.log("window.devicePixelRatio:", window.devicePixelRatio);
