@@ -330,8 +330,12 @@ var PLY = (function ($) {
 
         // converges on the time it takes to run touchmove
         tmProfile: 3, 
-        // just for reference purposes: my iPhone 5 appears to execute the 
+        // just for reference purposes: my iPhone 5 appears to execute (not 
+        // including the dispatch/computation stage)
         // touchmove, when debug is off, within 200 microseconds (one touch)
+        tmProfileDispatch: 3,
+        // converges on the time it takes to run only the block that computes
+        // and dispatches (and executes) the ply manipulation events 
 
         // converges on the rate touchmove is run 
         tmRate: 16,
@@ -365,7 +369,8 @@ var PLY = (function ($) {
         append_logs_dom: true, 
         escape: escapeHtml,
         serialize: serialize, // exposed helper functions
-        isInDOM: isInDOM
+        isInDOM: isInDOM, 
+        internalCheck: internalCheck
     };
 
 
@@ -445,6 +450,7 @@ var PLY = (function ($) {
         // this means all logs in your application get dumped into #debug_log if 
         // you've got one
     };
+
     if (exposed.debug) {
         console.log = instrumented_log; // pre-empt usage of this if starting off not debug
         // if the previous line is not conditional on debug then it will be always
@@ -454,15 +460,16 @@ var PLY = (function ($) {
         // set up a way to show the log buffer if debug mode 
         // (note toggling the debug off will stop logs being written)
         // (and if debug is not true to begin with, no button is made)
-        var show = false;
+        var show_log_buffer = false;
         $("#log_buffer_dump").before($('<button>toggle full log buffer snapshot</button>').on('click',function(){
-            show = !show;
-            if (show) {
+            show_log_buffer = !show_log_buffer;
+            if (show_log_buffer) {
                 $("#log_buffer_dump").html(log_buffer.join(''));
             } else {
                 $("#log_buffer_dump").html("");
             }
-        }));
+        })).on("touchenter",function(){console.log("touchenter on toggle buffer dump button");}).on('touchleave',function(){console.log("touchleave on toggle buffer dump button");});
+
     }
 
     // this is a helper for logging touchlists for debug purposes
@@ -498,11 +505,11 @@ var PLY = (function ($) {
     var TransformOriginStyle = Modernizr.prefixed("transformOrigin");
     var PerspectiveStyle = Modernizr.prefixed("perspective");
     var BackfaceVisibilityStyle = Modernizr.prefixed("backfaceVisibility");    
-    console.log("bfvs: "+BackfaceVisibilityStyle);
+    //console.log("bfvs: "+BackfaceVisibilityStyle);
 
 
     // this is used to obtain the true offset within the page to get the authoritative 
-    // origin point (which is used along with clientX/Y from input)
+    // origin point (which is used along with pageX/Y from input)
     function untransformed_offset(e) {
         var currentTransform = e.style[TransformStyle];
         e.style[TransformStyle] = "none"; // clear it out
@@ -523,22 +530,17 @@ var PLY = (function ($) {
     $(function (){
         // propagate "umbrella" style classes through to their children, now and in
         // the future. 
-        
-        // consolidate event handler behavior of marked elements by setting 
-        // ply-noscroll on all of them, but only on touch devices because 
-        // the PC allows you to drag just fine while scrolling.
-        if (Modernizr.touch) {
-            for (var classname in noscroll_class_set) {
-                $("."+classname).addClass("ply-noscroll");
-            }
-        
-            // propagate the noscroll class to all children and apply it to all 
-            // future children 
-            $(".ply-noscroll").on("DOMNodeInserted",function (evt){
-                $(evt.target).addClass("ply-noscroll");
-            }).addClassToChildren("ply-noscroll");
+    
+        for (var classname in noscroll_class_set) {
+            $("."+classname).addClass("ply-noscroll");
         }
-
+    
+        // propagate the noscroll class to all children and apply it to all 
+        // future children 
+        $(".ply-noscroll").on("DOMNodeInserted",function (evt){
+            $(evt.target).addClass("ply-noscroll");
+        }).addClassToChildren("ply-noscroll");
+    
         // handle ply-collect. 
         // The change that needs to happen here is to simply update the target 
         // of the fired event: While it might make some sense to just attach
@@ -551,8 +553,44 @@ var PLY = (function ($) {
         }).addClassToChildren("ply-cc");
     });
 
-    // dynamic CSS. This is for setting global behavioral CSS styles
-
+    // routine that should be run for debug sanity checking at any point in time that you desire or are able to
+    function internalCheck() {
+        //console.log("running internalcheck");
+        // check the model for consistency 
+        /* var touches_hash = {};
+        for (var t=0;t<et.length;++t) {
+            var etti = et[t].identifier;
+            touches_hash[etti] = true;
+            //assert(exposed.pointer_state[etti],"this element should be in the pointer_state because it is in the touches: "+etti+" in "+serialize(exposed.pointer_state));
+            // this assertion also trips because it is possible for the touches to produce a touch that is new
+            // while running the touchend of a previous touch. Not surprising, really.
+        } */
+        var ep = exposed.pointer_state;
+        var en = exposed.node_ids;
+        for (var x in ep) {
+            if (x === "m") continue; // skip the mouse
+            //assert(touches_hash[x],"this element should be in the touches in the event because it is in the pointer state: "+x+" in "+serialize(touches_hash));
+            // this above assert fails:
+            // looks like sometimes something can be taken out of touches list before a touchend
+            // for it is sent out!
+            if (ep[x].hasOwnProperty('ni')) {
+                assert($.data(ep[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
+                assert($.data(ep[x].e,'ply').t[x] === ep[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(ep[x])+"; "+serialize($.data(ep[x].e,'ply')));
+                assert(ep[x].ni === $.data(ep[x].e,'ply').node_id, "node id check "+ep[x].ni+", "+$.data(ep[x].e,'ply').node_id);
+                assert(en[ep[x].ni] === ep[x].e, "check element with id");
+            }
+        }
+        for (var j=0;j<en.length;++j) {
+            // check internal consistency of touches container by verifying with data contents
+            assert($.data(en[j],'ply').node_id === j, "node_id "+j+" should be equal to $.data(en["+j+"],'ply').node_id");
+            // check the count matches 
+            var touch_count = 0;
+            for (var y in $.data(en[j],'ply').t) {
+                touch_count ++;
+            }
+            assert(touch_count === $.data(en[j],'ply').count, "count checks out for touches on element "); 
+        }   
+    }
 
     function key(evt) {
         return evt.which || evt.keyCode || /*window.*/event.keyCode;
@@ -620,10 +658,6 @@ var PLY = (function ($) {
             // browser default scrolling. 
 
 
-            // On touch devices the touchstart is the critical event that keys 
-            // off a complex interaction, so it will be the place that 
-            // allow_scroll is directly assigned (when it is the first touch,
-            // of course).
             var ep = exposed.pointer_state;
             var en = exposed.node_ids;
             var ps_count = 0;
@@ -644,25 +678,27 @@ var PLY = (function ($) {
                 // is destined to control. for right now it uses the immediate
                 // target which is fine to test that the thing works. 
 
-                var v = {id: ecii, xs: eci.pageX, ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, e: seen_target};
+                var v = {t: eci, id: ecii, xs: eci.pageX, ys: eci.pageY, xc: eci.pageX, yc: eci.pageY, e: seen_target};
                 data_list.push(v);
             }
 
-            // only when element is a noscroll (interesting element) AND in noscroll mode (or could initiate it) do we track element's touches
+            // only when element is a noscroll (interesting element) AND in noscroll mode (or could initiate it) do we track touches on the element's data (on a per element basis) -- this runs at least once on each element AFAIK
             if ((ps_count === 0 || !exposed.allow_scroll) && (' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1) {
                 // set up $.data stuff on element
                 var dt = $.data(seen_target,"ply");
                 var nid = en.length;
                 //console.log('nid',nid);
                 if (!dt) { // new element to put in our node index buffer
-                    dt = $.data(seen_target,"ply",{node_id: nid, offset: untransformed_offset(seen_target)});
+                    dt = $.data(seen_target,"ply",{node_id: nid, count: 0, t: {}});
                     en.push(seen_target);
                     console.log('en extended ',en);
                 } else { // otherwise look node up and use its index
                     nid = dt.node_id;
                 }
-                dt.trans = seen_target.style[TransformStyle]; // hold on to this because it is helpful later on                
+                //dt.offset = untransformed_offset(seen_target); // only set this on creation of first touch! 
+                //dt.trans = seen_target.style[TransformStyle]; // this should be tracked by the user not by ply's data. It must be set on start 
                 
+                /* 
                 var touches_on_e = 0;
                 var touch; 
                 for (var x in dt) {
@@ -676,31 +712,52 @@ var PLY = (function ($) {
                 if (touches_on_e === 1) {
                     // insert a special marker property in the data to use the fresh value for transforming. The original 
                     // pointerstate properties tracking the raw touch input shall not be trampled. 
-                    console.log("Here I am about to add new xs/ys props to ptr state", touch);
-                }
+                    //console.log("Here I am about to add new xs/ys props to ptr state", touch);
+                }*/
 
                 var dl = data_list.length;
-                for (var j=0;j<dl;++j) { // go and insert the new touches into our element and ep
+                for (var j=0;j<dl;++j) { // go and insert the new touches into our element (ep is done outside this conditional)
                     var dj = data_list[j];
                     dj.ni = nid;
-                    //console.log('set dj.ni to nid=',nid);
-                    dt[dj.id] = dj;
-                    ep[dj.id] = dj;
+                    if (!dt.t.hasOwnProperty(dj.id)) {
+                        dt.count++;
+                        dt.t[dj.id] = dj;
+                        var event = document.createEvent('HTMLEvents'); 
+                        switch (dt.count) {
+                            case 1: 
+                                event.initEvent('ply_onetouchstart',true,true);
+                                break;
+                            case 2: 
+                                event.initEvent('ply_twotouchesstart',true,true);
+                                break;
+                            case 3: 
+                                event.initEvent('ply_threetouchesstart',true,true);
+                                break;
+                            default: 
+                                console.log("zero or fourth or fifth or... touchstart (unimplemented) n="+dt.count);
+                        }
+                        // set some helpful touch specific info into the event
+                        // "touch" is a nod at "touches" but here we only give the one Touch this event refers to
+                        event.changedTouch = dj.t;
+                        // also allow the event handler to inspect the other touches (this is not a full blown TouchList and if you modify this structure from your handler things may end badly)
+                        event.touches_active_on_element = dt.t;
+                        var defPrevented = seen_target.dispatchEvent(event);
+                    }
                 }
-
-                if (ps_count === 0) {
+                //if (ps_count === 0) {
                     // this is so that if you start scrolling and then with 2nd
                     // finger touch a ply-noscroll element it will not 
                     // preventDefault on the touchstart on this 2nd touch (which
                     // produces strange stuff, trust me)
                     exposed.allow_scroll = false;
-                }
-            } else { // not a no-scroll, means only need to track touch data
-                var d_l = data_list.length;
-                for (var k=0;k<d_l;++k) { // go and insert the new touches into ep
-                    var dk = data_list[k];
-                    ep[dk.id] = dk;
-                }
+                //}
+            } 
+            // always track touch data (ep) 
+            // The values in our data_list are now referenced by two DS's: the $.data(e) and the ep
+            var d_l = data_list.length;
+            for (var k=0;k<d_l;++k) { // go and insert the new touches into ep
+                var dk = data_list[k];
+                ep[dk.id] = dk;
             }
             if (!exposed.allow_scroll) { // never allow scroll once you start manipulating something 
                 evt.preventDefault();
@@ -724,7 +781,7 @@ var PLY = (function ($) {
         // preventDefault on touchstart in order to force behavior reliably and running the 
         // same routine off of all three of these events is probably overkill 
 
-        touchend: (touchend_touchcancel = function (evt) { console.log("touchend", id_string_for_touch_list(evt.changedTouches));
+        touchend: (touchend_touchcancel = function (evt) { //console.log("touchend", id_string_for_touch_list(evt.changedTouches));
 
             exposed.tmTime = 0; // reset touchmove timer
 
@@ -748,14 +805,39 @@ var PLY = (function ($) {
                 var eti = et[i];
                 var etii = eti.identifier;
                 hash[etii] = true;
+
+                // "sanity" check (more like implementation consistency/spec check)
+                // make sure the touch object stored with the touchstart from before 
+                // is the same obj as the one seen at this point within the touches list 
+                assert(!ep[etii] || ep[etii].t === eti,"Touch is same object as saved from touchstart");
             }
             for (var id in ep) {
                 if (!hash[id] && id !== "m") {
                     if (ep[id].hasOwnProperty('ni')) { // if is a touch that requires removing from data
                         var ed = $.data(ep[id].e, 'ply');
                         // this touch is no longer valid so remove from element's touch hash
-                        delete ed[id];
+                        delete ed.t[id];
+                        // update count
+                        ed.count--;
                         
+                        var event = document.createEvent('HTMLEvents'); 
+                        switch (ed.count) {
+                            case 0: 
+                                event.initEvent('ply_onetouchend',true,true);
+                                break;
+                            case 1: 
+                                event.initEvent('ply_twotouchesend',true,true);
+                                break;
+                            case 2: 
+                                event.initEvent('ply_threetouchesend',true,true);
+                                break;
+                            default:
+                                console.log("nthtouchend n="+ed.count);
+                        }
+                        event.changedTouch = ep[id].t;
+                        event.touches_active_on_element = ed.t;
+                        var defaultPrevented = ep[id].e.dispatchEvent(event);
+                        /* *** this stuff gotta move out of ply domain -- also wont be needing count loop since i track count now (duuuh)
                         // we set the transform on the data for the element while leaving 
                         // touch info the same (as I want to preserve the semantics of pointer_state)
                         // to the value that would achieve the correct positioning
@@ -763,17 +845,18 @@ var PLY = (function ($) {
                         // remaining touches is 1: 
                         var count_touches = 0;
                         var touch; 
-                        for (var x in ed) {
-                            var c = x.charCodeAt(0);
+                        for (var z in ed) {
+                            var c = z.charCodeAt(0);
                             if (c < 58 && c > 47) { // fast is-number check
-                                touch = ed[x];
+                                touch = ed[z];
                                 count_touches++;
                                 if (count_touches > 1) break; // short-circuit (take note c_t will be either 0, 1, or 2)
                             }
                         }
                         if (count_touches === 1) {
+                            // this also needs to be moved out of ply's domain 
                             ed.trans = "translate3d("+(touch.xs-touch.xc)+"px,"+(touch.ys-touch.yc)+"px,0) " + ep[id].e.style[TransformStyle];
-                        }
+                        } */
                     }
 
                     // en[ep[id].ni] = null; // clear out reference to node
@@ -786,34 +869,6 @@ var PLY = (function ($) {
             }
             if (etl === 0) { // this indicates no touches remain
                 exposed.allow_scroll = true;
-            }
-            // debug check the model for consistency here
-            if (exposed.debug) {
-                var touches_hash = {};
-                for (var t=0;t<et.length;++t) {
-                    var etti = et[t].identifier;
-                    touches_hash[etti] = true;
-                    //assert(exposed.pointer_state[etti],"this element should be in the pointer_state because it is in the touches: "+etti+" in "+serialize(exposed.pointer_state));
-                    // this assertion also trips because it is possible for the touches to produce a touch that is new
-                    // while running the touchend of a previous touch. Not surprising, really.
-                }
-                for (var x in ep) {
-                    if (x === "m") continue; // skip the mouse
-                    //assert(touches_hash[x],"this element should be in the touches in the event because it is in the pointer state: "+x+" in "+serialize(touches_hash));
-                    // this above assert fails:
-                    // looks like sometimes something can be taken out of touches list before a touchend
-                    // for it is sent out!
-                    if (ep[x].hasOwnProperty('ni')) {
-                        assert($.data(ep[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
-                        assert($.data(ep[x].e,'ply')[x] === ep[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(ep[x])+"; "+serialize($.data(ep[x].e,'ply')));
-                        assert(ep[x].ni === $.data(ep[x].e,'ply').node_id, "node id check "+ep[x].ni+", "+$.data(ep[x].e,'ply').node_id);
-                        assert(en[ep[x].ni] === ep[x].e, "check element with id");
-                    }
-                }
-                for (var j=0;j<en.length;++j) {
-                    // check consistency of node_ids by verifying with data contents
-                    assert($.data(en[j],'ply').node_id === j, "node_id "+j+" should be equal to $.data(en["+j+"],'ply').node_id");
-                }
             }
         }),
         touchcancel: touchend_touchcancel,
@@ -863,9 +918,12 @@ var PLY = (function ($) {
 
             //console.log("elems=",elems);
 
-            // for each element 
+            var beforeDispatch = Date.now();
+
+            // for each element
             for (var ni in elems) {
                 var nd = $.data(en[Number(ni)],'ply');
+                /* 
                 var one, two; 
                 one = undefined; two = undefined;
                 var more = [];
@@ -886,10 +944,15 @@ var PLY = (function ($) {
                         }
                         tc++;
                     }
-                }
+                }*/
                 //console.log("tc "+tc);
                 // at long last ready to parse our element's manipulating touches
-                if (!two) { // only one!
+                assert(nd.count > 0);
+                var one;
+                if (nd.count === 1) {
+                    for (var z in nd.t) { // set to the only value in nd.t (technically not a loop)
+                        one = nd.t[z];
+                    }
                     //console.log("touch",one,"on",en[ni]);
                     var event = document.createEvent('HTMLEvents'); // this is for compatibility with DOM Level 2
                     event.initEvent('ply_translate',true,true);
@@ -902,6 +965,16 @@ var PLY = (function ($) {
                     // will be sent like usual
                     var defaultPrevented = en[ni].dispatchEvent(event);
                 } else {
+                    var two, j;
+                    j=0; 
+                    for (var y in nd.t) { // a two iteration loop
+                        if (j === 0) one = nd.t[y];
+                        else {
+                            two = nd.t[y]; // if j !== 0, then j must be 1
+                            break;
+                        }
+                        j++;
+                    }
                     // we need to do the transform
                     // If the element has been specified to react automatically to the two finger 
                     // transforms, the default behavior will be the direct application (via rAF) of the
@@ -918,8 +991,8 @@ var PLY = (function ($) {
                     var ys_bar = 0.5 * (one.ys + two.ys);
                     var xc_bar = 0.5 * (one.xc + two.xc);
                     var yc_bar = 0.5 * (one.yc + two.yc);
-                    event2.originX = xs_bar - nd.offset.x; // the origin point around which to scale+rotate.
-                    event2.originY = ys_bar - nd.offset.y;
+                    event2.startX = xs_bar; // the originating origin point around which scale+rotate happens
+                    event2.startY = ys_bar;
                     // TODO: reduce to a single sqrt, and otherwise optimize the crap out of this
                     var xs_diff = one.xs - two.xs;
                     var ys_diff = one.ys - two.ys;
@@ -939,8 +1012,9 @@ var PLY = (function ($) {
                     event2.translateY = yc_bar - ys_bar;
                     var defaultPrevented2 = en[ni].dispatchEvent(event2);
 
-                    if (more.length > 0) {
-                        console.log("total " + (2 + more.length) + " touches:", more);
+                    if (nd.count > 2) {
+                        console.log("total " + nd.count + " touches:", nd.t);
+                        // do more things on these touches
                     }
                 }
             }
@@ -949,30 +1023,30 @@ var PLY = (function ($) {
             exposed.tmTime = now; // update this last
             if (exposed.debug) {
                 var profile = now - start;
+                var dispatchProfile = now - beforeDispatch;
                 exposed.tmProfile += (profile - exposed.tmProfile) * 0.02;
+                exposed.tmProfileDispatch += (dispatchProfile - exposed.tmProfileDispatch) * 0.02;
                 exposed.tmRate += (diff - exposed.tmRate) * 0.02;
             }
         },
-        touchenter: function(evt) {
+        // these two don't bubble according to MDN. So it'd be useless putting them on document. 
+        // also fairly certain that no browser implements them yet. 
+        /* touchenter: function(evt) {
             console.log("touchenter");
         },
         touchleave: function(evt) {
             console.log("touchleave");
-        },
-        ply_translate: function(evt) {
-            console.log("transform before setting translate: "+$(evt.target).css(TransformStyle));
-            evt.target.style[TransformStyle] = "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans;
-            console.log("transform set to: "+evt.target.style[TransformStyle]);
-            
-            evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
-            console.log("transform after: "+evt.target.style[TransformStyle]);            
-        },
+        }, */
+        ply_onetouchstart: function(evt) {
+            console.log("1TS", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
+            //assert(this === evt.changedTouch.target, "this is evt.ct.target (firsttouchstart)");
+            assert(evt.target === evt.changedTouch.target, "this is evt.ct.target (firsttouchstart)");
+            var dt = $.data(evt.target,"ply");
+            assert(dt,"dt exists");
+            dt.offset = untransformed_offset(evt.target);
+            // set the initial styles 
+            evt.target.style[TransformOriginStyle] = "0 0"; 
 
-        ply_transform: function(evt) {
-            // ensure zeroing xformorigin CSS
-            if (evt.target.style[TransformOriginStyle] !== "0 0") {
-                evt.target.style[TransformOriginStyle] = "0 0";
-            }
             /* 
             // ensure backface visibility 
             if (evt.target.style[BackfaceVisibilityStyle] !== "hidden") 
@@ -981,32 +1055,74 @@ var PLY = (function ($) {
             if (evt.target.style[PerspectiveStyle] !== "1000")
                 evt.target.style[PerspectiveStyle] = "1000";
             */
-
-            // This gives us beautiful prefiltered antialiasing via texture sampling
-            if (evt.target.style.outline !== "1px solid transparent") {
-                evt.target.style.outline = "1px solid transparent";
-            } 
-
-            var starting_trans = $.data(evt.target,"ply").trans; 
-            if (!starting_trans || starting_trans === "none") {
-                //console.log("Existing transform on newly touched element: ",dt.trans,seen_target);
-                starting_trans = "scale3d(1,1,2)"; // this is to force 3d matrix (testing)
+            
+            // This gives us beautiful prefiltered antialiasing via texture sampling (helps on pretty much all browsers)
+            evt.target.style.outline = "1px solid transparent";
+            var etst = evt.target.style[TransformStyle];
+            if (!etst || etst === "none") {
+                dt.trans = "scale3d(1,1,0.5) scale3d(1,1,2)"; // a roundabout way of forcing 3d matrix
+            } else {
+                dt.trans = etst;
             }
+
+            if (etst.length > 140) { // bigger than a tweet means probably will convert to a shorter matrix() format
+                evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
+            }
+        },
+        ply_twotouchesstart: function(evt) {
+            console.log("2TS", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
+            // must properly update the transform (trans) on initiation of second touch 
+        },
+        ply_threetouchesstart: function(evt) {
+            console.log("3TS", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
+        },        
+        ply_onetouchend: function(evt) {
+            console.log("OneTE");
+        },
+        ply_twotouchesend: function(evt) {
+            console.log("TwoTE");
+            // must properly update trans on termination of second touch 
+            // append to my transform the offset of the remaining touch 
+            var ed = $.data(evt.target);
+            // evt.touches_active_on_element should have length 1            
+            for (var touch in evt.touches_active_on_element);
+            ed.trans = "translate3d(" + (touch.xs-touch.yc);
+        },
+        ply_threetouchesend: function(evt) {
+            console.log("ThreeTE");
+        },
+        ply_translate: function(evt) {
+            //console.log("transform before setting translate: "+$(evt.target).css(TransformStyle));
+            evt.target.style[TransformStyle] = "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans;
+            console.log("transform set to: "+evt.target.style[TransformStyle]);
+            
+            if (evt.target.style[TransformStyle].length > 300) {
+                evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
+            }
+            //console.log("transform after: "+evt.target.style[TransformStyle]);            
+        },
+
+        ply_transform: function(evt) {
+            // todo: make this not require a per-input run of $.data (actually it may be unavoidable.. sigh)
+            var dt = $.data(evt.target,"ply");
+            var o = dt.offset; 
+            var t = dt.trans;
+            startX = evt.startX - o.x;
+            startY = evt.startY - o.y;
 
             // transform := T * T_o * R * S * T_o^-1 * transform
             var final_style = "";
             // T * T_o can be combined so we do so
-            final_style += "translate3d("+(evt.originX+evt.translateX)+"px,"+(evt.originY+evt.translateY)+"px,0) ";
+            final_style += "translate3d("+(startX+evt.translateX)+"px,"+(startY+evt.translateY)+"px,0) ";
             // next line takes care of R and S
             final_style += "rotate("+evt.rotate+"rad) scale("+evt.scale+") ";
             // T_o^-1
-            final_style += "translate3d("+(-evt.originX)+"px,"+(-evt.originY)+"px,0) ";
+            final_style += "translate3d("+(-startX)+"px,"+(-startY)+"px,0) ";
             // all premult'd to original transform
-            final_style += starting_trans;
+            final_style += t;
             evt.target.style[TransformStyle] = final_style;
             console.log("transform set to: "+evt.target.style[TransformStyle]);
-            evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
-            console.log("transform after: "+evt.target.style[TransformStyle]);
+            //console.log("transform after: "+evt.target.style[TransformStyle]);
         },
         // only assign these deprecated mutation events to the document when absolutely necessary (perf reasons)
         DOMNodeInserted: Mutation_Observer ? null : function (evt) { //console.log("DOMNodeInserted: ",evt.target);
