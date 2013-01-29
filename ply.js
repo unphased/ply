@@ -307,7 +307,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 4c145d3 moving the setting of the matrix3d forcing transform start into the more approipriate handler %#";
+    var git_context = "#% b476810 a bunch more stuff %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
