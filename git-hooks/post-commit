@@ -4,7 +4,7 @@
 git checkout gh-pages
 git merge master
 # update the js file with commit identification information from git
-sed -i _bak "s/#%.*%#/#% `git log master -1 --format="%h %s"` %#/" ply.js
+sed -i_bak "s/#%.*%#/#% `git log master -1 --format="%h %s"` %#/" ply.js
 git add ply.js
 rm ply.js_bak
 git commit -m"script writes git hash into js file"
