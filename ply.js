@@ -1083,7 +1083,7 @@ var PLY = (function ($) {
             console.log("TwoTE");
             // must properly update trans on termination of second touch 
             // append to my transform the offset of the remaining touch 
-            var ed = $.data(evt.target);
+            var ed = $.data(evt.target,"ply");
             // evt.touches_active_on_element should have length 1
             for (var touch in evt.touches_active_on_element);
             ed.trans = "translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle];
