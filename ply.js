@@ -31,7 +31,7 @@ var PLY = (function ($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 6c458b1 test if changing to bubbling mode on the handlers allow the titlebar scroll to work again %#";
+    var git_context = "#% a55b0f3 doesnt look like it fixed it on ios6. going back now to double check ios5 %#";
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
