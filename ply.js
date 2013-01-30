@@ -26,20 +26,12 @@
 // IN THE SOFTWARE. 
 // ============================================================================
 
-var PLY = (function ($) {
-    
-    // all vars except the variable "exposed" are private variables 
-    var log_buffer = [];
-
-    var git_context = "#% REVISION %#";
+var PLY = (function ($) {    
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
     var exposed = {
-
-        // version string updated with git hash from scripts
-        revision: git_context.slice(3,-3),
-
+       
         // Never assume that keys is not filled with keys that were held down 
         // the last time the browser was in focus.
         keys_depressed: {}, 
@@ -88,28 +80,15 @@ var PLY = (function ($) {
         // event handlers so that the test site can be a bit more efficient about 
         // re-updating the DOM. I will eventually let the events that don't 
         // change the debugprints to also not set this either. 
-        event_processed: true, 
-        debug: true,
+        event_processed: true,         
         append_logs_dom: true, 
         escape: escapeHtml,
         serialize: serialize, // exposed helper functions
         isInDOM: isInDOM, 
-        internalCheck: internalCheck
+        sanityCheck: internalCheck // this is like a unit test that you can run any time
     };
 
-
-    var AssertException, assert; 
-    
-    AssertException = function (message) { this.message = message; };
-    AssertException.prototype.toString = function () {
-        return 'AssertException: ' + this.message;
-    };
-
-    assert = function (exp, message) {
-        if (!exp) {
-            throw new AssertException(message);
-        }
-    };
+    var debug = DEBUG.enabled;
 
     // this HTML escapist came from mustache.js
     var entityMap = {
@@ -154,49 +133,7 @@ var PLY = (function ($) {
         return false;
     }
 
-    
-    var original_console_log = console.log;
-    // echo console logs to the debug 
-    var instrumented_log = function () {
-        original_console_log.apply(window.console, arguments);
-        if (!exposed.debug) return;
-        var str = "";
-        for (var i=0;i<arguments.length;++i) {
-            str += escapeHtml(serialize(arguments[i])).replace(/ {2}/g,'</br>');
-            str += ", ";
-        }
-        str = str.slice(0,-2);
-        var now = Date.now();
-        var html_str = '<div class="log" data-time="'+now+'">'+str+'</div>';
-        log_buffer.push(html_str);
-        if (!exposed.append_logs_dom) return;
-        $("#debug_log").prepend(html_str); 
-        // this means all logs in your application get dumped into #debug_log if 
-        // you've got one
-    };
-
-    if (exposed.debug) {
-        console.log = instrumented_log; // pre-empt usage of this if starting off not debug
-        // if the previous line is not conditional on debug then it will be always
-        // possible to "turn on debug" but with this here like this debug is never instrumented
-        // when debug is initially off.
-
-        // set up a way to show the log buffer if debug mode 
-        // (note toggling the debug off will stop logs being written)
-        // (and if debug is not true to begin with, no button is made)
-        var show_log_buffer = false;
-        $("#log_buffer_dump").before($('<button>toggle full log buffer snapshot</button>').on('click',function(){
-            show_log_buffer = !show_log_buffer;
-            if (show_log_buffer) {
-                $("#log_buffer_dump").html(log_buffer.join(''));
-            } else {
-                $("#log_buffer_dump").html("");
-            }
-        })).on("touchenter",function(){console.log("touchenter on toggle buffer dump button");}).on('touchleave',function(){console.log("touchleave on toggle buffer dump button");});
-
-    }
-
-    // this is a helper for logging touchlists for debug purposes
+    // this is a helper for logging touchlists for friendlier debug output
     function id_string_for_touch_list(list) {
         var str = "[";
         for (var i=0; i<list.length; ++i) {
@@ -205,7 +142,7 @@ var PLY = (function ($) {
         return str.slice(0,-2)+"]";
     }
 
-    // for scoped iteration over an object
+    // for scoped iteration over an object (faster version of jquery each)
     function each(obj, f) {
         for (var i in obj) {
             f(i, obj[i]);
@@ -745,7 +682,7 @@ var PLY = (function ($) {
             var now = Date.now();
             var diff = Math.min(now - exposed.tmTime,200);
             exposed.tmTime = now; // update this last
-            if (exposed.debug) {
+            if (debug) {
                 var profile = now - start;
                 var dispatchProfile = now - beforeDispatch;
                 exposed.tmProfile += (profile - exposed.tmProfile) * 0.02;
@@ -877,7 +814,7 @@ var PLY = (function ($) {
     // use each because we need a scoped loop
     each(handlers_for_doc, function (event_name,v) {
         if (!v) return; 
-        document.addEventListener(event_name, function () {
+        document.addEventListener(event_name, debug?function () {
             try {
                 v.apply(this, arguments);
             } catch (e) {
@@ -887,8 +824,8 @@ var PLY = (function ($) {
                 log_buffer.push(html);
                 throw e; // rethrow to give it to debugging safari, rather than be silent
             }
-            exposed.event_processed = true; 
-        }, true); // hook to capture phase to catch in the event of stopPropagation()
+            DEBUG.event_processed = true; 
+        }:v, true); // hook to capture phase to catch in the event of stopPropagation()
     });
     console.log("UA: "+navigator.userAgent);
     console.log("window.devicePixelRatio:", window.devicePixelRatio);
