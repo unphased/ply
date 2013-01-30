@@ -29,6 +29,7 @@
 var PLY = (function ($) {
 
     var assert = DEBUG.assert || function(){};
+    var datenow = DEBUG.datenow;
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
@@ -53,7 +54,7 @@ var PLY = (function ($) {
         click_possible: true, 
 
         // used by touchmove event to run code only when necessary
-        tmTime: Date.now(),
+        tmTime: datenow(),
 
         // converges on the time it takes to run touchmove
         tmProfile: 3, 
@@ -537,7 +538,7 @@ var PLY = (function ($) {
             // and gives browser about 7 ms of grace-period between touchmove events
             // (which is way more than it should be taking esp. since I start the timing after
             // completing ply transform tasks)
-            var start = Date.now();
+            var start = datenow();
             if (start - exposed.tmTime < 7) return; // discard the event
             
             var et = evt.touches;
@@ -570,7 +571,7 @@ var PLY = (function ($) {
 
             //console.log("elems=",elems);
 
-            var beforeDispatch = Date.now();
+            var beforeDispatch = datenow();
 
             // for each element
             for (var ni in elems) {
@@ -676,7 +677,7 @@ var PLY = (function ($) {
                     }
                 }
             }
-            var now = Date.now();
+            var now = datenow();
             var diff = Math.min(now - exposed.tmTime,200);
             exposed.tmTime = now; // update this last
             if (DEBUG.enabled) {
