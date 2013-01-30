@@ -444,7 +444,8 @@ var PLY = (function ($) {
             for (var id in ep) {
                 if (!hash[id] && id !== "m") {
                     if (ep[id].hasOwnProperty('ni')) { // if is a touch that requires removing from data
-                        var ed = $.data(ep[id].e, 'ply');
+                        var ei = ep[id];
+                        var ed = $.data(ei.e, 'ply');
                         // this touch is no longer valid so remove from element's touch hash
                         delete ed.t[id];
                         // update count
@@ -464,16 +465,25 @@ var PLY = (function ($) {
                             default:
                                 console.log("nthtouchend n="+ed.count);
                         }
-                        event.changedTouch = ep[id].t;
+                        event.changedTouch = ei.t;
                         event.touches_active_on_element = ed.t;
-                        var defaultNotPrevented = ep[id].e.dispatchEvent(event);
+                        var defaultNotPrevented = ei.e.dispatchEvent(event);
 
                         // now this is super neat. I don't know if preventDefault on touchend will change
                         // the behavior (for firing or not firing click), but with ply it will be possible
                         // to prevent the click by preventDefault on onetouchend! How nice is that? 
                         if (defaultNotPrevented && ed.count === 0 && exposed.click_possible) {
-                            // trigger click via jQuery because why the hell implement this. 
-                            $(ep[id].e).click();
+                            // the naive $.click() generally fails on anchor elements because 
+                            // probably for preventing script kiddie nastiness. 
+
+                            // So, I fire a click event created using the DOM API and attempt to 
+                            // fill it up with what data is available in the original touchstart. 
+                            var clickevent = document.createEvent("MouseEvents");
+                            // Not sure if touch can provide a screenX/Y
+                            clickevent.initMouseEvent("click", true, true, window, 1, 
+                                ei.t.screenX, ei.t.screenY, ei.t.clientX, ei.t.clientY, 
+                                false, false, false, false, 0, null);
+                            click_not_prevented = ei.e.dispatchEvent(clickevent);
                         }
 
                         /* *** this stuff gotta move out of ply domain -- also wont be needing count loop since i track count now (duuuh)
