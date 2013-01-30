@@ -43,6 +43,15 @@ var PLY = (function ($) {
         // touches are stored under their id as key.
         pointer_state: {}, 
 
+        // this is the global state that tracks whether a short single touch 
+        // can be interpreted as a click. 
+        // This can be implemented a ton of different ways but putting it here
+        // is probably most straightforward. 
+        // This flag is what allows us to seamlessly (and without the 300ms 
+        // delay) issue a click, however obviously the double-tap zoom gesture
+        // is not going to work on ply-enabled elements)
+        click_possible: true, 
+
         // used by touchmove event to run code only when necessary
         tmTime: Date.now(),
 
@@ -275,10 +284,11 @@ var PLY = (function ($) {
 
             var ep = exposed.pointer_state;
             var en = exposed.node_ids;
-            var ps_count = 0;
+            var ps_count = 0; // ps_count at beginning
             for (var x in ep) {
                 if (x !== "m") ps_count++;
             }
+            var ps_count_real = ps_count; // ps_count, updated
             var seen_target;
             var data_list = [];
             assert(evt.changedTouches.length > 0, "evt.changedTouches length > 0 on touchstart: "+evt.changedTouches.length);
@@ -356,7 +366,7 @@ var PLY = (function ($) {
                         event.changedTouch = dj.t;
                         // also allow the event handler to inspect the other touches (this is not a full blown TouchList and if you modify this structure from your handler things may end badly)
                         event.touches_active_on_element = dt.t;
-                        var defPrevented = seen_target.dispatchEvent(event);
+                        var defNotPrevented = seen_target.dispatchEvent(event);
                     }
                 }
                 //if (ps_count === 0) {
@@ -373,9 +383,14 @@ var PLY = (function ($) {
             for (var k=0;k<d_l;++k) { // go and insert the new touches into ep
                 var dk = data_list[k];
                 ep[dk.id] = dk;
+                ps_count_real++;
             }
             if (!exposed.allow_scroll) { // never allow scroll once you start manipulating something 
                 evt.preventDefault();
+            }
+            if (ps_count_real > 1) {
+                // if at any point two touches exist, the click event is never fired on a ply enabled element
+                click_possible = false;
             }
         },
 
@@ -451,7 +466,16 @@ var PLY = (function ($) {
                         }
                         event.changedTouch = ep[id].t;
                         event.touches_active_on_element = ed.t;
-                        var defaultPrevented = ep[id].e.dispatchEvent(event);
+                        var defaultNotPrevented = ep[id].e.dispatchEvent(event);
+
+                        // now this is super neat. I don't know if preventDefault on touchend will change
+                        // the behavior (for firing or not firing click), but with ply it will be possible
+                        // to prevent the click by preventDefault on onetouchend! How nice is that? 
+                        if (defaultNotPrevented && ed.count === 0 && exposed.click_possible) {
+                            // trigger click via jQuery because why the hell implement this. 
+                            $(ep[id].e).click();
+                        }
+
                         /* *** this stuff gotta move out of ply domain -- also wont be needing count loop since i track count now (duuuh)
                         // we set the transform on the data for the element while leaving 
                         // touch info the same (as I want to preserve the semantics of pointer_state)
@@ -484,6 +508,7 @@ var PLY = (function ($) {
             }
             if (etl === 0) { // this indicates no touches remain
                 exposed.allow_scroll = true;
+                click_possible = true;
             }
         }),
         touchcancel: touchend_touchcancel,
@@ -578,7 +603,13 @@ var PLY = (function ($) {
                     // which is probably about as efficient as we can get given what is available (early 2013).
                     // Since this is the single finger case there is no transform computation so the event
                     // will be sent like usual
-                    var defaultPrevented = en[ni].dispatchEvent(event);
+                    var defaultNotPrevented = en[ni].dispatchEvent(event);
+
+                    // if at any point a single touch has moved too far, prevent it from ever firing 
+                    // the click event 
+                    if (exposed.click_possible && (Math.abs(event.deltaX)+Math.abs(event.deltaY)) > 10) {
+                        exposed.click_possible = false;
+                    }
                 } else {
                     var two, j;
                     j=0; 
@@ -625,7 +656,7 @@ var PLY = (function ($) {
                     event2.rotate = currt_angle - start_angle;
                     event2.translateX = xc_bar - xs_bar;
                     event2.translateY = yc_bar - ys_bar;
-                    var defaultPrevented2 = en[ni].dispatchEvent(event2);
+                    var defaultNotPrevented2 = en[ni].dispatchEvent(event2);
 
                     if (nd.count > 2) {
                         console.log("total " + nd.count + " touches:", nd.t);
