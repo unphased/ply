@@ -22,6 +22,49 @@ var DEBUG = (function() {
         }
     };
 
+    // this HTML escapist came from mustache.js
+    var entityMap = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': '&quot;',
+        "'": '&#39;',
+        "/": '&#x2F;'
+    };
+    function escapeHtml(string) {
+        return String(string).replace(/[&<>"'\/]/g, function (s) {
+            return entityMap[s];
+        });
+    }
+
+    var json_handler = function (key,val) {
+        if (val instanceof HTMLElement) {
+            // tells us which child we are (incl. textnodes)
+            // for (var k=0,e=val; (e = e.previousSibling); ++k); 
+            // tells us which (real node) index it is
+            var k = val.parentNode.children?Array.prototype.indexOf.call(val.parentNode.children,val):undefined;
+            var cn = val.className;
+            var tn = val.tagName;
+            var id = val.id;
+            if (tn === "HTML") { cn = ""; } // too much output due to Modernizr
+            return "<"+tn+(k?" #"+k:"")+(cn?" c="+cn:"")+(id?" id="+id:"")+">";
+        }
+        return val;
+    };
+    function serialize(arg) {
+        if (typeof arg === "function") return "function";
+        return JSON.stringify(arg,json_handler).replace(/"([^"]*)":/g,"$1: ").replace(/\},([^ ])/g,'},  $1').replace(/,([^ ])/g,', $1');
+    }
+
+    function isInDOM(e) {
+        while ((e = e.parentNode)) {
+            if (e == document) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 	// all vars except the variable "exposed" are private variables 
 	var log_buffer = [];
 
@@ -87,9 +130,13 @@ var DEBUG = (function() {
     var exposed = {
         enabled: true,
         assert: assert,
+        escapeHtml: escapeHtml,
+        serialize: serialize,
+        isInDOM: isInDOM,
         revision: git_context.slice(3,-3), 
         clean_list: clean,
-        debug_controls: debugControls
+        debug_controls: debugControls, 
+        event_processed: false
     };
     return exposed;
 })();

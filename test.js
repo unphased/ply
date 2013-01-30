@@ -55,7 +55,7 @@
         // Preventing a mess in PLY.pointer_state caused by .html() setting #debug
         var pp = PLY.pointer_state;
         for (var id in pp) {
-            if (pp[id].e && !PLY.isInDOM(pp[id].e)) { // if not touch don't worry about it
+            if (pp[id].e && !DEBUG.isInDOM(pp[id].e)) { // if not touch don't worry about it
                 delete pp[id];
             }
         }
