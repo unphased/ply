@@ -222,7 +222,7 @@ var PLY = (function ($) {
 
     // entry point for code is the document's event handlers. 
     var handlers_for_doc = {
-        click: function (evt) { console.log('click', evt.pageX, evt.pageY); 
+        click: function (evt) { console.log('click', evt.pageX, evt.pageY, "on", evt.target); 
 
         },
         mousedown: function (evt) { console.log('mousedown',evt.pageX,evt.pageY);
