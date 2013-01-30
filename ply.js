@@ -28,11 +28,7 @@
 
 var PLY = (function ($) {
 
-<<<<<<< HEAD
-    var git_context = "#% cd63416 maybe this works %#";
-=======
     var assert = DEBUG.assert;
->>>>>>> master
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
