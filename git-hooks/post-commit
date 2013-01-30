@@ -2,7 +2,7 @@
 #ASSUMES WE ARE IN MASTER BRANCH
 [ `git rev-parse --abbrev-ref HEAD` != "master" ] && exit 1
 git checkout gh-pages
-git merge master
+git merge -Xtheirs master # favor master (as that is where *all* dev occurs; gh-pages is where auto-edits occur)
 # update the js file with commit identification information from git
 sed -i_bak "s/#%.*%#/#% `git log master -1 --format="%h %s"` %#/" debug.js
 git add debug.js
