@@ -25,7 +25,7 @@ var DEBUG = (function() {
 	// all vars except the variable "exposed" are private variables 
 	var log_buffer = [];
 
-	var git_context = "#% 732c0ef a lot more fixing was left apparnetly %#";
+	var git_context = "#% 1c85a08 a more appropriate approach to automerge for ghpages %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
