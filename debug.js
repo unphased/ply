@@ -7,7 +7,7 @@
 // #debug_log
 // #log_buffer_dump
 
-(function() {
+(function() { 
 
 	var AssertException, assert; 
     
