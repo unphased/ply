@@ -78,13 +78,6 @@ var PLY = (function ($) {
         // what will be necessary, however, is for mutation events/observer to 
         // clear out the values in here so as to not leak DOM nodes. 
 
-        // This is just marked when any event makes its way through the primary
-        // event handlers so that the test site can be a bit more efficient about 
-        // re-updating the DOM. I will eventually let the events that don't 
-        // change the debugprints to also not set this either. 
-        escape: escapeHtml,
-        serialize: serialize, // exposed helper functions
-        isInDOM: isInDOM, 
         sanityCheck: internalCheck // this is like a unit test that you can run any time
         // sanityCheck is not bound to/dependent on debug status
     };
