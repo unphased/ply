@@ -136,6 +136,11 @@ var DEBUG = (function() {
         revision: git_context.slice(3,-3), 
         clean_list: clean,
         debug_controls: debugControls, 
+
+        // This is just marked when any event makes its way through the primary
+        // event handlers so that the test site can be a bit more efficient about 
+        // re-updating the DOM. I may eventually let the events that don't 
+        // change the debugprints to also not set this either. 
         event_processed: false
     };
     return exposed;

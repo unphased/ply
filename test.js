@@ -69,7 +69,7 @@
             var str = '<div>node_ids:</div><ol start="0">';
             // dump the contents of $.data(e,'ply') for e in exposed.node_ids
             for (var j=0;j<PLY.node_ids.length;++j) {
-                str += "<li>"+PLY.escape(PLY.serialize($.data(PLY.node_ids[j],'ply')))+"</li>";
+                str += "<li>"+DEBUG.escapeHtml(DEBUG.serialize($.data(PLY.node_ids[j],'ply')))+"</li>";
             }
             str += "</ol>";
 
@@ -78,7 +78,7 @@
             for (var prop in PLY) {
                 str += "<li>";
                 str += prop + ": "; 
-                str += PLY.escape(PLY.serialize(PLY[prop]));
+                str += DEBUG.escapeHtml(DEBUG.serialize(PLY[prop]));
                 str += "</li>";
             }
             str += "</ul><div>revision: "+DEBUG.revision+"</div>";
