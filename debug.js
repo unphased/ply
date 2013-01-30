@@ -68,7 +68,7 @@ var DEBUG = (function() {
 	// all vars except the variable "exposed" are private variables 
 	var log_buffer = [];
 
-	var git_context = "#% d60f69f weird that ios6 seems to share some scope. kinda bad really %#";
+	var git_context = "#% db30deb removing the other button and fixing the first one %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
