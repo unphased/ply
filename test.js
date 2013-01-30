@@ -1,3 +1,5 @@
+// depends on debug.js
+
 (function() {
     var lastTime = 0;
     var vendors = ['ms', 'moz', 'webkit', 'o'];
@@ -39,17 +41,17 @@
             requestAnimationFrame(debug_refresh);
         else console.log("document has lost focus. Stopping rAF");
 
-        if (!PLY.debug) return; // wait next tick (iOS does not issue window focus
+        if (!DEBUG.enabled) return; // wait next tick (iOS does not issue window focus
                                 // rAF start/restart won't work with toggling debug)
-        if (!PLY.event_processed) {
-            if (no_events_processed_for++ > 0) {
+        if (!DEBUG.event_processed) {
+            if (no_events_processed_for++ > 0) { // counts ticks (technically could be a boolean)
                 return; // wait next tick 
             }
         } else {
             no_events_processed_for = 0;
         }
 
-        PLY.event_processed = false; // mark it updated: we're gonna go update the stuff. 
+        DEBUG.event_processed = false; // mark it updated: we're gonna go update the stuff. 
 
         // Preventing a mess in PLY.pointer_state caused by .html() setting #debug
         var pp = PLY.pointer_state;
@@ -59,8 +61,8 @@
             }
         }
 
-        // gonna do our check impl in ply that got exposed
-        PLY.internalCheck();
+        // gonna do our sanity check for ply
+        PLY.sanityCheck();
         
         if (debug_show_hide) {
             // skip the HTML debug dump of the data if its view is hidden
@@ -80,7 +82,7 @@
                 str += PLY.escape(PLY.serialize(PLY[prop]));
                 str += "</li>";
             }
-            str += "</ul>";
+            str += "</ul><div>revision: "+DEBUG.revision+"</div>";
 
             $("#debug").html(str); 
         }
