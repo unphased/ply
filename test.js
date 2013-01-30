@@ -220,6 +220,5 @@
         debug_show_hide = !debug_show_hide;
     });
 
-    $("h1").after('<button id="append_logs_dom_toggle" onclick="PLY.append_logs_dom = !PLY.append_logs_dom">toggle realtime log display</button>')
-        .after('<button id="debug_toggle" onclick="PLY.debug = !PLY.debug">toggle all debug</button>');
+    $("h1").after(DEBUG.debug_controls());
 }());

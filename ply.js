@@ -28,7 +28,7 @@
 
 var PLY = (function ($) {
 
-    var assert = DEBUG.assert;
+    var assert = DEBUG.assert || function(){};
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
@@ -82,8 +82,6 @@ var PLY = (function ($) {
         // event handlers so that the test site can be a bit more efficient about 
         // re-updating the DOM. I will eventually let the events that don't 
         // change the debugprints to also not set this either. 
-        event_processed: true,         
-        append_logs_dom: true, 
         escape: escapeHtml,
         serialize: serialize, // exposed helper functions
         isInDOM: isInDOM, 
@@ -815,7 +813,7 @@ var PLY = (function ($) {
     // use each because we need a scoped loop
     each(handlers_for_doc, function (event_name,v) {
         if (!v) return; 
-        document.addEventListener(event_name, DEBUG.enabled?function () {
+        document.addEventListener(event_name, DEBUG?function () {
             try {
                 v.apply(this, arguments);
             } catch (e) {

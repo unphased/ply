@@ -33,7 +33,7 @@ var DEBUG = (function() {
     // echo console logs to the debug 
     var instrumented_log = function () {
         original_console_log.apply(window.console, arguments);
-        if (!exposed.debug) return;
+        if (!exposed.enabled) return;
         var str = "";
         for (var i=0;i<arguments.length;++i) {
             str += escapeHtml(serialize(arguments[i])).replace(/ {2}/g,'</br>');
@@ -43,7 +43,6 @@ var DEBUG = (function() {
         var now = datenow();
         var html_str = '<div class="log" data-time="'+now+'">'+str+'</div>';
         log_buffer.push(html_str);
-        if (!exposed.append_logs_dom) return;
         $("#debug_log").prepend(html_str); 
         // this means all logs in your application get dumped into #debug_log if 
         // you've got one
@@ -68,6 +67,7 @@ var DEBUG = (function() {
     })).on("touchenter",function(){console.log("touchenter on toggle buffer dump button");})
         .on('touchleave',function(){console.log("touchleave on toggle buffer dump button");});
 
+    // clears out old values in debug log (run me periodically)
     function clean() {
         var now = datenow();
         var debuglog = $("#debug_log")[0];
@@ -79,9 +79,17 @@ var DEBUG = (function() {
         }
     }
 
-    return {
+    // return HTML string containing controls (yeah its a bit ugly but arguably more portable than direct dom manipulation)
+    function debugControls() {
+        return '<button id="debug_toggle" onclick="PLY.debug = !PLY.debug">toggle all debug</button><button id="append_logs_dom_toggle" onclick="PLY.append_logs_dom = !PLY.append_logs_dom">toggle realtime log display</button>';
+    }
+
+    var exposed = {
+        enabled: true,
         assert: assert,
         revision: git_context.slice(3,-3), 
-        clean_list: clean
+        clean_list: clean,
+        debug_controls: debugControls
     };
+    return exposed;
 })();
