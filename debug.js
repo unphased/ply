@@ -91,9 +91,5 @@ var DEBUG = (function() {
         clean_list: clean,
         debug_controls: debugControls
     };
-<<<<<<< HEAD
-})();
-=======
     return exposed;
 })();
->>>>>>> master
