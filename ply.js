@@ -731,7 +731,16 @@ var PLY = (function ($) {
         ply_twotouchesstart: function(evt) {
             console.log("2TS", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
             // must properly update the transform (trans) on initiation of second touch 
-            var ed = $.data(evt.target,"ply");
+            var dt = $.data(evt.target,"ply");
+            var eta = evt.touches_active_on_element;
+            var touch; 
+            for (var t in eta) {
+                // grab the one that is not evt.target
+                if (eta[t].t !== evt.changedTouch) {
+                    touch = eta[t].t;
+                }
+            }
+            
         },
         ply_threetouchesstart: function(evt) {
             console.log("3TS", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
@@ -745,7 +754,7 @@ var PLY = (function ($) {
             // append to my transform the offset of the remaining touch 
             var ed = $.data(evt.target,"ply");
             // evt.touches_active_on_element should have length 1
-            for (var t in evt.touches_active_on_element);
+            for (var t in evt.touches_active_on_element); // grabs the remaining touch
             var touch = evt.touches_active_on_element[t];
             ed.trans = "translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle];
             //console.log("ed trans"+"translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle]);
