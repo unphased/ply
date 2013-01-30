@@ -446,20 +446,16 @@ var PLY = (function ($) {
                     if (ep[id].hasOwnProperty('ni')) { // if is a touch that requires removing from data
                         var ei = ep[id];
                         var ed = $.data(ei.e, 'ply');
-                        // this touch is no longer valid so remove from element's touch hash
-                        delete ed.t[id];
-                        // update count
-                        ed.count--;
-                        
+
                         var event = document.createEvent('HTMLEvents'); 
                         switch (ed.count) {
-                            case 0: 
+                            case 1: 
                                 event.initEvent('ply_onetouchend',true,true);
                                 break;
-                            case 1: 
+                            case 2: 
                                 event.initEvent('ply_twotouchesend',true,true);
                                 break;
-                            case 2: 
+                            case 3: 
                                 event.initEvent('ply_threetouchesend',true,true);
                                 break;
                             default:
@@ -485,6 +481,12 @@ var PLY = (function ($) {
                                 false, false, false, false, 0, null);
                             click_not_prevented = ei.e.dispatchEvent(clickevent);
                         }
+
+                        // this touch is no longer valid so remove from element's touch hash
+                        delete ed.t[id];
+                        // update count
+                        ed.count--;
+                        
 
                         /* *** this stuff gotta move out of ply domain -- also wont be needing count loop since i track count now (duuuh)
                         // we set the transform on the data for the element while leaving 
@@ -728,6 +730,7 @@ var PLY = (function ($) {
         ply_twotouchesstart: function(evt) {
             console.log("2TS", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
             // must properly update the transform (trans) on initiation of second touch 
+            var ed = $.data(evt.target,"ply");
         },
         ply_threetouchesstart: function(evt) {
             console.log("3TS", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
@@ -744,7 +747,7 @@ var PLY = (function ($) {
             for (var t in evt.touches_active_on_element);
             var touch = evt.touches_active_on_element[t];
             ed.trans = "translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle];
-            console.log("ed trans"+"translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle]);
+            //console.log("ed trans"+"translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle]);
         },
         ply_threetouchesend: function(evt) {
             console.log("ThreeTE");
