@@ -68,7 +68,7 @@ var DEBUG = (function() {
 	// all vars except the variable "exposed" are private variables 
 	var log_buffer = [];
 
-	var git_context = "#% 3d6b54c hmmmmmmm debugging click handler %#";
+	var git_context = "#% f3b9752 a custom click emulation for short touches %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
