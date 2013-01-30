@@ -390,7 +390,7 @@ var PLY = (function ($) {
             }
             if (ps_count_real > 1) {
                 // if at any point two touches exist, the click event is never fired on a ply enabled element
-                click_possible = false;
+                exposed.click_possible = false;
             }
         },
 
@@ -508,7 +508,7 @@ var PLY = (function ($) {
             }
             if (etl === 0) { // this indicates no touches remain
                 exposed.allow_scroll = true;
-                click_possible = true;
+                exposed.click_possible = true;
             }
         }),
         touchcancel: touchend_touchcancel,
