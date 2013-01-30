@@ -26,7 +26,9 @@
 // IN THE SOFTWARE. 
 // ============================================================================
 
-var PLY = (function ($) {    
+var PLY = (function ($) {
+
+    var assert = DEBUG.assert;
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
@@ -86,9 +88,8 @@ var PLY = (function ($) {
         serialize: serialize, // exposed helper functions
         isInDOM: isInDOM, 
         sanityCheck: internalCheck // this is like a unit test that you can run any time
+        // sanityCheck is not bound to/dependent on debug status
     };
-
-    var debug = DEBUG.enabled;
 
     // this HTML escapist came from mustache.js
     var entityMap = {
@@ -682,7 +683,7 @@ var PLY = (function ($) {
             var now = Date.now();
             var diff = Math.min(now - exposed.tmTime,200);
             exposed.tmTime = now; // update this last
-            if (debug) {
+            if (DEBUG.enabled) {
                 var profile = now - start;
                 var dispatchProfile = now - beforeDispatch;
                 exposed.tmProfile += (profile - exposed.tmProfile) * 0.02;
@@ -814,7 +815,7 @@ var PLY = (function ($) {
     // use each because we need a scoped loop
     each(handlers_for_doc, function (event_name,v) {
         if (!v) return; 
-        document.addEventListener(event_name, debug?function () {
+        document.addEventListener(event_name, DEBUG.enabled?function () {
             try {
                 v.apply(this, arguments);
             } catch (e) {

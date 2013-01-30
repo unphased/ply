@@ -8,7 +8,6 @@
         window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame']
                                    || window[vendors[x]+'CancelRequestAnimationFrame'];
     }
-    var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
     if (!window.requestAnimationFrame)
         window.requestAnimationFrame = function(callback, element) {
             var currTime = datenow();
@@ -205,14 +204,7 @@
             psmc.children[i].style[transform_name] = hide_transform;
         }
         // cleaning up the debug log 
-        var now = Date.now();
-        var debuglog = $("#debug_log")[0];
-        var dc = debuglog.children;
-        for (i = dc.length-1; dc.length > 50 && i >= 0; --i) {
-            var timestamp = dc[i].getAttribute('data-time');
-            if (timestamp && timestamp < (now - 15000))
-                debuglog.removeChild(dc[i]);
-        }
+        DEBUG.clean_list();
     }
     requestAnimationFrame(debug_refresh);
     $(window).focus(function(){
