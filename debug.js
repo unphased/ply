@@ -124,7 +124,7 @@ var DEBUG = (function() {
 
     // return HTML string containing controls (yeah its a bit ugly but arguably more portable than direct dom manipulation)
     function debugControls() {
-        return '<button id="debug_toggle" onclick="PLY.debug = !PLY.debug">toggle all debug</button><button id="append_logs_dom_toggle" onclick="PLY.append_logs_dom = !PLY.append_logs_dom">toggle realtime log display</button>';
+        return '<button id="debug_toggle" onclick="DEBUG.enabled = !DEBUG.enabled">toggle all debug</button>';
     }
 
     var exposed = {
