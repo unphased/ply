@@ -355,6 +355,11 @@ var PLY = (function ($) {
                                 break;
                             case 2: 
                                 event.initEvent('ply_twotouchesstart',true,true);
+                                // set an updated start position for the existing point to prevent a "warp"
+                                // find the first touch on the element and set it to current value
+                                for (var ti in dt.t) { if (ti !== dj.id) { break; } }
+                                ep[ti].xs2 = dj.t.pageX;
+                                ep[ti].ys2 = dj.t.pageY;
                                 break;
                             case 3: 
                                 event.initEvent('ply_threetouchesstart',true,true);
@@ -646,15 +651,20 @@ var PLY = (function ($) {
                     //console.log("two touches",one,two,"on",en[ni]);
                     var event2 = document.createEvent('HTMLEvents'); // this is for compatibility with DOM Level 2
                     event2.initEvent('ply_transform',true,true);
-                    var xs_bar = 0.5 * (one.xs + two.xs);
-                    var ys_bar = 0.5 * (one.ys + two.ys);
+                    var xs1 = one.xs2 || one.xs;
+                    var ys1 = one.ys2 || one.ys;
+                    var xs2 = two.xs2 || two.xs;
+                    var ys2 = two.ys2 || two.ys;
+                    // might be the case that only one of these should have the xs2/ys2 
+                    var xs_bar = 0.5 * (xs1 + xs2);
+                    var ys_bar = 0.5 * (ys1 + ys2);
                     var xc_bar = 0.5 * (one.xc + two.xc);
                     var yc_bar = 0.5 * (one.yc + two.yc);
                     event2.startX = xs_bar; // the originating origin point around which scale+rotate happens
                     event2.startY = ys_bar;
                     // TODO: reduce to a single sqrt, and otherwise optimize the crap out of this
-                    var xs_diff = one.xs - two.xs;
-                    var ys_diff = one.ys - two.ys;
+                    var xs_diff = xs1 - xs2;
+                    var ys_diff = ys1 - ys2;
                     var xc_diff = one.xc - two.xc;
                     var yc_diff = one.yc - two.yc;
                     var xs_dist = Math.abs(xs_diff);
@@ -696,6 +706,8 @@ var PLY = (function ($) {
         touchleave: function(evt) {
             console.log("touchleave");
         }, */
+
+        // the following handlers are ply use cases
         ply_onetouchstart: function(evt) {
             console.log("1S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
             //assert(this === evt.changedTouch.target, "this is evt.ct.target (firsttouchstart)");
@@ -719,7 +731,7 @@ var PLY = (function ($) {
             evt.target.style.outline = "1px solid transparent";
             var etst = evt.target.style[TransformStyle];
             if (!etst || etst === "none") {
-                dt.trans = "scale3d(1,1,0.5) scale3d(1,1,2)"; // a roundabout way of forcing 3d matrix
+                dt.trans = ""; // I know of no way to avoid matrix() matrix without applying an actual 3d matrix does not interfere
             } else {
                 dt.trans = etst;
             }
@@ -730,21 +742,11 @@ var PLY = (function ($) {
         },
         ply_twotouchesstart: function(evt) {
             console.log("2S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
-            // must properly update the transform (trans) on initiation of second touch 
-            var dt = $.data(evt.target,"ply");
-            var eta = evt.touches_active_on_element;
-            var touch; 
-            for (var t in eta) {
-                // grab the one that is not evt.target
-                if (eta[t].t !== evt.changedTouch) {
-                    touch = eta[t].t;
-                }
-            }
-            
+            // The adjustment for linear transform of initial finger actually has to be taken care of by ply itself            
         },
         ply_threetouchesstart: function(evt) {
             console.log("3S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
-        },        
+        },
         ply_onetouchend: function(evt) {
             console.log("1E");
         },
