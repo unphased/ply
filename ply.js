@@ -697,7 +697,7 @@ var PLY = (function ($) {
             console.log("touchleave");
         }, */
         ply_onetouchstart: function(evt) {
-            console.log("1TS", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
+            console.log("1S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
             //assert(this === evt.changedTouch.target, "this is evt.ct.target (firsttouchstart)");
             assert(evt.target === evt.changedTouch.target, "this is evt.ct.target (firsttouchstart)");
             var dt = $.data(evt.target,"ply");
@@ -729,7 +729,7 @@ var PLY = (function ($) {
             }
         },
         ply_twotouchesstart: function(evt) {
-            console.log("2TS", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
+            console.log("2S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
             // must properly update the transform (trans) on initiation of second touch 
             var dt = $.data(evt.target,"ply");
             var eta = evt.touches_active_on_element;
@@ -743,13 +743,13 @@ var PLY = (function ($) {
             
         },
         ply_threetouchesstart: function(evt) {
-            console.log("3TS", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
+            console.log("3S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
         },        
         ply_onetouchend: function(evt) {
-            console.log("OneTE");
+            console.log("1E");
         },
         ply_twotouchesend: function(evt) {
-            console.log("TwoTE");
+            console.log("2E");
             // must properly update trans on termination of second touch 
             // append to my transform the offset of the remaining touch 
             var ed = $.data(evt.target,"ply");
@@ -760,7 +760,7 @@ var PLY = (function ($) {
             //console.log("ed trans"+"translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle]);
         },
         ply_threetouchesend: function(evt) {
-            console.log("ThreeTE");
+            console.log("3E");
         },
         ply_translate: function(evt) {
             //console.log("transform before setting translate: "+$(evt.target).css(TransformStyle));
