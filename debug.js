@@ -68,7 +68,7 @@ var DEBUG = (function() {
 	// all vars except the variable "exposed" are private variables 
 	var log_buffer = [];
 
-	var git_context = "#% db30deb removing the other button and fixing the first one %#";
+	var git_context = "#% d7ddb03 better debug names %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
