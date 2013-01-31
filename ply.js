@@ -29,6 +29,7 @@
 var PLY = (function ($) {
 
     var assert = DEBUG.assert || function(){};
+    var datenow = DEBUG.datenow;
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
@@ -53,7 +54,7 @@ var PLY = (function ($) {
         click_possible: true, 
 
         // used by touchmove event to run code only when necessary
-        tmTime: Date.now(),
+        tmTime: datenow(),
 
         // converges on the time it takes to run touchmove
         tmProfile: 3, 
@@ -446,20 +447,16 @@ var PLY = (function ($) {
                     if (ep[id].hasOwnProperty('ni')) { // if is a touch that requires removing from data
                         var ei = ep[id];
                         var ed = $.data(ei.e, 'ply');
-                        // this touch is no longer valid so remove from element's touch hash
-                        delete ed.t[id];
-                        // update count
-                        ed.count--;
-                        
+
                         var event = document.createEvent('HTMLEvents'); 
                         switch (ed.count) {
-                            case 0: 
+                            case 1: 
                                 event.initEvent('ply_onetouchend',true,true);
                                 break;
-                            case 1: 
+                            case 2: 
                                 event.initEvent('ply_twotouchesend',true,true);
                                 break;
-                            case 2: 
+                            case 3: 
                                 event.initEvent('ply_threetouchesend',true,true);
                                 break;
                             default:
@@ -485,6 +482,12 @@ var PLY = (function ($) {
                                 false, false, false, false, 0, null);
                             click_not_prevented = ei.e.dispatchEvent(clickevent);
                         }
+
+                        // this touch is no longer valid so remove from element's touch hash
+                        delete ed.t[id];
+                        // update count
+                        ed.count--;
+                        
 
                         /* *** this stuff gotta move out of ply domain -- also wont be needing count loop since i track count now (duuuh)
                         // we set the transform on the data for the element while leaving 
@@ -535,7 +538,7 @@ var PLY = (function ($) {
             // and gives browser about 7 ms of grace-period between touchmove events
             // (which is way more than it should be taking esp. since I start the timing after
             // completing ply transform tasks)
-            var start = Date.now();
+            var start = datenow();
             if (start - exposed.tmTime < 7) return; // discard the event
             
             var et = evt.touches;
@@ -568,7 +571,7 @@ var PLY = (function ($) {
 
             //console.log("elems=",elems);
 
-            var beforeDispatch = Date.now();
+            var beforeDispatch = datenow();
 
             // for each element
             for (var ni in elems) {
@@ -674,7 +677,7 @@ var PLY = (function ($) {
                     }
                 }
             }
-            var now = Date.now();
+            var now = datenow();
             var diff = Math.min(now - exposed.tmTime,200);
             exposed.tmTime = now; // update this last
             if (DEBUG.enabled) {
@@ -694,7 +697,7 @@ var PLY = (function ($) {
             console.log("touchleave");
         }, */
         ply_onetouchstart: function(evt) {
-            console.log("1TS", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
+            console.log("1S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
             //assert(this === evt.changedTouch.target, "this is evt.ct.target (firsttouchstart)");
             assert(evt.target === evt.changedTouch.target, "this is evt.ct.target (firsttouchstart)");
             var dt = $.data(evt.target,"ply");
@@ -726,28 +729,38 @@ var PLY = (function ($) {
             }
         },
         ply_twotouchesstart: function(evt) {
-            console.log("2TS", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
+            console.log("2S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
             // must properly update the transform (trans) on initiation of second touch 
+            var dt = $.data(evt.target,"ply");
+            var eta = evt.touches_active_on_element;
+            var touch; 
+            for (var t in eta) {
+                // grab the one that is not evt.target
+                if (eta[t].t !== evt.changedTouch) {
+                    touch = eta[t].t;
+                }
+            }
+            
         },
         ply_threetouchesstart: function(evt) {
-            console.log("3TS", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
+            console.log("3S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
         },        
         ply_onetouchend: function(evt) {
-            console.log("OneTE");
+            console.log("1E");
         },
         ply_twotouchesend: function(evt) {
-            console.log("TwoTE");
+            console.log("2E");
             // must properly update trans on termination of second touch 
             // append to my transform the offset of the remaining touch 
             var ed = $.data(evt.target,"ply");
             // evt.touches_active_on_element should have length 1
-            for (var t in evt.touches_active_on_element);
+            for (var t in evt.touches_active_on_element); // grabs the remaining touch
             var touch = evt.touches_active_on_element[t];
             ed.trans = "translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle];
-            console.log("ed trans"+"translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle]);
+            //console.log("ed trans"+"translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle]);
         },
         ply_threetouchesend: function(evt) {
-            console.log("ThreeTE");
+            console.log("3E");
         },
         ply_translate: function(evt) {
             //console.log("transform before setting translate: "+$(evt.target).css(TransformStyle));

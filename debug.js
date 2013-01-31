@@ -141,7 +141,8 @@ var DEBUG = (function() {
         // event handlers so that the test site can be a bit more efficient about 
         // re-updating the DOM. I may eventually let the events that don't 
         // change the debugprints to also not set this either. 
-        event_processed: false
+        event_processed: false, 
+        datenow: datenow
     };
     return exposed;
 })();
