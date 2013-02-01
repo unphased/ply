@@ -134,9 +134,7 @@ Indicative classes are assigned automatically to all page elements.
 
 ## Notes
 
-When using the library, please be careful about stopPropagation(). It can prevent things from functioning. Be aware that whenever any events are prevented from bubbling that ply's event handlers will be unable to process input: If this is done you can no longer rely on ply's features. 
-
-When DOM4 Mutation Observer is not present, ply will be unable to automatically assign all necessary classes to dynamically inserted elements. This can be addressed in two ways: You can insert your node in its entirety (with the initial `ply-` classes assigned) and the DOMNodeInserted DOM2 Mutation event can figure out the details. But if you modify the DOM in a way that requires changing the "manipulability" of an element, simply removing classes will not work. For this purpose I have defined functions (todo: write names of dynamic management functions here) to call to control ply's behavior.  
+(todo: determine if dynamic class tracking is to be a feature of the library: It may warrant its own separate library) When DOM4 Mutation Observer is not present, ply will be unable to automatically assign all necessary classes to dynamically inserted elements. This can be addressed in two ways: You can insert your node in its entirety (with the initial `ply-` classes assigned) and the DOMNodeInserted DOM2 Mutation event can figure out the details. But if you modify the DOM in a way that requires changing the "manipulability" of an element, simply removing classes will not work. For this purpose I have defined functions (todo: write names of dynamic management functions here) to call to control ply's behavior.  
 Note that if DOM4 Mutation Observers are supported (Safari 6.0+, Chrome 18+, Firefox 14) you will not even have dynamic update functions defined, the way to do it is simply remove the class!
 
 Disclaimer: No relation to [PLY](http://www.dabeaz.com/ply/) 
