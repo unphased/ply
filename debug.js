@@ -25,7 +25,7 @@
 	// all vars except the variable "exposed" are private variables 
 	var log_buffer = [];
 
-	var git_context = "#% REVISION %#";
+	var git_context = "#% ddbe5c8 doc update %#";
 
 
 	// version string updated with git hash from scripts
