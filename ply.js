@@ -651,7 +651,7 @@ var PLY = (function ($) {
                     //console.log("two touches",one,two,"on",en[ni]);
                     var event2 = document.createEvent('HTMLEvents'); // this is for compatibility with DOM Level 2
                     event2.initEvent('ply_transform',true,true);
-                    var xs1 = one.xs2 || one.xs;
+                    var xs1 = one.xs2 || one.xs; 
                     var ys1 = one.ys2 || one.ys;
                     var xs2 = two.xs2 || two.xs;
                     var ys2 = two.ys2 || two.ys;
