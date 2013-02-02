@@ -123,6 +123,17 @@
                     '<div class="pointer_marker"></div>'+
                     '<div class="pointer_marker"></div>'+
                     '<div class="pointer_marker"></div></div>'+
+                '<div id="pointer_secondary_start_marker_container">'+
+                    '<div class="pointer_marker_secondary"></div>'+
+                    '<div class="pointer_marker_secondary"></div>'+
+                    '<div class="pointer_marker_secondary"></div>'+
+                    '<div class="pointer_marker_secondary"></div>'+
+                    '<div class="pointer_marker_secondary"></div>'+
+                    '<div class="pointer_marker_secondary"></div>'+
+                    '<div class="pointer_marker_secondary"></div>'+
+                    '<div class="pointer_marker_secondary"></div>'+
+                    '<div class="pointer_marker_secondary"></div>'+
+                    '<div class="pointer_marker_secondary"></div></div>'+
                 '<div id="pointer_start_marker_container">'+
                     '<div class="pointer_start_marker"></div>'+
                     '<div class="pointer_start_marker"></div>'+
@@ -138,10 +149,12 @@
         }
         var jpmc = $("#pointer_marker_container");
         var jpsmc = $("#pointer_start_marker_container");
+        var jpssmc = $("#pointer_secondary_start_marker_container");
         var jechl = $("#element_current_highlight_layers");
         var jeshl = $("#element_start_highlight_layers");
         var pmc = jpmc[0];
         var psmc = jpsmc[0];
+        var pssmc = jpssmc[0];
         var echl = jechl[0];
         var eshl = jeshl[0];
         var scrollY = document.body.scrollTop;
@@ -158,6 +171,7 @@
             var eshli = eshl.children[i];
             var pci = pmc.children[i];
             var psci = psmc.children[i];
+            var pssci = pssmc.children[i];
             if (ppp.e || ppp.es === ppp.ec) {
                 // I defer the calling of elementFromPoint to here for performance reasons
                 // ply will never do this kind of heavy lifting without being told to
@@ -191,6 +205,11 @@
 
             pci.style[transform_name] = "translate3d("+ppp.xc+"px,"+ppp.yc+"px,0)";
             psci.style[transform_name] = "translate3d("+ppp.xs+"px,"+ppp.ys+"px,0)";
+            if (ppp.xs2) {
+                pssci.style[transform_name] = "translate3d("+ppp.xs2+"px,"+ppp.ys2+"px,0)";
+            } else {
+                pssci.style[transform_name] = hide_transform;
+            }
             if (ppp.fatness) {
                 var rounded_fatness = Math.floor(ppp.fatness*100);
                 pci.style.width = pci.style.height = rounded_fatness+"px";

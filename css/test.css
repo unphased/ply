@@ -48,7 +48,7 @@ div {
     position: absolute;
     top: 0; left: 0;
 }
-.pointer_marker,.pointer_start_marker {
+.pointer_marker,.pointer_start_marker,.pointer_marker_secondary {
     pointer-events: none;
     position: absolute;
     background-color: #33f;
@@ -75,6 +75,11 @@ div {
     background-color: #f33;
     border: #900 2px solid;
     box-shadow: 0 0 8px 0 #f33;
+}
+.pointer_marker_secondary {
+    background-color: #3c3;
+    border: #070 2px solid;
+    box-shadow: 0 0 8px 0 #3c3;
 }
 
 ul {
