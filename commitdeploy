@@ -9,7 +9,5 @@ then
 	git commit -a -m"commit-deploy scripted commit on master performed on host `hostname` at `date`" && ./deploy
 else 
 	echo "Using provided argument list as commit message"
-	echo "args are $*"
-	echo "args wrapped are \"$*\""
 	git commit -a -m"$*" && ./deploy
 fi
