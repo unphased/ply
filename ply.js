@@ -358,8 +358,8 @@ var PLY = (function ($) {
                                 // set an updated start position for the existing point to prevent a "warp"
                                 // find the first touch on the element and set it to current value
                                 for (var ti in dt.t) { if (ti !== dj.id) { break; } }
-                                ep[ti].xs2 = dj.t.pageX;
-                                ep[ti].ys2 = dj.t.pageY;
+                                ep[ti].xs2 = ep[ti].xc;
+                                ep[ti].ys2 = ep[ti].yc;
                                 break;
                             case 3: 
                                 event.initEvent('ply_threetouchesstart',true,true);
@@ -665,6 +665,9 @@ var PLY = (function ($) {
                     // TODO: reduce to a single sqrt, and otherwise optimize the crap out of this
                     var xs_diff = xs1 - xs2;
                     var ys_diff = ys1 - ys2;
+
+                    console.log("669",xs_bar, ys_bar, xs_diff, ys_diff, one, two);
+                    
                     var xc_diff = one.xc - two.xc;
                     var yc_diff = one.yc - two.yc;
                     var xs_dist = Math.abs(xs_diff);
@@ -794,7 +797,7 @@ var PLY = (function ($) {
             // all premult'd to original transform
             final_style += t;
             evt.target.style[TransformStyle] = final_style;
-            console.log("transform set to: "+evt.target.style[TransformStyle]);
+            console.log("transform set to: "+final_style);
             //console.log("transform after: "+evt.target.style[TransformStyle]);
         },
         // only assign these deprecated mutation events to the document when absolutely necessary (perf reasons)

@@ -65,8 +65,8 @@ var DEBUG = (function() {
         return false;
     }
 
-	// all vars except the variable "exposed" are private variables 
-	var log_buffer = [];
+    // all vars except the variable "exposed" are private variables 
+    var log_buffer = [];
 
 	var git_context = "#% 5f7bcdf gotta test now %#";
 
