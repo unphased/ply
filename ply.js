@@ -752,7 +752,7 @@ var PLY = (function ($) {
             var touch = evt.existingTouch;
             $.data(evt.target,"ply").trans = "translate3d(" + (touch.xc-touch.xs) + "px," + (touch.yc-touch.ys) + "px,0) " + evt.target.style[TransformStyle]; 
 
-            console.log("into",  $.data(evt.target,"ply").trans, "end 2S");
+            console.log(evt.existingTouch,"into",  $.data(evt.target,"ply").trans, "end 2S");
         },
         ply_threetouchesstart: function(evt) {
             console.log("3S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
