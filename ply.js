@@ -779,12 +779,7 @@ var PLY = (function ($) {
         ply_translate: function(evt) {
             //console.log("transform before setting translate: "+$(evt.target).css(TransformStyle));
             evt.target.style[TransformStyle] = "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans;
-            console.log("transform set to: "+evt.target.style[TransformStyle]);
-            
-            if (evt.target.style[TransformStyle].length > 300) {
-                evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
-            }
-            //console.log("transform after: "+evt.target.style[TransformStyle]);
+            console.log("transform got set to: "+evt.target.style[TransformStyle], "using", "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans);
         },
 
         ply_transform: function(evt) {
