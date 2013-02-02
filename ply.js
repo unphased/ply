@@ -481,7 +481,7 @@ var PLY = (function ($) {
                         // now this is super neat. I don't know if preventDefault on touchend will change
                         // the behavior (for firing or not firing click), but with ply it will be possible
                         // to prevent the click by preventDefault on onetouchend! How nice is that? 
-                        if (defaultNotPrevented && ed.count === 0 && exposed.click_possible) {
+                        if (defaultNotPrevented && ed.count === 1 && exposed.click_possible) {
                             // the naive $.click() generally fails on anchor elements because 
                             // probably for preventing script kiddie nastiness. 
 
