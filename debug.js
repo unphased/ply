@@ -65,10 +65,10 @@ var DEBUG = (function() {
         return false;
     }
 
-	// all vars except the variable "exposed" are private variables 
-	var log_buffer = [];
+    // all vars except the variable "exposed" are private variables 
+    var log_buffer = [];
 
-	var git_context = "#% ddbe5c8 doc update %#";
+    var git_context = "#% 371e1cb debugging style being set (it is clearly incorrect) %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
