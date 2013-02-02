@@ -65,10 +65,10 @@ var DEBUG = (function() {
         return false;
     }
 
-	// all vars except the variable "exposed" are private variables 
-	var log_buffer = [];
+    // all vars except the variable "exposed" are private variables 
+    var log_buffer = [];
 
-	var git_context = "#% 90de73e added deploy script %#";
+    var git_context = "#% 90de73e added deploy script %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
