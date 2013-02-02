@@ -222,6 +222,7 @@
             eshl.children[i].style[transform_name] = hide_transform;
             pmc.children[i].style[transform_name] = hide_transform;
             psmc.children[i].style[transform_name] = hide_transform;
+            pssmc.children[i].style[transform_name] = hide_transform;
         }
         // cleaning up the debug log 
         DEBUG.clean_list();
