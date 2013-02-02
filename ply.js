@@ -366,7 +366,7 @@ var PLY = (function ($) {
                                 // set an updated start position for the existing point to prevent a "warp"
                                 // find the first touch on the element and set it to current value
                                 for (var ti in dt.t) { if (ti !== dj.id) { break; } }
-                                event.existingTouch = dt.t[ti]; 
+                                event.existingTouch = ep[ti].t; 
                                 // take note that existingTouch *could be created at the exact same time* as changedTouch
                                 ep[ti].xs2 = ep[ti].xc;
                                 ep[ti].ys2 = ep[ti].yc;
@@ -465,9 +465,8 @@ var PLY = (function ($) {
                                 event.initEvent('ply_twotouchesend',true,true);
                                 for (var ti in ed.t) {
                                     if (ti !== id) break;
-                                } 
-                                assert(ti !== id);
-                                event.remainingTouch = ed.t[ti].t; 
+                                }
+                                event.remainingTouch = ep[ti].t; 
                                 break;
                             case 3: 
                                 event.initEvent('ply_threetouchesend',true,true);
@@ -753,9 +752,10 @@ var PLY = (function ($) {
             console.log("2S", $.data(evt.target,"ply").trans);
             // The tracking of the position the initial finger was at actually has to be taken care of by ply itself
             // and becomes the .xs2 .ys2 properties
-            var touch = evt.existingTouch;
-            $.data(evt.target,"ply").trans = evt.target.style[TransformStyle];
-            console.log(evt.existingTouch,"into",  $.data(evt.target,"ply").trans, "end 2S");
+            //var touch = evt.existingTouch;
+            $.data(evt.target,"ply").trans = evt.target.style[TransformStyle]; 
+            // simply keep the same spot
+            console.log("into",  $.data(evt.target,"ply").trans, "end 2S");
         },
         ply_threetouchesstart: function(evt) {
             console.log("3S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
@@ -766,12 +766,12 @@ var PLY = (function ($) {
         ply_twotouchesend: function(evt) {
             console.log("2E", $.data(evt.target,"ply").trans);
             // must properly update trans on termination of second touch 
-            // append to my transform the offset of the remaining touch             
-            var touch = evt.remainingTouch;
-            // there is a subtle might-be-bug here wherein xs2/ys2 === 0 (pageX/pageY being zero) would be wrong. But this will *never* happen
-            $.data(evt.target,"ply").trans = "translate3d(" + ((touch.xs2 || touch.xs)-touch.xc) + "px," + ((touch.ys2 || touch.ys)-touch.yc) + "px,0) " + evt.target.style[TransformStyle];
+            // append to my transform the offset of the remaining touch
+            var t = evt.remainingTouch;
+            var touch = exposed.pointer_state[t.identifier];
+            $.data(evt.target,"ply").trans = "translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle];
             //console.log("ed trans"+"translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle]);
-            console.log("into", $.data(evt.target,"ply").trans, "remainingTouch", touch, touch.xs, touch.xc, touch.xs2, "end 2E");
+            console.log("into", $.data(evt.target,"ply").trans, "remainingTouch", touch, "end 2E");
         },
         ply_threetouchesend: function(evt) {
             console.log("3E");
