@@ -1,3 +1,3 @@
 #!/bin/bash
 [ `git rev-parse --abbrev-ref HEAD` != "master" ] && echo "Not on master branch. Aborting" && exit 1
-git commit -a -m"commit-deploy scripted commit on master performed on machine `hostname` at `date +%Y-%m-%d`" && ./deploy
+git commit -a -m"commit-deploy scripted commit on master performed on machine `hostname` at `date`" && ./deploy
