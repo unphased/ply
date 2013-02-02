@@ -5,7 +5,7 @@
 if [[ -z $1 ]] 
 then
 	echo "No args supplied, using default commit message"
-	git commit -a -m"\"commitdeploy\" scripted commit on master performed on host `hostname` at `date`" && ./deploy
+	git commit -a -m"commitdeploy scripted commit on master performed on host `hostname` at `date`" && ./deploy
 else 
 	echo "Using provided argument list as commit message"
 	git commit -a -m"$*" && ./deploy
