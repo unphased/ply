@@ -750,7 +750,7 @@ var PLY = (function ($) {
             // The tracking of the position the initial finger was at actually has to be taken care of by ply itself
             // and becomes the .xs2 .ys2 properties
             var touch = evt.existingTouch;
-            //$.data(evt.target,"ply").trans = "translate3d(" + (touch.xc-touch.xs) + "px," + (touch.yc-touch.ys) + "px,0) " + evt.target.style[TransformStyle]; 
+            $.data(evt.target,"ply").trans =  evt.target.style[TransformStyle] + " translate3d(" + (touch.xc-touch.xs) + "px," + (touch.yc-touch.ys) + "px,0)"; 
 
             console.log(evt.existingTouch,"into",  $.data(evt.target,"ply").trans, "end 2S");
         },
