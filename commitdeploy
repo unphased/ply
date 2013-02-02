@@ -1,7 +1,7 @@
 #!/bin/bash
 [ `git rev-parse --abbrev-ref HEAD` != "master" ] && echo "Not on master branch. Aborting" && exit 1
 
-if [ -z $1 ] 
+if [[ -z $1 ]] 
 then
 	echo "No args supplied, using default commit message"
 	git commit -a -m"commit-deploy scripted commit on master performed on machine `hostname` at `date`" && ./deploy
