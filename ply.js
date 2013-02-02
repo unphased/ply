@@ -773,7 +773,7 @@ var PLY = (function ($) {
             var touch = evt.remainingTouch;
             $.data(evt.target,"ply").trans = "translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle];
             //console.log("ed trans"+"translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle]);
-            console.log("into", $.data(evt.target,"ply").trans, "end 2E");
+            console.log("into", $.data(evt.target,"ply").trans, "remainingTouch",remainingTouch,"end 2E");
         },
         ply_threetouchesend: function(evt) {
             console.log("3E");
