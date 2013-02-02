@@ -1,5 +1,6 @@
 #!/bin/bash
 # run me to deploy to gh-pages (as opposed to using pre/postcommit hook... too inflexible) 
+# must be on master without having any changes (so commit on master first)
 [ `git rev-parse --abbrev-ref HEAD` != "master" ] && echo "Not on master branch. Aborting" && exit 1
 git checkout gh-pages
 git pull
