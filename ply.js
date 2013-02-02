@@ -669,7 +669,7 @@ var PLY = (function ($) {
                     // TODO: reduce to a single sqrt, and otherwise optimize the crap out of this
                     var xs_diff = xs1 - xs2;
                     var ys_diff = ys1 - ys2;
-                    console.log("672",xs_bar, ys_bar, xs_diff, ys_diff);
+                    console.log("672",xs_bar, ys_bar, xs_diff, ys_diff, event2.startX, event2.startY);
                     var xc_diff = one.xc - two.xc;
                     var yc_diff = one.yc - two.yc;
                     var xs_dist = Math.abs(xs_diff);
