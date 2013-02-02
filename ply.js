@@ -366,7 +366,7 @@ var PLY = (function ($) {
                                 // set an updated start position for the existing point to prevent a "warp"
                                 // find the first touch on the element and set it to current value
                                 for (var ti in dt.t) { if (ti !== dj.id) { break; } }
-                                event.existingTouch = ti; 
+                                event.existingTouch = dt.t[ti]; 
                                 // take note that existingTouch *could be created at the exact same time* as changedTouch
                                 ep[ti].xs2 = ep[ti].xc;
                                 ep[ti].ys2 = ep[ti].yc;
