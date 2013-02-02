@@ -308,6 +308,15 @@ var PLY = (function ($) {
                 data_list.push(v);
             }
 
+            // always track touch data (ep) 
+            // The values in our data_list are to be referenced by two datastructus: the $.data(e) and the ep
+            var dl = data_list.length;
+            for (var k=0;k<dl;++k) { // go and insert the new touches into ep
+                var dk = data_list[k];
+                ep[dk.id] = dk;
+                ps_count_real++;
+            }
+
             // only when element is a noscroll (interesting element) AND in noscroll mode (or could initiate it) do we track touches on the element's data (on a per element basis) -- this runs at least once on each element AFAIK
             if ((ps_count === 0 || !exposed.allow_scroll) && (' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1) {
                 // set up $.data stuff on element
@@ -341,7 +350,6 @@ var PLY = (function ($) {
                     //console.log("Here I am about to add new xs/ys props to ptr state", touch);
                 }*/
 
-                var dl = data_list.length;
                 for (var j=0;j<dl;++j) { // go and insert the new touches into our element (ep is done outside this conditional)
                     var dj = data_list[j];
                     dj.ni = nid;
@@ -358,6 +366,8 @@ var PLY = (function ($) {
                                 // set an updated start position for the existing point to prevent a "warp"
                                 // find the first touch on the element and set it to current value
                                 for (var ti in dt.t) { if (ti !== dj.id) { break; } }
+                                event.existingTouch = ti; 
+                                // take note that existingTouch *could be created at the exact same time* as changedTouch
                                 ep[ti].xs2 = ep[ti].xc;
                                 ep[ti].ys2 = ep[ti].yc;
                                 break;
@@ -382,14 +392,6 @@ var PLY = (function ($) {
                     // produces strange stuff, trust me)
                     exposed.allow_scroll = false;
                 //}
-            } 
-            // always track touch data (ep) 
-            // The values in our data_list are now referenced by two DS's: the $.data(e) and the ep
-            var d_l = data_list.length;
-            for (var k=0;k<d_l;++k) { // go and insert the new touches into ep
-                var dk = data_list[k];
-                ep[dk.id] = dk;
-                ps_count_real++;
             }
             if (!exposed.allow_scroll) { // never allow scroll once you start manipulating something 
                 evt.preventDefault();
@@ -460,6 +462,8 @@ var PLY = (function ($) {
                                 break;
                             case 2: 
                                 event.initEvent('ply_twotouchesend',true,true);
+                                for (var ti in ed.t); 
+                                event.remainingTouch = ed.t[ti]; 
                                 break;
                             case 3: 
                                 event.initEvent('ply_threetouchesend',true,true);
@@ -744,8 +748,13 @@ var PLY = (function ($) {
             }
         },
         ply_twotouchesstart: function(evt) {
-            console.log("2S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
-            // The adjustment for linear transform of initial finger actually has to be taken care of by ply itself            
+            console.log("2S", $.data(evt.target,"ply").trans);
+            // The tracking of the position the initial finger was at actually has to be taken care of by ply itself
+            // and becomes the .xs2 .ys2 properties
+            var touch = evt.existingTouch;
+            $.data(evt.target,"ply").trans = "translate3d(" + (touch.xc-touch.xs) + "px," + (touch.yc-touch.ys) + "px,0) " + evt.target.style[TransformStyle]; 
+
+            console.log("into",  $.data(evt.target,"ply").trans, "end 2S");
         },
         ply_threetouchesstart: function(evt) {
             console.log("3S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
@@ -754,15 +763,13 @@ var PLY = (function ($) {
             console.log("1E");
         },
         ply_twotouchesend: function(evt) {
-            console.log("2E");
+            console.log("2E", $.data(evt.target,"ply").trans);
             // must properly update trans on termination of second touch 
-            // append to my transform the offset of the remaining touch 
-            var ed = $.data(evt.target,"ply");
-            // evt.touches_active_on_element should have length 1
-            for (var t in evt.touches_active_on_element); // grabs the remaining touch
-            var touch = evt.touches_active_on_element[t];
-            ed.trans = "translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle];
+            // append to my transform the offset of the remaining touch             
+            var touch = evt.remainingTouch;
+            $.data(evt.target,"ply").trans = "translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle];
             //console.log("ed trans"+"translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle]);
+            console.log("into", $.data(evt.target,"ply").trans, "end 2E");
         },
         ply_threetouchesend: function(evt) {
             console.log("3E");

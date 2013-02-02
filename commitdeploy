@@ -2,7 +2,6 @@
 # commits current changes to master (via commit -a) and calls the deploy script which pushes to gh-pages
 # note that with neither script does master get pushed
 [ `git rev-parse --abbrev-ref HEAD` != "master" ] && echo "Not on master branch. Aborting" && exit 1
-
 if [[ -z $1 ]] 
 then
 	echo "No args supplied, using default commit message"
