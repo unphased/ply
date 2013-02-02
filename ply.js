@@ -764,7 +764,8 @@ var PLY = (function ($) {
             // must properly update trans on termination of second touch 
             // append to my transform the offset of the remaining touch             
             var touch = evt.remainingTouch;
-            $.data(evt.target,"ply").trans = "translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle];
+            // there is a subtle might-be-bug here wherein xs2/ys2 === 0 (pageX/pageY being zero) would be wrong. But this will *never* happen
+            $.data(evt.target,"ply").trans = "translate3d(" + ((touch.xs2 || touch.xs)-touch.xc) + "px," + ((touch.ys2 || touch.ys)-touch.yc) + "px,0) " + evt.target.style[TransformStyle];
             //console.log("ed trans"+"translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle]);
             console.log(evt.remainingTouch,"into", $.data(evt.target,"ply").trans, "end 2E");
         },
