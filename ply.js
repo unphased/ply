@@ -466,7 +466,8 @@ var PLY = (function ($) {
                                 for (var ti in ed.t) {
                                     if (ti !== id) break;
                                 } 
-                                event.remainingTouch = ed.t[ti]; 
+                                assert(ti !== id);
+                                event.remainingTouch = ed.t[ti].t; 
                                 break;
                             case 3: 
                                 event.initEvent('ply_threetouchesend',true,true);
