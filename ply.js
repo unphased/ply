@@ -666,7 +666,7 @@ var PLY = (function ($) {
                     var xs_diff = xs1 - xs2;
                     var ys_diff = ys1 - ys2;
 
-                    console.log("669",xs_bar, ys_bar, xs_diff, ys_diff);
+                    console.log("669",xs_bar, ys_bar, xs_diff, ys_diff, one, two);
                     
                     var xc_diff = one.xc - two.xc;
                     var yc_diff = one.yc - two.yc;
