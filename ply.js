@@ -452,6 +452,7 @@ var PLY = (function ($) {
             for (var id in ep) {
                 if (!hash[id] && id !== "m") {
                     if (ep[id].hasOwnProperty('ni')) { // if is a touch that requires removing from data
+                        // i.e. is a "ply enabled" element
                         var ei = ep[id];
                         var ed = $.data(ei.e, 'ply');
 
@@ -462,7 +463,9 @@ var PLY = (function ($) {
                                 break;
                             case 2: 
                                 event.initEvent('ply_twotouchesend',true,true);
-                                for (var ti in ed.t); 
+                                for (var ti in ed.t) {
+                                    if (ti !== id) break;
+                                } 
                                 event.remainingTouch = ed.t[ti]; 
                                 break;
                             case 3: 
