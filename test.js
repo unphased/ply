@@ -1,6 +1,7 @@
 // depends on debug.js
 
 (function() {
+    var datenow = DEBUG.datenow;
     var lastTime = 0;
     var vendors = ['ms', 'moz', 'webkit', 'o'];
     for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
@@ -8,7 +9,6 @@
         window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame']
                                    || window[vendors[x]+'CancelRequestAnimationFrame'];
     }
-    var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
     if (!window.requestAnimationFrame)
         window.requestAnimationFrame = function(callback, element) {
             var currTime = datenow();
@@ -56,7 +56,7 @@
         // Preventing a mess in PLY.pointer_state caused by .html() setting #debug
         var pp = PLY.pointer_state;
         for (var id in pp) {
-            if (pp[id].e && !PLY.isInDOM(pp[id].e)) { // if not touch don't worry about it
+            if (pp[id].e && !DEBUG.isInDOM(pp[id].e)) { // if not touch don't worry about it
                 delete pp[id];
             }
         }
@@ -70,7 +70,7 @@
             var str = '<div>node_ids:</div><ol start="0">';
             // dump the contents of $.data(e,'ply') for e in exposed.node_ids
             for (var j=0;j<PLY.node_ids.length;++j) {
-                str += "<li>"+PLY.escape(PLY.serialize($.data(PLY.node_ids[j],'ply')))+"</li>";
+                str += "<li>"+DEBUG.escapeHtml(DEBUG.serialize($.data(PLY.node_ids[j],'ply')))+"</li>";
             }
             str += "</ol>";
 
@@ -79,7 +79,7 @@
             for (var prop in PLY) {
                 str += "<li>";
                 str += prop + ": "; 
-                str += PLY.escape(PLY.serialize(PLY[prop]));
+                str += DEBUG.escapeHtml(DEBUG.serialize(PLY[prop]));
                 str += "</li>";
             }
             str += "</ul><div>revision: "+DEBUG.revision+"</div>";
@@ -205,14 +205,7 @@
             psmc.children[i].style[transform_name] = hide_transform;
         }
         // cleaning up the debug log 
-        var now = Date.now();
-        var debuglog = $("#debug_log")[0];
-        var dc = debuglog.children;
-        for (i = dc.length-1; dc.length > 50 && i >= 0; --i) {
-            var timestamp = dc[i].getAttribute('data-time');
-            if (timestamp && timestamp < (now - 15000))
-                debuglog.removeChild(dc[i]);
-        }
+        DEBUG.clean_list();
     }
     requestAnimationFrame(debug_refresh);
     $(window).focus(function(){
@@ -228,6 +221,5 @@
         debug_show_hide = !debug_show_hide;
     });
 
-    $("h1").after('<button id="append_logs_dom_toggle" onclick="PLY.append_logs_dom = !PLY.append_logs_dom">toggle realtime log display</button>')
-        .after('<button id="debug_toggle" onclick="PLY.debug = !PLY.debug">toggle all debug</button>');
+    $("h1").after(DEBUG.debug_controls());
 }());

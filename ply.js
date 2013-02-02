@@ -26,7 +26,10 @@
 // IN THE SOFTWARE. 
 // ============================================================================
 
-var PLY = (function ($) {    
+var PLY = (function ($) {
+
+    var assert = DEBUG.assert || function(){};
+    var datenow = DEBUG.datenow;
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
@@ -41,8 +44,17 @@ var PLY = (function ($) {
         // touches are stored under their id as key.
         pointer_state: {}, 
 
+        // this is the global state that tracks whether a short single touch 
+        // can be interpreted as a click. 
+        // This can be implemented a ton of different ways but putting it here
+        // is probably most straightforward. 
+        // This flag is what allows us to seamlessly (and without the 300ms 
+        // delay) issue a click, however obviously the double-tap zoom gesture
+        // is not going to work on ply-enabled elements)
+        click_possible: true, 
+
         // used by touchmove event to run code only when necessary
-        tmTime: Date.now(),
+        tmTime: datenow(),
 
         // converges on the time it takes to run touchmove
         tmProfile: 3, 
@@ -76,62 +88,14 @@ var PLY = (function ($) {
         // what will be necessary, however, is for mutation events/observer to 
         // clear out the values in here so as to not leak DOM nodes. 
 
-        // This is just marked when any event makes its way through the primary
-        // event handlers so that the test site can be a bit more efficient about 
-        // re-updating the DOM. I will eventually let the events that don't 
-        // change the debugprints to also not set this either. 
-        event_processed: true,         
-        append_logs_dom: true, 
-        escape: escapeHtml,
-        serialize: serialize, // exposed helper functions
-        isInDOM: isInDOM, 
         sanityCheck: internalCheck // this is like a unit test that you can run any time
+        // sanityCheck is not bound to/dependent on debug status
     };
 
-    var debug = DEBUG.enabled;
+    var escapeHtml = DEBUG.escapeHtml;
 
-    // this HTML escapist came from mustache.js
-    var entityMap = {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': '&quot;',
-        "'": '&#39;',
-        "/": '&#x2F;'
-    };
-    function escapeHtml(string) {
-        return String(string).replace(/[&<>"'\/]/g, function (s) {
-            return entityMap[s];
-        });
-    }
-
-    var json_handler = function (key,val) {
-        if (val instanceof HTMLElement) {
-            // tells us which child we are (incl. textnodes)
-            // for (var k=0,e=val; (e = e.previousSibling); ++k); 
-            // tells us which (real node) index it is
-            var k = val.parentNode.children?Array.prototype.indexOf.call(val.parentNode.children,val):undefined;
-            var cn = val.className;
-            var tn = val.tagName;
-            var id = val.id;
-            if (tn === "HTML") { cn = ""; } // too much output due to Modernizr
-            return "<"+tn+(k?" #"+k:"")+(cn?" c="+cn:"")+(id?" id="+id:"")+">";
-        }
-        return val;
-    };
-    function serialize(arg) {
-        if (typeof arg === "function") return "function";
-        return JSON.stringify(arg,json_handler).replace(/"([^"]*)":/g,"$1: ").replace(/\},([^ ])/g,'},  $1').replace(/,([^ ])/g,', $1');
-    }
-
-    function isInDOM(e) {
-        while ((e = e.parentNode)) {
-            if (e == document) {
-                return true;
-            }
-        }
-        return false;
-    }
+    var serialize = DEBUG.serialize;
+    var isInDOM = DEBUG.isInDOM;
 
     // this is a helper for logging touchlists for friendlier debug output
     function id_string_for_touch_list(list) {
@@ -259,7 +223,7 @@ var PLY = (function ($) {
 
     // entry point for code is the document's event handlers. 
     var handlers_for_doc = {
-        click: function (evt) { console.log('click', evt.pageX, evt.pageY); 
+        click: function (evt) { console.log('click', evt.pageX, evt.pageY, "on", evt.target); 
 
         },
         mousedown: function (evt) { console.log('mousedown',evt.pageX,evt.pageY);
@@ -321,10 +285,11 @@ var PLY = (function ($) {
 
             var ep = exposed.pointer_state;
             var en = exposed.node_ids;
-            var ps_count = 0;
+            var ps_count = 0; // ps_count at beginning
             for (var x in ep) {
                 if (x !== "m") ps_count++;
             }
+            var ps_count_real = ps_count; // ps_count, updated
             var seen_target;
             var data_list = [];
             assert(evt.changedTouches.length > 0, "evt.changedTouches length > 0 on touchstart: "+evt.changedTouches.length);
@@ -390,6 +355,11 @@ var PLY = (function ($) {
                                 break;
                             case 2: 
                                 event.initEvent('ply_twotouchesstart',true,true);
+                                // set an updated start position for the existing point to prevent a "warp"
+                                // find the first touch on the element and set it to current value
+                                for (var ti in dt.t) { if (ti !== dj.id) { break; } }
+                                ep[ti].xs2 = dj.t.pageX;
+                                ep[ti].ys2 = dj.t.pageY;
                                 break;
                             case 3: 
                                 event.initEvent('ply_threetouchesstart',true,true);
@@ -402,7 +372,7 @@ var PLY = (function ($) {
                         event.changedTouch = dj.t;
                         // also allow the event handler to inspect the other touches (this is not a full blown TouchList and if you modify this structure from your handler things may end badly)
                         event.touches_active_on_element = dt.t;
-                        var defPrevented = seen_target.dispatchEvent(event);
+                        var defNotPrevented = seen_target.dispatchEvent(event);
                     }
                 }
                 //if (ps_count === 0) {
@@ -419,9 +389,14 @@ var PLY = (function ($) {
             for (var k=0;k<d_l;++k) { // go and insert the new touches into ep
                 var dk = data_list[k];
                 ep[dk.id] = dk;
+                ps_count_real++;
             }
             if (!exposed.allow_scroll) { // never allow scroll once you start manipulating something 
                 evt.preventDefault();
+            }
+            if (ps_count_real > 1) {
+                // if at any point two touches exist, the click event is never fired on a ply enabled element
+                exposed.click_possible = false;
             }
         },
 
@@ -475,29 +450,50 @@ var PLY = (function ($) {
             for (var id in ep) {
                 if (!hash[id] && id !== "m") {
                     if (ep[id].hasOwnProperty('ni')) { // if is a touch that requires removing from data
-                        var ed = $.data(ep[id].e, 'ply');
-                        // this touch is no longer valid so remove from element's touch hash
-                        delete ed.t[id];
-                        // update count
-                        ed.count--;
-                        
+                        var ei = ep[id];
+                        var ed = $.data(ei.e, 'ply');
+
                         var event = document.createEvent('HTMLEvents'); 
                         switch (ed.count) {
-                            case 0: 
+                            case 1: 
                                 event.initEvent('ply_onetouchend',true,true);
                                 break;
-                            case 1: 
+                            case 2: 
                                 event.initEvent('ply_twotouchesend',true,true);
                                 break;
-                            case 2: 
+                            case 3: 
                                 event.initEvent('ply_threetouchesend',true,true);
                                 break;
                             default:
                                 console.log("nthtouchend n="+ed.count);
                         }
-                        event.changedTouch = ep[id].t;
+                        event.changedTouch = ei.t;
                         event.touches_active_on_element = ed.t;
-                        var defaultPrevented = ep[id].e.dispatchEvent(event);
+                        var defaultNotPrevented = ei.e.dispatchEvent(event);
+
+                        // now this is super neat. I don't know if preventDefault on touchend will change
+                        // the behavior (for firing or not firing click), but with ply it will be possible
+                        // to prevent the click by preventDefault on onetouchend! How nice is that? 
+                        if (defaultNotPrevented && ed.count === 0 && exposed.click_possible) {
+                            // the naive $.click() generally fails on anchor elements because 
+                            // probably for preventing script kiddie nastiness. 
+
+                            // So, I fire a click event created using the DOM API and attempt to 
+                            // fill it up with what data is available in the original touchstart. 
+                            var clickevent = document.createEvent("MouseEvents");
+                            // Not sure if touch can provide a screenX/Y
+                            clickevent.initMouseEvent("click", true, true, window, 1, 
+                                ei.t.screenX, ei.t.screenY, ei.t.clientX, ei.t.clientY, 
+                                false, false, false, false, 0, null);
+                            click_not_prevented = ei.e.dispatchEvent(clickevent);
+                        }
+
+                        // this touch is no longer valid so remove from element's touch hash
+                        delete ed.t[id];
+                        // update count
+                        ed.count--;
+                        
+
                         /* *** this stuff gotta move out of ply domain -- also wont be needing count loop since i track count now (duuuh)
                         // we set the transform on the data for the element while leaving 
                         // touch info the same (as I want to preserve the semantics of pointer_state)
@@ -530,6 +526,7 @@ var PLY = (function ($) {
             }
             if (etl === 0) { // this indicates no touches remain
                 exposed.allow_scroll = true;
+                exposed.click_possible = true;
             }
         }),
         touchcancel: touchend_touchcancel,
@@ -546,7 +543,7 @@ var PLY = (function ($) {
             // and gives browser about 7 ms of grace-period between touchmove events
             // (which is way more than it should be taking esp. since I start the timing after
             // completing ply transform tasks)
-            var start = Date.now();
+            var start = datenow();
             if (start - exposed.tmTime < 7) return; // discard the event
             
             var et = evt.touches;
@@ -579,7 +576,7 @@ var PLY = (function ($) {
 
             //console.log("elems=",elems);
 
-            var beforeDispatch = Date.now();
+            var beforeDispatch = datenow();
 
             // for each element
             for (var ni in elems) {
@@ -624,7 +621,13 @@ var PLY = (function ($) {
                     // which is probably about as efficient as we can get given what is available (early 2013).
                     // Since this is the single finger case there is no transform computation so the event
                     // will be sent like usual
-                    var defaultPrevented = en[ni].dispatchEvent(event);
+                    var defaultNotPrevented = en[ni].dispatchEvent(event);
+
+                    // if at any point a single touch has moved too far, prevent it from ever firing 
+                    // the click event 
+                    if (exposed.click_possible && (Math.abs(event.deltaX)+Math.abs(event.deltaY)) > 10) {
+                        exposed.click_possible = false;
+                    }
                 } else {
                     var two, j;
                     j=0; 
@@ -648,15 +651,20 @@ var PLY = (function ($) {
                     //console.log("two touches",one,two,"on",en[ni]);
                     var event2 = document.createEvent('HTMLEvents'); // this is for compatibility with DOM Level 2
                     event2.initEvent('ply_transform',true,true);
-                    var xs_bar = 0.5 * (one.xs + two.xs);
-                    var ys_bar = 0.5 * (one.ys + two.ys);
+                    var xs1 = one.xs2 || one.xs; 
+                    var ys1 = one.ys2 || one.ys;
+                    var xs2 = two.xs2 || two.xs;
+                    var ys2 = two.ys2 || two.ys;
+                    // might be the case that only one of these should have the xs2/ys2 
+                    var xs_bar = 0.5 * (xs1 + xs2);
+                    var ys_bar = 0.5 * (ys1 + ys2);
                     var xc_bar = 0.5 * (one.xc + two.xc);
                     var yc_bar = 0.5 * (one.yc + two.yc);
                     event2.startX = xs_bar; // the originating origin point around which scale+rotate happens
                     event2.startY = ys_bar;
                     // TODO: reduce to a single sqrt, and otherwise optimize the crap out of this
-                    var xs_diff = one.xs - two.xs;
-                    var ys_diff = one.ys - two.ys;
+                    var xs_diff = xs1 - xs2;
+                    var ys_diff = ys1 - ys2;
                     var xc_diff = one.xc - two.xc;
                     var yc_diff = one.yc - two.yc;
                     var xs_dist = Math.abs(xs_diff);
@@ -671,7 +679,7 @@ var PLY = (function ($) {
                     event2.rotate = currt_angle - start_angle;
                     event2.translateX = xc_bar - xs_bar;
                     event2.translateY = yc_bar - ys_bar;
-                    var defaultPrevented2 = en[ni].dispatchEvent(event2);
+                    var defaultNotPrevented2 = en[ni].dispatchEvent(event2);
 
                     if (nd.count > 2) {
                         console.log("total " + nd.count + " touches:", nd.t);
@@ -679,10 +687,10 @@ var PLY = (function ($) {
                     }
                 }
             }
-            var now = Date.now();
+            var now = datenow();
             var diff = Math.min(now - exposed.tmTime,200);
             exposed.tmTime = now; // update this last
-            if (debug) {
+            if (DEBUG.enabled) {
                 var profile = now - start;
                 var dispatchProfile = now - beforeDispatch;
                 exposed.tmProfile += (profile - exposed.tmProfile) * 0.02;
@@ -698,8 +706,10 @@ var PLY = (function ($) {
         touchleave: function(evt) {
             console.log("touchleave");
         }, */
+
+        // the following handlers are ply use cases
         ply_onetouchstart: function(evt) {
-            console.log("1TS", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
+            console.log("1S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
             //assert(this === evt.changedTouch.target, "this is evt.ct.target (firsttouchstart)");
             assert(evt.target === evt.changedTouch.target, "this is evt.ct.target (firsttouchstart)");
             var dt = $.data(evt.target,"ply");
@@ -721,7 +731,7 @@ var PLY = (function ($) {
             evt.target.style.outline = "1px solid transparent";
             var etst = evt.target.style[TransformStyle];
             if (!etst || etst === "none") {
-                dt.trans = "scale3d(1,1,0.5) scale3d(1,1,2)"; // a roundabout way of forcing 3d matrix
+                dt.trans = ""; // I know of no way to avoid matrix() matrix without applying an actual 3d matrix does not interfere
             } else {
                 dt.trans = etst;
             }
@@ -731,28 +741,28 @@ var PLY = (function ($) {
             }
         },
         ply_twotouchesstart: function(evt) {
-            console.log("2TS", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
-            // must properly update the transform (trans) on initiation of second touch 
+            console.log("2S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
+            // The adjustment for linear transform of initial finger actually has to be taken care of by ply itself            
         },
         ply_threetouchesstart: function(evt) {
-            console.log("3TS", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
-        },        
+            console.log("3S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
+        },
         ply_onetouchend: function(evt) {
-            console.log("OneTE");
+            console.log("1E");
         },
         ply_twotouchesend: function(evt) {
-            console.log("TwoTE");
+            console.log("2E");
             // must properly update trans on termination of second touch 
             // append to my transform the offset of the remaining touch 
             var ed = $.data(evt.target,"ply");
             // evt.touches_active_on_element should have length 1
-            for (var t in evt.touches_active_on_element);
+            for (var t in evt.touches_active_on_element); // grabs the remaining touch
             var touch = evt.touches_active_on_element[t];
             ed.trans = "translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle];
-            console.log("ed trans"+"translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle]);
+            //console.log("ed trans"+"translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle]);
         },
         ply_threetouchesend: function(evt) {
-            console.log("ThreeTE");
+            console.log("3E");
         },
         ply_translate: function(evt) {
             //console.log("transform before setting translate: "+$(evt.target).css(TransformStyle));
@@ -814,7 +824,7 @@ var PLY = (function ($) {
     // use each because we need a scoped loop
     each(handlers_for_doc, function (event_name,v) {
         if (!v) return; 
-        document.addEventListener(event_name, debug?function () {
+        document.addEventListener(event_name, DEBUG?function () {
             try {
                 v.apply(this, arguments);
             } catch (e) {
