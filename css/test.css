@@ -104,6 +104,10 @@ ul {
     -webkit-transition: -webkit-transform 1s;
 }
 
+.log {
+    outline: #eee 1px solid;
+}
+
 .error {
     color: red;
 }
