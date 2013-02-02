@@ -358,8 +358,8 @@ var PLY = (function ($) {
                                 // set an updated start position for the existing point to prevent a "warp"
                                 // find the first touch on the element and set it to current value
                                 for (var ti in dt.t) { if (ti !== dj.id) { break; } }
-                                ep[ti].xs2 = dj.t.pageX;
-                                ep[ti].ys2 = dj.t.pageY;
+                                ep[ti].xs2 = ep[ti].xc;
+                                ep[ti].ys2 = ep[ti].yc;
                                 break;
                             case 3: 
                                 event.initEvent('ply_threetouchesstart',true,true);
