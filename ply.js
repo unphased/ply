@@ -748,11 +748,13 @@ var PLY = (function ($) {
             }
         },
         ply_twotouchesstart: function(evt) {
-            console.log("2S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
+            console.log("2S", $.data(evt.target,"ply").trans);
             // The tracking of the position the initial finger was at actually has to be taken care of by ply itself
             // and becomes the .xs2 .ys2 properties
             var touch = evt.existingTouch;
             $.data(evt.target,"ply").trans = "translate3d(" + (touch.xc-touch.xs) + "px," + (touch.yc-touch.ys) + "px,0) " + evt.target.style[TransformStyle]; 
+
+            console.log("into",  $.data(evt.target,"ply").trans, "end 2S");
         },
         ply_threetouchesstart: function(evt) {
             console.log("3S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
@@ -761,12 +763,13 @@ var PLY = (function ($) {
             console.log("1E");
         },
         ply_twotouchesend: function(evt) {
-            console.log("2E");
+            console.log("2E", $.data(evt.target,"ply").trans);
             // must properly update trans on termination of second touch 
             // append to my transform the offset of the remaining touch             
             var touch = evt.remainingTouch;
             $.data(evt.target,"ply").trans = "translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle];
             //console.log("ed trans"+"translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle]);
+            console.log("into", $.data(evt.target,"ply").trans, "end 2E");
         },
         ply_threetouchesend: function(evt) {
             console.log("3E");
