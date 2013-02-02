@@ -1,5 +1,6 @@
-#!/bin/bash
-# commits current changes to master (via commit -a) and calls deploy script which pushes to gh-pages
+#!/bin/sh
+# commits current changes to master (via commit -a) and calls the deploy script which pushes to gh-pages
+# note that with neither script does master get pushed
 [ `git rev-parse --abbrev-ref HEAD` != "master" ] && echo "Not on master branch. Aborting" && exit 1
 
 if [[ -z $1 ]] 
@@ -8,5 +9,7 @@ then
 	git commit -a -m"commit-deploy scripted commit on master performed on host `hostname` at `date`" && ./deploy
 else 
 	echo "Using provided argument list as commit message"
-	git commit -a -m"$@" && ./deploy
+	echo "args are $*"
+	echo "args wrapped are \"$*\""
+	git commit -a -m"$*" && ./deploy
 fi
