@@ -106,6 +106,7 @@ ul {
 
 .log {
     outline: #eee 1px solid;
+    margin: 0 1px;
 }
 
 .error {
