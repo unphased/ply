@@ -671,7 +671,9 @@ var PLY = (function ($) {
                     // TODO: reduce to a single sqrt, and otherwise optimize the crap out of this
                     var xs_diff = xs1 - xs2;
                     var ys_diff = ys1 - ys2;
-                    //console.log("672",xs_bar, ys_bar, xs_diff, ys_diff, event2.startX, event2.startY);
+
+                    console.log("669",xs_bar, ys_bar, xs_diff, ys_diff, one, two);
+                    
                     var xc_diff = one.xc - two.xc;
                     var yc_diff = one.yc - two.yc;
                     var xs_dist = Math.abs(xs_diff);
@@ -788,7 +790,6 @@ var PLY = (function ($) {
             var t = dt.trans;
             startX = evt.startX - o.x;
             startY = evt.startY - o.y;
-            //console.log("ply_transform",o);
 
             // transform := T * T_o * R * S * T_o^-1 * transform
             var final_style = "";
