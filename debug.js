@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-	var git_context = "#% ca6a9e4 click fakage %#";
+	var git_context = "#% bc5a40f this should update ghpages files to be same %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 

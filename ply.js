@@ -498,8 +498,7 @@ var PLY = (function ($) {
                         // this touch is no longer valid so remove from element's touch hash
                         delete ed.t[id];
                         // update count
-                        ed.count--;
-                        
+                        ed.count--;                        
 
                         /* *** this stuff gotta move out of ply domain -- also wont be needing count loop since i track count now (duuuh)
                         // we set the transform on the data for the element while leaving 
