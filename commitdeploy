@@ -10,3 +10,4 @@ else
 	echo "Using provided argument list as commit message"
 	git commit -a -m"$*" && ./deploy
 fi
+git push origin master
