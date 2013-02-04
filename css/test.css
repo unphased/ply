@@ -10,9 +10,9 @@
 }
 
 /* try to keep stuff from changing viewport size */
-html, body {
+html, body{
     margin: 0;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 body {
