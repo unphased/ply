@@ -259,13 +259,12 @@ var PLY = (function ($) {
 
         },
         mousewheel: function (evt) { console.log("mousewheel", evt.wheelDeltaX, evt.wheelDeltaY); 
-            if (evt.target.tagName === "HTML") return; // don't waste cycles 
-            // scanning Modernizr's class list on <html>
+            if (evt.target.tagName === "HTML") return; // don't waste cycles scanning Modernizr's class list on <html>
             var et = evt.target;
             // check for safari "bug"
             if (evt.target.nodeType === 3) /* is text node */ 
                 et = evt.target.parentNode;
-            if (et.className && et.className.indexOf("ply-noscroll") !== -1) 
+            if (et.className && (' '+et.className+' ').indexOf(" ply-noscroll ") !== -1) 
                 evt.preventDefault();
         },
         keydown: function (evt) { console.log("keydown",key(evt));
