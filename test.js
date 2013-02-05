@@ -77,6 +77,7 @@
             str += "<div>ply state:</div><ul>";
             // dump the contents of exposed
             for (var prop in PLY) {
+                if (prop === "Modernizr") continue;
                 str += "<li>";
                 str += prop + ": "; 
                 str += DEBUG.escapeHtml(DEBUG.serialize(PLY[prop]));
