@@ -116,11 +116,6 @@ var DEBUG = (function() {
         }
     }
 
-    // return HTML string containing controls (yeah its a bit ugly but arguably more portable than direct dom manipulation)
-    function debugControls() {
-        return '<button id="debug_toggle" onclick="DEBUG.enabled = !DEBUG.enabled">toggle all debug</button>';
-    }
-
     // primitive set of methods provided by debug
     var exposed = {
         enabled: true,
@@ -130,8 +125,7 @@ var DEBUG = (function() {
         isInDOM: isInDOM,
         revision: git_context.slice(3,-3), 
         clean_list: clean,
-        debug_controls: debugControls, 
-
+     
         // This is just marked when any event makes its way through the primary
         // event handlers so that the test site can be a bit more efficient about 
         // re-updating the DOM. I may eventually let the events that don't 

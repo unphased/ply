@@ -9,6 +9,7 @@
 				// In order to preserve regular site functionality as much as possible, 
 				// a double-tap custom gesture is required to start selection mode. 
 				
+				var tap_start_time = Date.now();
 				PLY.attach_handlers_on_document({
 					touchstart: function() {},
 					touchmove: function() {},
