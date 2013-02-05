@@ -42,7 +42,7 @@ var DEBUG = (function() {
             // tells us which child we are (incl. textnodes)
             // for (var k=0,e=val; (e = e.previousSibling); ++k); 
             // tells us which (real node) index it is
-            var k = val.parentNode.children?Array.prototype.indexOf.call(val.parentNode.children,val):undefined;
+            var k = val.parentNode&&val.parentNode.children?Array.prototype.indexOf.call(val.parentNode.children,val):undefined;
             var cn = val.className;
             var tn = val.tagName;
             var id = val.id;
@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 8f901d2 stupid debug trivialities %#";
+    var git_context = "#% 756db31 fix a bug %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -114,6 +114,11 @@ var DEBUG = (function() {
             if (timestamp && timestamp < (now - 15000))
                 debuglog.removeChild(dc[i]);
         }
+    }
+
+    // an interface for portably highlighting any page element 
+    function highlight(e){
+
     }
 
     // primitive set of methods provided by debug
