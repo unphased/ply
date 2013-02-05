@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% d71918c adding a buncha changes in preparation for building out a better test page (one that disables debug display by default) and a powerful bookmarklet feature to allow dynamic testing on existing websites %#";
+    var git_context = "#% 8f901d2 stupid debug trivialities %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -116,11 +116,6 @@ var DEBUG = (function() {
         }
     }
 
-    // return HTML string containing controls (yeah its a bit ugly but arguably more portable than direct dom manipulation)
-    function debugControls() {
-        return '<button id="debug_toggle" onclick="DEBUG.enabled = !DEBUG.enabled">toggle all debug</button>';
-    }
-
     // primitive set of methods provided by debug
     var exposed = {
         enabled: true,
@@ -130,8 +125,7 @@ var DEBUG = (function() {
         isInDOM: isInDOM,
         revision: git_context.slice(3,-3), 
         clean_list: clean,
-        debug_controls: debugControls, 
-
+     
         // This is just marked when any event makes its way through the primary
         // event handlers so that the test site can be a bit more efficient about 
         // re-updating the DOM. I may eventually let the events that don't 

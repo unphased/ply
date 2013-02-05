@@ -241,5 +241,7 @@
         debug_show_hide = !debug_show_hide;
     });
 
-    $("h1").after(DEBUG.debug_controls());
+    if (DEBUG){
+        $("h1").after('<button id="debug_toggle" onclick="DEBUG.enabled = !DEBUG.enabled">toggle all debug</button>');
+    }
 }());
