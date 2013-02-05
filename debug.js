@@ -91,14 +91,8 @@ var DEBUG = (function() {
         // you've got one
     };
 
-    console.log = instrumented_log; // pre-empt usage of this if starting off not debug
-    // if the previous line is not conditional on debug then it will be always
-    // possible to "turn on debug" but with this here like this debug is never instrumented
-    // when debug is initially off.
-
-    // set up a way to show the log buffer if debug mode 
-    // (note toggling the debug off will stop logs being written)
-    // (and if debug is not true to begin with, no button is made)
+    console.log = instrumented_log; 
+    
     var show_log_buffer = false;
     $("#log_buffer_dump").before($('<button>toggle full log buffer snapshot</button>').on('click',function(){
         show_log_buffer = !show_log_buffer;
@@ -127,6 +121,7 @@ var DEBUG = (function() {
         return '<button id="debug_toggle" onclick="DEBUG.enabled = !DEBUG.enabled">toggle all debug</button>';
     }
 
+    // primitive set of methods provided by debug
     var exposed = {
         enabled: true,
         assert: assert,
@@ -144,5 +139,10 @@ var DEBUG = (function() {
         event_processed: false, 
         datenow: datenow
     };
+
+    // generally helpful debugging info
+    console.log("UA: "+navigator.userAgent);
+    console.log("window.devicePixelRatio:", window.devicePixelRatio);
+
     return exposed;
 })();

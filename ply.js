@@ -1,8 +1,8 @@
-//////////////////////////////
-/////////// ply.js ///////////
-//////////////////////////////
-//// A JavaScript library ////
-//////////////////////////////
+///////////////////////////////////////////
+////////////////// ply.js /////////////////
+///////////////////////////////////////////
+//// A JavaScript event expansion pack ////
+///////////////////////////////////////////
 
 // ============================================================================
 // Copyright (c) 2012 Steven Lu 
@@ -30,6 +30,9 @@ var PLY = (function ($) {
 
     var assert = DEBUG.assert || function(){};
     var datenow = DEBUG.datenow;
+    var escapeHtml = DEBUG.escapeHtml;
+    var serialize = DEBUG.serialize;
+    var isInDOM = DEBUG.isInDOM;
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
@@ -88,14 +91,13 @@ var PLY = (function ($) {
         // what will be necessary, however, is for mutation events/observer to 
         // clear out the values in here so as to not leak DOM nodes. 
 
+        // the ply mechanism for globally assigning event handlers
+        attach_handlers_on_document: attach_handlers_on_document, 
+
         sanityCheck: internalCheck // this is like a unit test that you can run any time
         // sanityCheck is not bound to/dependent on debug status
     };
 
-    var escapeHtml = DEBUG.escapeHtml;
-
-    var serialize = DEBUG.serialize;
-    var isInDOM = DEBUG.isInDOM;
 
     // this is a helper for logging touchlists for friendlier debug output
     function id_string_for_touch_list(list) {
@@ -222,7 +224,7 @@ var PLY = (function ($) {
     }
 
     // entry point for code is the document's event handlers. 
-    var handlers_for_doc = {
+    var level_1_events = {
         click: function (evt) { console.log('click', evt.pageX, evt.pageY, "on", evt.target); 
 
         },
@@ -703,7 +705,7 @@ var PLY = (function ($) {
                 exposed.tmProfileDispatch += (dispatchProfile - exposed.tmProfileDispatch) * 0.02;
                 exposed.tmRate += (diff - exposed.tmRate) * 0.02;
             }
-        },
+        }
         // these two don't bubble according to MDN. So it'd be useless putting them on document. 
         // also fairly certain that no browser implements them yet. 
         /* touchenter: function(evt) {
@@ -712,139 +714,28 @@ var PLY = (function ($) {
         touchleave: function(evt) {
             console.log("touchleave");
         }, */
-
-        // the following handlers are ply use cases
-        ply_onetouchstart: function(evt) {
-            console.log("1S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
-            //assert(this === evt.changedTouch.target, "this is evt.ct.target (firsttouchstart)");
-            assert(evt.target === evt.changedTouch.target, "this is evt.ct.target (firsttouchstart)");
-            var dt = $.data(evt.target,"ply");
-            assert(dt,"dt exists");
-            dt.offset = untransformed_offset(evt.target);
-            // set the initial styles 
-            evt.target.style[TransformOriginStyle] = "0 0"; 
-
-            /* 
-            // ensure backface visibility 
-            if (evt.target.style[BackfaceVisibilityStyle] !== "hidden") 
-                evt.target.style[BackfaceVisibilityStyle] = "hidden";
-            // ensure perspective
-            if (evt.target.style[PerspectiveStyle] !== "1000")
-                evt.target.style[PerspectiveStyle] = "1000";
-            */
-            
-            // This gives us beautiful prefiltered antialiasing via texture sampling (helps on pretty much all browsers)
-            evt.target.style.outline = "1px solid transparent";
-            var etst = evt.target.style[TransformStyle];
-            if (!etst || etst === "none") {
-                dt.trans = ""; // I know of no way to avoid matrix() matrix without applying an actual 3d matrix does not interfere
-            } else {
-                dt.trans = etst;
-            }
-
-            if (etst.length > 140) { // bigger than a tweet means probably will convert to a shorter matrix() format
-                evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
-            }
-        },
-        ply_twotouchesstart: function(evt) {
-            console.log("2S", $.data(evt.target,"ply").trans);
-            // The tracking of the position the initial finger was at actually has to be taken care of by ply itself
-            // and becomes the .xs2 .ys2 properties
-            //var touch = evt.existingTouch;
-            $.data(evt.target,"ply").trans = evt.target.style[TransformStyle]; 
-            // simply keep the same spot
-            console.log("into",  $.data(evt.target,"ply").trans, "end 2S");
-        },
-        ply_threetouchesstart: function(evt) {
-            console.log("3S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
-        },
-        ply_onetouchend: function(evt) {
-            console.log("1E");
-        },
-        ply_twotouchesend: function(evt) {
-            console.log("2E", $.data(evt.target,"ply").trans);
-            // must properly update trans on termination of second touch 
-            // append to my transform the offset of the remaining touch
-            var t = evt.remainingTouch;
-            var touch = exposed.pointer_state[t.identifier];
-            $.data(evt.target,"ply").trans = "translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle];
-            //console.log("ed trans"+"translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle]);
-            console.log("into", $.data(evt.target,"ply").trans, "remainingTouch", touch, "end 2E");
-        },
-        ply_threetouchesend: function(evt) {
-            console.log("3E");
-        },
-        ply_translate: function(evt) {
-            //console.log("transform before setting translate: "+$(evt.target).css(TransformStyle));
-            evt.target.style[TransformStyle] = "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans;
-            console.log("transform got set to: "+evt.target.style[TransformStyle], "using", "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans);
-        },
-
-        ply_transform: function(evt) {
-            // todo: make this not require a per-input run of $.data (actually it may be unavoidable.. sigh)
-            var dt = $.data(evt.target,"ply");
-            var o = dt.offset; 
-            var t = dt.trans;
-            startX = evt.startX - o.x;
-            startY = evt.startY - o.y;
-            //console.log("ply_transform",o);
-
-            // transform := T * T_o * R * S * T_o^-1 * transform
-            var final_style = "";
-            // T * T_o can be combined so we do so
-            final_style += "translate3d("+(startX+evt.translateX)+"px,"+(startY+evt.translateY)+"px,0) ";
-            // next line takes care of R and S
-            final_style += "rotate("+evt.rotate+"rad) scale("+evt.scale+") ";
-            // T_o^-1
-            final_style += "translate3d("+(-startX)+"px,"+(-startY)+"px,0) ";
-            // all premult'd to original transform
-            final_style += t;
-            evt.target.style[TransformStyle] = final_style;
-            console.log("transform set to: "+final_style);
-            //console.log("transform after: "+evt.target.style[TransformStyle]);
-        },
-        // only assign these deprecated mutation events to the document when absolutely necessary (perf reasons)
-        DOMNodeInserted: Mutation_Observer ? null : function (evt) { //console.log("DOMNodeInserted: ",evt.target);
-            // handle specially new elements which have the classes we're 
-            // interested in
-        },
-        DOMNodeRemoved: Mutation_Observer ? null : function (evt) {
-            // removed nodes need to clean up their pointers. Pointers must be made to point to the new thing they are 
-            // over now or to be removed. 
-
-            console.log("a node has been removed: ",evt.target);
-
-            // I actually don't know what the consequences of using a mutation observer will be when it comes to
-            // cleaning up data. Hopefully getting a ref to the removed element after-the-fact allows me to still
-            // access the $.data of it. 
-            // this whole step may be unnecessary and jQuery may already do auto-cleanup. But while I can't be sure I'll go do some manual clean up.
-            var data = $.data(evt.target,'ply');
-            if (data) {
-                for (var x in data) {
-                    data[x] = null; // just indiscriminately clear out references from this object to prevent it leaking anything
-                }
-            }
-        }
     };
 
-    // use each because we need a scoped loop
-    each(handlers_for_doc, function (event_name,v) {
-        if (!v) return; 
-        document.addEventListener(event_name, DEBUG?function () {
-            try {
-                v.apply(this, arguments);
-            } catch (e) {
-                // show the error to the DOM to help out for mobile (also cool on PC)
-                var html = '<div class="error">'+e.toString()+" at "+e.stack+"</div>";
-                $("#debug_log").prepend(html);
-                log_buffer.push(html);
-                throw e; // rethrow to give it to debugging safari, rather than be silent
-            }
-            DEBUG.event_processed = true; 
-        }:v, true); // hook to capture phase to catch in the event of stopPropagation()
-    });
-    console.log("UA: "+navigator.userAgent);
-    console.log("window.devicePixelRatio:", window.devicePixelRatio);
+    function attach_handlers_on_document(handler_map) {
+        each(handler_map, function (event_name,v) {
+            if (!v) return; 
+            document.addEventListener(event_name, DEBUG?function () {
+                // in debug mode (i.e. if debug.js is included) all exceptions originating from 
+                // ply and 2ply global events are caught and reported to debug elements if present
+                try {
+                    v.apply(this, arguments);
+                } catch (e) {
+                    // show the error to the DOM to help out for mobile (also cool on PC)
+                    var html = '<div class="error">'+e.toString()+" at "+e.stack+"</div>";
+                    $("#debug_log").prepend(html);
+                    log_buffer.push(html);
+                    throw e; // rethrow to give it to debugging safari, rather than be silent
+                }
+                DEBUG.event_processed = true; 
+            }:v, true); // hook to capture phase to catch in the event of stopPropagation()
+        });
+    }
+    attach_handlers_on_document(level_1_events);
 
     return exposed;
 })(jQuery);
