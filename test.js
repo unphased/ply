@@ -24,7 +24,7 @@
             clearTimeout(id);
         };
     
-    var transform_name = Modernizr.prefixed('transform');
+    var transform_name = PLY.Modernizr.prefixed('transform');
     var hide_transform = "translate3d(-99999px,-99999px,0)";
 
     var no_events_processed_for = 0;

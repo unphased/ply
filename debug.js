@@ -46,7 +46,7 @@ var DEBUG = (function() {
             var cn = val.className;
             var tn = val.tagName;
             var id = val.id;
-            if (tn === "HTML") { cn = ""; } // too much output due to Modernizr
+            if (tn === "HTML") { cn = ""; } // in case of Modernizr don't dump it all
             return "<"+tn+(k?" #"+k:"")+(cn?" c="+cn:"")+(id?" id="+id:"")+">";
         }
         return val;
@@ -116,8 +116,26 @@ var DEBUG = (function() {
         }
     }
 
-    // an interface for portably highlighting any page element 
-    function highlight(e){
+    // an interface for portably highlighting any page element (without changing it)
+    function highlight(e, identifier){
+        // lazily init top level element 
+        var jc = $("#debug_element_highlighter_container");
+        if (jc.length === 0) {
+            $("html").append("<div id=debug_element_highlighter_container></div>");
+            jc = $("#debug_element_highlighter_container")
+        }        
+        var selector = identifier?'[data-id="'+identifier+'"]':"#debug_element_highlighter_noid";
+        var target = jc.children(selector);
+        if (!e) { // remove command: remove if present
+            target.remove();
+        } else if (target.length === 0) { // update command: add if not present
+            jc.append("<div "+(identifier?"data-id="+identifier:"id=debug_element_highlighter_noid")+"></div>");
+            target = jc.children(selector);
+            target.css({ // init
+
+            });
+        }
+        // assign to the target styles that has it overlap the target element
 
     }
 

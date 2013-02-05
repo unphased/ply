@@ -16,7 +16,6 @@ An API is provided to control behavior (also not sure if mutation observation is
 ## Dependencies
 
 - [jQuery](http://jquery.com/) 
-- [Modernizr](http://modernizr.com/)
 
 ## Devices Supported
 
