@@ -99,7 +99,7 @@ var level_2_events = {
         // must properly update trans on termination of second touch 
         // append to my transform the offset of the remaining touch
         var t = evt.remainingTouch;
-        var touch = exposed.pointer_state[t.identifier];
+        var touch = evt.touches_active_on_element[t.identifier];
         $.data(evt.target,"ply").trans = "translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle];
         //console.log("ed trans"+"translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle]);
         console.log("into", $.data(evt.target,"ply").trans, "remainingTouch", touch, "end 2E");
