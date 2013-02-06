@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% d7e6316 worked on highlight in debug.js %#";
+    var git_context = "#% 4592515 more issues %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -127,7 +127,7 @@ var DEBUG = (function() {
         'OTransition'      : 'oTransitionEnd',
         'msTransition'     : 'MSTransitionEnd',
         'transition'       : 'transitionend'
-    };
+    }; 
     var transEndEventName;
     var transitionStyle = local_Modernizr.prefixed('transition');
 
@@ -155,7 +155,7 @@ var DEBUG = (function() {
                 target.remove(); // erase me
             });
             target.css({ // fade
-                opacity: 0;
+                opacity: 0
             });
         } else {
             if (target.length === 0) { // update command: add if not present
