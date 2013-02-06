@@ -26,6 +26,9 @@
 // IN THE SOFTWARE. 
 // ============================================================================
 
+var TransformStyle = PLY.Modernizr.prefixed("transform"); 
+var TransformOriginStyle = PLY.Modernizr.prefixed("transformOrigin");
+
 var level_2_events = {
     ply_onetouchstart: function(evt) {
         console.log("1S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
