@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 5ae379d a bit more progress %#";
+    var git_context = "#% dc1df15 some work on debug %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -116,6 +116,27 @@ var DEBUG = (function() {
         }
     }
 
+    /* Modernizr 2.6.2 (Custom Build) | MIT & BSD
+    * Build: http://modernizr.com/download/#-prefixed-testprop-testallprops-domprefixes
+    */
+    local_Modernizr=function(a,b,c){function w(a){i.cssText=a}function x(a,b){return w(prefixes.join(a+";")+(b||""))}function y(a,b){return typeof a===b}function z(a,b){return!!~(""+a).indexOf(b)}function A(a,b){for(var d in a){var e=a[d];if(!z(e,"-")&&i[e]!==c)return b=="pfx"?e:!0}return!1}function B(a,b,d){for(var e in a){var f=b[a[e]];if(f!==c)return d===!1?a[e]:y(f,"function")?f.bind(d||b):f}return!1}function C(a,b,c){var d=a.charAt(0).toUpperCase()+a.slice(1),e=(a+" "+m.join(d+" ")+d).split(" ");return y(b,"string")||y(b,"undefined")?A(e,b):(e=(a+" "+n.join(d+" ")+d).split(" "),B(e,b,c))}var d="2.6.2",e={},f=b.documentElement,g="modernizr",h=b.createElement(g),i=h.style,j,k={}.toString,l="Webkit Moz O ms",m=l.split(" "),n=l.toLowerCase().split(" "),o={},p={},q={},r=[],s=r.slice,t,u={}.hasOwnProperty,v;!y(u,"undefined")&&!y(u.call,"undefined")?v=function(a,b){return u.call(a,b)}:v=function(a,b){return b in a&&y(a.constructor.prototype[b],"undefined")},Function.prototype.bind||(Function.prototype.bind=function(b){var c=this;if(typeof c!="function")throw new TypeError;var d=s.call(arguments,1),e=function(){if(this instanceof e){var a=function(){};a.prototype=c.prototype;var f=new a,g=c.apply(f,d.concat(s.call(arguments)));return Object(g)===g?g:f}return c.apply(b,d.concat(s.call(arguments)))};return e});for(var D in o)v(o,D)&&(t=D.toLowerCase(),e[t]=o[D](),r.push((e[t]?"":"no-")+t));return e.addTest=function(a,b){if(typeof a=="object")for(var d in a)v(a,d)&&e.addTest(d,a[d]);else{a=a.toLowerCase();if(e[a]!==c)return e;b=typeof b=="function"?b():b,typeof enableClasses!="undefined"&&enableClasses&&(f.className+=" "+(b?"":"no-")+a),e[a]=b}return e},w(""),h=j=null,e._version=d,e._domPrefixes=n,e._cssomPrefixes=m,e.testProp=function(a){return A([a])},e.testAllProps=C,e.prefixed=function(a,b,c){return b?C(a,b,c):C(a,"pfx")},e}(this,this.document);
+
+    var transEndEventNames = {
+        'WebkitTransition' : 'webkitTransitionEnd',
+        'MozTransition'    : 'transitionend',
+        'OTransition'      : 'oTransitionEnd',
+        'msTransition'     : 'MSTransitionEnd',
+        'transition'       : 'transitionend'
+    },
+    var transEndEventName;
+
+    // init some CSS for styling our highlighters (this debug script is intended to be a self contained bundle of magic)
+    // tis a shame jquery doesn't help out with this sort of thing
+    document.styleSheets[0].insertRule('#debug_element_highlighter_container > * {}',0);
+    document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionDuration')] = '0.3s, 0.3s';
+    document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionProperty')] = 'transform, opacity';
+    transEndEventName = transEndEventNames[ local_Modernizr.prefixed('transition') ];
+
     // an interface for portably highlighting any page element (without changing it)
     function highlight(e, identifier){
         // lazily init top level element 
@@ -123,20 +144,27 @@ var DEBUG = (function() {
         if (jc.length === 0) {
             $("html").append("<div id=debug_element_highlighter_container></div>");
             jc = $("#debug_element_highlighter_container")
-        }        
+        }
         var selector = identifier?'[data-id="'+identifier+'"]':"#debug_element_highlighter_noid";
         var target = jc.children(selector);
         if (!e) { // remove command: remove if present
-            target.remove();
+            // fade out
+            target.on(transEndEventName,function(){
+                target.remove(); // erase me
+            });
+            target.css({ // fade
+                opacity: 0;
+            });
         } else {
             if (target.length === 0) { // update command: add if not present
                 jc.append("<div "+(identifier?"data-id="+identifier:"id=debug_element_highlighter_noid")+"></div>");
                 target = jc.children(selector);
-                target.css({ // init
-
-                });
             }
             // assign to the target styles that has it overlap the target element
+            var je = $(e);
+            var p = je.offset();
+            var w = je.outerWidth();
+            var h = je.outerHeight();
         }
     }
 
