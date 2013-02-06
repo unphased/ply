@@ -247,12 +247,12 @@ var PLY = (function ($) {
                 epm.ec = evt.target;
             }
         }, 
-        mouseover: function (evt) { //console.log("mouseover", evt.target);
+        //mouseover: function (evt) { //console.log("mouseover", evt.target);
 
-        },
-        mouseout: function (evt) { //console.log("mouseout", evt.target);
+        //},
+        //mouseout: function (evt) { //console.log("mouseout", evt.target);
 
-        },
+        //},
         mousewheel: function (evt) { console.log("mousewheel", evt.wheelDeltaX, evt.wheelDeltaY); 
             if (evt.target.tagName === "HTML") return; // don't waste cycles scanning Modernizr's class list on <html>
             var et = evt.target;
