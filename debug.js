@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 4592515 more issues %#";
+    var git_context = "#% fe3ee67 building out dyn load code %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -136,7 +136,12 @@ var DEBUG = (function() {
     document.styleSheets[0].insertRule('#debug_element_highlighter_container > * {}',0);
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionDuration')] = '0.3s, 0.3s';
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionProperty')] = 'transform, opacity';
-    document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transformOrigin')] = '0 0'; 
+    document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transformOrigin')] = '0 0';
+    document.styleSheets[0].cssRules[0].style.backgroundColor = 'rgba(0,0,255,0.3)';
+    document.styleSheets[0].cssRules[0].style.pointerEvents = 'none';
+    document.styleSheets[0].cssRules[0].style.width = '100px';
+    document.styleSheets[0].cssRules[0].style.height = '100px';
+
     transEndEventName = transEndEventNames[ local_Modernizr.prefixed('transition') ];
 
     // an interface for portably highlighting any page element (without changing it)
@@ -166,9 +171,7 @@ var DEBUG = (function() {
             var je = $(e);
             var p = je.offset();
             var w = je.outerWidth();
-            var h = je.outerHeight();
-            e.style.width = 100;
-            e.style.height = 100;
+            var h = je.outerHeight();            
             e.style[transitionStyle] = "scale3d("+w/100+","+h/100+",1) translate3d("+p.left+"px, "+p.top+"px,0)";
         }
     }
