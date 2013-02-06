@@ -26,6 +26,7 @@
 // IN THE SOFTWARE. 
 // ============================================================================
 
+var assert = DEBUG.assert || function(){};
 var TransformStyle = PLY.Modernizr.prefixed("transform"); 
 var TransformOriginStyle = PLY.Modernizr.prefixed("transformOrigin");
 
