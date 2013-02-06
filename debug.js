@@ -128,15 +128,16 @@ var DEBUG = (function() {
         var target = jc.children(selector);
         if (!e) { // remove command: remove if present
             target.remove();
-        } else if (target.length === 0) { // update command: add if not present
-            jc.append("<div "+(identifier?"data-id="+identifier:"id=debug_element_highlighter_noid")+"></div>");
-            target = jc.children(selector);
-            target.css({ // init
+        } else {
+            if (target.length === 0) { // update command: add if not present
+                jc.append("<div "+(identifier?"data-id="+identifier:"id=debug_element_highlighter_noid")+"></div>");
+                target = jc.children(selector);
+                target.css({ // init
 
-            });
+                });
+            }
+            // assign to the target styles that has it overlap the target element
         }
-        // assign to the target styles that has it overlap the target element
-
     }
 
     // primitive set of methods provided by debug
