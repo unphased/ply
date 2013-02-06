@@ -1,4 +1,5 @@
 #!/bin/sh
+# deprecated, use commitdeploy or manually deploy!
 # run me to deploy to gh-pages (as opposed to using pre/postcommit hook... too inflexible) 
 # must be on master without having any changes (so commit on master first)
 [ `git rev-parse --abbrev-ref HEAD` != "master" ] && echo "Not on master branch. Aborting" && exit 1
@@ -6,7 +7,7 @@ git checkout gh-pages
 git pull
 git merge -Xtheirs master --no-commit # favor master (as that is where *all* dev occurs; gh-pages is where auto-edits occur)
 # update the js file with commit identification information from git
-sed -i_bak "s/#%.*%#/#% `git log master -1 --format="%h %s"` %#/" debug.js
+sed -i_bak 's/#%.*%#/#% `git log master -1 --format='%h %s'` %#/' debug.js
 git add debug.js
 rm debug.js_bak
 git commit -m"script writes git hash into js file for this commit: `git log master -1 --format="%h %s"`"

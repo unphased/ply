@@ -140,8 +140,8 @@ var PLY = (function ($) {
 
     var TransformStyle = ply_Modernizr.prefixed("transform"); 
     var TransformOriginStyle = ply_Modernizr.prefixed("transformOrigin");
-    var PerspectiveStyle = ply_Modernizr.prefixed("perspective");
-    var BackfaceVisibilityStyle = ply_Modernizr.prefixed("backfaceVisibility");
+    //var PerspectiveStyle = ply_Modernizr.prefixed("perspective");
+    //var BackfaceVisibilityStyle = ply_Modernizr.prefixed("backfaceVisibility");
     //console.log("bfvs: "+BackfaceVisibilityStyle);
 
 
