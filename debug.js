@@ -127,7 +127,7 @@ var DEBUG = (function() {
         'OTransition'      : 'oTransitionEnd',
         'msTransition'     : 'MSTransitionEnd',
         'transition'       : 'transitionend'
-    };
+    }; 
     var transEndEventName;
     var transitionStyle = local_Modernizr.prefixed('transition');
 
@@ -155,7 +155,7 @@ var DEBUG = (function() {
                 target.remove(); // erase me
             });
             target.css({ // fade
-                opacity: 0;
+                opacity: 0
             });
         } else {
             if (target.length === 0) { // update command: add if not present
