@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% dc1df15 some work on debug %#";
+    var git_context = "#% d7e6316 worked on highlight in debug.js %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -127,14 +127,16 @@ var DEBUG = (function() {
         'OTransition'      : 'oTransitionEnd',
         'msTransition'     : 'MSTransitionEnd',
         'transition'       : 'transitionend'
-    },
+    };
     var transEndEventName;
+    var transitionStyle = local_Modernizr.prefixed('transition');
 
     // init some CSS for styling our highlighters (this debug script is intended to be a self contained bundle of magic)
     // tis a shame jquery doesn't help out with this sort of thing
     document.styleSheets[0].insertRule('#debug_element_highlighter_container > * {}',0);
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionDuration')] = '0.3s, 0.3s';
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionProperty')] = 'transform, opacity';
+    document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transformOrigin')] = '0 0'; 
     transEndEventName = transEndEventNames[ local_Modernizr.prefixed('transition') ];
 
     // an interface for portably highlighting any page element (without changing it)
@@ -165,6 +167,9 @@ var DEBUG = (function() {
             var p = je.offset();
             var w = je.outerWidth();
             var h = je.outerHeight();
+            e.style.width = 100;
+            e.style.height = 100;
+            e.style[transitionStyle] = "scale3d("+w/100+","+h/100+",1) translate3d("+p.left+"px, "+p.top+"px,0)";
         }
     }
 
