@@ -1,13 +1,23 @@
 #!/bin/sh
-# commits current changes to master (via commit -a) and calls the deploy script which pushes to gh-pages
-# note that with neither script does master get pushed
+# commits current changes to after auto-generating a commit msg if necessary and 
+# auto-editing debug.js to inject commit message 
 [ `git rev-parse --abbrev-ref HEAD` != "master" ] && echo "Not on master branch. Aborting" && exit 1
-if [[ -z $1 ]] 
+if [[ -z $1 ]]
 then
 	echo "No args supplied, using default commit message"
-	git commit -a -m"commitdeploy scripted commit on master performed on host `hostname` at `date`" && ./deploy
+	MESSAGE="commitdeploy scripted commit on master performed on host `hostname` at `date`" 
 else 
 	echo "Using provided argument list as commit message"
-	git commit -a -m"$*" && ./deploy
+	MESSAGE="$*"
 fi
-git push origin master
+# apply message to code
+DELIM='|'
+# make sed call robust by checking no collision between delimiter and replacement string
+[[ $MESSAGE == *$DELIM* ]] && echo "Delimiter found in message string, Aborting" && exit 2
+git commit -a -m"$MESSAGE"
+git checkout gh-pages
+git pull
+git merge -Xtheirs master --no-commit
+MASTER_COMMIT=git log master -1 --format='%h %s'
+sed -i_bak "s$DELIM#%.*%#$DELIM#% $MASTER_COMMIT %#$DELIM" debug.js && git add debug.js && git commit -m"scripted update of code from master at $MASTER_COMMIT" && git push origin master gh-pages
+git checkout master
