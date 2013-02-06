@@ -30,6 +30,22 @@ var assert = DEBUG.assert || function(){};
 var TransformStyle = PLY.Modernizr.prefixed("transform"); 
 var TransformOriginStyle = PLY.Modernizr.prefixed("transformOrigin");
 
+// this is used to obtain the true offset within the page to get the authoritative 
+// origin point (which is used along with pageX/Y from input)
+function untransformed_offset(e) {
+    var currentTransform = e.style[TransformStyle];
+    e.style[TransformStyle] = "none"; // clear it out
+    assert(getComputedStyle(e)[TransformStyle] === "none"); // this assert should as a side effect ensure the clearing out occurs
+    // use an appropriate method to obtain the offset after clearing out transform
+    // taking the easy way out with jQuery is probably the best way to go 
+    // (1.9.0(+?) will use fast method, but DOM walking method is also legit)
+    var jeo = $(e).offset();
+    var jeoc = {x: jeo.left, y: jeo.top};
+    // set our style back 
+    e.style[TransformStyle] = currentTransform;
+    return jeoc;
+}
+
 var level_2_events = {
     ply_onetouchstart: function(evt) {
         console.log("1S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
