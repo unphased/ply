@@ -144,7 +144,11 @@ var DEBUG = (function() {
         s.appendChild(document.createTextNode("dummy_tag {/* dummy selector */}"));
         document.head.appendChild(s);
     }
-    document.styleSheets[0].insertRule('#debug_element_highlighter_container > * {}',0);
+    document.styleSheets[0].insertRule('#debug_element_highlighter_container {}',0);
+    document.styleSheets[0].cssRules[0].style.position = "absolute";
+    document.styleSheets[0].cssRules[0].style.pointerEvents = 'none';
+    
+    document.styleSheets[0].insertRule('#debug_element_highlighter_container * {}',0);
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionDuration')] = '0.3s, 0.3s';
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionProperty')] = 'transform, opacity';
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transformOrigin')] = '0 0';
