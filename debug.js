@@ -180,7 +180,7 @@ var DEBUG = (function() {
                 target.remove(); // erase me
                 console.log("removed");
             });
-            setTimeout(function(){can_change_transform = true;},500); // ensure not get stuck set to false
+            setTimeout(function(){can_change_transform = true;},100); // ensure not get stuck set to false
             console.log("removing");
             can_change_transform = false;
             target.css({ // fade
