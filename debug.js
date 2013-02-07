@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% c9117bb race condition %#";
+    var git_context = "#% 9d32352 error handling %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -92,6 +92,10 @@ var DEBUG = (function() {
     };
 
     console.log = instrumented_log; 
+
+    var error(e) {
+        log_buffer.push('<div class="error">'+e.toString()+" at "+e.stack+"</div>");
+    }
     
     var show_log_buffer = false;
     $("#log_buffer_dump").before($('<button>toggle full log buffer snapshot</button>').on('click',function(){
@@ -192,6 +196,7 @@ var DEBUG = (function() {
         isInDOM: isInDOM,
         revision: git_context.slice(3,-3), 
         clean_list: clean,
+        error: error,
      
         // This is just marked when any event makes its way through the primary
         // event handlers so that the test site can be a bit more efficient about 
