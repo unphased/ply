@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 1ea5f74 css holy crap css %#";
+    var git_context = "#% c454a79 css %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -155,7 +155,7 @@ var DEBUG = (function() {
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionProperty')] = 'transform, opacity';
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transformOrigin')] = '0 0';
     document.styleSheets[0].cssRules[0].style.backgroundColor = 'rgba(0,0,255,0.3)';
-    document.styleSheets[0].cssRules[0].style.border = '2px rgba(0,0,255,0.7) solid';
+    document.styleSheets[0].cssRules[0].style.border = '2px blue solid';
     document.styleSheets[0].cssRules[0].style.pointerEvents = 'none';
     
     transEndEventName = transEndEventNames[ local_Modernizr.prefixed('transition') ];
@@ -190,8 +190,8 @@ var DEBUG = (function() {
             var w = je.outerWidth();
             var h = je.outerHeight();
             target[0].style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0)";
-            target[0].style.width = w+"px";
-            target[0].style.height = h+"px";
+            target[0].style.width = (w-4)+"px";
+            target[0].style.height = (h-4)+"px";
             target[0].style.opacity = "1";
         }
         original_console_log.apply(window.console,["highlight2",e, jc]);
