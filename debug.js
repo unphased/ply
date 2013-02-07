@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% ec4d534 on init only %#";
+    var git_context = "#% a84d92f setting style prior to insertion %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -186,11 +186,12 @@ var DEBUG = (function() {
             });
         } else if (can_change_transform) {
             if (target.length === 0) { // update command: add if not present
-                jc.append('<div '+(identifier?"data-id="+identifier:"id=debug_element_highlighter_noid")+"></div>");
 
-                target = jc.children(selector);
-                target[0].style[transformStyle] = "scale3d("+document.body.clientWidth/500+","+document.body.clientHeight/500+",1)"; // opacity should already be 0 at this point but we'll force it
-                target[0].style.opacity = "0";
+                css_set = {opacity: 0};
+                css_set[transformStyle] = "scale3d("+document.body.clientWidth/500+","+document.body.clientHeight/500+",1)";
+                var jt = $('<div '+(identifier?"data-id="+identifier:"id=debug_element_highlighter_noid")+"></div>").css(css_set);
+                jc.append(jt);
+                target = jt;
             }
             // assign to the target styles that has it overlap the target element
             var je = $(e);
