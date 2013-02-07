@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% af535ef using scrollheight/width %#";
+    var git_context = "#% c96889d okay how about this %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -178,20 +178,20 @@ var DEBUG = (function() {
             // fade out
             target.on(transEndEventName,function(){                
                 target.remove(); // erase me
-                console.log("removed");
+                //console.log("removed");
             });
-            setTimeout(function(){can_change_transform = true;},100); // ensure not get stuck set to false
-            console.log("removing");
+            setTimeout(function(){can_change_transform = true;},300); // ensure not get stuck set to false
+            //console.log("removing");
             can_change_transform = false;
             target.css({ // fade
                 opacity: 0
             });
         } else if (can_change_transform) {
-            console.log("running the update");
+            //console.log("running the update");
             if (target.length === 0) { // update command: add if not present
 
                 css_set = {opacity: 0};
-                css_set[transformStyle] = "scale3d("+document.documentElement.scrollHeight/500+","+document.documentElement.scrollHeight/500+",1)";
+                css_set[transformStyle] = "scale3d("+document.documentElement.scrollWidth/500+","+document.documentElement.scrollHeight/500+",1)";
                 var jt = $('<div '+(identifier?"data-id="+identifier:"id=debug_element_highlighter_noid")+"></div>").css(css_set);
                 jc.append(jt);
                 target = jt;
