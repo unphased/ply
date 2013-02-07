@@ -155,7 +155,7 @@ var DEBUG = (function() {
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionProperty')] = 'transform, opacity';
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transformOrigin')] = '0 0';
     document.styleSheets[0].cssRules[0].style.backgroundColor = 'rgba(0,0,255,0.3)';
-    document.styleSheets[0].cssRules[0].style.border = '2px rgba(0,0,255,0.7)';
+    document.styleSheets[0].cssRules[0].style.border = '2px rgba(0,0,255,0.7) solid';
     document.styleSheets[0].cssRules[0].style.pointerEvents = 'none';
     
     transEndEventName = transEndEventNames[ local_Modernizr.prefixed('transition') ];
