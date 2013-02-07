@@ -171,7 +171,7 @@ var DEBUG = (function() {
         }
         var selector = identifier?'[data-id="'+identifier+'"]':"#debug_element_highlighter_noid";
         var target = jc.children(selector);
-        console.log('highlight1', jc.length)
+        console.log('highlight1', target.length)
         if (!e) { // remove command: remove if present
             // fade out
             target.on(transEndEventName,function(){
@@ -190,7 +190,7 @@ var DEBUG = (function() {
             var p = je.offset();
             var w = je.outerWidth();
             var h = je.outerHeight();
-            e.style[transitionStyle] = "scale3d("+w/100+","+h/100+",1) translate3d("+p.left+"px, "+p.top+"px,0)";
+            target[0].style[transitionStyle] = "scale3d("+w/100+","+h/100+",1) translate3d("+p.left+"px, "+p.top+"px,0)";
         }
         original_console_log.apply(window.console,["highlight2",e, jc]);
     }
