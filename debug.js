@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 9439949 css via js is pernicious %#";
+    var git_context = "#% 7435cc8 css holy crap css %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -155,7 +155,7 @@ var DEBUG = (function() {
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionProperty')] = 'transform, opacity';
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transformOrigin')] = '0 0';
     document.styleSheets[0].cssRules[0].style.backgroundColor = 'rgba(0,0,255,0.3)';
-    document.styleSheets[0].cssRules[0].style.border = '2px rgba(0,0,255,0.7)';
+    document.styleSheets[0].cssRules[0].style.border = '2px rgba(0,0,255,0.7) solid';
     document.styleSheets[0].cssRules[0].style.pointerEvents = 'none';
     
     transEndEventName = transEndEventNames[ local_Modernizr.prefixed('transition') ];
