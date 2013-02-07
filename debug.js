@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 2531ad6 gah %#";
+    var git_context = "#% 45534ef gahh %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -162,8 +162,7 @@ var DEBUG = (function() {
     transEndEventName = transEndEventNames[ local_Modernizr.prefixed('transition') ];
 
     // an interface for portably highlighting any page element (without changing it)
-    function highlight(e, identifier){
-        console.log("highlight",e);
+    function highlight(e, identifier){        
         // lazily init top level element 
         var jc = $("#debug_element_highlighter_container");
         if (jc.length === 0) {
@@ -192,6 +191,7 @@ var DEBUG = (function() {
             var h = je.outerHeight();
             e.style[transitionStyle] = "scale3d("+w/100+","+h/100+",1) translate3d("+p.left+"px, "+p.top+"px,0)";
         }
+        console.log("highlight",e, jc);
     }
 
     // primitive set of methods provided by debug
