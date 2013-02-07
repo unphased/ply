@@ -32,8 +32,8 @@
                         DEBUG.highlight(null);
                     },
                     mouseover: function(evt){
-                        console.log(evt, evt.target);
-                        
+                        DEBUG.highlight(evt.target);
+                        //console.log(evt.target);
                     },
                     touchstart: function(evt) {
                         if (Date.now() - tap_start_time < 300) {
