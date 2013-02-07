@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 28820cf so much stupid %#";
+    var git_context = "#% 29bc1af damn stupid confusion of transition and transform %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -133,7 +133,7 @@ var DEBUG = (function() {
         'transition'       : 'transitionend'
     }; 
     var transEndEventName;
-    var transitionStyle = local_Modernizr.prefixed('transition');
+    var transformStyle = local_Modernizr.prefixed('transform');
 
     // init some CSS for styling our highlighters (this debug script is intended to be a self contained bundle of magic)
     // tis a shame jquery doesn't help out with this sort of thing
@@ -190,7 +190,7 @@ var DEBUG = (function() {
             var p = je.offset();
             var w = je.outerWidth();
             var h = je.outerHeight();
-            target[0].style[transitionStyle] = "scale3d("+w/100+","+h/100+",1) translate3d("+p.left+"px, "+p.top+"px,0)";
+            target[0].style[transformStyle] = "scale3d("+w/100+","+h/100+",1) translate3d("+p.left+"px, "+p.top+"px,0)";
         }
         original_console_log.apply(window.console,["highlight2",e, jc]);
     }
