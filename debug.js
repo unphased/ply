@@ -195,6 +195,8 @@ var DEBUG = (function() {
             var p = je.offset();
             var w = je.outerWidth();
             var h = je.outerHeight();
+            target[0].style[transformStyle] = "scale3d("+document.body.clientWidth/500+","+document.body.clientHeight/500+",1)"; // opacity should already be 0 at this point but we'll force it
+            target[0].style.opacity = "0";
             var computed = getComputedStyle(target[0]);
             //setTimeout(function(){
                 target[0].style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+w/500+","+h/500+",1)";
