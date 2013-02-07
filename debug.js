@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 2ce0b67 order of transformations %#";
+    var git_context = "#% 73ed66e css %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -155,10 +155,9 @@ var DEBUG = (function() {
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionProperty')] = 'transform, opacity';
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transformOrigin')] = '0 0';
     document.styleSheets[0].cssRules[0].style.backgroundColor = 'rgba(0,0,255,0.3)';
+    document.styleSheets[0].cssRules[0].style.border = '2px rgba(0,0,255,0.7)';
     document.styleSheets[0].cssRules[0].style.pointerEvents = 'none';
-    document.styleSheets[0].cssRules[0].style.width = '100px';
-    document.styleSheets[0].cssRules[0].style.height = '100px';
-
+    
     transEndEventName = transEndEventNames[ local_Modernizr.prefixed('transition') ];
 
     // an interface for portably highlighting any page element (without changing it)
@@ -190,7 +189,9 @@ var DEBUG = (function() {
             var p = je.offset();
             var w = je.outerWidth();
             var h = je.outerHeight();
-            target[0].style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+w/100+","+h/100+",1) ";
+            target[0].style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0)";
+            target[0].style.width = w;
+            target[0].style.width = h;
         }
         original_console_log.apply(window.console,["highlight2",e, jc]);
     }
