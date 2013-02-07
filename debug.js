@@ -196,6 +196,7 @@ var DEBUG = (function() {
         isInDOM: isInDOM,
         revision: git_context.slice(3,-3), 
         clean_list: clean,
+        highlight: highlight,
         error: error,
      
         // This is just marked when any event makes its way through the primary
