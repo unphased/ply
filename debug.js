@@ -1,7 +1,7 @@
-/// slu's JS debug layer. Please include prior to loading libraries that use it
+/// slu's deluxe JS browser debug layer. Please include prior to loading libraries that depend on it
 /// Primarily provides functionality for live DOM manipulation style debugging
 /// which was used heavily throughout development of ply.js.
-/// Access features through window.DEBUG
+/// You will be able to access exposed features through window.DEBUG.
 
 // there are a few special DOM id's: 
 // #debug_log
@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% d1aad6e using 3 mouse buttons now %#";
+    var git_context = "#% d11c679 comments, and setting overlay page size to nothing %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -149,6 +149,9 @@ var DEBUG = (function() {
     document.styleSheets[0].cssRules[0].style.pointerEvents = 'none';
     document.styleSheets[0].cssRules[0].style.top = '0';
     document.styleSheets[0].cssRules[0].style.left = '0';
+    document.styleSheets[0].cssRules[0].style.overflow = 'visible';
+    document.styleSheets[0].cssRules[0].style.width = '0';
+    document.styleSheets[0].cssRules[0].style.height = '0';
     
     document.styleSheets[0].insertRule('#debug_element_highlighter_container * {}',0);
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionDuration')] = '0.3s, 0.3s';
