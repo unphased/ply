@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 982b141 printing %#";
+    var git_context = "#% 9887129 need revision %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -232,6 +232,7 @@ var DEBUG = (function() {
     // generally helpful debugging info
     console.log("UA: "+navigator.userAgent);
     console.log("window.devicePixelRatio:", window.devicePixelRatio);
+    console.log("Revision: "+DEBUG.revision);
 
     return exposed;
 })();
