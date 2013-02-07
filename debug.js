@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 6495ba3 css %#";
+    var git_context = "#% 2531ad6 gah %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -163,6 +163,7 @@ var DEBUG = (function() {
 
     // an interface for portably highlighting any page element (without changing it)
     function highlight(e, identifier){
+        console.log("highlight",e);
         // lazily init top level element 
         var jc = $("#debug_element_highlighter_container");
         if (jc.length === 0) {
@@ -188,7 +189,7 @@ var DEBUG = (function() {
             var je = $(e);
             var p = je.offset();
             var w = je.outerWidth();
-            var h = je.outerHeight();            
+            var h = je.outerHeight();
             e.style[transitionStyle] = "scale3d("+w/100+","+h/100+",1) translate3d("+p.left+"px, "+p.top+"px,0)";
         }
     }
