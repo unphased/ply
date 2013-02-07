@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% fee8f51 shorter %#";
+    var git_context = "#% af535ef using scrollheight/width %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -191,7 +191,7 @@ var DEBUG = (function() {
             if (target.length === 0) { // update command: add if not present
 
                 css_set = {opacity: 0};
-                css_set[transformStyle] = "scale3d("+document.documentElement.clientWidth/500+","+document.documentElement.clientHeight/500+",1)";
+                css_set[transformStyle] = "scale3d("+document.documentElement.scrollHeight/500+","+document.documentElement.scrollHeight/500+",1)";
                 var jt = $('<div '+(identifier?"data-id="+identifier:"id=debug_element_highlighter_noid")+"></div>").css(css_set);
                 jc.append(jt);
                 target = jt;
