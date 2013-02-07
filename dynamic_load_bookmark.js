@@ -21,6 +21,7 @@
                             btn = evt.button;
                         if (btn == 1) { // right mouse 
                             DEBUG.highlight(evt.target);
+                            evt.preventDefault();
                         }
                     },
                     mouseup: function(evt) {
