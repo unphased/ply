@@ -19,17 +19,17 @@
                             btn = evt.which;
                         else if (typeof(evt.button) !== "undefined") 
                             btn = evt.button;
-                        console.log("btn",btn);
+                        //console.log("btn",btn);
                         if (btn == 3) { // right mouse 
                             DEBUG.highlight(evt.target);
                             evt.preventDefault(); // this appears to not be able to prevent context menu
                         }
+                        if (btn == 2) {
+                            DEBUG.highlight(null);
+                        }
                     },
                     contextmenu: function(evt) {
                         evt.preventDefault();
-                    },
-                    mouseup: function(evt) {
-                        DEBUG.highlight(null);
                     },
                     touchstart: function(evt) {
                         if (Date.now() - tap_start_time < 300) {
