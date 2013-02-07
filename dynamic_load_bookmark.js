@@ -12,6 +12,19 @@
                 var tracked_elements = {};
                 var tap_start_time = 0;
                 PLY.attach_handlers_on_document({
+                    mousedown: function(evt) {
+                        var btn;
+                        if (typeof(evt.which) !== "undefined")
+                            btn = evt.which;
+                        else if (typeof(evt.button) !== "undefined") 
+                            btn = evt.button;
+                        if (btn == 1) { // right mouse 
+                            DEBUG.highlight(evt.target);
+                        }
+                    }
+                    mouseup: function(evt) {
+                        DEBUG.highlight(null);
+                    }
                     touchstart: function(evt) {
                         if (Date.now() - tap_start_time < 300) {
                             // is second tap start
