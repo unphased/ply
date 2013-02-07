@@ -21,10 +21,10 @@
                         if (btn == 1) { // right mouse 
                             DEBUG.highlight(evt.target);
                         }
-                    }
+                    },
                     mouseup: function(evt) {
                         DEBUG.highlight(null);
-                    }
+                    },
                     touchstart: function(evt) {
                         if (Date.now() - tap_start_time < 300) {
                             // is second tap start
