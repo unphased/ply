@@ -179,12 +179,15 @@ var DEBUG = (function() {
             target.on(transEndEventName,function(){
                 can_change_transform = true;
                 target.remove(); // erase me
+                console.log("removed");
             });
+            console.log("removing");
             can_change_transform = false;
             target.css({ // fade
                 opacity: 0
             });
         } else if (can_change_transform) {
+            console.log("running the update");
             if (target.length === 0) { // update command: add if not present
 
                 css_set = {opacity: 0};
@@ -201,12 +204,9 @@ var DEBUG = (function() {
             
             //var computed = DEBUG.serialize(getComputedStyle(target[0]));
             //console.log("computed",target[0].style[transformStyle]);
-            setTimeout(function(){
-                target[0].style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+w/500+","+h/500+",1)";
-                ///target[0].style.width = (w-4)+"px";
-                ///target[0].style.height = (h-4)+"px";
-                target[0].style.opacity = "1";
-            },0); // delay to allow transition to run on start
+            
+            target.css(transformStyle, "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+w/500+","+h/500+",1)");
+            target.css("opacity",1);            
         }
         //original_console_log.apply(window.console,["highlight2",e, jc]);
     }
