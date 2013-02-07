@@ -189,16 +189,17 @@ var DEBUG = (function() {
                 jc.append('<div '+(identifier?"data-id="+identifier:"id=debug_element_highlighter_noid")+"></div>");
 
                 target = jc.children(selector);
+                target[0].style[transformStyle] = "scale3d("+document.body.clientWidth/500+","+document.body.clientHeight/500+",1)"; // opacity should already be 0 at this point but we'll force it
+                target[0].style.opacity = "0";
             }
             // assign to the target styles that has it overlap the target element
             var je = $(e);
             var p = je.offset();
             var w = je.outerWidth();
             var h = je.outerHeight();
-            target[0].style[transformStyle] = "scale3d("+document.body.clientWidth/500+","+document.body.clientHeight/500+",1)"; // opacity should already be 0 at this point but we'll force it
-            target[0].style.opacity = "0";
+            
             //var computed = DEBUG.serialize(getComputedStyle(target[0]));
-            //console.log("computed",computed);
+            //console.log("computed",target[0].style[transformStyle]);
             setTimeout(function(){
                 target[0].style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+w/500+","+h/500+",1)";
                 ///target[0].style.width = (w-4)+"px";
