@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% c454a79 css %#";
+    var git_context = "#% 85b381f hopefully this gives behavior i want %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -149,6 +149,8 @@ var DEBUG = (function() {
     document.styleSheets[0].cssRules[0].style.pointerEvents = 'none';
     document.styleSheets[0].cssRules[0].style.top = '0';
     document.styleSheets[0].cssRules[0].style.left = '0';
+    document.styleSheets[0].cssRules[0].style.width = '100%';
+    document.styleSheets[0].cssRules[0].style.height = '100%';
     
     document.styleSheets[0].insertRule('#debug_element_highlighter_container * {}',0);
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionDuration')] = '0.3s, 0.3s';
@@ -157,6 +159,8 @@ var DEBUG = (function() {
     document.styleSheets[0].cssRules[0].style.backgroundColor = 'rgba(0,0,255,0.3)';
     document.styleSheets[0].cssRules[0].style.border = '2px blue solid';
     document.styleSheets[0].cssRules[0].style.pointerEvents = 'none';
+    document.styleSheets[0].cssRules[0].style.height = '100%';
+    document.styleSheets[0].cssRules[0].style.width = '100%';
     
     transEndEventName = transEndEventNames[ local_Modernizr.prefixed('transition') ];
 
@@ -181,7 +185,8 @@ var DEBUG = (function() {
             });
         } else {
             if (target.length === 0) { // update command: add if not present
-                jc.append("<div "+(identifier?"data-id="+identifier:"id=debug_element_highlighter_noid")+"></div>");
+                jc.append('<div '+(identifier?"data-id="+identifier:"id=debug_element_highlighter_noid")+"></div>");
+
                 target = jc.children(selector);
             }
             // assign to the target styles that has it overlap the target element
