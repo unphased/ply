@@ -20,7 +20,7 @@
                         else if (typeof(evt.button) !== "undefined") 
                             btn = evt.button;
                         console.log("btn",btn);
-                        if (btn == 1) { // right mouse 
+                        if (btn == 3) { // right mouse 
                             DEBUG.highlight(evt.target);
                             evt.preventDefault();
                         }
