@@ -147,6 +147,8 @@ var DEBUG = (function() {
     document.styleSheets[0].insertRule('#debug_element_highlighter_container {}',0);
     document.styleSheets[0].cssRules[0].style.position = "absolute";
     document.styleSheets[0].cssRules[0].style.pointerEvents = 'none';
+    document.styleSheets[0].cssRules[0].style.top = '0';
+    document.styleSheets[0].cssRules[0].style.left = '0';
     
     document.styleSheets[0].insertRule('#debug_element_highlighter_container * {}',0);
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionDuration')] = '0.3s, 0.3s';
