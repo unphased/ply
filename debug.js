@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 9b4f278 getting closer... %#";
+    var git_context = "#% 42f6620 cool %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -173,15 +173,18 @@ var DEBUG = (function() {
         var selector = identifier?'[data-id="'+identifier+'"]':"#debug_element_highlighter_noid";
         var target = jc.children(selector);
         console.log('highlight1', target.length)
+        var do_not_change_transform
         if (!e) { // remove command: remove if present
             // fade out
             target.on(transEndEventName,function(){
+                do_not_change_transform = false;
                 target.remove(); // erase me
             });
+            do_not_change_transform = true;
             target.css({ // fade
                 opacity: 0
             });
-        } else {
+        } else if (!do_not_change_transform) {
             if (target.length === 0) { // update command: add if not present
                 jc.append('<div '+(identifier?"data-id="+identifier:"id=debug_element_highlighter_noid")+"></div>");
 
@@ -200,7 +203,7 @@ var DEBUG = (function() {
                 target[0].style.opacity = "1";
             //},0); // delay to allow transition to run on start
         }
-        original_console_log.apply(window.console,["highlight2",e, jc]);
+        //original_console_log.apply(window.console,["highlight2",e, jc]);
     }
 
     // primitive set of methods provided by debug
