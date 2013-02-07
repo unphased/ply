@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 9d32352 error handling %#";
+    var git_context = "#% 6b57fb0 syntax %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -93,7 +93,7 @@ var DEBUG = (function() {
 
     console.log = instrumented_log; 
 
-    var error(e) {
+    function error(e) {
         log_buffer.push('<div class="error">'+e.toString()+" at "+e.stack+"</div>");
     }
     
