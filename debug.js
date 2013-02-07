@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 8345b29 fix commas %#";
+    var git_context = "#% b4fc225 inserting a stylesheet when one is not present %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -133,6 +133,13 @@ var DEBUG = (function() {
 
     // init some CSS for styling our highlighters (this debug script is intended to be a self contained bundle of magic)
     // tis a shame jquery doesn't help out with this sort of thing
+    if (document.styleSheets.length === 0) {
+        // must init a stylesheet 
+        var s = document.createElement('style');
+        s.type = 'text/css';
+        s.appendChild(document.createTextNode("dummy_tag {/* dummy selector */}"));
+        document.head.appendChild(s);
+    }
     document.styleSheets[0].insertRule('#debug_element_highlighter_container > * {}',0);
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionDuration')] = '0.3s, 0.3s';
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionProperty')] = 'transform, opacity';
