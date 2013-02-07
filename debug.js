@@ -191,7 +191,7 @@ var DEBUG = (function() {
             var h = je.outerHeight();
             e.style[transitionStyle] = "scale3d("+w/100+","+h/100+",1) translate3d("+p.left+"px, "+p.top+"px,0)";
         }
-        console.log("highlight",e, jc);
+        original_console_log("highlight",e, jc);
     }
 
     // primitive set of methods provided by debug
