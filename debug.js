@@ -192,6 +192,7 @@ var DEBUG = (function() {
             target[0].style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0)";
             target[0].style.width = w+"px";
             target[0].style.width = h+"px";
+            target[0].style.opacity = "1";
         }
         original_console_log.apply(window.console,["highlight2",e, jc]);
     }
