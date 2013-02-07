@@ -721,7 +721,7 @@ var PLY = (function ($) {
                     // show the error to the DOM to help out for mobile (also cool on PC)
                     var html = '<div class="error">'+e.toString()+" at "+e.stack+"</div>";
                     $("#debug_log").prepend(html);
-                    log_buffer.push(html);
+                    DEBUG.error(e);
                     throw e; // rethrow to give it to debugging safari, rather than be silent
                 }
                 DEBUG.event_processed = true; 
