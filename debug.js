@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 7ffa08d right mouse button %#";
+    var git_context = "#% 6495ba3 css %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -147,6 +147,8 @@ var DEBUG = (function() {
     document.styleSheets[0].insertRule('#debug_element_highlighter_container {}',0);
     document.styleSheets[0].cssRules[0].style.position = "absolute";
     document.styleSheets[0].cssRules[0].style.pointerEvents = 'none';
+    document.styleSheets[0].cssRules[0].style.top = '0';
+    document.styleSheets[0].cssRules[0].style.left = '0';
     
     document.styleSheets[0].insertRule('#debug_element_highlighter_container * {}',0);
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionDuration')] = '0.3s, 0.3s';
