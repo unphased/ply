@@ -29,7 +29,7 @@
                     touchstart: function(evt) {
                         if (Date.now() - tap_start_time < 300) {
                             // is second tap start
-                            evt.preventDefault();                            
+                            evt.preventDefault();
                             tracked_elements[evt.changedTouches[0].identifier] = true;
                         } // too much waiting, just function as normal
                         tap_start_time = Date.now();

@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 6b57fb0 syntax %#";
+    var git_context = "#% 9a956f5 expose function %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -196,6 +196,7 @@ var DEBUG = (function() {
         isInDOM: isInDOM,
         revision: git_context.slice(3,-3), 
         clean_list: clean,
+        highlight: highlight,
         error: error,
      
         // This is just marked when any event makes its way through the primary
