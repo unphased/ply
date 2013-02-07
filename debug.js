@@ -194,10 +194,12 @@ var DEBUG = (function() {
             var p = je.offset();
             var w = je.outerWidth();
             var h = je.outerHeight();
-            target[0].style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+w/document.body.clientWidth+","+h/document.body.clientHeight+",1)";
-            ///target[0].style.width = (w-4)+"px";
-            ///target[0].style.height = (h-4)+"px";
-            target[0].style.opacity = "1";
+            setTimeout(function(){
+                target[0].style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+w/document.body.clientWidth+","+h/document.body.clientHeight+",1)";
+                ///target[0].style.width = (w-4)+"px";
+                ///target[0].style.height = (h-4)+"px";
+                target[0].style.opacity = "1";
+            },0); // delay to allow transform 
         }
         original_console_log.apply(window.console,["highlight2",e, jc]);
     }
