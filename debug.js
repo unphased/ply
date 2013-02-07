@@ -163,6 +163,7 @@ var DEBUG = (function() {
     transEndEventName = transEndEventNames[ local_Modernizr.prefixed('transition') ];
 
     // an interface for portably highlighting any page element (without changing it)
+    var can_change_transform = true;
     function highlight(e, identifier){
         // lazily init top level element 
         var jc = $("#debug_element_highlighter_container");
@@ -172,8 +173,7 @@ var DEBUG = (function() {
         }
         var selector = identifier?'[data-id="'+identifier+'"]':"#debug_element_highlighter_noid";
         var target = jc.children(selector);
-        //console.log('highlight1', target.length)
-        var can_change_transform = true;
+        //console.log('highlight1', target.length)        
         if (!e) { // remove command: remove if present
             // fade out
             target.on(transEndEventName,function(){
@@ -206,7 +206,7 @@ var DEBUG = (function() {
             //console.log("computed",target[0].style[transformStyle]);
             
             target.css(transformStyle, "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+w/500+","+h/500+",1)");
-            target.css("opacity",1);            
+            target.css("opacity",1);
         }
         //original_console_log.apply(window.console,["highlight2",e, jc]);
     }
