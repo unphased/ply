@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% REVISION %#";
+    var git_context = "#% 42f6620 cool %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -173,18 +173,18 @@ var DEBUG = (function() {
         var selector = identifier?'[data-id="'+identifier+'"]':"#debug_element_highlighter_noid";
         var target = jc.children(selector);
         console.log('highlight1', target.length)
-        var do_not_change_transform
+        var can_change_transform = true;
         if (!e) { // remove command: remove if present
             // fade out
             target.on(transEndEventName,function(){
-                do_not_change_transform = false;
+                can_change_transform = true;
                 target.remove(); // erase me
             });
-            do_not_change_transform = true;
+            can_change_transform = false;
             target.css({ // fade
                 opacity: 0
             });
-        } else if (!do_not_change_transform) {
+        } else if (can_change_transform) {
             if (target.length === 0) { // update command: add if not present
                 jc.append('<div '+(identifier?"data-id="+identifier:"id=debug_element_highlighter_noid")+"></div>");
 
