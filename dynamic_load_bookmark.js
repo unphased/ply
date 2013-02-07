@@ -24,12 +24,16 @@
                             DEBUG.highlight(evt.target);
                             evt.preventDefault(); // this appears to not be able to prevent context menu
                         }
-                        if (btn == 2) {
-                            DEBUG.highlight(null);
-                        }
                     },
                     contextmenu: function(evt) {
                         evt.preventDefault();
+                    },
+                    mouseup: function(evt) {
+                        DEBUG.highlight(null);
+                    },
+                    mouseover: function(evt){
+                        console.log(evt, evt.target);
+                        
                     },
                     touchstart: function(evt) {
                         if (Date.now() - tap_start_time < 300) {

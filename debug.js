@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% d11c679 comments, and setting overlay page size to nothing %#";
+    var git_context = "#% 45f92c4 exploring mouseover %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
