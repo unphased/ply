@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 8f87d90 css %#";
+    var git_context = "#% 1ea5f74 css holy crap css %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -191,7 +191,7 @@ var DEBUG = (function() {
             var h = je.outerHeight();
             target[0].style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0)";
             target[0].style.width = w+"px";
-            target[0].style.width = h+"px";
+            target[0].style.height = h+"px";
             target[0].style.opacity = "1";
         }
         original_console_log.apply(window.console,["highlight2",e, jc]);
