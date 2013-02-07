@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 7d9a62f initialization %#";
+    var git_context = "#% 527b4a4 initialization %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -198,6 +198,7 @@ var DEBUG = (function() {
             target[0].style[transformStyle] = "scale3d("+document.body.clientWidth/500+","+document.body.clientHeight/500+",1)"; // opacity should already be 0 at this point but we'll force it
             target[0].style.opacity = "0";
             var computed = getComputedStyle(target[0]);
+            console.log("computed",computed);
             //setTimeout(function(){
                 target[0].style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+w/500+","+h/500+",1)";
                 ///target[0].style.width = (w-4)+"px";
