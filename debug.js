@@ -190,7 +190,7 @@ var DEBUG = (function() {
             var p = je.offset();
             var w = je.outerWidth();
             var h = je.outerHeight();
-            target[0].style[transformStyle] = "scale3d("+w/100+","+h/100+",1) translate3d("+p.left+"px, "+p.top+"px,0)";
+            target[0].style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+w/100+","+h/100+",1) ";
         }
         original_console_log.apply(window.console,["highlight2",e, jc]);
     }
