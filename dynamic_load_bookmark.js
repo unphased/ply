@@ -12,7 +12,7 @@
                 
                 var tracked_elements = {};
                 var tap_start_time = 0;
-                PLY.attach_handlers_on_document({
+                PLY.attach_handlers_on_document({                    
                     mousedown: function(evt) {
                         var btn;
                         if (typeof(evt.which) !== "undefined")
@@ -22,8 +22,11 @@
                         console.log("btn",btn);
                         if (btn == 3) { // right mouse 
                             DEBUG.highlight(evt.target);
-                            evt.preventDefault();
+                            evt.preventDefault(); // this appears to not be able to prevent context menu
                         }
+                    },
+                    contextmenu: function(evt) {
+                        evt.preventDefault();
                     },
                     mouseup: function(evt) {
                         DEBUG.highlight(null);
