@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 45534ef gahh %#";
+    var git_context = "#% 59f1e05 gahhh %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -191,7 +191,7 @@ var DEBUG = (function() {
             var h = je.outerHeight();
             e.style[transitionStyle] = "scale3d("+w/100+","+h/100+",1) translate3d("+p.left+"px, "+p.top+"px,0)";
         }
-        console.log("highlight",e, jc);
+        original_console_log("highlight",e, jc);
     }
 
     // primitive set of methods provided by debug
