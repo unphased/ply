@@ -232,6 +232,7 @@ var DEBUG = (function() {
     // generally helpful debugging info
     console.log("UA: "+navigator.userAgent);
     console.log("window.devicePixelRatio:", window.devicePixelRatio);
+    console.log("Revision: "+DEBUG.revision);
 
     return exposed;
 })();
