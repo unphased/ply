@@ -173,14 +173,14 @@ var DEBUG = (function() {
         }
         var selector = identifier?'[data-id="'+identifier+'"]':"#debug_element_highlighter_noid";
         var target = jc.children(selector);
-        //console.log('highlight1', target.length)        
+        //console.log('highlight1', target.length)
         if (!e) { // remove command: remove if present
             // fade out
-            target.on(transEndEventName,function(){
-                can_change_transform = true;
+            target.on(transEndEventName,function(){                
                 target.remove(); // erase me
                 console.log("removed");
             });
+            setTimeout(function(){can_change_transform = true;},500); // ensure not get stuck set to false
             console.log("removing");
             can_change_transform = false;
             target.css({ // fade
@@ -191,7 +191,7 @@ var DEBUG = (function() {
             if (target.length === 0) { // update command: add if not present
 
                 css_set = {opacity: 0};
-                css_set[transformStyle] = "scale3d("+document.body.clientWidth/500+","+document.body.clientHeight/500+",1)";
+                css_set[transformStyle] = "scale3d("+document.documentElement.clientWidth/500+","+document.documentElement.clientHeight/500+",1)";
                 var jt = $('<div '+(identifier?"data-id="+identifier:"id=debug_element_highlighter_noid")+"></div>").css(css_set);
                 jc.append(jt);
                 target = jt;
