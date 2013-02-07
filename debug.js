@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 9dc086b not quite %#";
+    var git_context = "#% 9b4f278 getting closer... %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -149,8 +149,6 @@ var DEBUG = (function() {
     document.styleSheets[0].cssRules[0].style.pointerEvents = 'none';
     document.styleSheets[0].cssRules[0].style.top = '0';
     document.styleSheets[0].cssRules[0].style.left = '0';
-    document.styleSheets[0].cssRules[0].style.width = '100%';
-    document.styleSheets[0].cssRules[0].style.height = '100%';
     
     document.styleSheets[0].insertRule('#debug_element_highlighter_container * {}',0);
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionDuration')] = '0.3s, 0.3s';
@@ -159,13 +157,13 @@ var DEBUG = (function() {
     document.styleSheets[0].cssRules[0].style.backgroundColor = 'rgba(0,0,255,0.3)';
     //document.styleSheets[0].cssRules[0].style.border = '2px blue solid';
     document.styleSheets[0].cssRules[0].style.pointerEvents = 'none';
-    document.styleSheets[0].cssRules[0].style.height = '100%';
-    document.styleSheets[0].cssRules[0].style.width = '100%';
+    document.styleSheets[0].cssRules[0].style.height = '500px';
+    document.styleSheets[0].cssRules[0].style.width = '500px';
     
     transEndEventName = transEndEventNames[ local_Modernizr.prefixed('transition') ];
 
     // an interface for portably highlighting any page element (without changing it)
-    function highlight(e, identifier){        
+    function highlight(e, identifier){
         // lazily init top level element 
         var jc = $("#debug_element_highlighter_container");
         if (jc.length === 0) {
@@ -194,12 +192,13 @@ var DEBUG = (function() {
             var p = je.offset();
             var w = je.outerWidth();
             var h = je.outerHeight();
-            setTimeout(function(){
-                target[0].style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+w/document.body.clientWidth+","+h/document.body.clientHeight+",1)";
+            var computed = getComputedStyle(target[0]);
+            //setTimeout(function(){
+                target[0].style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+w/500+","+h/500+",1)";
                 ///target[0].style.width = (w-4)+"px";
                 ///target[0].style.height = (h-4)+"px";
                 target[0].style.opacity = "1";
-            },0); // delay to allow transform 
+            //},0); // delay to allow transition to run on start
         }
         original_console_log.apply(window.console,["highlight2",e, jc]);
     }
