@@ -221,7 +221,7 @@ var PLY = (function ($) {
         click: function (evt) { console.log('click', evt.pageX, evt.pageY, "on", evt.target); 
 
         },
-        mousedown: function (evt) { console.log('mousedown',evt.pageX,evt.pageY);
+        mousedown: function (evt) { //console.log('mousedown',evt.pageX,evt.pageY);
             // need to trap drag-of-selection. Crap. You'll have to prevent 
             // selections entirely. Funny this stuff is quite
             // less problematic for touch events. 
@@ -234,7 +234,7 @@ var PLY = (function ($) {
             exposed.pointer_state.m = {xs:evt.pageX, ys:evt.pageY, 
                 xc: evt.pageX, yc: evt.pageY, es: evt.target, ec: evt.target};
         },
-        mouseup: function (evt) { console.log('mouseup',evt.pageX,evt.pageY);
+        mouseup: function (evt) { //console.log('mouseup',evt.pageX,evt.pageY);
             // this event may fail to fire by dragging mouse out of
             // window. This is less of a concern for touch since most touch
             // devices do not use window systems. 

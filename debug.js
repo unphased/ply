@@ -172,7 +172,7 @@ var DEBUG = (function() {
         }
         var selector = identifier?'[data-id="'+identifier+'"]':"#debug_element_highlighter_noid";
         var target = jc.children(selector);
-        console.log('highlight1', target.length)
+        //console.log('highlight1', target.length)
         var can_change_transform = true;
         if (!e) { // remove command: remove if present
             // fade out
