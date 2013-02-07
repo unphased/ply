@@ -12,7 +12,8 @@
                 
                 var tracked_elements = {};
                 var tap_start_time = 0;
-                PLY.attach_handlers_on_document({                    
+                var highlight_active = false;
+                PLY.attach_handlers_on_document({
                     mousedown: function(evt) {
                         var btn;
                         if (typeof(evt.which) !== "undefined")
@@ -22,18 +23,20 @@
                         //console.log("btn",btn);
                         if (btn == 3) { // right mouse 
                             DEBUG.highlight(evt.target);
-                            evt.preventDefault(); // this appears to not be able to prevent context menu
+                            //evt.preventDefault(); // this appears to not be able to prevent context menu
+                            highlight_active = true;
                         }
                     },
                     contextmenu: function(evt) {
                         evt.preventDefault();
                     },
                     mouseup: function(evt) {
+                        highlight_active = false;
                         DEBUG.highlight(null);
                     },
                     mouseover: function(evt){
-                        DEBUG.highlight(evt.target);
-                        //console.log(evt.target);
+                        if (highlight_active)
+                            DEBUG.highlight(evt.target);                        
                     },
                     touchstart: function(evt) {
                         if (Date.now() - tap_start_time < 300) {
