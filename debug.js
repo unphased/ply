@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 42f6620 cool %#";
+    var git_context = "#% 194e604 some proper math %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -192,7 +192,7 @@ var DEBUG = (function() {
                 assert(old.indexOf("matrix") === 0); // check we're seeing a matrix
                 assert(old.indexOf("(") === 6); // make sure it's not a matrix3d (only to ensure no error todo: write impl for matrix3d)
                 var mat = old.slice(7,-1).split(","); // epic oneliner
-                return "translate("+(-tok[0]*500)+"px,"+(-tok[3]*500)+"px) "+old+" scale(3)";
+                return "translate("+(-mat[0]*500)+"px,"+(-mat[3]*500)+"px) "+old+" scale(3)";
             }; // expand-fade out
             target.css(css_set_clear);
         } else if (can_change_transform) {
