@@ -162,10 +162,10 @@ var DEBUG = (function() {
     document.styleSheets[0].cssRules[0].style.height = '500px';
     document.styleSheets[0].cssRules[0].style.width = '500px';
 
-    document.styleSheets[0].insertRule('#debug_element_highlighter_outer * {}',0);
+    document.styleSheets[0].insertRule('#debug_element_highlighter_outer {}',0);
     document.styleSheets[0].cssRules[0].style.backgroundColor = 'rgba(0,0,255,0.2)';
 
-    document.styleSheets[0].insertRule('#debug_element_highlighter_inner * {}',0);
+    document.styleSheets[0].insertRule('#debug_element_highlighter_inner {}',0);
     document.styleSheets[0].cssRules[0].style.backgroundColor = 'rgba(0,200,0,0.3)';
 
     transEndEventName = transEndEventNames[ local_Modernizr.prefixed('transition') ];
