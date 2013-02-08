@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 2a0db80 position absolute %#";
+    var git_context = "#% 2add566 margins %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -229,13 +229,10 @@ var DEBUG = (function() {
             var ih = je.innerHeight();
             var w = je.width();
             var h = je.height();
-            
-            //var computed = DEBUG.serialize(getComputedStyle(outer[0]));
-            //console.log("computed",outer[0].style[transformStyle]);
-            
-            jouter[0].style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+ow/500+","+oh/500+",1)";
+
+            jouter[0].style[transformStyle] = "translate3d("+(p.left-(e.style.marginLeft))+"px, "+(p.top-(e.style.marginTop))+"px,0) scale3d("+ow/500+","+oh/500+",1)";
             jouter[0].style.opacity = "1";
-            jinner[0].style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+iw/500+","+ih/500+",1)";
+            jinner[0].style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+w/500+","+h/500+",1)";
             jinner[0].style.opacity = "1";
         }
         //original_console_log.apply(window.console,["highlight2",e, jc]);
