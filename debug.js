@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 05acdf6 somewhat confused about end animation %#";
+    var git_context = "#% 845f586 there is a deceptive amount of transformation happening %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -203,7 +203,7 @@ var DEBUG = (function() {
             var css_set_inner = {opacity: 0};
             css_set_inner[transformStyle] = function(i,old) { // this could be scrunched down and abstracted
                 var mat = old.slice(7,-1).split(","); 
-                return "translate("+(-mat[0]*250)+"px,"+(-mat[3]*250)+"px) "+old+" scale(0.5)";
+                return "translate("+(mat[0]*125)+"px,"+(mat[3]*125)+"px) "+old+" scale(0.5)";
             };
             jinner.css(css_set_inner); 
         } else {
