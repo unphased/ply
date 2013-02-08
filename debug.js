@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 680bba2 found it %#";
+    var git_context = "#% 2d12aab yup %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -188,7 +188,7 @@ var DEBUG = (function() {
             can_change_transform = false;
             var css_set_clear = {opacity: 0};
             css_set_clear[transformStyle] = function(i,old) { 
-                return "scale(3) " + old;
+                return old+" scale(3)";
             }; // expand-fade out
             target.css(css_set_clear);
         } else if (can_change_transform) {
