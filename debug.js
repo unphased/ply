@@ -188,7 +188,11 @@ var DEBUG = (function() {
             can_change_transform = false;
             var css_set_clear = {opacity: 0};
             css_set_clear[transformStyle] = function(i,old) { 
-                return old+" scale(3)";
+                // get the old position to adjust the origin of scale animation
+                assert(old.indexOf("matrix") === 0); // check we're seeing a matrix
+                assert(old.indexOf("(") === 6); // make sure it's not a matrix3d (only to ensure no error todo: write impl for matrix3d)
+                var mat = old.slice(7,-1).split(","); // epic oneliner
+                return "translate("+(-tok[0]*500)+"px,"+(-tok[3]*500)+"px) "+old+" scale(3)";
             }; // expand-fade out
             target.css(css_set_clear);
         } else if (can_change_transform) {
