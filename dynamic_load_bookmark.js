@@ -15,16 +15,17 @@
                 var highlight_active = false;
                 PLY.attach_handlers_on_document({
                     mousedown: function(evt) {
-                        var btn;
-                        if (typeof(evt.which) !== "undefined")
-                            btn = evt.which;
-                        else if (typeof(evt.button) !== "undefined") 
-                            btn = evt.button;
-                        //console.log("btn",btn);
-                        if (btn == 3) { // right mouse 
+                        if (event.button === 3) { // middle mouse btn (prolly indicates right button on IE. Screw you IE)
                             DEBUG.highlight(evt.target);
                             //evt.preventDefault(); // this appears to not be able to prevent context menu
                             highlight_active = true;
+                        } else if (event.button === 1) {
+                            if (Date.now() - tap_start_time < 300) {
+                                preventDefault(); // hopefully this can suppress selection of text. 
+                                DEBUG.highlight(evt.target);
+                                highlight_active = true;
+                            }
+                           tap_start_time = Date.now();
                         }
                     },
                     contextmenu: function(evt) {
@@ -41,7 +42,7 @@
                     touchstart: function(evt) {
                         if (Date.now() - tap_start_time < 300) {
                             // is second tap start
-                            evt.preventDefault();
+                            evt.preventDefault(); // stop scroll 
                             tracked_elements[evt.changedTouches[0].identifier] = true;
                         } // too much waiting, just function as normal
                         tap_start_time = Date.now();
