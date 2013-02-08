@@ -159,7 +159,6 @@ var DEBUG = (function() {
     //document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionTimingFunction')] = 'cubic-bezier(0.500, 0.055, 0.275, 1.045) ';
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transformOrigin')] = '0 0';
     document.styleSheets[0].cssRules[0].style.backgroundColor = 'rgba(0,0,255,0.3)';
-    //document.styleSheets[0].cssRules[0].style.border = '2px blue solid';
     document.styleSheets[0].cssRules[0].style.pointerEvents = 'none';
     document.styleSheets[0].cssRules[0].style.height = '500px';
     document.styleSheets[0].cssRules[0].style.width = '500px';
@@ -173,7 +172,7 @@ var DEBUG = (function() {
         var jc = $("#debug_element_highlighter_container");
         if (jc.length === 0) {
             $("html").append("<div id=debug_element_highlighter_container></div>");
-            jc = $("#debug_element_highlighter_container")
+            jc = $("#debug_element_highlighter_container");
         }
         var selector = identifier?'[data-id="'+identifier+'"]':"#debug_element_highlighter_noid";
         var target = jc.children(selector);
@@ -187,9 +186,9 @@ var DEBUG = (function() {
             setTimeout(function(){can_change_transform = true;},300); // ensure not get stuck set to false
             //console.log("removing");
             can_change_transform = false;
-            target.css({ // fade
-                opacity: 0
-            });
+            var css_set_clear = {opacity: 0};
+            css_set_clear[transformStyle] = "scale3d("+document.documentElement.scrollWidth/500+","+document.documentElement.scrollHeight/500+",1)";
+            target.css(css_set_clear);
         } else if (can_change_transform) {
             //console.log("running the update");
             if (target.length === 0) { // update command: add if not present
