@@ -15,11 +15,11 @@
                 var highlight_active = false;
                 PLY.attach_handlers_on_document({
                     mousedown: function(evt) {
-                        if (evt.button === 3) { // middle mouse btn (prolly indicates right button on IE. Screw you IE)
+                        if (evt.which === 3) { // middle mouse btn (prolly indicates right button on IE. Screw you IE)
                             DEBUG.highlight(evt.target);
                             //evt.preventDefault(); // this appears to not be able to prevent context menu
                             highlight_active = true;
-                        } else if (evt.button === 1) {
+                        } else if (evt.which === 1) {
                             if (Date.now() - tap_start_time < 300) {
                                 preventDefault(); // hopefully this can suppress selection of text. 
                                 DEBUG.highlight(evt.target);
