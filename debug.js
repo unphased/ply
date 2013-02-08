@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 5b28b53 ok %#";
+    var git_context = "#% 533c79c making more responsive %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -166,7 +166,6 @@ var DEBUG = (function() {
     transEndEventName = transEndEventNames[ local_Modernizr.prefixed('transition') ];
 
     // an interface for portably highlighting any page element (without changing it)
-    var can_change_transform = true;
     function highlight(e, identifier){
         // lazily init top level element 
         var jc = $("#debug_element_highlighter_container");
@@ -179,13 +178,10 @@ var DEBUG = (function() {
         //console.log('highlight1', target.length)
         if (!e) { // remove command: remove if present
             // fade out
-            target.on(transEndEventName,function(){                
+            target.on(transEndEventName,function(){
                 target.remove(); // erase me
                 //console.log("removed");
             });
-            setTimeout(function(){can_change_transform = true;},300); // ensure not get stuck set to false
-            //console.log("removing");
-            can_change_transform = false;
             var css_set_clear = {opacity: 0};
             css_set_clear[transformStyle] = function(i,old) { 
                 // get the old position to adjust the origin of scale animation
@@ -195,7 +191,8 @@ var DEBUG = (function() {
                 return "translate("+(-mat[0]*500)+"px,"+(-mat[3]*500)+"px) "+old+" scale(3)";
             }; // expand-fade out
             target.css(css_set_clear);
-        } else if (can_change_transform) {
+        } else {
+            target.off(transEndEventName);
             //console.log("running the update");
             if (target.length === 0) { // update command: add if not present
 
