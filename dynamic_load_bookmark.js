@@ -49,7 +49,7 @@
                     touchmove: function(evt) {
                         for (var i=0; i<evt.changedTouches.length; ++i) {
                             if (tracked_elements[evt.changedTouches[i].identifier]) {
-                                DEBUG.highlight(document.elementFromPoint(evt.changedTouches[i].clientX,evt.changedTouches[i].clientY), evt.changedTouches[i].identifier)
+                                DEBUG.highlight(document.elementFromPoint(evt.changedTouches[i].clientX,evt.changedTouches[i].clientY), evt.changedTouches[i].identifier);
                             }
                         }
                     },
