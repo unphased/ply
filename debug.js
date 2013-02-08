@@ -156,63 +156,84 @@ var DEBUG = (function() {
     document.styleSheets[0].insertRule('#debug_element_highlighter_container * {}',0);
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionDuration')] = '0.3s, 0.3s';
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionProperty')] = 'transform, opacity';
-    //document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionTimingFunction')] = 'cubic-bezier(0.500, 0.055, 0.275, 1.045) ';
+    document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionTimingFunction')] = 'cubic-bezier(0.500, 0.055, 0.275, 3.0) ';
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transformOrigin')] = '0 0';
-    document.styleSheets[0].cssRules[0].style.backgroundColor = 'rgba(0,0,255,0.3)';
     document.styleSheets[0].cssRules[0].style.pointerEvents = 'none';
     document.styleSheets[0].cssRules[0].style.height = '500px';
     document.styleSheets[0].cssRules[0].style.width = '500px';
-    
+
+    document.styleSheets[0].insertRule('#debug_element_highlighter_outer * {}',0);
+    document.styleSheets[0].cssRules[0].style.backgroundColor = 'rgba(0,0,255,0.2)';
+
+    document.styleSheets[0].insertRule('#debug_element_highlighter_inner * {}',0);
+    document.styleSheets[0].cssRules[0].style.backgroundColor = 'rgba(0,200,0,0.3)';
+
     transEndEventName = transEndEventNames[ local_Modernizr.prefixed('transition') ];
 
     // an interface for portably highlighting any page element (without changing it)
-    function highlight(e, identifier){
+    function highlight(e){
         // lazily init top level element 
         var jc = $("#debug_element_highlighter_container");
         if (jc.length === 0) {
             $("html").append("<div id=debug_element_highlighter_container></div>");
             jc = $("#debug_element_highlighter_container");
         }
-        var selector = identifier?'[data-id="'+identifier+'"]':"#debug_element_highlighter_noid";
-        var target = jc.children(selector);
-        //console.log('highlight1', target.length)
+        var jouter = jc.children("#debug_element_highlighter_outer");
+        var jinner = jc.children("#debug_element_highlighter_inner");
+        //console.log('highlight1', jouter.length)
         if (!e) { // remove command: remove if present
             // fade out
-            target.on(transEndEventName,function(){
-                target.remove(); // erase me
+            jouter.on(transEndEventName,function(){
+                jouter.remove(); // erase me
+                jinner.remove();
                 //console.log("removed");
             });
-            var css_set_clear = {opacity: 0};
-            css_set_clear[transformStyle] = function(i,old) { 
+            var css_set_outer = {opacity: 0};
+            css_set_outer[transformStyle] = function(i,old) { 
                 // get the old position to adjust the origin of scale animation
                 assert(old.indexOf("matrix") === 0); // check we're seeing a matrix
                 assert(old.indexOf("(") === 6); // make sure it's not a matrix3d (only to ensure no error todo: write impl for matrix3d)
                 var mat = old.slice(7,-1).split(","); // epic oneliner
-                return "translate("+(-mat[0]*500)+"px,"+(-mat[3]*500)+"px) "+old+" scale(3)";
+                return "translate("+(-mat[0]*500)+"px,"+(-mat[3]*500)+"px) "+old+" scale(2)";
             }; // expand-fade out
-            target.css(css_set_clear);
+            jouter.css(css_set_outer);
+            var css_set_inner = {opacity: 0};
+            css_set_inner[transformStyle] = function(i,old) { // this could be scrunched down and abstracted
+                var mat = old.slice(7,-1).split(","); 
+                return "translate("+(-mat[0]*500)+"px,"+(-mat[3]*500)+"px) "+old+" scale(0.5)";
+            };
+            jinner.css(css_set_inner); 
         } else {
-            target.off(transEndEventName);
+            jouter.off(transEndEventName);
             //console.log("running the update");
-            if (target.length === 0) { // update command: add if not present
-
+            if (jouter.length === 0) { // update command: add if not present
+                assert(jinner.length === 0, "jouter does not exist so neither should jinner"); // just a sanity check
                 css_set = {opacity: 0};
                 css_set[transformStyle] = "scale3d("+document.documentElement.scrollWidth/500+","+document.documentElement.scrollHeight/500+",1)";
-                var jt = $('<div '+(identifier?"data-id="+identifier:"id=debug_element_highlighter_noid")+"></div>").css(css_set);
-                jc.append(jt);
-                target = jt;
+                var jo = $('<div '+"id=debug_element_highlighter_outer"+"></div>").css(css_set);
+                var ji = $('<div '+"id=debug_element_highlighter_inner"+"></div>").css(css_set);
+                // insert to DOM
+                jc.append(jo);
+                jc.append(ji);
+                jouter = jo;
+                jinner = ji;
             }
-            // assign to the target styles that has it overlap the target element
             var je = $(e);
             var p = je.offset();
-            var w = je.outerWidth();
-            var h = je.outerHeight();
+            var ow = je.outerWidth(true);
+            var oh = je.outerHeight(true);
+            var iw = je.innerWidth();
+            var ih = je.innerHeight();
+            var w = je.width();
+            var h = je.height();
             
-            //var computed = DEBUG.serialize(getComputedStyle(target[0]));
-            //console.log("computed",target[0].style[transformStyle]);
+            //var computed = DEBUG.serialize(getComputedStyle(outer[0]));
+            //console.log("computed",outer[0].style[transformStyle]);
             
-            target.css(transformStyle, "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+w/500+","+h/500+",1)");
-            target.css("opacity",1);
+            jouter[0].style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+ow/500+","+oh/500+",1)";
+            jouter[0].style.opacity = "1";
+            jinner[0].style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+iw/500+","+ih/500+",1)";
+            jinner[0].style.opacity = "1";
         }
         //original_console_log.apply(window.console,["highlight2",e, jc]);
     }
