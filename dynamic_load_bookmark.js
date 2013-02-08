@@ -21,7 +21,7 @@
                             highlight_active = true;
                         } else if (evt.which === 1) {
                             if (Date.now() - tap_start_time < 300) {
-                                preventDefault(); // hopefully this can suppress selection of text. 
+                                evt.preventDefault(); // hopefully this can suppress selection of text. 
                                 DEBUG.highlight(evt.target);
                                 highlight_active = true;
                             }
