@@ -187,8 +187,8 @@ var DEBUG = (function() {
             //console.log("removing");
             can_change_transform = false;
             var css_set_clear = {opacity: 0};
-            css_set_clear[transformStyle] = function(orig) { 
-                return "scale(3) " + orig;
+            css_set_clear[transformStyle] = function(i,old) { 
+                return "scale(3) " + old;
             }; // expand-fade out
             target.css(css_set_clear);
         } else if (can_change_transform) {
