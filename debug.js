@@ -234,7 +234,7 @@ var DEBUG = (function() {
 
             jouter[0].style[transformStyle] = "translate3d("+(p.left-style_of_e.marginLeft.replace("px",""))+"px, "+(p.top-style_of_e.marginTop.replace("px",""))+"px,0) scale3d("+ow/500+","+oh/500+",1)";
             jouter[0].style.opacity = "1";
-            jinner[0].style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+w/500+","+h/500+",1)";
+            jinner[0].style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+iw/500+","+ih/500+",1)";
             jinner[0].style.opacity = "1";
         }
         //original_console_log.apply(window.console,["highlight2",e, jc]);
