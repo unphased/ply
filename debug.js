@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% bddb667 long delay %#";
+    var git_context = "#% 05acdf6 somewhat confused about end animation %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -197,13 +197,13 @@ var DEBUG = (function() {
                 assert(old.indexOf("matrix") === 0); // check we're seeing a matrix
                 assert(old.indexOf("(") === 6); // make sure it's not a matrix3d (only to ensure no error todo: write impl for matrix3d)
                 var mat = old.slice(7,-1).split(","); // epic oneliner
-                return "translate("+(-mat[0]*500)+"px,"+(-mat[3]*500)+"px) "+old+" scale(2)";
+                return "translate("+(-mat[0]*250)+"px,"+(-mat[3]*250)+"px) "+old+" scale(2)";
             }; // expand-fade out
             jouter.css(css_set_outer);
             var css_set_inner = {opacity: 0};
             css_set_inner[transformStyle] = function(i,old) { // this could be scrunched down and abstracted
                 var mat = old.slice(7,-1).split(","); 
-                return "translate("+(-mat[0]*500)+"px,"+(-mat[3]*500)+"px) "+old+" scale(0.5)";
+                return "translate("+(-mat[0]*250)+"px,"+(-mat[3]*250)+"px) "+old+" scale(0.5)";
             };
             jinner.css(css_set_inner); 
         } else {
