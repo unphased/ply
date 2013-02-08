@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% ffaa1f6 a nice ending transition %#";
+    var git_context = "#% ff0b769 a nicer fade out %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -187,7 +187,7 @@ var DEBUG = (function() {
             //console.log("removing");
             can_change_transform = false;
             var css_set_clear = {opacity: 0};
-            css_set_clear[transformStyle] = "scale3d("+document.documentElement.scrollWidth/500+","+document.documentElement.scrollHeight/500+",1)";
+            css_set_clear[transformStyle] = function(orig) { return "scale(3) " + orig; }; // expand-fade out
             target.css(css_set_clear);
         } else if (can_change_transform) {
             //console.log("running the update");
