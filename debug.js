@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 2add566 margins %#";
+    var git_context = "#% 2293198 margins take 2 %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -230,7 +230,9 @@ var DEBUG = (function() {
             var w = je.width();
             var h = je.height();
 
-            jouter[0].style[transformStyle] = "translate3d("+(p.left-(e.style.marginLeft))+"px, "+(p.top-(e.style.marginTop))+"px,0) scale3d("+ow/500+","+oh/500+",1)";
+            var style_of_e = getComputedStyle(e);
+
+            jouter[0].style[transformStyle] = "translate3d("+(p.left-(style_of_e.marginLeft))+"px, "+(p.top-(style_of_e.marginTop))+"px,0) scale3d("+ow/500+","+oh/500+",1)";
             jouter[0].style.opacity = "1";
             jinner[0].style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+w/500+","+h/500+",1)";
             jinner[0].style.opacity = "1";
