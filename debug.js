@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 845f586 there is a deceptive amount of transformation happening %#";
+    var git_context = "#% 3397d93 this is incredibly sexy. %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -154,7 +154,7 @@ var DEBUG = (function() {
     document.styleSheets[0].cssRules[0].style.height = '0';
     
     document.styleSheets[0].insertRule('#debug_element_highlighter_container * {}',0);
-    document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionDuration')] = '3s, 3s';
+    document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionDuration')] = '0.4s, 0.4s';
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionProperty')] = 'transform, opacity';
     //document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionTimingFunction')] = 'cubic-bezier(0.500, 0.055, 0.275, 3.0) ';
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transformOrigin')] = '0 0';
