@@ -68,7 +68,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% f7aec2a lol so i guess beziers going out of box is fine %#";
+    var git_context = "#% 2a0db80 position absolute %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -158,6 +158,9 @@ var DEBUG = (function() {
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionProperty')] = 'transform, opacity';
     //document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionTimingFunction')] = 'cubic-bezier(0.500, 0.055, 0.275, 3.0) ';
     document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transformOrigin')] = '0 0';
+    document.styleSheets[0].cssRules[0].style.position = "absolute";
+    document.styleSheets[0].cssRules[0].style.top = '0';
+    document.styleSheets[0].cssRules[0].style.left = '0';
     document.styleSheets[0].cssRules[0].style.pointerEvents = 'none';
     document.styleSheets[0].cssRules[0].style.height = '500px';
     document.styleSheets[0].cssRules[0].style.width = '500px';
