@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% a16a70d exception %#";
+    var git_context = "#% 15c94bd i had flipped a conditional in my refactor %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -226,7 +226,7 @@ var DEBUG = (function() {
         } else {
             jouter.off(transEndEventName);
             //console.log("running the update");
-            if (outer) { // update command: add if not present
+            if (!outer) { // update command: add if not present
                 assert(inner, "outer does not exist so neither should inner"); // just a sanity check
                 css_set = {opacity: 0};
                 css_set[transformStyle] = "scale3d("+document.documentElement.scrollWidth/500+","+document.documentElement.scrollHeight/500+",1)";
