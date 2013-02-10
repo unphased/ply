@@ -152,10 +152,10 @@ var DEBUG = (function() {
         "\toverflow: visible; \n"+
         "\twidth: 0; height: 0; \n} \n"+
         "#debug_element_highlighter_container * { \n\t"+
-        hyphen_mp('transitionDuration') + ": 0.2s, 0.2s; \n\t" + 
+        hyphen_mp('transitionDuration') + ": 0.4s, 0.4s; \n\t" + 
         hyphen_mp('transitionProperty') + ": "+hyphen_mp('transform')+", opacity; \n\t" +
         hyphen_mp('transformOrigin') + ": 0 0; \n\t" + 
-        hyphen_mp('transitionTimingFunction') + ": cubic-bezier(0.500, 0.500, 0.500, 1.000); \n" +
+        hyphen_mp('transitionTimingFunction') + ": cubic-bezier(0.500, 0.500, 0.200, 1.000); \n" +
         "\tposition: absolute; top: 0; left: 0; \n" + 
         "\tpointer-events: none; height: 500px; width: 500px; \n} \n" + 
         "#debug_element_highlighter_outer {\n\tbackground-color: rgba(45,60,255,0.2); \n} \n" + 
@@ -221,9 +221,9 @@ var DEBUG = (function() {
             // than extracting data from the matrix (since i won't have a matrix!)
 
             outer.style.opacity = "0";
-            outer.style[transformStyle] = "translate("+(-outer.ply_HL_dimX*0.25)+"px, "+(-outer.ply_HL_dimY*0.25)+"px) "+outer.style[transformStyle]+" scale(1.5)";
+            outer.style[transformStyle] = "translate("+(-outer.ply_HL_dimX*0.1)+"px, "+(-outer.ply_HL_dimY*0.1)+"px) "+outer.style[transformStyle]+" scale(1.2)";
             inner.style.opacity = "0";
-            inner.style[transformStyle] = "translate("+(inner.ply_HL_dimX*0.1)+"px, "+(inner.ply_HL_dimY*0.1)+"px)"+inner.style[transformStyle]+" scale(0.8)";
+            inner.style[transformStyle] = "translate("+(inner.ply_HL_dimX*0.05)+"px, "+(inner.ply_HL_dimY*0.05)+"px)"+inner.style[transformStyle]+" scale(0.9)";
         } else {
             jouter.off(transEndEventName);
             //console.log("running the update");
