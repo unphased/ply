@@ -187,6 +187,7 @@ var DEBUG = (function() {
         var inner = jinner[0];
         //console.log('highlight1', jouter.length)
         if (!e) { // remove command: remove if present
+            if (!outer) return;
             // fade out
             jouter.on(transEndEventName,function(){
                 jouter.remove(); // erase me
