@@ -152,7 +152,7 @@ var DEBUG = (function() {
         "\toverflow: visible; \n"+
         "\twidth: 0; height: 0; \n} \n"+
         "#debug_element_highlighter_container * { \n\t"+
-        hyphen_mp('transitionDuration') + ": 2s, 2s; \n\t" + 
+        hyphen_mp('transitionDuration') + ": 0.2s, 0.2s; \n\t" + 
         hyphen_mp('transitionProperty') + ": "+hyphen_mp('transform')+", opacity; \n\t" +
         hyphen_mp('transformOrigin') + ": 0 0; \n\t" + 
         hyphen_mp('transitionTimingFunction') + ": ease-out; \n" +
@@ -221,7 +221,7 @@ var DEBUG = (function() {
             // than extracting data from the matrix (since i won't have a matrix!)
 
             outer.style.opacity = "0";
-            outer.style[transformStyle] = "translate("+(-outer.ply_HL_dimX*0.4)+"px, "+(-outer.ply_HL_dimY*0.4)+"px) "+outer.style[transformStyle]+" scale(1.5)";
+            outer.style[transformStyle] = "translate("+(-outer.ply_HL_dimX*0.25)+"px, "+(-outer.ply_HL_dimY*0.25)+"px) "+outer.style[transformStyle]+" scale(1.5)";
             inner.style.opacity = "0";
             inner.style[transformStyle] = "translate("+(inner.ply_HL_dimX*0.1)+"px, "+(inner.ply_HL_dimY*0.1)+"px)"+inner.style[transformStyle]+" scale(0.8)";
         } else {
