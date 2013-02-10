@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 6407aaf css doing it smarter %#";
+    var git_context = "#% bdd3643 forgot a close curly bracket in css %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -156,7 +156,7 @@ var DEBUG = (function() {
         hyphen_mp('transitionProperty') + ": "+hyphen_mp('transform')+", opacity; " +
         hyphen_mp('transformOrigin') + ": 0 0; " + 
         "position: absolute; top: 0; left: 0; " + 
-        "pointer-events: none; height: 500px; width: 500px; " + 
+        "pointer-events: none; height: 500px; width: 500px; } " + 
         "#debug_element_highlighter_outer { background-color: rgba(45,60,255,0.2); } " + 
         "#debug_element_highlighter_inner { background-color: rgba(25,255,35,0.2); } ";
 
