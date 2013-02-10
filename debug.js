@@ -150,7 +150,7 @@ var DEBUG = (function() {
         "pointerEvents: none; "+
         "top: 0; left: 0; "+
         "overflow: visible; "+
-        "width: 0; height: 0; "+
+        "width: 0; height: 0; } "+
         "#debug_element_highlighter_container * { "+
         hyphen_mp('transitionDuration') + ": 2s, 2s; " + 
         hyphen_mp('transitionProperty') + ": "+hyphen_mp('transform')+", opacity; " +
