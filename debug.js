@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 49817bc a static size change %#";
+    var git_context = "#% 4be6f6b a smaller difference and also now can test what happens on super tiny elements %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -221,14 +221,14 @@ var DEBUG = (function() {
             // than extracting data from the matrix (since i won't have a matrix!)
 
             // compute a static width to adjust by, not a proportional one. (20 px outside, 10px inside)
-            var ws = (outer.ply_HL_dimX + 40) / outer.ply_HL_dimX; 
-            var hs = (outer.ply_HL_dimY + 40) / outer.ply_HL_dimY; 
+            var ws = (outer.ply_HL_dimX + 20) / outer.ply_HL_dimX; 
+            var hs = (outer.ply_HL_dimY + 20) / outer.ply_HL_dimY; 
             outer.style.opacity = "0";
-            outer.style[transformStyle] = "translate(-20px, -20px) "+outer.style[transformStyle]+" scale3d("+ws+", "+hs+", 1)";
-            ws = (inner.ply_HL_dimX - 20) / inner.ply_HL_dimX;
-            hs = (inner.ply_HL_dimY - 20) / inner.ply_HL_dimY;
+            outer.style[transformStyle] = "translate(-10px, -10px) "+outer.style[transformStyle]+" scale3d("+ws+", "+hs+", 1)";
+            ws = (inner.ply_HL_dimX - 10) / inner.ply_HL_dimX;
+            hs = (inner.ply_HL_dimY - 10) / inner.ply_HL_dimY;
             inner.style.opacity = "0";
-            inner.style[transformStyle] = "translate(10px, 10px)"+inner.style[transformStyle]+" scale3d("+ws+", "+hs+", 1)";
+            inner.style[transformStyle] = "translate(5px, 5px)"+inner.style[transformStyle]+" scale3d("+ws+", "+hs+", 1)";
         } else {
             jouter.off(transEndEventName);
             //console.log("running the update");
