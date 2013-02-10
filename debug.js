@@ -145,20 +145,19 @@ var DEBUG = (function() {
         return hyphen_style(local_Modernizr.prefixed(style));
     }
 
-    var css = "#debug_element_highlighter_container { 
-        "+
-        "position: absolute; "+
-        "pointerEvents: none; "+
-        "top: 0; left: 0; "+
-        "overflow: visible; "+
-        "width: 0; height: 0; } "+
-        "#debug_element_highlighter_container * { "+
-        hyphen_mp('transitionDuration') + ": 2s, 2s; " + 
-        hyphen_mp('transitionProperty') + ": "+hyphen_mp('transform')+", opacity; " +
-        hyphen_mp('transformOrigin') + ": 0 0; " + 
-        "position: absolute; top: 0; left: 0; " + 
-        "pointer-events: none; height: 500px; width: 500px; } " + 
-        "#debug_element_highlighter_outer { background-color: rgba(45,60,255,0.2); } " + 
+    var css = "#debug_element_highlighter_container { \n"+
+        "position: absolute; \n"+
+        "pointerEvents: none; \n"+
+        "top: 0; left: 0; \n"+
+        "overflow: visible; \n"+
+        "width: 0; height: 0; \n} \n"+
+        "#debug_element_highlighter_container * { \n"+
+        hyphen_mp('transitionDuration') + ": 2s, 2s; \n" + 
+        hyphen_mp('transitionProperty') + ": "+hyphen_mp('transform')+", opacity; \n" +
+        hyphen_mp('transformOrigin') + ": 0 0; \n" + 
+        "position: absolute; top: 0; left: 0; \n" + 
+        "pointer-events: none; height: 500px; width: 500px; \n} \n" + 
+        "#debug_element_highlighter_outer { background-color: rgba(45,60,255,0.2); } \n" + 
         "#debug_element_highlighter_inner { background-color: rgba(25,255,35,0.2); } ";
 
     // append a style tag to head 
