@@ -227,7 +227,7 @@ var DEBUG = (function() {
             jouter.off(transEndEventName);
             //console.log("running the update");
             if (!outer) { // update command: add if not present
-                assert(inner, "outer does not exist so neither should inner"); // just a sanity check
+                assert(!inner, "outer does not exist so neither should inner"); // just a sanity check
                 css_set = {opacity: 0};
                 css_set[transformStyle] = "scale3d("+document.documentElement.scrollWidth/500+","+document.documentElement.scrollHeight/500+",1)";
                 var jo = $('<div '+"id=debug_element_highlighter_outer"+"></div>").css(css_set);
