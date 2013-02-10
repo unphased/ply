@@ -154,7 +154,8 @@ var DEBUG = (function() {
         "#debug_element_highlighter_container * { \n\t"+
         hyphen_mp('transitionDuration') + ": 2s, 2s; \n\t" + 
         hyphen_mp('transitionProperty') + ": "+hyphen_mp('transform')+", opacity; \n\t" +
-        hyphen_mp('transformOrigin') + ": 0 0; \n" + 
+        hyphen_mp('transformOrigin') + ": 0 0; \n\t" + 
+        hyphen_mp('transitionTimingFunction') + ": ease-out;"
         "\tposition: absolute; top: 0; left: 0; \n" + 
         "\tpointer-events: none; height: 500px; width: 500px; \n} \n" + 
         "#debug_element_highlighter_outer {\n\tbackground-color: rgba(45,60,255,0.2); \n} \n" + 
