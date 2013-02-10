@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 6032fde real newlines %#";
+    var git_context = "#% 8751d60 throwing some tabs in %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -146,19 +146,19 @@ var DEBUG = (function() {
     }
 
     var css = "#debug_element_highlighter_container { \n"+
-        "position: absolute; \n"+
-        "pointerEvents: none; \n"+
-        "top: 0; left: 0; \n"+
-        "overflow: visible; \n"+
-        "width: 0; height: 0; \n} \n"+
-        "#debug_element_highlighter_container * { \n"+
-        hyphen_mp('transitionDuration') + ": 2s, 2s; \n" + 
-        hyphen_mp('transitionProperty') + ": "+hyphen_mp('transform')+", opacity; \n" +
+        "\tposition: absolute; \n"+
+        "\tpointerEvents: none; \n"+
+        "\ttop: 0; left: 0; \n"+
+        "\toverflow: visible; \n"+
+        "\twidth: 0; height: 0; \n} \n"+
+        "#debug_element_highlighter_container * { \n\t"+
+        hyphen_mp('transitionDuration') + ": 2s, 2s; \n\t" + 
+        hyphen_mp('transitionProperty') + ": "+hyphen_mp('transform')+", opacity; \n\t" +
         hyphen_mp('transformOrigin') + ": 0 0; \n" + 
-        "position: absolute; top: 0; left: 0; \n" + 
-        "pointer-events: none; height: 500px; width: 500px; \n} \n" + 
-        "#debug_element_highlighter_outer { background-color: rgba(45,60,255,0.2); } \n" + 
-        "#debug_element_highlighter_inner { background-color: rgba(25,255,35,0.2); } ";
+        "\tposition: absolute; top: 0; left: 0; \n" + 
+        "\tpointer-events: none; height: 500px; width: 500px; \n} \n" + 
+        "#debug_element_highlighter_outer {\n\tbackground-color: rgba(45,60,255,0.2); \n} \n" + 
+        "#debug_element_highlighter_inner {\n\tbackground-color: rgba(25,255,35,0.2); \n} ";
 
     // append a style tag to head 
     var head = document.getElementsByTagName("head")[0];
