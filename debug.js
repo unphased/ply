@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% ea8d824 i had flipped more than one conditional %#";
+    var git_context = "#% 401f4f7 wow this is even better than i thought %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -220,9 +220,9 @@ var DEBUG = (function() {
             // than extracting data from the matrix (since i won't have a matrix!)
 
             outer.style.opacity = "0";
-            outer.style[transformStyle] = "translate("+(-outer.ply_HL_dimX*125)+"px, "+(-outer.ply_HL_dimY*125)+"px) "+outer.style[transformStyle]+" scale(1.5)";
+            outer.style[transformStyle] = "translate("+(-outer.ply_HL_dimX*0.4)+"px, "+(-outer.ply_HL_dimY*0.4)+"px) "+outer.style[transformStyle]+" scale(1.5)";
             inner.style.opacity = "0";
-            inner.style[transformStyle] = "translate("+(inner.ply_HL_dimX*50)+"px, "+(inner.ply_HL_dimY*50)+"px)"+inner.style[transformStyle]+" scale(0.8)";
+            inner.style[transformStyle] = "translate("+(inner.ply_HL_dimX*0.1)+"px, "+(inner.ply_HL_dimY*0.1)+"px)"+inner.style[transformStyle]+" scale(0.8)";
         } else {
             jouter.off(transEndEventName);
             //console.log("running the update");
