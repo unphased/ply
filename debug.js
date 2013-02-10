@@ -51,6 +51,8 @@ var DEBUG = (function() {
         }
         return val;
     };
+
+    
     function serialize(arg) {
         if (typeof arg === "function") return "function";
         return JSON.stringify(arg,json_handler).replace(/"([^"]*)":/g,"$1: ").replace(/\},([^ ])/g,'},  $1').replace(/,([^ ])/g,', $1');
@@ -67,7 +69,7 @@ var DEBUG = (function() {
 
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
-
+   
     var git_context = "#% 194e604 some proper math %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
@@ -135,41 +137,38 @@ var DEBUG = (function() {
     var transEndEventName;
     var transformStyle = local_Modernizr.prefixed('transform');
 
-    // init some CSS for styling our highlighters (this debug script is intended to be a self contained bundle of magic)
-    // tis a shame jquery doesn't help out with this sort of thing
-    if (document.styleSheets.length === 0) {
-        // must init a stylesheet 
-        var s = document.createElement('style');
-        s.type = 'text/css';
-        s.appendChild(document.createTextNode("dummy_tag {/* dummy selector */}"));
-        document.head.appendChild(s);
+    function hyphen_style(style) {
+        return style.replace(/([A-Z])/g, function(str,m1){ return '-' + m1.toLowerCase(); }).replace(/^ms-/,'-ms-');
     }
-    document.styleSheets[0].insertRule('#debug_element_highlighter_container {}',0);
-    document.styleSheets[0].cssRules[0].style.position = "absolute";
-    document.styleSheets[0].cssRules[0].style.pointerEvents = 'none';
-    document.styleSheets[0].cssRules[0].style.top = '0';
-    document.styleSheets[0].cssRules[0].style.left = '0';
-    document.styleSheets[0].cssRules[0].style.overflow = 'visible';
-    document.styleSheets[0].cssRules[0].style.width = '0';
-    document.styleSheets[0].cssRules[0].style.height = '0';
-    
-    document.styleSheets[0].insertRule('#debug_element_highlighter_container * {}',0);
-    document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionDuration')] = '2s, 2s';
-    document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionProperty')] = 'transform, opacity';
-    //document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transitionTimingFunction')] = 'cubic-bezier(0.500, 0.055, 0.275, 3.0) ';
-    document.styleSheets[0].cssRules[0].style[local_Modernizr.prefixed('transformOrigin')] = '0 0';
-    document.styleSheets[0].cssRules[0].style.position = "absolute";
-    document.styleSheets[0].cssRules[0].style.top = '0';
-    document.styleSheets[0].cssRules[0].style.left = '0';
-    document.styleSheets[0].cssRules[0].style.pointerEvents = 'none';
-    document.styleSheets[0].cssRules[0].style.height = '500px';
-    document.styleSheets[0].cssRules[0].style.width = '500px';
 
-    document.styleSheets[0].insertRule('#debug_element_highlighter_outer {}',0);
-    document.styleSheets[0].cssRules[0].style.backgroundColor = 'rgba(0,0,255,0.2)';
+    function hyphen_mp(style) {
+        return hyphen_style(local_Modernizr.prefixed(style));
+    }
 
-    document.styleSheets[0].insertRule('#debug_element_highlighter_inner {}',0);
-    document.styleSheets[0].cssRules[0].style.backgroundColor = 'rgba(0,200,0,0.3)';
+    var css = "#debug_element_highlighter_container { "+
+        "position: absolute; "+
+        "pointerEvents: none; "+
+        "top: 0; left: 0; "+
+        "overflow: visible; "+
+        "width: 0; height: 0; "+
+        "#debug_element_highlighter_container * { "+
+        hyphen_mp('transitionDuration') + ": 2s, 2s; " + 
+        hyphen_mp('transitionProperty') + ": "+hyphen_mp('transform')+", opacity; " +
+        hyphen_mp('transformOrigin') + ": 0 0; " + 
+        "position: absolute; top: 0; left: 0; " + 
+        "pointer-events: none; height: 500px; width: 500px; " + 
+        "#debug_element_highlighter_outer { background-color: rgba(45,60,255,0.2); } " + 
+        "#debug_element_highlighter_inner { background-color: rgba(25,255,35,0.2); } ";
+
+    // append a style tag to head 
+    var head = document.getElementsByTagName("head")[0];
+    var style = document.createElement("style");
+    style.type = "text/css";
+    if (style.styleSheet){
+        style.styleSheet.cssText = css;
+    } else {
+        style.appendChild(document.createTextNode(css));
+    }
 
     transEndEventName = transEndEventNames[ local_Modernizr.prefixed('transition') ];
 
