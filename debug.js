@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 0e20d7a and here is the other one %#";
+    var git_context = "#% 6453b63 appending the stylesheet which is kind of important %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -169,6 +169,7 @@ var DEBUG = (function() {
     } else {
         style.appendChild(document.createTextNode(css));
     }
+    head.appendChild(style);
 
     transEndEventName = transEndEventNames[ local_Modernizr.prefixed('transition') ];
 
