@@ -145,7 +145,8 @@ var DEBUG = (function() {
         return hyphen_style(local_Modernizr.prefixed(style));
     }
 
-    var css = "#debug_element_highlighter_container { "+
+    var css = "#debug_element_highlighter_container { 
+        "+
         "position: absolute; "+
         "pointerEvents: none; "+
         "top: 0; left: 0; "+
