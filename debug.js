@@ -169,6 +169,7 @@ var DEBUG = (function() {
     } else {
         style.appendChild(document.createTextNode(css));
     }
+    head.appendChild(style);
 
     transEndEventName = transEndEventNames[ local_Modernizr.prefixed('transition') ];
 
