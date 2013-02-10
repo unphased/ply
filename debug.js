@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 8751d60 throwing some tabs in %#";
+    var git_context = "#% f01f8c6 more efficient method %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -182,7 +182,9 @@ var DEBUG = (function() {
             jc = $("#debug_element_highlighter_container");
         }
         var jouter = jc.children("#debug_element_highlighter_outer");
+        var outer = jouter[0];
         var jinner = jc.children("#debug_element_highlighter_inner");
+        var inner = jinner[0];
         //console.log('highlight1', jouter.length)
         if (!e) { // remove command: remove if present
             // fade out
@@ -191,6 +193,7 @@ var DEBUG = (function() {
                 jinner.remove();
                 //console.log("removed");
             });
+            /* 
             var css_set_outer = {opacity: 0};
             css_set_outer[transformStyle] = function(i,old) { 
                 // get the old position to adjust the origin of scale animation
@@ -205,12 +208,25 @@ var DEBUG = (function() {
                 var mat = old.slice(7,-1).split(","); 
                 return "translate("+(mat[0]*125)+"px,"+(mat[3]*125)+"px) "+old+" scale(0.5)";
             };
-            jinner.css(css_set_inner); 
+            jinner.css(css_set_inner); */ 
+
+            // I actually don't want the interpolated (actual real current) value, I just want to 
+            // extract the value I set (which should be the transform for my target element) 
+            // and perform my animation modification upon that. So... that means avoiding 
+            // $.css() and getComputedStyle()
+
+            // this actually means using an attr to track the size of the element is a better way
+            // than extracting data from the matrix (since i won't have a matrix!)
+
+            outer.style.opacity = "0";
+            outer.style[transformStyle] = "translate("+(-outer.ply_HL_dimX*125)+"px, "+(-outer.ply_HL_dimY*125)+"px) "+outer.style[transformStyle]+" scale(1.5)";
+            inner.style.opacity = "0";
+            inner.style[transformStyle] = "translate("+(inner.ply_HL_dimX*50)+"px, "+(inner.ply_HL_dimY*50)+"px)"+inner.style[transformStyle]+" scale(0.8)";
         } else {
             jouter.off(transEndEventName);
             //console.log("running the update");
-            if (jouter.length === 0) { // update command: add if not present
-                assert(jinner.length === 0, "jouter does not exist so neither should jinner"); // just a sanity check
+            if (outer) { // update command: add if not present
+                assert(inner, "outer does not exist so neither should inner"); // just a sanity check
                 css_set = {opacity: 0};
                 css_set[transformStyle] = "scale3d("+document.documentElement.scrollWidth/500+","+document.documentElement.scrollHeight/500+",1)";
                 var jo = $('<div '+"id=debug_element_highlighter_outer"+"></div>").css(css_set);
@@ -218,8 +234,8 @@ var DEBUG = (function() {
                 // insert to DOM
                 jc.append(jo);
                 jc.append(ji);
-                jouter = jo;
-                jinner = ji;
+                jouter = jo; outer = jouter[0];
+                jinner = ji; inner = jinner[0];
             }
             var je = $(e);
             var p = je.offset();
@@ -232,10 +248,14 @@ var DEBUG = (function() {
 
             var style_of_e = getComputedStyle(e);
 
-            jouter[0].style[transformStyle] = "translate3d("+(p.left-style_of_e.marginLeft.replace("px",""))+"px, "+(p.top-style_of_e.marginTop.replace("px",""))+"px,0) scale3d("+ow/500+","+oh/500+",1)";
-            jouter[0].style.opacity = "1";
-            jinner[0].style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+iw/500+","+ih/500+",1)";
-            jinner[0].style.opacity = "1";
+            outer.style[transformStyle] = "translate3d("+(p.left-style_of_e.marginLeft.replace("px",""))+"px, "+(p.top-style_of_e.marginTop.replace("px",""))+"px,0) scale3d("+ow/500+","+oh/500+",1)";
+            outer.style.opacity = "1";
+            outer.ply_HL_dimX = ow;
+            outer.ply_HL_dimY = oh;
+            inner.style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+iw/500+","+ih/500+",1)";
+            inner.style.opacity = "1";
+            inner.ply_HL_dimX = iw;
+            inner.ply_HL_dimY = ih;
         }
         //original_console_log.apply(window.console,["highlight2",e, jc]);
     }
