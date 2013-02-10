@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% f01f8c6 more efficient method %#";
+    var git_context = "#% a16a70d exception %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -187,6 +187,7 @@ var DEBUG = (function() {
         var inner = jinner[0];
         //console.log('highlight1', jouter.length)
         if (!e) { // remove command: remove if present
+            if (!outer) return;
             // fade out
             jouter.on(transEndEventName,function(){
                 jouter.remove(); // erase me
