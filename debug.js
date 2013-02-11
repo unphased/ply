@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% a843067 and a little more of hte same %#";
+    var git_context = "#% 38824d8 whitespace cleanup %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -145,13 +145,13 @@ var DEBUG = (function() {
         return hyphen_style(local_Modernizr.prefixed(style));
     }
 
-    var css = "#debug_element_container { \n"+
-        "\tposition: absolute; \n"+
-        "\tpointerEvents: none; \n"+
-        "\ttop: 0; left: 0; \n"+
-        "\toverflow: visible; \n"+
-        "\twidth: 0; height: 0; \n} \n"+
-        "#debug_element_container * { \n\t"+
+    var css = "#debug_element_container { \n" +
+        "\tposition: absolute; \n" +
+        "\tpointerEvents: none; \n" +
+        "\ttop: 0; left: 0; \n" +
+        "\toverflow: visible; \n" +
+        "\twidth: 0; height: 0; \n} \n" +
+        "#debug_element_container * { \n\t" +
         hyphen_mp('transitionDuration') + ": 0.4s, 0.4s; \n\t" + 
         hyphen_mp('transitionProperty') + ": "+hyphen_mp('transform')+", opacity; \n\t" +
         hyphen_mp('transformOrigin') + ": 0 0; \n\t" + 
