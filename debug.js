@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% c8ccf91 some borders now that are correct %#";
+    var git_context = "#% 54b1a08 more border related stuff %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -255,14 +255,14 @@ var DEBUG = (function() {
 
             var style_of_e = getComputedStyle(e);
 
-            outer.style[transformStyle] = "translate3d("+(p.left-style_of_e.marginLeft.replace("px",""))+"px, "+(p.top-style_of_e.marginTop.replace("px",""))+"px,0) scale3d("+ow/500+","+oh/500+",1)";
+            outer.style[transformStyle] = "translate3d("+(p.left-parseInt(style_of_e.marginLeft,10))+"px, "+(p.top-parseInt(style_of_e.marginTop,10))+"px,0) scale3d("+ow/500+","+oh/500+",1)";
             outer.style.opacity = "1";
             outer.ply_HL_dimX = ow;
             outer.ply_HL_dimY = oh;
-            inner.style[transformStyle] = "translate3d("+p.left+"px, "+p.top+"px,0) scale3d("+iw/500+","+ih/500+",1)";
+            inner.style[transformStyle] = "translate3d("+(p.left+parseInt(style_of_e.paddingLeft,10)+parseInt(style_of_e.borderLeftWidth,10))+"px, "+(p.top+parseInt(style_of_e.paddingTop,10)+parseInt(style_of_e.borderTopWidth,10))+"px,0) scale3d("+w/500+","+h/500+",1)";
             inner.style.opacity = "1";
-            inner.ply_HL_dimX = iw;
-            inner.ply_HL_dimY = ih;
+            inner.ply_HL_dimX = w;
+            inner.ply_HL_dimY = h;
         }
         //original_console_log.apply(window.console,["highlight2",e, jc]);
     }
