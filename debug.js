@@ -163,8 +163,8 @@ var DEBUG = (function() {
         "@keyframes pulsate_opacity_light {\n\t0% {\n\t\topacity: 0.1\n\t}\n\t50% {\n\t\topacity: 0.3\n\t}\n\t100% {\n\t\topacity: 0.1\n\t}\n}\n" + 
         "#debug_element_focused {\n\t" + 
         "background-color: yellow;\n\t" + 
-        hyphen_mp('animationName') + ": pulsate_opacity_light;\n" + 
-        hyphen_mp('animationIterationCount') + ": infinite;\n" + 
+        hyphen_mp('animationName') + ": pulsate_opacity_light;\n\t" + 
+        hyphen_mp('animationIterationCount') + ": infinite;\n\t" + 
         hyphen_mp('animationDuration') + ": 1.3s;\n" + 
         "} \n";
 
