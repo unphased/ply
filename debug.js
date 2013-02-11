@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 6f278df clamping to 0.1 on shrinking shape %#";
+    var git_context = "#% 1d56b82 adding gitignore for this proj and also defined in JS some CSS for animating element selection %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -145,13 +145,13 @@ var DEBUG = (function() {
         return hyphen_style(local_Modernizr.prefixed(style));
     }
 
-    var css = "#debug_element_highlighter_container { \n"+
+    var css = "#debug_element_container { \n"+
         "\tposition: absolute; \n"+
         "\tpointerEvents: none; \n"+
         "\ttop: 0; left: 0; \n"+
         "\toverflow: visible; \n"+
         "\twidth: 0; height: 0; \n} \n"+
-        "#debug_element_highlighter_container * { \n\t"+
+        "#debug_element_container * { \n\t"+
         hyphen_mp('transitionDuration') + ": 0.4s, 0.4s; \n\t" + 
         hyphen_mp('transitionProperty') + ": "+hyphen_mp('transform')+", opacity; \n\t" +
         hyphen_mp('transformOrigin') + ": 0 0; \n\t" + 
@@ -159,7 +159,14 @@ var DEBUG = (function() {
         "\tposition: absolute; top: 0; left: 0; \n" + 
         "\tpointer-events: none; height: 500px; width: 500px; \n} \n" + 
         "#debug_element_highlighter_outer {\n\tbackground-color: rgba(45,60,255,0.2); \n} \n" + 
-        "#debug_element_highlighter_inner {\n\tbackground-color: rgba(25,255,35,0.2); \n} ";
+        "#debug_element_highlighter_inner {\n\tbackground-color: rgba(25,255,35,0.2); \n} \n" + 
+        "@keyframes pulsate_opacity_light {\n\t0% {\n\t\topacity: 0.1\n\t}\n\t50% {\n\t\topacity: 0.3\n\t}\n\t100% {\n\t\topacity: 0.1\n\t}\n\t }\n" + 
+        "#debug_element_focused {\n\t" + 
+        "background-color: yellow;\n\t" + 
+        hyphen_mp('animationName') + ": pulsate_opacity_light;\n" + 
+        hyphen_mp('animationIterationCount') + ": infinite;\n" + 
+        hyphen_mp('animationDuration') + ": 1.3s;\n" + 
+        "} \n";
 
     // append a style tag to head 
     var head = document.getElementsByTagName("head")[0];
@@ -177,10 +184,10 @@ var DEBUG = (function() {
     // an interface for portably highlighting any page element (without changing it)
     function highlight(e){
         // lazily init top level element 
-        var jc = $("#debug_element_highlighter_container");
+        var jc = $("#debug_element_container");
         if (jc.length === 0) {
-            $("html").append("<div id=debug_element_highlighter_container></div>");
-            jc = $("#debug_element_highlighter_container");
+            $("html").append("<div id=debug_element_container></div>");
+            jc = $("#debug_element_container");
         }
         var jouter = jc.children("#debug_element_highlighter_outer");
         var outer = jouter[0];
@@ -210,7 +217,7 @@ var DEBUG = (function() {
                 var mat = old.slice(7,-1).split(","); 
                 return "translate("+(mat[0]*125)+"px,"+(mat[3]*125)+"px) "+old+" scale(0.5)";
             };
-            jinner.css(css_set_inner); */ 
+            jinner.css(css_set_inner); */ // above code retrieves actual transitioning value 
 
             // I actually don't want the interpolated (actual real current) value, I just want to 
             // extract the value I set (which should be the transform for my target element) 
@@ -238,8 +245,8 @@ var DEBUG = (function() {
                 assert(!inner, "outer does not exist so neither should inner"); // just a sanity check
                 css_set = {opacity: 0};
                 css_set[transformStyle] = "scale3d("+document.documentElement.scrollWidth/500+","+document.documentElement.scrollHeight/500+",1)";
-                var jo = $('<div '+"id=debug_element_highlighter_outer"+"></div>").css(css_set);
-                var ji = $('<div '+"id=debug_element_highlighter_inner"+"></div>").css(css_set);
+                var jo = $('<div id="debug_element_highlighter_outer"></div>').css(css_set);
+                var ji = $('<div id="debug_element_highlighter_inner"></div>').css(css_set);
                 // insert to DOM
                 jc.append(jo);
                 jc.append(ji);
@@ -269,6 +276,10 @@ var DEBUG = (function() {
         //original_console_log.apply(window.console,["highlight2",e, jc]);
     }
 
+    function focused(e) {
+
+    }
+
     // primitive set of methods provided by debug
     var exposed = {
         enabled: true,
@@ -279,6 +290,7 @@ var DEBUG = (function() {
         revision: git_context.slice(3,-3), 
         clean_list: clean,
         highlight: highlight,
+        focused: focused, 
         error: error,
      
         // This is just marked when any event makes its way through the primary
