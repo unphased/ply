@@ -228,7 +228,9 @@ var DEBUG = (function() {
             ws = (inner.ply_HL_dimX - 10) / inner.ply_HL_dimX;
             hs = (inner.ply_HL_dimY - 10) / inner.ply_HL_dimY;
             inner.style.opacity = "0";
+            console.log("before ",inner.style[transformStyle]);
             inner.style[transformStyle] = "translate(5px, 5px) "+inner.style[transformStyle]+" scale3d("+ws+", "+hs+", 1)";
+            console.log("after ",inner.style[transformStyle]);
         } else {
             jouter.off(transEndEventName);
             //console.log("running the update");
