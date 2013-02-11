@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 4be6f6b a smaller difference and also now can test what happens on super tiny elements %#";
+    var git_context = "#% 78ff415 more stuff to test spacing %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
