@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% c4da67a a firefox only thing %#";
+    var git_context = "#% 687b660 a well hidden debug shortcut %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
