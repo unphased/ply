@@ -20,6 +20,10 @@
                                 case 65: // a
                                     highlight_active = true;
                                 break;
+                                case 66: // b
+                                break;
+                                default:
+                                break;
                             }
                         }
                     },
