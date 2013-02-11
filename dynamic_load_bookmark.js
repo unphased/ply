@@ -14,6 +14,15 @@
                 var tap_start_time = 0;
                 var highlight_active = false;
                 PLY.attach_handlers_on_document({
+                    keydown: function(evt) {
+                        if (evt.shiftKey && evt.altKey && evt.ctrlKey) {
+                            switch (evt.which) {
+                                case 65: // a
+                                    highlight_active = true;
+                                break;
+                            }
+                        }
+                    },
                     mousedown: function(evt) {
                         if (evt.which === 3) { // middle mouse btn (prolly indicates right button on IE. Screw you IE)
                             DEBUG.highlight(evt.target);
