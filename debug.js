@@ -235,9 +235,7 @@ var DEBUG = (function() {
             ws = (inner.ply_HL_dimX - 10) / inner.ply_HL_dimX;
             hs = (inner.ply_HL_dimY - 10) / inner.ply_HL_dimY;
             inner.style.opacity = "0";
-            console.log("before ",inner.style[transformStyle]);
             inner.style[transformStyle] = "translate(5px, 5px) "+inner.style[transformStyle]+" scale3d("+(ws<=0.1?0.1:ws)+", "+(hs<=0.1?0.1:hs)+", 1)";
-            console.log("after ",inner.style[transformStyle]);
         } else {
             jouter.off(transEndEventName);
             //console.log("running the update");
@@ -276,8 +274,14 @@ var DEBUG = (function() {
         //original_console_log.apply(window.console,["highlight2",e, jc]);
     }
 
+    // Usage note: call me after calling highlight
     function focused(e) {
+        // no lazily init for speed
+        var jc = $("#debug_element_container");
+        var jfocus = jc.children("#debug_element_focused");
+        if (jfocus.length === 0) {
 
+        }
     }
 
     // primitive set of methods provided by debug
