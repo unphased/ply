@@ -280,8 +280,8 @@ var DEBUG = (function() {
             inner.style.opacity = "1";
             inner.ply_HL_dimX = w;
             inner.ply_HL_dimY = h;
-            console.log(transOuter);
-            console.log(transInner);
+            console.log("O",transOuter);
+            console.log("I",transInner);
         }
         //original_console_log.apply(window.console,["highlight2",e, jc]);
     }
