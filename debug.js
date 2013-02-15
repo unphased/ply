@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% f9cfd49 a print in highlight %#";
+    var git_context = "#% e7776c9 less climsy print %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -280,7 +280,8 @@ var DEBUG = (function() {
             inner.style.opacity = "1";
             inner.ply_HL_dimX = w;
             inner.ply_HL_dimY = h;
-            console.log(transOuter+"\n"+transInner);
+            console.log(transOuter);
+            console.log(transInner);
         }
         //original_console_log.apply(window.console,["highlight2",e, jc]);
     }
