@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 38824d8 whitespace cleanup %#";
+    var git_context = "#% f9cfd49 a print in highlight %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -235,9 +235,7 @@ var DEBUG = (function() {
             ws = (inner.ply_HL_dimX - 10) / inner.ply_HL_dimX;
             hs = (inner.ply_HL_dimY - 10) / inner.ply_HL_dimY;
             inner.style.opacity = "0";
-            console.log("before ",inner.style[transformStyle]);
             inner.style[transformStyle] = "translate(5px, 5px) "+inner.style[transformStyle]+" scale3d("+(ws<=0.1?0.1:ws)+", "+(hs<=0.1?0.1:hs)+", 1)";
-            console.log("after ",inner.style[transformStyle]);
         } else {
             jouter.off(transEndEventName);
             //console.log("running the update");
@@ -264,20 +262,44 @@ var DEBUG = (function() {
 
             var style_of_e = getComputedStyle(e);
 
-            outer.style[transformStyle] = "translate3d("+(p.left-parseInt(style_of_e.marginLeft,10))+"px, "+(p.top-parseInt(style_of_e.marginTop,10))+"px,0) scale3d("+ow/500+","+oh/500+",1)";
+            var transOuter = "translate3d("+
+                (p.left-parseInt(style_of_e.marginLeft,10))+"px, "+
+                (p.top-parseInt(style_of_e.marginTop,10))+"px,0) scale3d("+
+                ow/500+","+oh/500+",1)";
+            outer.style[transformStyle] = transOuter;
             outer.style.opacity = "1";
             outer.ply_HL_dimX = ow;
             outer.ply_HL_dimY = oh;
-            inner.style[transformStyle] = "translate3d("+(p.left+parseInt(style_of_e.paddingLeft,10)+parseInt(style_of_e.borderLeftWidth,10))+"px, "+(p.top+parseInt(style_of_e.paddingTop,10)+parseInt(style_of_e.borderTopWidth,10))+"px,0) scale3d("+w/500+","+h/500+",1)";
+            var transInner = "translate3d("+
+                (p.left+parseInt(style_of_e.paddingLeft,10)+
+                    parseInt(style_of_e.borderLeftWidth,10))+"px, "+
+                (p.top+parseInt(style_of_e.paddingTop,10)+
+                    parseInt(style_of_e.borderTopWidth,10))+"px,0) scale3d("+
+                w/500+","+h/500+",1)";
+            inner.style[transformStyle] = transInner;
             inner.style.opacity = "1";
             inner.ply_HL_dimX = w;
             inner.ply_HL_dimY = h;
+            console.log(transOuter+"\n"+transInner);
         }
         //original_console_log.apply(window.console,["highlight2",e, jc]);
     }
 
     function focused(e) {
+        // lazily init
+        var jc = $("#debug_element_container");
+        if (jc.length === 0) {
+            $("html").append("<div id=debug_element_container></div>");
+            jc = $("#debug_element_container");
+        }
+        var jfocus = jc.children("#debug_element_focused");
+        if (e) { // setting 
+            if (jfocus.length === 0) { // jouter not present 
 
+            }
+        } else { // removing 
+            
+        }
     }
 
     // primitive set of methods provided by debug
