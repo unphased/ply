@@ -322,6 +322,7 @@ var DEBUG = (function() {
             var oh = je.height();
             var transFocus = "translate3d("+p.left+"px,"+p.top+"px,0) scale3d("+ow/500+","+oh/500+",1)"; 
             focus.style[transformStyle] = transFocus; 
+            focus.style.opacity = "1";
             //focus.ply_HL_dimX = ow;
         } else { // removing 
             jfocus.on(transEndEventName, function(){
