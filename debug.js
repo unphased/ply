@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 70fc0ab a variable %#";
+    var git_context = "#% 5178cf2 forgot opacity %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -322,6 +322,7 @@ var DEBUG = (function() {
             var oh = je.height();
             var transFocus = "translate3d("+p.left+"px,"+p.top+"px,0) scale3d("+ow/500+","+oh/500+",1)"; 
             focus.style[transformStyle] = transFocus; 
+            focus.style.opacity = "1";
             //focus.ply_HL_dimX = ow;
         } else { // removing 
             jfocus.on(transEndEventName, function(){
