@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 5178cf2 forgot opacity %#";
+    var git_context = "#% f1974e6 got another idea for making the UX even better on a mouse ^^ %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 

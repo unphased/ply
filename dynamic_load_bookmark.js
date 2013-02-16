@@ -27,12 +27,13 @@
                             }
                         }
                     },
-                    mousedown: function(evt) {
-                        if (evt.which === 3) { // middle mouse btn (prolly indicates right button on IE. Screw you IE)
+                    mousedown: function(evt) { console.log("mousedown");
+                        if (evt.which === 3) {
                             DEBUG.highlight(evt.target);
                             //evt.preventDefault(); // this appears to not be able to prevent context menu
                             highlight_active = true;
                         } else if (evt.which === 1) {
+                            // treat double-click also as starting selection (nice for touchpad users)
                             if (Date.now() - tap_start_time < 300) {
                                 evt.preventDefault(); // hopefully this can suppress selection of text. 
                                 DEBUG.highlight(evt.target);
@@ -41,10 +42,13 @@
                            tap_start_time = Date.now();
                         }
                     },
-                    contextmenu: function(evt) {
-                        evt.preventDefault();
+                    // a right-click overload (very nice for mouse users)
+                    contextmenu: function(evt) { console.log("ctxmenu");
+                        if (highlight_active) {
+                            evt.preventDefault();
+                        }
                     },
-                    mouseup: function(evt) {
+                    mouseup: function(evt) { console.log("mouseup");
                         highlight_active = false;
                         DEBUG.highlight(null);
                     },
