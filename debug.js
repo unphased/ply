@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% ac30359 some more done on focus highlight %#";
+    var git_context = "#% 70fc0ab a variable %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -305,7 +305,7 @@ var DEBUG = (function() {
             jc = $("#debug_element_container");
         }
         var jfocus = jc.children("#debug_element_focused");
-        // var focus = jfocus[0];
+        var focus = jfocus[0];
         if (e) { // setting 
             jfocus.off(transEndEventName);
             if (jfocus.length === 0) { // jouter not present 
@@ -314,7 +314,7 @@ var DEBUG = (function() {
                 css_obj[transformStyle] = "scale3d(" + document.documentElement.scrollWidth/500+","+document.documentElement.scrollHeight/500+",1)";
                 jfocus = $('<div id="debug_element_focused"></div>').css(css_obj);
                 jc.append(jfocus);
-                //focus = jfocus[0];
+                focus = jfocus[0];
             }
             var je = $(e);
             var p = je.offset();
