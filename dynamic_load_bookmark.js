@@ -61,11 +61,11 @@
                         highlight_active = false;
                         DEBUG.highlight(null);
                     },
-                    mousemove: function(evt) {
+                    /* mousemove: function(evt) {
                         if (mouse_down_at && (Math.abs(mouse_down_at.x-evt.clientX) + Math.abs(mouse_down_at.y-evt.clientY)) > 5) {
                             enable_ctx_menu = false;
                         }
-                    },
+                    }, */
                     mouseover: function(evt) { console.log("highlight_active",highlight_active);
                         if (highlight_active)
                             DEBUG.highlight(evt.target);                        
