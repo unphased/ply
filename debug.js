@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 15fba31 commitdeploy scripted commit on master performed on host new-host.home at Sat Feb 16 18:01:08 EST 2013 %#";
+    var git_context = "#% 470ff1c missed this one %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
