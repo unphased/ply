@@ -145,26 +145,26 @@ var DEBUG = (function() {
         return hyphen_style(local_Modernizr.prefixed(style));
     }
 
-    var css = "body { "+hyphen_mp('backfaceVisibility')+": hidden; "+hyphen_mp('perspective') + ": 1000; }\n" +
+    var css = //"body { "+hyphen_mp('backfaceVisibility')+": hidden; "+hyphen_mp('perspective') + ": 1000; }\n" +
         "#debug_element_container { \n" +
         "\tposition: absolute; \n" +
         "\tpointer-events: none; \n" +
         "\ttop: 0; left: 0; \n" +
         "\toverflow: visible; \n\t" +
         //hyphen_mp('transform') + ": translate3d(0,0,-1px);\n\t" + 
-        hyphen_mp('backfaceVisibility') + ": hidden;\n\t" + 
-        //hyphen_mp('transformStyle') + ": preserve-3d;\n\t" +
-        hyphen_mp('perspective') + ": 1000;\n" +
-        "width: 0; height: 0; \n} \n" +
+        //hyphen_mp('backfaceVisibility') + ": hidden;\n\t" + 
+        hyphen_mp('transformStyle') + ": preserve-3d;\n\t" +
+        //hyphen_mp('perspective') + ": 1000;\n" +
+        "width: 100; height: 100; \n} \n" +
         "#debug_element_container > div { \n\t" +
         hyphen_mp('transitionDuration') + ": 0.4s, 0.4s; \n\t" + 
         hyphen_mp('transitionProperty') + ": "+hyphen_mp('transform')+", opacity; \n\t" +
         hyphen_mp('transformOrigin') + ": 0 0; \n\t" + 
-        hyphen_mp('transitionTimingFunction') + ": cubic-bezier(0.130, 0.500, 0.200, 1.000), linear; \n\t" +
+        hyphen_mp('transitionTimingFunction') + ": cubic-bezier(0.500, 0.500, 0.200, 1.000), linear; \n\t" +
         hyphen_mp('backfaceVisibility') + ": hidden;\n\t" + 
-        hyphen_mp('perspective') + ": 1000;\n" +
-        //hyphen_mp('transformStyle') + ": preserve-3d;\n" +
-        "\tposition: absolute; top: 0; left: 0; \n" + 
+        //hyphen_mp('perspective') + ": 1000;\n\t" +
+        //hyphen_mp('transformStyle') + ": preserve-3d;\n\t" +
+        "position: absolute; top: 0; left: 0; \n" + 
         "\tpointer-events: none; height: 500px; width: 500px; \n} \n" + 
         "#debug_element_highlighter_outer {\n\tbackground-color: rgba(45,60,255,0.2); \n} \n" + 
         "#debug_element_highlighter_inner {\n\tbackground-color: rgba(25,255,35,0.2); \n} \n" + 
