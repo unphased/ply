@@ -29,10 +29,11 @@
                     },
                     mousedown: function(evt) { console.log("mousedown");
                         if (evt.which === 3) {
-                            DEBUG.highlight(evt.target);
                             //evt.preventDefault(); // this appears to not be able to prevent context menu
-                            if (!evt.shiftKey) 
+                            if (!evt.shiftKey) { 
                                 highlight_active = true;
+                                DEBUG.highlight(evt.target);
+                            }
                         } else if (evt.which === 1) {
                             // treat double-click also as starting selection (nice for touchpad users)
                             if (Date.now() - tap_start_time < 300) {
