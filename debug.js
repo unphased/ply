@@ -54,6 +54,7 @@ var DEBUG = (function() {
 
     
     function serialize(arg) {
+        if (typeof arg === "undefined") return "undefined";
         if (typeof arg === "function") return "function";
         return JSON.stringify(arg,json_handler).replace(/"([^"]*)":/g,"$1: ").replace(/\},([^ ])/g,'},  $1').replace(/,([^ ])/g,', $1');
     }
