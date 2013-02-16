@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 78a9972 trying this %#";
+    var git_context = "#% 44f7b1d trying this (again) %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -161,8 +161,8 @@ var DEBUG = (function() {
         hyphen_mp('transitionProperty') + ": "+hyphen_mp('transform')+", opacity; \n\t" +
         hyphen_mp('transformOrigin') + ": 0 0; \n\t" + 
         hyphen_mp('transitionTimingFunction') + ": cubic-bezier(0.500, 0.500, 0.200, 1.000), linear; \n\t" +
-        //hyphen_mp('backfaceVisibility') + ": hidden;\n\t" + 
-        //hyphen_mp('perspective') + ": 1000;\n" +
+        hyphen_mp('backfaceVisibility') + ": hidden;\n\t" + 
+        hyphen_mp('perspective') + ": 1000;\n" +
         //hyphen_mp('transformStyle') + ": preserve-3d;\n" +
         "\tposition: absolute; top: 0; left: 0; \n" + 
         "\tpointer-events: none; height: 500px; width: 500px; \n} \n" + 
@@ -252,7 +252,7 @@ var DEBUG = (function() {
             if (!outer) { // update command: add if not present
                 assert(!inner, "outer does not exist so neither should inner"); // just a sanity check
                 css_set = {opacity: 0};
-                css_set[local_Modernizr.prefixed('backfaceVisibility')] = "hidden";
+                //css_set[local_Modernizr.prefixed('backfaceVisibility')] = "hidden";
                 css_set[transformStyle] = "scale3d("+document.documentElement.scrollWidth/500+","+document.documentElement.scrollHeight/500+",1)";
                 var jo = $('<div id="debug_element_highlighter_outer"></div>').css(css_set);
                 var ji = $('<div id="debug_element_highlighter_inner"></div>').css(css_set);
