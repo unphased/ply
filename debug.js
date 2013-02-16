@@ -145,7 +145,7 @@ var DEBUG = (function() {
         return hyphen_style(local_Modernizr.prefixed(style));
     }
 
-    var css = "body { "+hyphen_mp('backfaceVisibility')+": hidden; "+hyphen_mp('transformStyle') + ": preserve-3d; }\n" +
+    var css = "body { "+hyphen_mp('backfaceVisibility')+": hidden; "+hyphen_mp('perspective') + ": 1000; }\n" +
         "#debug_element_container { \n" +
         "\tposition: absolute; \n" +
         "\tpointer-events: none; \n" +
@@ -153,8 +153,8 @@ var DEBUG = (function() {
         "\toverflow: visible; \n\t" +
         //hyphen_mp('transform') + ": translate3d(0,0,-1px);\n\t" + 
         hyphen_mp('backfaceVisibility') + ": hidden;\n\t" + 
-        hyphen_mp('transformStyle') + ": preserve-3d;\n\t" +
-        //hyphen_mp('perspective') + ": 1000;\n" +
+        //hyphen_mp('transformStyle') + ": preserve-3d;\n\t" +
+        hyphen_mp('perspective') + ": 1000;\n" +
         "width: 0; height: 0; \n} \n" +
         "#debug_element_container > div { \n\t" +
         hyphen_mp('transitionDuration') + ": 0.4s, 0.4s; \n\t" + 
