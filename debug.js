@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% be72c90 commitdeploy scripted commit on master performed on host new-host.home at Sat Feb 16 17:58:21 EST 2013 %#";
+    var git_context = "#% 1daa53b commitdeploy scripted commit on master performed on host new-host.home at Sat Feb 16 17:59:39 EST 2013 %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -325,7 +325,7 @@ var DEBUG = (function() {
             var transFocus = "translate3d("+p.left+"px,"+p.top+"px,0) scale3d("+ow/500+","+oh/500+",1)"; 
             focus.style[transformStyle] = transFocus; 
             //focus.ply_HL_dimX = ow;
-        } else { // removing 
+        } else if (focus) { // removing 
             jfocus.on(transEndEventName, function(){
                 jfocus.remove();
             });
