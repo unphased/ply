@@ -44,9 +44,9 @@
                     },
                     // a right-click overload (very nice for mouse users)
                     contextmenu: function(evt) { console.log("ctxmenu");
-                        if (highlight_active) {
-                            evt.preventDefault();
-                        }
+                        //if (highlight_active) {
+                        //    evt.preventDefault();
+                        //}
                     },
                     mouseup: function(evt) { console.log("mouseup");
                         highlight_active = false;
