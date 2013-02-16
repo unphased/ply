@@ -14,6 +14,7 @@
                 var tap_start_time = 0;
                 var select_active = false;
                 var mouse_down_at;
+                var element_selected; 
                 var enable_ctx_menu = true;
                 PLY.attach_handlers_on_document({
                     keydown: function(evt) {
@@ -59,8 +60,12 @@
                         }
                     },
                     mouseup: function(evt) { console.log("mouseup");
-                        select_active = false;
-                        DEBUG.highlight(null);
+                        if (select_active) {
+                            select_active = false;
+                            DEBUG.highlight(null);
+                            DEBUG.focused(element_selected); 
+                            element_selected = null;
+                        }
                     },
                     mousemove: function(evt) {
                         if (mouse_down_at && (Math.abs(mouse_down_at.x-evt.clientX) + Math.abs(mouse_down_at.y-evt.clientY)) > 5) {
@@ -68,8 +73,10 @@
                         }
                     }, 
                     mouseover: function(evt) { console.log("select_active",select_active);
-                        if (select_active)
+                        if (select_active) {
                             DEBUG.highlight(evt.target);
+                            element_selected = evt.target;
+                        }
                     },
                     touchstart: function(evt) {
                         if (Date.now() - tap_start_time < 300) {
