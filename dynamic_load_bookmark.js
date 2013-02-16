@@ -30,6 +30,7 @@
                         }
                     },
                     mousedown: function(evt) { //console.log("mousedown");
+                        mouse_down_at = {x: evt.clientX, y: evt.clientY};
                         if (evt.which === 3) {
                             //evt.preventDefault(); // this appears to not be able to prevent context menu
                             if (!evt.shiftKey) { 
