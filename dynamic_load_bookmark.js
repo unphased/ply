@@ -13,6 +13,8 @@
                 var tracked_elements = {};
                 var tap_start_time = 0;
                 var highlight_active = false;
+                var mouse_down_at;
+                var enable_ctx_menu = true;
                 PLY.attach_handlers_on_document({
                     keydown: function(evt) {
                         if (evt.shiftKey && evt.altKey && evt.ctrlKey) {
@@ -27,7 +29,7 @@
                             }
                         }
                     },
-                    mousedown: function(evt) { console.log("mousedown");
+                    mousedown: function(evt) { //console.log("mousedown");
                         if (evt.which === 3) {
                             //evt.preventDefault(); // this appears to not be able to prevent context menu
                             if (!evt.shiftKey) { 
@@ -49,15 +51,21 @@
                     // coming in before the mouseup. There is a workaround though
                     // and that is hold Shift to get the menu :)
                     contextmenu: function(evt) { console.log("ctxmenu");
-                        if (highlight_active) {
+                        if (enable_ctx_menu || highlight_active) {
                             evt.preventDefault();
                         }
+                        enable_ctx_menu = true;
                     },
                     mouseup: function(evt) { console.log("mouseup");
                         highlight_active = false;
                         DEBUG.highlight(null);
                     },
-                    mouseover: function(evt){
+                    mousemove: function(evt) {
+                        if (mouse_down_at && (Math.abs(mouse_down_at.x-evt.clientX) + Math.abs(mouse_down_at.y-evt.clientY)) > 5) {
+                            enable_ctx_menu = false;
+                        }
+                    },
+                    mouseover: function(evt) {
                         if (highlight_active)
                             DEBUG.highlight(evt.target);                        
                     },
