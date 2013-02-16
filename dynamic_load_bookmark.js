@@ -39,6 +39,7 @@
                             if (!evt.shiftKey) { 
                                 select_active = true;
                                 DEBUG.highlight(evt.target);
+                                element_selected = evt.target;
                             }
                         } else if (evt.which === 1) {
                             // treat double-click also as starting selection (nice for touchpad users)
