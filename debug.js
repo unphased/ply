@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% ec16ae4 a desperate test %#";
+    var git_context = "#% 50e4ecb commitdeploy scripted commit on master performed on host steven-rmbp-w7.home at Sat Feb 16 04:59:32 EST 2013 %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -151,9 +151,9 @@ var DEBUG = (function() {
         "\tpointer-events: none; \n" +
         "\ttop: 0; left: 0; \n" +
         "\toverflow: visible; \n\t" +
-        hyphen_mp('transform') + ": translate3d(0,0,-1px);\n\t" + 
+        //hyphen_mp('transform') + ": translate3d(0,0,-1px);\n\t" + 
         hyphen_mp('backfaceVisibility') + ": hidden;\n\t" + 
-        hyphen_mp('transformStyle') + ": preserve-3d;\n\t" +
+        //hyphen_mp('transformStyle') + ": preserve-3d;\n\t" +
         hyphen_mp('perspective') + ": 1000;\n" +
         "\twidth: 0; height: 0; \n} \n" +
         "#debug_element_container > div { \n\t" +
@@ -162,8 +162,8 @@ var DEBUG = (function() {
         hyphen_mp('transformOrigin') + ": 0 0; \n\t" + 
         hyphen_mp('transitionTimingFunction') + ": cubic-bezier(0.500, 0.500, 0.200, 1.000), linear; \n\t" +
         hyphen_mp('backfaceVisibility') + ": hidden;\n\t" + 
-        hyphen_mp('perspective') + ": 1000;\n\t" +
-        hyphen_mp('transformStyle') + ": preserve-3d;\n" +
+        hyphen_mp('perspective') + ": 1000;\n" +
+        //hyphen_mp('transformStyle') + ": preserve-3d;\n" +
         "\tposition: absolute; top: 0; left: 0; \n" + 
         "\tpointer-events: none; height: 500px; width: 500px; \n} \n" + 
         "#debug_element_highlighter_outer {\n\tbackground-color: rgba(45,60,255,0.2); \n} \n" + 
