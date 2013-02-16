@@ -175,7 +175,7 @@ var DEBUG = (function() {
         hyphen_mp('animationName') + ": pulsate_opacity_light;\n\t" + 
         hyphen_mp('animationIterationCount') + ": infinite;\n\t" + 
         hyphen_mp('animationDirection') + ": alternate;\n\t" + 
-        hyphen_mp('transitionTimingFunction') + ": ease;\n\t" + 
+        hyphen_mp('animationTimingFunction') + ": ease;\n\t" + 
         hyphen_mp('animationDuration') + ": 1.3s;\n" + 
         "} \n";
 
