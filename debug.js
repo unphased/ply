@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 47e136e last commit s/climsy/clumsy/ %#";
+    var git_context = "#% 6b228ea some improvements and did some fleshing out of the focused indicator %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -155,16 +155,18 @@ var DEBUG = (function() {
         hyphen_mp('transitionDuration') + ": 0.4s, 0.4s; \n\t" + 
         hyphen_mp('transitionProperty') + ": "+hyphen_mp('transform')+", opacity; \n\t" +
         hyphen_mp('transformOrigin') + ": 0 0; \n\t" + 
-        hyphen_mp('transitionTimingFunction') + ": cubic-bezier(0.500, 0.500, 0.200, 1.000); \n" +
+        hyphen_mp('transitionTimingFunction') + ": cubic-bezier(0.500, 0.500, 0.200, 1.000), linear; \n" +
         "\tposition: absolute; top: 0; left: 0; \n" + 
         "\tpointer-events: none; height: 500px; width: 500px; \n} \n" + 
         "#debug_element_highlighter_outer {\n\tbackground-color: rgba(45,60,255,0.2); \n} \n" + 
         "#debug_element_highlighter_inner {\n\tbackground-color: rgba(25,255,35,0.2); \n} \n" + 
-        "@keyframes pulsate_opacity_light {\n\t0% {\n\t\topacity: 0.1\n\t}\n\t50% {\n\t\topacity: 0.3\n\t}\n\t100% {\n\t\topacity: 0.1\n\t}\n}\n" + 
+        "@keyframes pulsate_opacity_light {\n\t0% {\n\t\topacity: 0.1\n\t}\n\t100% {\n\t\topacity: 0.1\n\t}\n}\n" + 
         "#debug_element_focused {\n\t" + 
         "background-color: yellow;\n\t" + 
         hyphen_mp('animationName') + ": pulsate_opacity_light;\n\t" + 
         hyphen_mp('animationIterationCount') + ": infinite;\n\t" + 
+        hyphen_mp('animationDirection') + ": alternate;\n\t" + 
+        hyphen_mp('transitionTimingFunction') + ": ease;\n\t" + 
         hyphen_mp('animationDuration') + ": 1.3s;\n" + 
         "} \n";
 
@@ -280,8 +282,8 @@ var DEBUG = (function() {
             inner.style.opacity = "1";
             inner.ply_HL_dimX = w;
             inner.ply_HL_dimY = h;
-            console.log("O",transOuter);
-            console.log("I",transInner);
+            //console.log("O",transOuter);
+            //console.log("I",transInner);
         }
         //original_console_log.apply(window.console,["highlight2",e, jc]);
     }
@@ -294,12 +296,21 @@ var DEBUG = (function() {
             jc = $("#debug_element_container");
         }
         var jfocus = jc.children("#debug_element_focused");
+        // var focus = jfocus[0];
         if (e) { // setting 
+            jfocus.off(transEndEventName);
             if (jfocus.length === 0) { // jouter not present 
-
+                // create. 
+                css_obj = {opacity: 0};
+                css_obj[transformStyle] = "scale3d(" + document.documentElement.scrollWidth/500+","+document.documentElement.scrollHeight/500+",1)";
+                jfocus = $('<div id="debug_element_focused"></div>').css(css_obj);
+                jc.append(jfocus);
+                //focus = jfocus[0];
             }
         } else { // removing 
-            
+            jfocus.on(transEndEventName, function(){
+                jfocus.remove();
+            });
         }
     }
 
