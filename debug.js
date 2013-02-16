@@ -153,7 +153,7 @@ var DEBUG = (function() {
         "\toverflow: visible; \n\t" +
         //hyphen_mp('transform') + ": translate3d(0,0,-1px);\n\t" + 
         //hyphen_mp('backfaceVisibility') + ": hidden;\n\t" + 
-        hyphen_mp('transformStyle') + ": preserve-3d;\n\t" +
+        //hyphen_mp('transformStyle') + ": preserve-3d;\n\t" +
         //hyphen_mp('perspective') + ": 1000;\n" +
         "width: 100; height: 100; \n} \n" +
         "#debug_element_container > div { \n\t" +
