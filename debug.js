@@ -325,7 +325,7 @@ var DEBUG = (function() {
             var transFocus = "translate3d("+p.left+"px,"+p.top+"px,0) scale3d("+ow/500+","+oh/500+",1)"; 
             focus.style[transformStyle] = transFocus; 
             //focus.ply_HL_dimX = ow;
-        } else { // removing 
+        } else if (focus) { // removing 
             jfocus.on(transEndEventName, function(){
                 jfocus.remove();
             });
