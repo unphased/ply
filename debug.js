@@ -151,7 +151,8 @@ var DEBUG = (function() {
         "\ttop: 0; left: 0; \n" +
         "\toverflow: visible; \n\t" +
         //hyphen_mp('transform') + ": translate3d(0,0,-1px);\n" + 
-        hyphen_mp('backfaceVisibility') + ": hidden;\n" + 
+        hyphen_mp('backfaceVisibility') + ": hidden;\n\t" + 
+        hyphen_mp('perspective') + ": 1000;\n" +
         "\twidth: 0; height: 0; \n} \n" +
         "#debug_element_container > div { \n\t" +
         hyphen_mp('transitionDuration') + ": 0.4s, 0.4s; \n\t" + 
