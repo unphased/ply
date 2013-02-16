@@ -31,6 +31,7 @@
                     },
                     mousedown: function(evt) { //console.log("mousedown");
                         mouse_down_at = {x: evt.clientX, y: evt.clientY};
+                        enable_ctx_menu = true;
                         if (evt.which === 3) {
                             //evt.preventDefault(); // this appears to not be able to prevent context menu
                             if (!evt.shiftKey) { 
@@ -55,7 +56,6 @@
                         if (!enable_ctx_menu || highlight_active) {
                             evt.preventDefault();
                         }
-                        enable_ctx_menu = true;
                     },
                     mouseup: function(evt) { console.log("mouseup");
                         highlight_active = false;
