@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% f459b97 now attempting to assign it to the element itself in addition to using the stylesheet %#";
+    var git_context = "#% 31ef054 did not help. Anyway it works good on iOS so must be OSX Safari bug %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -245,8 +245,7 @@ var DEBUG = (function() {
             if (!outer) { // update command: add if not present
                 assert(!inner, "outer does not exist so neither should inner"); // just a sanity check
                 css_set = {opacity: 0};
-                css_set[local_Modernizr.prefixed('transitionDuration')] = "0.4s, 0.4s";
-                css_set[local_Modernizr.prefixed('transitionProperty')] = hyphen_mp('transform')+", opacity";
+                
                 css_set[transformStyle] = "scale3d("+document.documentElement.scrollWidth/500+","+document.documentElement.scrollHeight/500+",1)";
                 var jo = $('<div id="debug_element_highlighter_outer"></div>').css(css_set);
                 var ji = $('<div id="debug_element_highlighter_inner"></div>').css(css_set);
