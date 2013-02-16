@@ -52,7 +52,7 @@
                     // coming in before the mouseup. There is a workaround though
                     // and that is hold Shift to get the menu :)
                     contextmenu: function(evt) { console.log("ctxmenu ecm, ha:",enable_ctx_menu,highlight_active);
-                        if (enable_ctx_menu || highlight_active) {
+                        if (!enable_ctx_menu || highlight_active) {
                             evt.preventDefault();
                         }
                         enable_ctx_menu = true;
