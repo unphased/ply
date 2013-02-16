@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 44f7b1d trying this (again) %#";
+    var git_context = "#% 652bd73 some more desperation %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -145,15 +145,15 @@ var DEBUG = (function() {
         return hyphen_style(local_Modernizr.prefixed(style));
     }
 
-    var css = "body { "+hyphen_mp('transform')+": translate3d(0,0,-1px); }\n" +
+    var css = "body { "+hyphen_mp('backfaceVisibility')+": hidden; "+hyphen_mp('transformStyle') + ": preserve-3d; }\n" +
         "#debug_element_container { \n" +
         "\tposition: absolute; \n" +
         "\tpointer-events: none; \n" +
         "\ttop: 0; left: 0; \n" +
         "\toverflow: visible; \n\t" +
         //hyphen_mp('transform') + ": translate3d(0,0,-1px);\n\t" + 
-        //hyphen_mp('backfaceVisibility') + ": hidden;\n\t" + 
-        //hyphen_mp('transformStyle') + ": preserve-3d;\n\t" +
+        hyphen_mp('backfaceVisibility') + ": hidden;\n\t" + 
+        hyphen_mp('transformStyle') + ": preserve-3d;\n\t" +
         //hyphen_mp('perspective') + ": 1000;\n" +
         "width: 0; height: 0; \n} \n" +
         "#debug_element_container > div { \n\t" +
