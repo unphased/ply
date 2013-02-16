@@ -31,7 +31,8 @@
                         if (evt.which === 3) {
                             DEBUG.highlight(evt.target);
                             //evt.preventDefault(); // this appears to not be able to prevent context menu
-                            highlight_active = true;
+                            if (!evt.shiftKey) 
+                                highlight_active = true;
                         } else if (evt.which === 1) {
                             // treat double-click also as starting selection (nice for touchpad users)
                             if (Date.now() - tap_start_time < 300) {
@@ -43,10 +44,13 @@
                         }
                     },
                     // a right-click overload (very nice for mouse users)
+                    // unfortunately does break on OS X due to ctxmenu event 
+                    // coming in before the mouseup. There is a workaround though
+                    // and that is hold Shift to get the menu :)
                     contextmenu: function(evt) { console.log("ctxmenu");
-                        //if (highlight_active) {
-                        //    evt.preventDefault();
-                        //}
+                        if (highlight_active) {
+                            evt.preventDefault();
+                        }
                     },
                     mouseup: function(evt) { console.log("mouseup");
                         highlight_active = false;
