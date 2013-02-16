@@ -51,7 +51,7 @@
                     // unfortunately does break on OS X due to ctxmenu event 
                     // coming in before the mouseup. There is a workaround though
                     // and that is hold Shift to get the menu :)
-                    contextmenu: function(evt) { console.log("ctxmenu");
+                    contextmenu: function(evt) { console.log("ctxmenu ecm, ha:",enable_ctx_menu,highlight_active);
                         if (enable_ctx_menu || highlight_active) {
                             evt.preventDefault();
                         }
@@ -68,7 +68,7 @@
                     }, 
                     mouseover: function(evt) { console.log("highlight_active",highlight_active);
                         if (highlight_active)
-                            DEBUG.highlight(evt.target);                        
+                            DEBUG.highlight(evt.target);
                     },
                     touchstart: function(evt) {
                         if (Date.now() - tap_start_time < 300) {
