@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% c4ac1d5 animation %#";
+    var git_context = "#% 9f16b52 keyframes decl %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -169,7 +169,7 @@ var DEBUG = (function() {
         "\tpointer-events: none; height: 500px; width: 500px; \n} \n" + 
         "#debug_element_highlighter_outer {\n\tbackground-color: rgba(45,60,255,0.2); \n} \n" + 
         "#debug_element_highlighter_inner {\n\tbackground-color: rgba(25,255,35,0.2); \n} \n" + 
-        "@keyframes pulsate_opacity_light {\n\t0% {\n\t\topacity: 0.1\n\t}\n\t100% {\n\t\topacity: 0.3\n\t}\n}\n" + 
+        "@keyframes pulsate_opacity_light {\n\tfrom {\n\t\topacity: 0.1;\n\t}\n\tto {\n\t\topacity: 0.3;\n\t}\n}\n" + 
         "#debug_element_focused {\n\t" + 
         "background-color: yellow;\n\t" + 
         hyphen_mp('animationName') + ": pulsate_opacity_light;\n\t" + 
