@@ -147,7 +147,7 @@ var DEBUG = (function() {
 
     var css = "#debug_element_container { \n" +
         "\tposition: absolute; \n" +
-        "\tpointerEvents: none; \n" +
+        "\tpointer-events: none; \n" +
         "\ttop: 0; left: 0; \n" +
         "\toverflow: visible; \n" +
         "\twidth: 0; height: 0; \n} \n" +
@@ -202,7 +202,7 @@ var DEBUG = (function() {
             jouter.on(transEndEventName,function(){
                 jouter.remove(); // erase me
                 jinner.remove();
-                //console.log("removed");
+                console.log("removed");
             });
             /* 
             var css_set_outer = {opacity: 0};
