@@ -149,7 +149,8 @@ var DEBUG = (function() {
         "\tposition: absolute; \n" +
         "\tpointer-events: none; \n" +
         "\ttop: 0; left: 0; \n" +
-        "\toverflow: visible; \n" +
+        "\toverflow: visible; \n\t" +
+        hyphen_mp('transform') + ": translate3d(0,0,-1px)\n" + 
         "\twidth: 0; height: 0; \n} \n" +
         "#debug_element_container * { \n\t" +
         hyphen_mp('transitionDuration') + ": 0.4s, 0.4s; \n\t" + 
