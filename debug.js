@@ -145,7 +145,8 @@ var DEBUG = (function() {
         return hyphen_style(local_Modernizr.prefixed(style));
     }
 
-    var css = "#debug_element_container { \n" +
+    var css = "body { "+hyphen_mp('transform')+": translate3d(0,0,-1px); }\n" +
+        "#debug_element_container { \n" +
         "\tposition: absolute; \n" +
         "\tpointer-events: none; \n" +
         "\ttop: 0; left: 0; \n" +
