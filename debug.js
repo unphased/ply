@@ -160,7 +160,7 @@ var DEBUG = (function() {
         hyphen_mp('transitionDuration') + ": 0.4s, 0.4s; \n\t" + 
         hyphen_mp('transitionProperty') + ": "+hyphen_mp('transform')+", opacity; \n\t" +
         hyphen_mp('transformOrigin') + ": 0 0; \n\t" + 
-        hyphen_mp('transitionTimingFunction') + ": cubic-bezier(0.500, 0.500, 0.200, 1.000), linear; \n\t" +
+        hyphen_mp('transitionTimingFunction') + ": cubic-bezier(0.130, 0.500, 0.200, 1.000), linear; \n\t" +
         hyphen_mp('backfaceVisibility') + ": hidden;\n\t" + 
         hyphen_mp('perspective') + ": 1000;\n" +
         //hyphen_mp('transformStyle') + ": preserve-3d;\n" +
