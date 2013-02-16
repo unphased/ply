@@ -12,15 +12,16 @@
                 
                 var tracked_elements = {};
                 var tap_start_time = 0;
-                var highlight_active = false;
+                var select_active = false;
                 var mouse_down_at;
                 var enable_ctx_menu = true;
                 PLY.attach_handlers_on_document({
                     keydown: function(evt) {
+                        // secret shortcut keys 
                         if (evt.shiftKey && evt.altKey && evt.ctrlKey) {
                             switch (evt.which) {
                                 case 65: // a
-                                    highlight_active = true;
+                                    select_active = true;
                                 break;
                                 case 66: // b
                                 break;
@@ -35,7 +36,7 @@
                         if (evt.which === 3) {
                             //evt.preventDefault(); // this appears to not be able to prevent context menu
                             if (!evt.shiftKey) { 
-                                highlight_active = true;
+                                select_active = true;
                                 DEBUG.highlight(evt.target);
                             }
                         } else if (evt.which === 1) {
@@ -43,7 +44,7 @@
                             if (Date.now() - tap_start_time < 300) {
                                 evt.preventDefault(); // hopefully this can suppress selection of text. 
                                 DEBUG.highlight(evt.target);
-                                highlight_active = true;
+                                select_active = true;
                             }
                            tap_start_time = Date.now();
                         }
@@ -52,13 +53,13 @@
                     // unfortunately does break on OS X due to ctxmenu event 
                     // coming in before the mouseup. There is a workaround though
                     // and that is hold Shift to get the menu :)
-                    contextmenu: function(evt) { console.log("ctxmenu ecm, ha:",enable_ctx_menu,highlight_active);
-                        if (!enable_ctx_menu || highlight_active) {
+                    contextmenu: function(evt) { console.log("ctxmenu ecm, ha:",enable_ctx_menu,select_active);
+                        if (!enable_ctx_menu || select_active) {
                             evt.preventDefault();
                         }
                     },
                     mouseup: function(evt) { console.log("mouseup");
-                        highlight_active = false;
+                        select_active = false;
                         DEBUG.highlight(null);
                     },
                     mousemove: function(evt) {
@@ -66,8 +67,8 @@
                             enable_ctx_menu = false;
                         }
                     }, 
-                    mouseover: function(evt) { console.log("highlight_active",highlight_active);
-                        if (highlight_active)
+                    mouseover: function(evt) { console.log("select_active",select_active);
+                        if (select_active)
                             DEBUG.highlight(evt.target);
                     },
                     touchstart: function(evt) {
