@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% eca71ed just a hunch... setting transform on the container might enable HWaccel on it and hopefully quell the bug %#";
+    var git_context = "#% 06384dd well that does not seem to work (it still might htough because i did mess up my last commit) however i am now trying a higher specificity selector (long shot) %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -150,9 +150,9 @@ var DEBUG = (function() {
         "\tpointer-events: none; \n" +
         "\ttop: 0; left: 0; \n" +
         "\toverflow: visible; \n\t" +
-        hyphen_mp('transform') + ": translate3d(0,0,-1px)\n" + 
+        hyphen_mp('transform') + ": translate3d(0,0,-1px);\n" + 
         "\twidth: 0; height: 0; \n} \n" +
-        "#debug_element_container * { \n\t" +
+        "#debug_element_container > div { \n\t" +
         hyphen_mp('transitionDuration') + ": 0.4s, 0.4s; \n\t" + 
         hyphen_mp('transitionProperty') + ": "+hyphen_mp('transform')+", opacity; \n\t" +
         hyphen_mp('transformOrigin') + ": 0 0; \n\t" + 
