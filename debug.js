@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 0f55e00 throwing this one in for good measure %#";
+    var git_context = "#% ec16ae4 a desperate test %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -145,7 +145,8 @@ var DEBUG = (function() {
         return hyphen_style(local_Modernizr.prefixed(style));
     }
 
-    var css = "#debug_element_container { \n" +
+    var css = "body { "+hyphen_mp('transform')+": translate3d(0,0,-1px); }\n" +
+        "#debug_element_container { \n" +
         "\tposition: absolute; \n" +
         "\tpointer-events: none; \n" +
         "\ttop: 0; left: 0; \n" +
