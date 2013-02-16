@@ -70,7 +70,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% a1a9b47 testing only setting size %#";
+    var git_context = "#% 7b0e6d5 back to what it was a long time ago %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -275,7 +275,8 @@ var DEBUG = (function() {
 
             var transOuter = "translate3d("+
                 (p.left-parseInt(style_of_e.marginLeft,10))+"px, "+
-                (p.top-parseInt(style_of_e.marginTop,10))+"px,0) ";//scale3d("+                ow/500+","+oh/500+",1)";
+                (p.top-parseInt(style_of_e.marginTop,10))+"px,0) scale3d("+
+                ow/500+","+oh/500+",1)";
             outer.style[transformStyle] = transOuter;
             outer.style.opacity = "1";
             outer.ply_HL_dimX = ow;
@@ -284,7 +285,8 @@ var DEBUG = (function() {
                 (p.left+parseInt(style_of_e.paddingLeft,10)+
                     parseInt(style_of_e.borderLeftWidth,10))+"px, "+
                 (p.top+parseInt(style_of_e.paddingTop,10)+
-                    parseInt(style_of_e.borderTopWidth,10))+"px,0)";//" scale3d("+                w/500+","+h/500+",1)";
+                    parseInt(style_of_e.borderTopWidth,10))+"px,0) scale3d("+
+                w/500+","+h/500+",1)";
             inner.style[transformStyle] = transInner;
             inner.style.opacity = "1";
             inner.ply_HL_dimX = w;
