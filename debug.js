@@ -54,6 +54,7 @@ var DEBUG = (function() {
 
     
     function serialize(arg) {
+        if (typeof arg === "undefined") return "undefined";
         if (typeof arg === "function") return "function";
         return JSON.stringify(arg,json_handler).replace(/"([^"]*)":/g,"$1: ").replace(/\},([^ ])/g,'},  $1').replace(/,([^ ])/g,', $1');
     }
@@ -70,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 1daa53b commitdeploy scripted commit on master performed on host new-host.home at Sat Feb 16 17:59:39 EST 2013 %#";
+    var git_context = "#% 15fba31 commitdeploy scripted commit on master performed on host new-host.home at Sat Feb 16 18:01:08 EST 2013 %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
