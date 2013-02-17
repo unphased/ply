@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% c145df1 oooh lets go back because i forgot to init to 0 opacity %#";
+    var git_context = "#% f139784 not sure if fillmode is being honored %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -181,7 +181,7 @@ var DEBUG = (function() {
         hyphen_mp('animationTimingFunction') + ": ease;\n\t" + 
         hyphen_mp('animationDuration') + ": 1.1s;\n" + 
         hyphen_mp('animationDelay') + ": 1.1s;\n" + 
-        hyphen_mp('animationFillMode') + ": before;\n" + 
+        hyphen_mp('animationFillMode') + ": both;\n" + 
         "} \n";
 
     // append a style tag to head 
