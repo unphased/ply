@@ -30,6 +30,12 @@
                                 break;
                             }
                         }
+                        if (evt.which === 27) { // esc
+                            if (element_selected) {
+                                element_selected = null;
+                                DEBUG.focused(null);
+                            }
+                        }
                     },
                     mousedown: function(evt) { //console.log("mousedown");
                         mouse_down_at = {x: evt.clientX, y: evt.clientY};
@@ -66,7 +72,7 @@
                             select_active = false;
                             DEBUG.highlight(null);
                             DEBUG.focused(element_selected); 
-                            element_selected = null;
+                            //element_selected = null;
                         }
                     },
                     mousemove: function(evt) {
