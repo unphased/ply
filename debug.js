@@ -174,7 +174,7 @@ var DEBUG = (function() {
         "#debug_element_highlighter_inner {\n\tbackground-color: rgba(25,255,35,0.2); \n} \n" + 
         "@"+keyframesPrefixed+" pulsate_opacity_light {\n\tfrom {\n\t\topacity: 0.1;\n\t}\n\tto {\n\t\topacity: 0.3;\n\t}\n}\n" + 
         "#debug_element_focused {\n\t" + 
-        "background-color: yellow;\n\t" + 
+        "background-color: orange;\n\t" + 
         hyphen_mp('animationName') + ": pulsate_opacity_light;\n\t" + 
         hyphen_mp('animationIterationCount') + ": infinite;\n\t" + 
         hyphen_mp('animationDirection') + ": alternate;\n\t" + 
@@ -313,20 +313,20 @@ var DEBUG = (function() {
         var focus = jfocus[0];
         if (e) { // setting 
             jfocus.off(transEndEventName);
-            if (jfocus.length === 0) { // jouter not present 
-                // create. 
-                css_obj = {opacity: 0};
-                css_obj[transformStyle] = "scale3d(" + document.documentElement.scrollWidth/500+","+document.documentElement.scrollHeight/500+",1)";
-                jfocus = $('<div id="debug_element_focused"></div>').css(css_obj);
-                jc.append(jfocus);
-                focus = jfocus[0];
-                focus.style.opacity = "";
-            }
             var je = $(e);
             var p = je.offset();
             var ow = je.outerWidth();
             var oh = je.outerHeight();
             var transFocus = "translate3d("+p.left+"px,"+p.top+"px,0) scale3d("+ow/500+","+oh/500+",1)"; 
+            if (jfocus.length === 0) { // jouter not present 
+                // create. 
+                css_obj = {opacity: 0};
+                css_obj[transformStyle] = transFocus;
+                jfocus = $('<div id="debug_element_focused"></div>').css(css_obj);
+                jc.append(jfocus);
+                focus = jfocus[0];
+                focus.style.opacity = "";
+            }
             focus.style[transformStyle] = transFocus; 
             //focus.ply_HL_dimX = ow;
         } else if (focus) { // removing 
