@@ -181,7 +181,7 @@ var DEBUG = (function() {
         hyphen_mp('animationTimingFunction') + ": ease;\n\t" + 
         hyphen_mp('animationDuration') + ": 1.1s;\n" + 
         hyphen_mp('animationDelay') + ": 1.1s;\n" + 
-        hyphen_mp('animationFillMode') + ": before;\n" + 
+        hyphen_mp('animationFillMode') + ": both;\n" + 
         "} \n";
 
     // append a style tag to head 
