@@ -330,12 +330,14 @@ var DEBUG = (function() {
                 jfocus = $('<div id="debug_element_focused"></div>').css(css_obj);
                 jc.append(jfocus);
                 focus = jfocus[0];
-                focus.style.opacity = "0.5";
-                focus.style[transformStyle] = transFocus;
-                jfocus.on(transEndEventName, function() {
-                    jfocus.off(transEndEventName);
-                    jfocus.addClass('pulsate_opacity');
-                });
+                setTimeout(function(){
+                    focus.style.opacity = "0.5";
+                    focus.style[transformStyle] = transFocus;
+                    jfocus.on(transEndEventName, function() {
+                        jfocus.off(transEndEventName);
+                        jfocus.addClass('pulsate_opacity');
+                    });
+                },0);
             }
             focus.style[transformStyle] = transFocus; 
             //focus.ply_HL_dimX = ow;
