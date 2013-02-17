@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% f8ae10e using outerwidth outerheight %#";
+    var git_context = "#% f85c0a3 a little less urgent %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -179,7 +179,7 @@ var DEBUG = (function() {
         hyphen_mp('animationIterationCount') + ": infinite;\n\t" + 
         hyphen_mp('animationDirection') + ": alternate;\n\t" + 
         hyphen_mp('animationTimingFunction') + ": ease;\n\t" + 
-        hyphen_mp('animationDuration') + ": 0.3s;\n" + 
+        hyphen_mp('animationDuration') + ": 0.5s;\n" + 
         "} \n";
 
     // append a style tag to head 
