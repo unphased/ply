@@ -324,8 +324,8 @@ var DEBUG = (function() {
             }
             var je = $(e);
             var p = je.offset();
-            var ow = je.width();
-            var oh = je.height();
+            var ow = je.outerWidth();
+            var oh = je.outerHeight();
             var transFocus = "translate3d("+p.left+"px,"+p.top+"px,0) scale3d("+ow/500+","+oh/500+",1)"; 
             focus.style[transformStyle] = transFocus; 
             //focus.ply_HL_dimX = ow;
