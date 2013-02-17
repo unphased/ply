@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 7716080 moving the animation to a class is the proper way to deal with the start/stop headache %#";
+    var git_context = "#% 49100bc to ensure the transition is kicked off %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -330,12 +330,14 @@ var DEBUG = (function() {
                 jfocus = $('<div id="debug_element_focused"></div>').css(css_obj);
                 jc.append(jfocus);
                 focus = jfocus[0];
-                focus.style.opacity = "0.5";
-                focus.style[transformStyle] = transFocus;
-                jfocus.on(transEndEventName, function() {
-                    jfocus.off(transEndEventName);
-                    jfocus.addClass('pulsate_opacity');
-                });
+                setTimeout(function(){
+                    focus.style.opacity = "0.5";
+                    focus.style[transformStyle] = transFocus;
+                    jfocus.on(transEndEventName, function() {
+                        jfocus.off(transEndEventName);
+                        jfocus.addClass('pulsate_opacity');
+                    });
+                },0);
             }
             focus.style[transformStyle] = transFocus; 
             //focus.ply_HL_dimX = ow;
