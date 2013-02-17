@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 119beed 0.2~0.4 now and also much slower %#";
+    var git_context = "#% 46e9df8 opacity fix %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -172,10 +172,10 @@ var DEBUG = (function() {
         "\tpointer-events: none; height: 500px; width: 500px; \n} \n" + 
         "#debug_element_highlighter_outer {\n\tbackground-color: rgba(45,60,255,0.2); \n} \n" + 
         "#debug_element_highlighter_inner {\n\tbackground-color: rgba(25,255,35,0.2); \n} \n" + 
-        "@"+keyframesPrefixed+" pulsate_opacity_light {\n\tfrom {\n\t\topacity: 0.2;\n\t}\n\tto {\n\t\topacity: 0.4;\n\t}\n}\n" + 
+        "@"+keyframesPrefixed+" pulsate_opacity {\n\tfrom {\n\t\topacity: 1;\n\t}\n\tto {\n\t\topacity: 0.4;\n\t}\n}\n" + 
         "#debug_element_focused {\n\t" + 
-        "background-color: orange;\n\t" + 
-        hyphen_mp('animationName') + ": pulsate_opacity_light;\n\t" + 
+        "background-color: rgba(255,150,25,0.3);\n\t" + 
+        hyphen_mp('animationName') + ": pulsate_opacity;\n\t" + 
         hyphen_mp('animationIterationCount') + ": infinite;\n\t" + 
         hyphen_mp('animationDirection') + ": alternate;\n\t" + 
         hyphen_mp('animationTimingFunction') + ": ease;\n\t" + 
@@ -335,6 +335,14 @@ var DEBUG = (function() {
             });
             focus.style.opacity = "0";
         }
+    }
+
+    // A bit of a heads-up display. I use OSD (on-screen-display) as that term better 
+    // describes the experience of this feature. 
+    // Attempts to be unintrusive and minimalistic
+    function OSD(item) {
+        if (typeof item !== "string") { console.log("non-string item for OSD is not implemented"); return; }
+        // lazy init a container for holding and showing the display. They are to be shown horizontally centered and at the bottom of the window. 
     }
 
     // primitive set of methods provided by debug
