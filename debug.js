@@ -177,8 +177,8 @@ var DEBUG = (function() {
         "background-color: rgba(255,150,25,0.3);\n\t" + 
         hyphen_mp('animationName') + ": pulsate_opacity;\n\t" + 
         hyphen_mp('animationIterationCount') + ": infinite;\n\t" + 
-        hyphen_mp('animationDirection') + ": alternate;\n\t" + 
-        hyphen_mp('animationTimingFunction') + ": ease-in-out;\n\t" + 
+        hyphen_mp('animationDirection') + ": alternate-reverse;\n\t" + 
+        hyphen_mp('animationTimingFunction') + ": ease;\n\t" + 
         hyphen_mp('animationDuration') + ": 0.8s;\n" + 
         "} \n";
 
