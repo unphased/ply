@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 2ee95cf maybe this is right %#";
+    var git_context = "#% dffc5f9 see if this works %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -172,14 +172,15 @@ var DEBUG = (function() {
         "\tpointer-events: none; height: 500px; width: 500px; \n} \n" + 
         "#debug_element_highlighter_outer {\n\tbackground-color: rgba(45,60,255,0.2); \n} \n" + 
         "#debug_element_highlighter_inner {\n\tbackground-color: rgba(25,255,35,0.2); \n} \n" + 
-        "@"+keyframesPrefixed+" pulsate_opacity {\n\tfrom {\n\t\topacity: 1;\n\t}\n\tto {\n\t\topacity: 0.4;\n\t}\n}\n" + 
+        "@"+keyframesPrefixed+" pulsate_opacity {\n\tfrom {\n\t\topacity: 0.3;\n\t}\n\tto {\n\t\topacity: 1;\n\t}\n}\n" + 
         "#debug_element_focused {\n\t" + 
         "background-color: rgba(255,150,25,0.3);\n\t" + 
         hyphen_mp('animationName') + ": pulsate_opacity;\n\t" + 
         hyphen_mp('animationIterationCount') + ": infinite;\n\t" + 
-        hyphen_mp('animationDirection') + ": alternate-reverse;\n\t" + 
+        hyphen_mp('animationDirection') + ": alternate;\n\t" + 
         hyphen_mp('animationTimingFunction') + ": ease;\n\t" + 
-        hyphen_mp('animationDuration') + ": 0.8s;\n" + 
+        hyphen_mp('animationDuration') + ": 0.5s;\n" + 
+        hyphen_mp('animationDelay') + ": -0.5s;\n" + // this is to start it at opacity=1, inverting timing func 
         "} \n";
 
     // append a style tag to head 
