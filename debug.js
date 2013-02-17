@@ -172,7 +172,7 @@ var DEBUG = (function() {
         "\tpointer-events: none; height: 500px; width: 500px; \n} \n" + 
         "#debug_element_highlighter_outer {\n\tbackground-color: rgba(45,60,255,0.2); \n} \n" + 
         "#debug_element_highlighter_inner {\n\tbackground-color: rgba(25,255,35,0.2); \n} \n" + 
-        "@"+keyframesPrefixed+" pulsate_opacity_light {\n\tfrom {\n\t\topacity: 0.1;\n\t}\n\tto {\n\t\topacity: 0.3;\n\t}\n}\n" + 
+        "@"+keyframesPrefixed+" pulsate_opacity_light {\n\tfrom {\n\t\topacity: 0;\n\t}\n\tto {\n\t\topacity: 0.4;\n\t}\n}\n" + 
         "#debug_element_focused {\n\t" + 
         "background-color: orange;\n\t" + 
         hyphen_mp('animationName') + ": pulsate_opacity_light;\n\t" + 
