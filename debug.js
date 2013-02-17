@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% e48c919 wonder if i will be able to tell the differene %#";
+    var git_context = "#% 2ee95cf maybe this is right %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -177,8 +177,8 @@ var DEBUG = (function() {
         "background-color: rgba(255,150,25,0.3);\n\t" + 
         hyphen_mp('animationName') + ": pulsate_opacity;\n\t" + 
         hyphen_mp('animationIterationCount') + ": infinite;\n\t" + 
-        hyphen_mp('animationDirection') + ": alternate;\n\t" + 
-        hyphen_mp('animationTimingFunction') + ": ease-in-out;\n\t" + 
+        hyphen_mp('animationDirection') + ": alternate-reverse;\n\t" + 
+        hyphen_mp('animationTimingFunction') + ": ease;\n\t" + 
         hyphen_mp('animationDuration') + ": 0.8s;\n" + 
         "} \n";
 
