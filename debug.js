@@ -138,7 +138,7 @@ var DEBUG = (function() {
     var transEndEventName;
     var transformStyle = local_Modernizr.prefixed('transform');
 
-    if (!testAllProps('animationName')) { alert("@keyframes are not supported"); }
+    if (!local_Modernizr.testAllProps('animationName')) { alert("@keyframes are not supported"); }
     var keyframesPrefixed = hyphen_mp('animationName').replace('animation-name','keyframes');
 
     function hyphen_style(style) {
