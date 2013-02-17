@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 088cde0 testing initialization and opacity %#";
+    var git_context = "#% 562d487 two birds, one stone, but one bird being not a real actual bird %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -172,7 +172,7 @@ var DEBUG = (function() {
         "\tpointer-events: none; height: 500px; width: 500px; \n} \n" + 
         "#debug_element_highlighter_outer {\n\tbackground-color: rgba(45,60,255,0.2); \n} \n" + 
         "#debug_element_highlighter_inner {\n\tbackground-color: rgba(25,255,35,0.2); \n} \n" + 
-        "@"+keyframesPrefixed+" pulsate_opacity {\n\tfrom {\n\t\topacity: 0.3;\n\t}\n\tto {\n\t\topacity: 1;\n\t}\n}\n" + 
+        "@"+keyframesPrefixed+" pulsate_opacity {\n\tfrom {\n\t\topacity: 0;\n\t}\n\tto {\n\t\topacity: 1;\n\t}\n}\n" + 
         "#debug_element_focused {\n\t" + 
         "background-color: rgba(255,150,25,0.3);\n\t" + 
         hyphen_mp('animationName') + ": pulsate_opacity;\n\t" + 
@@ -180,7 +180,7 @@ var DEBUG = (function() {
         hyphen_mp('animationDirection') + ": alternate;\n\t" + 
         hyphen_mp('animationTimingFunction') + ": ease;\n\t" + 
         hyphen_mp('animationDuration') + ": 1.1s;\n" + 
-        hyphen_mp('animationDelay') + ": -1.1s;\n" + // this is to start it at opacity=1, inverting timing func 
+        hyphen_mp('animationDelay') + ": 0;\n" + // this is to start it at opacity=1, inverting timing func 
         "} \n";
 
     // append a style tag to head 
@@ -321,12 +321,12 @@ var DEBUG = (function() {
             var transFocus = "translate3d("+p.left+"px,"+p.top+"px,0) scale3d("+ow/500+","+oh/500+",1)"; 
             if (jfocus.length === 0) { // jouter not present 
                 // create. 
-                css_obj = {opacity: 0};
+                css_obj = {};
                 css_obj[transformStyle] = transFocus;
                 jfocus = $('<div id="debug_element_focused"></div>').css(css_obj);
                 jc.append(jfocus);
                 focus = jfocus[0];
-                focus.style.opacity = "1";
+                //focus.style.opacity = "1";
             }
             focus.style[transformStyle] = transFocus; 
             //focus.ply_HL_dimX = ow;
