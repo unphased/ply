@@ -174,14 +174,15 @@ var DEBUG = (function() {
         "#debug_element_highlighter_inner {\n\tbackground-color: rgba(25,255,35,0.2); \n} \n" + 
         "@"+keyframesPrefixed+" pulsate_opacity {\n\tfrom {\n\t\topacity: 0.5;\n\t}\n\tto {\n\t\topacity: 1;\n\t}\n}\n" + 
         "#debug_element_focused {\n\t" + 
-        "background-color: rgba(255,150,25,0.3);\n\t" + 
+        "background-color: rgba(255,150,25,0.3);\n}" + 
+        ".pulsate_opacity {\n\t" +
         hyphen_mp('animationName') + ": pulsate_opacity;\n\t" + 
         hyphen_mp('animationIterationCount') + ": infinite;\n\t" + 
         hyphen_mp('animationDirection') + ": alternate;\n\t" + 
         hyphen_mp('animationTimingFunction') + ": ease;\n\t" + 
-        hyphen_mp('animationDuration') + ": 1.1s;\n" + 
-        hyphen_mp('animationDelay') + ": 1.1s;\n" + 
-        hyphen_mp('animationFillMode') + ": both;\n" + 
+        hyphen_mp('animationDuration') + ": 1.1s;\n\t" + 
+        hyphen_mp('animationDelay') + ": 0;\n\t" + 
+        //hyphen_mp('animationFillMode') + ": both;\n" + 
         "} \n";
 
     // append a style tag to head 
@@ -315,6 +316,7 @@ var DEBUG = (function() {
         var focus = jfocus[0];
         if (e) { // setting 
             jfocus.off(transEndEventName);
+            jfocus.addClass('pulsate_opacity'); // for consistency
             var je = $(e);
             var p = je.offset();
             var ow = je.outerWidth();
@@ -323,11 +325,17 @@ var DEBUG = (function() {
             if (jfocus.length === 0) { // jouter not present 
                 // create. 
                 css_obj = {opacity: 0};
-                css_obj[transformStyle] = transFocus;
+                var transStart = "translate3d("+(p.left+ow/2)+"px,"+(p.top+oh/2)+"px,0) scale3d(0,0,1)";
+                css_obj[transformStyle] = transStart;
                 jfocus = $('<div id="debug_element_focused"></div>').css(css_obj);
                 jc.append(jfocus);
                 focus = jfocus[0];
-                //focus.style.opacity = "1";
+                focus.style.opacity = "0.5";
+                focus.style[transformStyle] = transFocus;
+                jfocus.on(transEndEventName, function() {
+                    jfocus.off(transEndEventName);
+                    jfocus.addClass('pulsate_opacity');
+                });
             }
             focus.style[transformStyle] = transFocus; 
             //focus.ply_HL_dimX = ow;
@@ -335,6 +343,7 @@ var DEBUG = (function() {
             jfocus.on(transEndEventName, function(){
                 jfocus.remove();
             });
+            jfocus.removeClass('pulsate_opacity');
             focus.style.opacity = "0";
         }
     }
