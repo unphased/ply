@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 92e1f45 okay what about negative delay %#";
+    var git_context = "#% c145df1 oooh lets go back because i forgot to init to 0 opacity %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -180,7 +180,7 @@ var DEBUG = (function() {
         hyphen_mp('animationDirection') + ": alternate;\n\t" + 
         hyphen_mp('animationTimingFunction') + ": ease;\n\t" + 
         hyphen_mp('animationDuration') + ": 1.1s;\n" + 
-        hyphen_mp('animationDelay') + ": -1.1s;\n" + 
+        hyphen_mp('animationDelay') + ": 1.1s;\n" + 
         hyphen_mp('animationFillMode') + ": before;\n" + 
         "} \n";
 
@@ -322,7 +322,7 @@ var DEBUG = (function() {
             var transFocus = "translate3d("+p.left+"px,"+p.top+"px,0) scale3d("+ow/500+","+oh/500+",1)"; 
             if (jfocus.length === 0) { // jouter not present 
                 // create. 
-                css_obj = {};
+                css_obj = {opacity: 0};
                 css_obj[transformStyle] = transFocus;
                 jfocus = $('<div id="debug_element_focused"></div>').css(css_obj);
                 jc.append(jfocus);
