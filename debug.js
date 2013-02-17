@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% d68046b keyframes prefixed %#";
+    var git_context = "#% 93342e5 fix modernizr call %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -138,7 +138,7 @@ var DEBUG = (function() {
     var transEndEventName;
     var transformStyle = local_Modernizr.prefixed('transform');
 
-    if (!testAllProps('animationName')) { alert("@keyframes are not supported"); }
+    if (!local_Modernizr.testAllProps('animationName')) { alert("@keyframes are not supported"); }
     var keyframesPrefixed = hyphen_mp('animationName').replace('animation-name','keyframes');
 
     function hyphen_style(style) {
