@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 49100bc to ensure the transition is kicked off %#";
+    var git_context = "#% 1ea7a3c wow debugger led me straight to it %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -330,7 +330,7 @@ var DEBUG = (function() {
                 jfocus = $('<div id="debug_element_focused"></div>').css(css_obj);
                 jc.append(jfocus);
                 focus = jfocus[0];
-                setTimeout(function(){
+                setTimeout(function(){ // alternatively we can do a getComputedStyles
                     focus.style.opacity = "0.5";
                     focus.style[transformStyle] = transFocus;
                     jfocus.on(transEndEventName, function() {
@@ -338,8 +338,9 @@ var DEBUG = (function() {
                         jfocus.addClass('pulsate_opacity');
                     });
                 },0);
+            } else {
+                focus.style[transformStyle] = transFocus; 
             }
-            focus.style[transformStyle] = transFocus; 
             //focus.ply_HL_dimX = ow;
         } else if (focus) { // removing 
             jfocus.on(transEndEventName, function(){
