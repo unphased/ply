@@ -179,8 +179,8 @@ var DEBUG = (function() {
         hyphen_mp('animationIterationCount') + ": infinite;\n\t" + 
         hyphen_mp('animationDirection') + ": alternate;\n\t" + 
         hyphen_mp('animationTimingFunction') + ": ease;\n\t" + 
-        hyphen_mp('animationDuration') + ": 0.5s;\n" + 
-        hyphen_mp('animationDelay') + ": -0.5s;\n" + // this is to start it at opacity=1, inverting timing func 
+        hyphen_mp('animationDuration') + ": 1.1s;\n" + 
+        hyphen_mp('animationDelay') + ": -1.1s;\n" + // this is to start it at opacity=1, inverting timing func 
         "} \n";
 
     // append a style tag to head 
