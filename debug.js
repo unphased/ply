@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 3a688aa changing duration %#";
+    var git_context = "#% 088cde0 testing initialization and opacity %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -326,7 +326,7 @@ var DEBUG = (function() {
                 jfocus = $('<div id="debug_element_focused"></div>').css(css_obj);
                 jc.append(jfocus);
                 focus = jfocus[0];
-                focus.style.opacity = "";
+                focus.style.opacity = "1";
             }
             focus.style[transformStyle] = transFocus; 
             //focus.ply_HL_dimX = ow;
