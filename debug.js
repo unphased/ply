@@ -181,7 +181,7 @@ var DEBUG = (function() {
         hyphen_mp('animationDirection') + ": alternate;\n\t" + 
         hyphen_mp('animationTimingFunction') + ": ease;\n\t" + 
         hyphen_mp('animationDuration') + ": 1.1s;\n\t" + 
-        hyphen_mp('animationDelay') + ": 0;\n\t" + 
+        hyphen_mp('animationDelay') + ": -1.1s;\n\t" + 
         //hyphen_mp('animationFillMode') + ": both;\n" + 
         "} \n";
 
@@ -331,7 +331,7 @@ var DEBUG = (function() {
                 jc.append(jfocus);
                 focus = jfocus[0];
                 setTimeout(function(){ // alternatively we can do a getComputedStyles
-                    focus.style.opacity = "0.5";
+                    focus.style.opacity = "1";
                     focus.style[transformStyle] = transFocus;
                     jfocus.on(transEndEventName, function() {
                         jfocus.off(transEndEventName);
