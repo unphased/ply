@@ -330,7 +330,7 @@ var DEBUG = (function() {
                 jfocus = $('<div id="debug_element_focused"></div>').css(css_obj);
                 jc.append(jfocus);
                 focus = jfocus[0];
-                var style = getComputedStyle(focus);
+                assert(window.getComputedStyle(focus).getPropertyValue('opacity') === "0"); // must ensure this does not get optimized out
                 focus.style.opacity = "1";
                 focus.style[transformStyle] = transFocus;
                 jfocus.on(transEndEventName, function() {
