@@ -1,1 +1,1 @@
-javascript:function(){document.body.appendChild(document.createElement('script')).src="http://unphased.github.com/ply/dynamic_load_2ply.js";}();
+(function(){document.body.appendChild(document.createElement('script')).src="http://unphased.github.com/ply/dynamic_load_2ply.js";})();
