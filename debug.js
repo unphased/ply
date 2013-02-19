@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 71fa0fc okay this should make the print work... %#";
+    var git_context = "#% 0307f22 trimming %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -348,20 +348,17 @@ var DEBUG = (function() {
             //focus.ply_HL_dimX = ow;
         } else if (focus) { // removing 
             // must normalize for browsers that don't interpolate starting with ending animation value
-            var opacity_now = window.getComputedStyle(focus).getPropertyValue('opacity');
+            focus.style[transitionDurationStyle] = "0"; // put in state that lets me directly set opacity
+            // obtain current opacity level (dictated by animation),
+            // simultaneously putting the durationstyle change into effect
+            var opacity_now = window.getComputedStyle(focus).getPropertyValue('opacity'); 
             console.log("opacity_now before removing class",opacity_now);
-            // set it so it does not flicker as animation terminates
-            focus.style[transitionDurationStyle] = "0";
-            console.log("a ",getComputedStyle(focus).getPropertyValue(hyphen_style(transitionDurationStyle)));
-            focus.style.opacity = opacity_now; 
+            focus.style.opacity = opacity_now; // set the opacity of the element to what it is now
             jfocus.removeClass('pulsate_opacity'); // cause animation to terminate
-            console.log("b ",getComputedStyle(focus).getPropertyValue(hyphen_style(transitionDurationStyle)));
-            focus.style[transitionDurationStyle] = ""; 
+            focus.style[transitionDurationStyle] = ""; // re-enable the transitions
             console.log("c ", window.getComputedStyle(focus).getPropertyValue('opacity'));
             focus.style.opacity = "0"; // fade out
-            console.log("d ", window.getComputedStyle(focus).getPropertyValue('opacity'));
             jfocus.on(transEndEventName, function(){
-                console.log("e ", window.getComputedStyle(focus).getPropertyValue('opacity'));
                 jfocus.remove();
             });
         }
