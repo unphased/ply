@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% eb4315d negative paddings are not supported %#";
+    var git_context = "#% f1a4c36 slight update for making it work even more smooth on windows %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -201,7 +201,9 @@ var DEBUG = (function() {
     transEndEventName = transEndEventNames[ local_Modernizr.prefixed('transition') ];
 
     // an interface for portably highlighting any page element (without changing it)
-    function highlight(e){
+    // color, if unspecified, return to those defined by css above. Use any CSS compatible color string
+    // color not referenced if e is null 
+    function highlight(e, color_margin){
         // lazily init top level element 
         var jc = $("#debug_element_container");
         if (jc.length === 0) {
