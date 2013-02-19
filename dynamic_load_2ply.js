@@ -68,11 +68,18 @@
                         }
                     },
                     mouseup: function(evt) { console.log("mouseup");
-                        if (select_active && (evt.which === 1 || !enable_ctx_menu)) {
-                            select_active = false;
-                            DEBUG.highlight(null);
-                            DEBUG.focused(element_selected); 
-                            //element_selected = null;
+                        if (select_active) {
+                            if (enable_ctx_menu) { // if we've not moved outside 
+                                // do not go on to select, just abort the action
+                                select_active = false;
+                                DEBUG.highlight(null);
+                                // not interfere with focused 
+                            } else {
+                                select_active = false;
+                                DEBUG.highlight(null);
+                                DEBUG.focused(element_selected); 
+                                //element_selected = null;
+                            }
                         }
                     },
                     mousemove: function(evt) {
