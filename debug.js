@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 4000e28 abolishing this bit of hopefully unnecessary asynchronicity %#";
+    var git_context = "#% 203f2ea hopefully this prevents jit optimizing it out %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -330,7 +330,7 @@ var DEBUG = (function() {
                 jfocus = $('<div id="debug_element_focused"></div>').css(css_obj);
                 jc.append(jfocus);
                 focus = jfocus[0];
-                var style = getComputedStyle(focus);
+                assert(window.getComputedStyle(focus).getPropertyValue('opacity') === "0"); // must ensure this does not get optimized out
                 focus.style.opacity = "1";
                 focus.style[transformStyle] = transFocus;
                 jfocus.on(transEndEventName, function() {
