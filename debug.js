@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 39cd01e excellent %#";
+    var git_context = "#% f8bff49 fixing broken bookmarklet src and beginning to investigate HTML5 HUDability %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -363,12 +363,18 @@ var DEBUG = (function() {
         }
     }
 
-    // A bit of a heads-up display. I use OSD (on-screen-display) as that term better 
-    // describes the experience of this feature. 
-    // Attempts to be unintrusive and minimalistic
+    // A heads-up display in the sense that it pops up in your face. 
+    // I use OSD (on-screen-display) as that term better describes the experience of this feature. 
+    // Attempts to be minimalistic in its styling (uses CSS from the dynamic CSS injection up above)
     function OSD(item) {
         if (typeof item !== "string") { console.log("non-string item for OSD is not implemented"); return; }
         // lazy init a container for holding and showing the display. They are to be shown horizontally centered and at the bottom of the window. 
+    }
+
+    // Exploratory work on fixed UI elements that stay in their position regardless of
+    // zoom and pan of the browser
+    function HUD() {
+        
     }
 
     // primitive set of methods provided by debug
