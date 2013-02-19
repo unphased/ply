@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 0e20978 maybe this will do %#";
+    var git_context = "#% 39cd01e excellent %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -352,14 +352,12 @@ var DEBUG = (function() {
             // obtain current opacity level (dictated by animation),
             // simultaneously putting the durationstyle change into effect
             var opacity_now = window.getComputedStyle(focus).getPropertyValue('opacity'); 
-            console.log("opacity_now before removing class",opacity_now);
             focus.style.opacity = opacity_now; // set the opacity of the element to what it is now
             jfocus.removeClass('pulsate_opacity'); // cause animation to terminate
-            console.log("c ", window.getComputedStyle(focus).getPropertyValue('opacity'));
+            window.getComputedStyle(focus).getPropertyValue('opacity'); // function call forces style reflow
             focus.style[transitionDurationStyle] = ""; // re-enable the transitions
-            
-            focus.style.opacity = "0"; // fade out
-            jfocus.on(transEndEventName, function(){
+            focus.style.opacity = "0"; // initiate fade out
+            jfocus.on(transEndEventName, function(){ // handles fade out completion 
                 jfocus.remove();
             });
         }
