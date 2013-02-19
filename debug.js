@@ -348,7 +348,12 @@ var DEBUG = (function() {
             jfocus.on(transEndEventName, function(){
                 jfocus.remove();
             });
+            // must normalize for browsers that don't interpolate starting with ending animation value
+            var opacity_now = window.getComputedStyle(focus).getPropertyValue('opacity');
+            console.log("opacity_now before removing class",opacity_now);
             jfocus.removeClass('pulsate_opacity');
+            console.log("opacity after removing class", window.getComputedStyle(focus).getPropertyValue('opacity'))
+            focus.style.opacity = opacity_now;
             focus.style.opacity = "0";
         }
     }
