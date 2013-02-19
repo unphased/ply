@@ -149,6 +149,8 @@ var DEBUG = (function() {
         return hyphen_style(local_Modernizr.prefixed(style));
     }
 
+    var hyphen_transitionDuration = hyphen_mp('transitionDuration');
+
     var css = //"body { "+hyphen_mp('backfaceVisibility')+": hidden; "+hyphen_mp('perspective') + ": 1000; }\n" +
         "#debug_element_container { \n" +
         "\tposition: absolute; \n" +
@@ -161,7 +163,7 @@ var DEBUG = (function() {
         //hyphen_mp('perspective') + ": 1000;\n" +
         "width: 100; height: 100; \n} \n" +
         "#debug_element_container > div { \n\t" +
-        hyphen_mp('transitionDuration') + ": 0.4s, 0.4s; \n\t" + 
+        hyphen_transitionDuration + ": 0.4s, 0.4s; \n\t" + 
         hyphen_mp('transitionProperty') + ": "+hyphen_mp('transform')+", opacity; \n\t" +
         hyphen_mp('transformOrigin') + ": 0 0; \n\t" + 
         hyphen_mp('transitionTimingFunction') + ": cubic-bezier(0.500, 0.500, 0.200, 1.000), linear; \n\t" +
@@ -348,8 +350,11 @@ var DEBUG = (function() {
             // must normalize for browsers that don't interpolate starting with ending animation value
             var opacity_now = window.getComputedStyle(focus).getPropertyValue('opacity');
             console.log("opacity_now before removing class",opacity_now);
-            focus.style.opacity = opacity_now; // set it so it does not flicker as animation terminates
+            // set it so it does not flicker as animation terminates
+            focus.style[hyphen_transitionDuration] = "0";
+            focus.style.opacity = opacity_now; 
             jfocus.removeClass('pulsate_opacity'); // cause animation to terminate
+            focus.style[hyphen_transitionDuration] = ""; 
             console.log("opacity after removing class", window.getComputedStyle(focus).getPropertyValue('opacity'));
             focus.style.opacity = "0"; // fade out
             jfocus.on(transEndEventName, function(){
