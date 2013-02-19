@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% a7f9ab7 testing something %#";
+    var git_context = "#% a9faec0 this should be the correct order (currently has two gCS calls) %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -345,16 +345,16 @@ var DEBUG = (function() {
             }
             //focus.ply_HL_dimX = ow;
         } else if (focus) { // removing 
-            jfocus.on(transEndEventName, function(){
-                jfocus.remove();
-            });
             // must normalize for browsers that don't interpolate starting with ending animation value
             var opacity_now = window.getComputedStyle(focus).getPropertyValue('opacity');
             console.log("opacity_now before removing class",opacity_now);
-            jfocus.removeClass('pulsate_opacity');
-            console.log("opacity after removing class", window.getComputedStyle(focus).getPropertyValue('opacity'))
-            focus.style.opacity = opacity_now;
-            focus.style.opacity = "0";
+            focus.style.opacity = opacity_now; // set it so it does not flicker as animation terminates
+            jfocus.removeClass('pulsate_opacity'); // cause animation to terminate
+            console.log("opacity after removing class", window.getComputedStyle(focus).getPropertyValue('opacity'));
+            focus.style.opacity = "0"; // fade out
+            jfocus.on(transEndEventName, function(){
+                jfocus.remove();
+            });
         }
     }
 
