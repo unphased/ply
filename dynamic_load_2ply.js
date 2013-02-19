@@ -68,7 +68,7 @@
                         }
                     },
                     mouseup: function(evt) { console.log("mouseup");
-                        if (select_active && enable_ctx_menu) {
+                        if (select_active && (evt.which === 1 || !enable_ctx_menu)) {
                             select_active = false;
                             DEBUG.highlight(null);
                             DEBUG.focused(element_selected); 
