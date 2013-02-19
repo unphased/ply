@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 203f2ea hopefully this prevents jit optimizing it out %#";
+    var git_context = "#% a7f9ab7 testing something %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -348,7 +348,12 @@ var DEBUG = (function() {
             jfocus.on(transEndEventName, function(){
                 jfocus.remove();
             });
+            // must normalize for browsers that don't interpolate starting with ending animation value
+            var opacity_now = window.getComputedStyle(focus).getPropertyValue('opacity');
+            console.log("opacity_now before removing class",opacity_now);
             jfocus.removeClass('pulsate_opacity');
+            console.log("opacity after removing class", window.getComputedStyle(focus).getPropertyValue('opacity'))
+            focus.style.opacity = opacity_now;
             focus.style.opacity = "0";
         }
     }
