@@ -201,7 +201,9 @@ var DEBUG = (function() {
     transEndEventName = transEndEventNames[ local_Modernizr.prefixed('transition') ];
 
     // an interface for portably highlighting any page element (without changing it)
-    function highlight(e){
+    // color, if unspecified, return to those defined by css above. Use any CSS compatible color string
+    // color not referenced if e is null 
+    function highlight(e, color_margin){
         // lazily init top level element 
         var jc = $("#debug_element_container");
         if (jc.length === 0) {
