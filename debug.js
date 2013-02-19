@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% a79f9c9 alright hows this %#";
+    var git_context = "#% 2fa9a17 make the drag distance flag only affect selecting using right mouse %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
