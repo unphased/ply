@@ -106,7 +106,9 @@
                     },
                     touchmove: function(evt) {
                         if (select_active) {
-                            DEBUG.highlight(document.elementFromPoint(evt.changedTouches[0].clientX,evt.changedTouches[0].clientY));
+                            var e = document.elementFromPoint(evt.changedTouches[0].clientX,evt.changedTouches[0].clientY);
+                            DEBUG.highlight(e);
+                            element_selected = e;
                         }
                     },
                     touchend: function(evt) {
