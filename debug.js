@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 5b0e8a3 added z-index on container of highlight planes, adding second arg to highlight for differentiating for negative margins (not done with impl this at all), put in optimization for highlight so that subsequent calls to the same element will not run logic on it, and renamed a variable and reworked the touch bit of the dynamic script section since it was falling behind the mouse functionality %#";
+    var git_context = "#% c9b1dce properly selecting %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
