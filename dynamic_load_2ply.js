@@ -118,6 +118,7 @@
                             DEBUG.highlight(null);
                             DEBUG.focused(element_selected);
                             element_selected = null;
+                            select_active = false;
                         }
                     }
                 });
