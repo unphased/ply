@@ -10,8 +10,7 @@
                 // In order to preserve regular site functionality as much as possible, 
                 // a double-tap custom gesture is required to start selection mode.
                 
-                var tracked_elements = {};
-                var tap_start_time = 0;
+                var start_time = 0;
                 var select_active = false;
                 var mouse_down_at;
                 var element_selected; 
@@ -49,13 +48,13 @@
                             }
                         } else if (evt.which === 1) {
                             // treat double-click also as starting selection (nice for touchpad users)
-                            if (Date.now() - tap_start_time < 300) {
+                            if (Date.now() - start_time < 300) {
                                 evt.preventDefault(); // hopefully this can suppress selection of text. 
                                 DEBUG.highlight(evt.target);
                                 element_selected = evt.target;
                                 select_active = true;
                             }
-                           tap_start_time = Date.now();
+                            start_time = Date.now();
                         }
                     },
                     // a right-click overload (very nice for mouse users)
@@ -94,30 +93,29 @@
                         }
                     },
                     touchstart: function(evt) {
-                        if (Date.now() - tap_start_time < 300) {
+                        // todo: make this not depend on clean start (i.e. allow double tap with non first finger)
+                        if (Date.now() - start_time < 300 && evt.touches.length === 1) {
                             // is second tap start
-                            evt.preventDefault(); // stop scroll 
-                            tracked_elements[evt.changedTouches[0].identifier] = true;
-                        } // too much waiting, just function as normal
-                        tap_start_time = Date.now();
+                            evt.preventDefault(); // stop scroll, stop "copy" popup and selector 
+                            select_active = true;
+                            DEBUG.highlight(evt.target);
+                            element_selected = evt.target;
+                        } 
+                        // if not fast enough, just function as normal
+                        start_time = Date.now();
                     },
                     touchmove: function(evt) {
-                        for (var i=0; i<evt.changedTouches.length; ++i) {
-                            if (tracked_elements[evt.changedTouches[i].identifier]) {
-                                DEBUG.highlight(document.elementFromPoint(evt.changedTouches[i].clientX,evt.changedTouches[i].clientY), evt.changedTouches[i].identifier);
-                            }
+                        if (select_active) {
+                            DEBUG.highlight(document.elementFromPoint(evt.changedTouches[0].clientX,evt.changedTouches[0].clientY));
                         }
                     },
                     touchend: function(evt) {
-                        var hash={};
-                        for (var i=0; i<evt.touches.length; ++i) {
-                            hash[evt.touches[i].identifier] = true;
-                        }
-                        for (var x in tracked_elements) {
-                            if (!hash[x]) {
-                                delete tracked_elements[x];
-                                DEBUG.highlight(null, x);
-                            }
+                        // todo: make me a bit less dumb by remembering the finger ID of the triggering finger
+                        if (evt.touches.length === 0) { 
+                            // no touches = terminate selection
+                            DEBUG.highlight(null);
+                            DEBUG.focused(element_selected);
+                            element_selected = null;
                         }
                     }
                 });

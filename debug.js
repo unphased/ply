@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 2fa9a17 make the drag distance flag only affect selecting using right mouse %#";
+    var git_context = "#% 5b0e8a3 added z-index on container of highlight planes, adding second arg to highlight for differentiating for negative margins (not done with impl this at all), put in optimization for highlight so that subsequent calls to the same element will not run logic on it, and renamed a variable and reworked the touch bit of the dynamic script section since it was falling behind the mouse functionality %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -156,7 +156,7 @@ var DEBUG = (function() {
         "\tposition: absolute; \n" +
         "\tpointer-events: none; \n" +
         "\ttop: 0; left: 0; \n" +
-        "\toverflow: visible; \n\t" +
+        "\toverflow: visible; z-index: 2147483647; \n\t" +
         //hyphen_mp('transform') + ": translate3d(0,0,-1px);\n\t" + 
         //hyphen_mp('backfaceVisibility') + ": hidden;\n\t" + 
         //hyphen_mp('transformStyle') + ": preserve-3d;\n\t" +
@@ -200,10 +200,15 @@ var DEBUG = (function() {
 
     transEndEventName = transEndEventNames[ local_Modernizr.prefixed('transition') ];
 
+
+    var highlight_last_invoked_with = null;
     // an interface for portably highlighting any page element (without changing it)
     // color, if unspecified, return to those defined by css above. Use any CSS compatible color string
     // color not referenced if e is null 
-    function highlight(e, color_margin){
+    function highlight(e, color_margin) {
+        if (highlight_last_invoked_with === e) { // highlight invoked on the same target
+            return; // an optimization
+        }
         // lazily init top level element 
         var jc = $("#debug_element_container");
         if (jc.length === 0) {
@@ -306,6 +311,7 @@ var DEBUG = (function() {
             //console.log("I",transInner);
         }
         //original_console_log.apply(window.console,["highlight2",e, jc]);
+        highlight_last_invoked_with = e;
     }
 
     function focused(e) {
