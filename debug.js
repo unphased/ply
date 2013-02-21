@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% c06e645 maybe this gCS call is important. lol probably was super important. %#";
+    var git_context = "#% c4c70e3 could be these string to number comparisons causing it %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -318,7 +318,7 @@ var DEBUG = (function() {
             outer.style.opacity = "1";
             outer.ply_HL_dimX = ow;
             outer.ply_HL_dimY = oh;
-            if (style_of_e.marginLeft < 0 || style_of_e.marginTop < 0 || style_of_e.marginRight < 0 || style_of_e.marginBottom < 0) {
+            if (parseInt(style_of_e.marginLeft,10) < 0 || parseInt(style_of_e.marginTop,10) < 0 || parseInt(style_of_e.marginRight,10) < 0 || parseInt(style_of_e.marginBottom,10) < 0) {
                 // if a negative margin exists, mark the extents of the margin out more prominently
                 outer.style.backgroundColor = "rgba(255,40,20,0.5)";
             } else {
