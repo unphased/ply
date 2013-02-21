@@ -240,32 +240,8 @@ var DEBUG = (function() {
                 jinner.remove();
                 //console.log("removed");
             });
-            /* 
-            var css_set_outer = {opacity: 0};
-            css_set_outer[transformStyle] = function(i,old) { 
-                // get the old position to adjust the origin of scale animation
-                assert(old.indexOf("matrix") === 0); // check we're seeing a matrix
-                assert(old.indexOf("(") === 6); // make sure it's not a matrix3d (only to ensure no error todo: write impl for matrix3d)
-                var mat = old.slice(7,-1).split(","); // epic oneliner
-                return "translate("+(-mat[0]*250)+"px,"+(-mat[3]*250)+"px) "+old+" scale(2)";
-            }; // expand-fade out
-            jouter.css(css_set_outer);
-            var css_set_inner = {opacity: 0};
-            css_set_inner[transformStyle] = function(i,old) { // this could be scrunched down and abstracted
-                var mat = old.slice(7,-1).split(","); 
-                return "translate("+(mat[0]*125)+"px,"+(mat[3]*125)+"px) "+old+" scale(0.5)";
-            };
-            jinner.css(css_set_inner); */ // above code retrieves actual transitioning value 
-
-            // I actually don't want the interpolated (actual real current) value, I just want to 
-            // extract the value I set (which should be the transform for my target element) 
-            // and perform my animation modification upon that. So... that means avoiding 
-            // $.css() and getComputedStyle()
-
-            // this actually means using an attr to track the size of the element is a better way
-            // than extracting data from the matrix (since i won't have a matrix!)
-
-            // compute a static width to adjust by, not a proportional one. (20 px outside, 10px inside)
+            
+            // uses a static width to animate by (this is the fade out anim), not a proportional one. Good visual effect.
             var ws = (outer.ply_HL_dimX + 20) / outer.ply_HL_dimX; 
             var hs = (outer.ply_HL_dimY + 20) / outer.ply_HL_dimY; 
             outer.style.opacity = "0";
