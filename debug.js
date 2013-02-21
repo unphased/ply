@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% c7ec81a more state dumbness %#";
+    var git_context = "#% 0a9e75e some more really basic state machine logic %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -315,7 +315,7 @@ var DEBUG = (function() {
     }
 
     function focused(e) {
-        console.log("focused",e);
+        //console.log("focused",e);
         // lazily init
         var jc = $("#debug_element_container");
         if (jc.length === 0) {

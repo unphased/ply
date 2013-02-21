@@ -68,7 +68,7 @@
                     },
                     mouseup: function(evt) { console.log("mouseup");
                         if (select_active) {
-                            if (enable_ctx_menu && evt.which === 3) { // if we've not moved outside 
+                            if (enable_ctx_menu && evt.which === 3) { // if we're about to trigger ctxmenu
                                 // do not go on to select, just abort the action
                                 select_active = false;
                                 DEBUG.highlight(null);
@@ -113,7 +113,7 @@
                     },
                     touchend: function(evt) {
                         // todo: make me a bit less dumb by remembering the finger ID of the triggering finger
-                        if (evt.touches.length === 0) { 
+                        if (evt.touches.length === 0 && select_active) { 
                             // no touches = terminate selection
                             DEBUG.highlight(null);
                             DEBUG.focused(element_selected);
