@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% f33cfe8 more debug %#";
+    var git_context = "#% 15df298 ah thats why gCS is necessary. It basically contains none of the CSS that we actually are looking for. heh. %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -290,8 +290,8 @@ var DEBUG = (function() {
             var w = je.width();
             var h = je.height();
 
-            var style_of_e = e.style; 
-            console.log("soe",style_of_e);
+            var style_of_e = getComputedStyle(e); 
+            //console.log("soe",style_of_e);
 
             var transOuter = "translate3d("+
                 (p.left-parseInt(style_of_e.marginLeft,10))+"px, "+
