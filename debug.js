@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 10a749e 1. updating highlight to do a different style when margin has negative values %#";
+    var git_context = "#% cfc3f2d for the last commit the message in full is 1. updating highlight to do a different style when margin has negative values; removing arg originally meant for that purpose, 2. adding arg to specify the starting from element or geometry so that the "source" of highlight can be context specific, 3. changed esc key behavior 4. renamed select_active to highlight_active 5. applying (2) on mouse only %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -330,7 +330,7 @@ var DEBUG = (function() {
             inner.ply_HL_dimX = w;
             inner.ply_HL_dimY = h;
             //console.log("O",transOuter);
-            //console.log("I",transInner);
+            //console.log("I",transInner); 
         }
         //original_console_log.apply(window.console,["highlight2",e, jc]);
         highlight_last_invoked_with = e;
