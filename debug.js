@@ -72,7 +72,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 33f0b9d a more permissive assertion (this was bound to happen) %#";
+    var git_context = "#% cc4d499 ply level 2 refactor, adding framework for L3 gesturescommitting as requested %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
