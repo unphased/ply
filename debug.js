@@ -18,7 +18,8 @@ var DEBUG = (function() {
 
     assert = function (exp, message) {
         if (!exp) {
-            throw new AssertException(message);
+            console.log("Assertion Failed: "+message);
+            //throw new AssertException(message);
         }
     };
 
