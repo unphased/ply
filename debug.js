@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 79ab556 added a method for querying current focused item %#";
+    var git_context = "#% 930d9b8 a debug statement %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -221,6 +221,7 @@ var DEBUG = (function() {
         if (highlight_last_invoked_with === e) { // highlight invoked on the same target
             return; // an optimization
         }
+        console.log("highlight",e,start_from);
         // lazily init top level element 
         var jc = $("#debug_element_container");
         if (jc.length === 0) {

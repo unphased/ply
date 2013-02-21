@@ -16,7 +16,7 @@
                 var element_selected; 
                 var enable_ctx_menu = true;
                 PLY.attach_handlers_on_document({
-                    keydown: function(evt) {
+                    keyup: function(evt) {
                         // secret shortcut keys 
                         if (evt.shiftKey && evt.altKey && evt.ctrlKey) {
                             switch (evt.which) {
