@@ -4,7 +4,7 @@
     load('http://code.jquery.com/jquery.min.js',function(){
         load('http://unphased.github.com/ply/debug.js',function(){            
             load('http://unphased.github.com/ply/ply.js',function(){
-                load('http://unphased.github.com/ply/2ply.js'); // 2ply can be executed at any point to transparently augment functionality                
+                load('http://unphased.github.com/ply/ply_L2.js'); // 2ply can be executed at any point to transparently augment functionality                
 
                 // some basic UI to allow selection of features via my debug lib
                 // In order to preserve regular site functionality as much as possible, 
