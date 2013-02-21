@@ -78,7 +78,6 @@
                                 highlight_active = false;
                                 DEBUG.highlight(null);
                                 DEBUG.focused(element_selected); 
-                                //element_selected = null;
                             }
                         }
                     },
@@ -118,7 +117,6 @@
                             // no touches = terminate selection
                             DEBUG.highlight(null);
                             DEBUG.focused(element_selected);
-                            element_selected = null;
                             highlight_active = false;
                         }
                     }
