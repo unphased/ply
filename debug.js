@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% cfc3f2d for the last commit the message in full is 1. updating highlight to do a different style when margin has negative values; removing arg originally meant for that purpose, 2. adding arg to specify the starting from element or geometry so that the "source" of highlight can be context specific, 3. changed esc key behavior 4. renamed select_active to highlight_active 5. applying (2) on mouse only %#";
+    var git_context = "#% 87bbcab note to self do not use doublequotes in commit message %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
