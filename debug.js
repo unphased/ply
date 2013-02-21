@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 0a9e75e some more really basic state machine logic %#";
+    var git_context = "#% 10a749e 1. updating highlight to do a different style when margin has negative values %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -200,12 +200,14 @@ var DEBUG = (function() {
 
     transEndEventName = transEndEventNames[ local_Modernizr.prefixed('transition') ];
 
-
+    var show_border_highlights = false;
     var highlight_last_invoked_with = null;
-    // an interface for portably highlighting any page element (without changing it)
-    // color, if unspecified, return to those defined by css above. Use any CSS compatible color string
-    // color not referenced if e is null 
-    function highlight(e, color_margin) {
+    // an interface for portably highlighting any page element (without interacting w/ it)
+    // start_from determines the animation source for initializing the highlight. It can be 
+    // either an element (in which case its measurements are obtained with jQuery like usual)
+    // or a more optimized datastructure that holds the geometry data for direct use
+    // leaving start_from falsy == fade in starting from global page shape 
+    function highlight(e, start_from) {
         if (highlight_last_invoked_with === e) { // highlight invoked on the same target
             return; // an optimization
         }
@@ -269,7 +271,17 @@ var DEBUG = (function() {
                 assert(!inner, "outer does not exist so neither should inner"); // just a sanity check
                 css_set = {opacity: 0};
                 //css_set[local_Modernizr.prefixed('backfaceVisibility')] = "hidden";
-                css_set[transformStyle] = "scale3d("+document.documentElement.scrollWidth/500+","+document.documentElement.scrollHeight/500+",1)";
+                if (start_from) {
+                    if (start_from instanceof HTMLElement) {
+                        var jsf = $(start_from);
+                        var jsfp = jsf.offset();
+                        css_set[transformStyle] = "translate3d("+jsfp.left+"px,"+jsfp.top+"px,0) scale3d("+jsf.outerWidth()/500+","+jsf.outerHeight()/500+",1)";
+                    } else {
+                        css_set[transformStyle] = "translate3d("+start_from.left+"px,"+start_from.top+"px,0) scale3d("+start_from.owf/500+","+start_from.ohf/500+",1)";
+                    }
+                } else {
+                    css_set[transformStyle] = "scale3d("+document.documentElement.scrollWidth/500+","+document.documentElement.scrollHeight/500+",1)";
+                }
                 var jo = $('<div id="debug_element_highlighter_outer"></div>').css(css_set);
                 var ji = $('<div id="debug_element_highlighter_inner"></div>').css(css_set);
                 // insert to DOM
@@ -282,12 +294,16 @@ var DEBUG = (function() {
             var p = je.offset();
             var ow = je.outerWidth(true);
             var oh = je.outerHeight(true);
-            var iw = je.innerWidth();
-            var ih = je.innerHeight();
+            var owf = je.outerWidth(); // outside border (corresponds with offset)
+            var ohf = je.outerHeight(); 
+            // if (show_border_highlights) {
+            //     var iw = je.innerWidth(); // incl padding (inside border)
+            //     var ih = je.innerHeight();
+            // }
             var w = je.width();
             var h = je.height();
 
-            var style_of_e = getComputedStyle(e);
+            var style_of_e = e.style;
 
             var transOuter = "translate3d("+
                 (p.left-parseInt(style_of_e.marginLeft,10))+"px, "+
@@ -297,6 +313,12 @@ var DEBUG = (function() {
             outer.style.opacity = "1";
             outer.ply_HL_dimX = ow;
             outer.ply_HL_dimY = oh;
+            if (style_of_e.marginLeft < 0 || style_of_e.marginTop < 0 || style_of_e.marginRight < 0 || style_of_e.marginBottom < 0) {
+                // if a negative margin exists, mark the extents of the margin out more prominently
+                outer.style.backgroundColor = "rgba(255,40,20,0.5)";
+            } else {
+                outer.style.backgroundColor = ""; // unset
+            }
             var transInner = "translate3d("+
                 (p.left+parseInt(style_of_e.paddingLeft,10)+
                     parseInt(style_of_e.borderLeftWidth,10))+"px, "+

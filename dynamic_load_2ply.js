@@ -11,7 +11,7 @@
                 // a double-tap custom gesture is required to start selection mode.
                 
                 var start_time = 0;
-                var select_active = false;
+                var highlight_active = false;
                 var mouse_down_at;
                 var element_selected; 
                 var enable_ctx_menu = true;
@@ -21,7 +21,7 @@
                         if (evt.shiftKey && evt.altKey && evt.ctrlKey) {
                             switch (evt.which) {
                                 case 65: // a
-                                    select_active = true;
+                                    highlight_active = true;
                                 break;
                                 case 66: // b
                                 break;
@@ -29,11 +29,12 @@
                                 break;
                             }
                         }
-                        if (evt.which === 27) { // esc
-                            if (element_selected) {
-                                element_selected = null;
-                                DEBUG.focused(null);
-                            }
+                        if (evt.which === 27) { // esc should abort immediate action
+                            // currently aborts *everything*
+                            element_selected = null;
+                            DEBUG.focused(null);
+                            highlight_active = false;
+                            DEBUG.highlight(null);
                         }
                     },
                     mousedown: function(evt) { //console.log("mousedown");
@@ -42,17 +43,17 @@
                         if (evt.which === 3) {
                             //evt.preventDefault(); // this appears to not be able to prevent context menu
                             if (!evt.shiftKey) { 
-                                select_active = true;
-                                DEBUG.highlight(evt.target);
+                                DEBUG.highlight(evt.target, element_selected);
                                 element_selected = evt.target;
+                                highlight_active = true;
                             }
                         } else if (evt.which === 1) {
                             // treat double-click also as starting selection (nice for touchpad users)
                             if (Date.now() - start_time < 300) {
                                 evt.preventDefault(); // hopefully this can suppress selection of text. 
-                                DEBUG.highlight(evt.target);
+                                DEBUG.highlight(evt.target, element_selected);
                                 element_selected = evt.target;
-                                select_active = true;
+                                highlight_active = true;
                             }
                             start_time = Date.now();
                         }
@@ -61,20 +62,20 @@
                     // unfortunately does break on OS X due to ctxmenu event 
                     // coming in before the mouseup. There is a workaround though
                     // and that is hold Shift to get the menu :)
-                    contextmenu: function(evt) { console.log("ctxmenu ecm, ha:",enable_ctx_menu,select_active);
-                        if (!enable_ctx_menu || select_active) {
+                    contextmenu: function(evt) { 
+                        if (!enable_ctx_menu || highlight_active) {
                             evt.preventDefault();
                         }
                     },
-                    mouseup: function(evt) { console.log("mouseup");
-                        if (select_active) {
+                    mouseup: function(evt) { //console.log("mouseup");
+                        if (highlight_active) {
                             if (enable_ctx_menu && evt.which === 3) { // if we're about to trigger ctxmenu
                                 // do not go on to select, just abort the action
-                                select_active = false;
+                                highlight_active = false;
                                 DEBUG.highlight(null);
                                 // not interfere with focused 
                             } else {
-                                select_active = false;
+                                highlight_active = false;
                                 DEBUG.highlight(null);
                                 DEBUG.focused(element_selected); 
                                 //element_selected = null;
@@ -86,8 +87,8 @@
                             enable_ctx_menu = false;
                         }
                     }, 
-                    mouseover: function(evt) { console.log("select_active",select_active);
-                        if (select_active) {
+                    mouseover: function(evt) { console.log("highlight_active",highlight_active);
+                        if (highlight_active) {
                             DEBUG.highlight(evt.target);
                             element_selected = evt.target;
                         }
@@ -97,7 +98,7 @@
                         if (Date.now() - start_time < 300 && evt.touches.length === 1) {
                             // is second tap start
                             evt.preventDefault(); // stop scroll, stop "copy" popup and selector 
-                            select_active = true;
+                            highlight_active = true;
                             DEBUG.highlight(evt.target);
                             element_selected = evt.target;
                         } 
@@ -105,7 +106,7 @@
                         start_time = Date.now();
                     },
                     touchmove: function(evt) {
-                        if (select_active) {
+                        if (highlight_active) {
                             var e = document.elementFromPoint(evt.changedTouches[0].clientX,evt.changedTouches[0].clientY);
                             DEBUG.highlight(e);
                             element_selected = e;
@@ -113,12 +114,12 @@
                     },
                     touchend: function(evt) {
                         // todo: make me a bit less dumb by remembering the finger ID of the triggering finger
-                        if (evt.touches.length === 0 && select_active) { 
+                        if (evt.touches.length === 0 && highlight_active) { 
                             // no touches = terminate selection
                             DEBUG.highlight(null);
                             DEBUG.focused(element_selected);
                             element_selected = null;
-                            select_active = false;
+                            highlight_active = false;
                         }
                     }
                 });
