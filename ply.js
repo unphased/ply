@@ -28,7 +28,7 @@
 
 var PLY = (function ($) {
 
-    var assert = DEBUG.assert || function(){};
+    var assert = DEBUG.assert || function(assertion,message){if (!assertion) console.log("ASSERTION FAILED: "+message);};
     var datenow = DEBUG.datenow;
     var escapeHtml = DEBUG.escapeHtml;
     var serialize = DEBUG.serialize;

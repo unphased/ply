@@ -18,7 +18,8 @@ var DEBUG = (function() {
 
     assert = function (exp, message) {
         if (!exp) {
-            throw new AssertException(message);
+            console.log("Assertion Failed: "+message);
+            //throw new AssertException(message);
         }
     };
 
@@ -71,7 +72,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 15df298 ah thats why gCS is necessary. It basically contains none of the CSS that we actually are looking for. heh. %#";
+    var git_context = "#% 33f0b9d a more permissive assertion (this was bound to happen) %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
