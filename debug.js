@@ -233,7 +233,7 @@ var DEBUG = (function() {
             jouter.on(transEndEventName,function(){
                 jouter.remove(); // erase me
                 jinner.remove();
-                console.log("removed");
+                //console.log("removed");
             });
             /* 
             var css_set_outer = {opacity: 0};
@@ -308,7 +308,7 @@ var DEBUG = (function() {
             var w = je.width();
             var h = je.height();
 
-            var style_of_e = e.style;
+            var style_of_e = getComputedStyle(e);
 
             var transOuter = "translate3d("+
                 (p.left-parseInt(style_of_e.marginLeft,10))+"px, "+

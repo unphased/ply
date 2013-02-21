@@ -87,7 +87,7 @@
                             enable_ctx_menu = false;
                         }
                     }, 
-                    mouseover: function(evt) { console.log("highlight_active",highlight_active);
+                    mouseover: function(evt) { //console.log("highlight_active",highlight_active);
                         if (highlight_active) {
                             DEBUG.highlight(evt.target);
                             element_selected = evt.target;
