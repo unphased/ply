@@ -99,7 +99,7 @@
                             // is second tap start
                             evt.preventDefault(); // stop scroll, stop "copy" popup and selector 
                             highlight_active = true;
-                            DEBUG.highlight(evt.target);
+                            DEBUG.highlight(evt.target, element_selected);
                             element_selected = evt.target;
                         } 
                         // if not fast enough, just function as normal

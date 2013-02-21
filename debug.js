@@ -215,6 +215,8 @@ var DEBUG = (function() {
     // either an element (in which case its measurements are obtained with jQuery like usual)
     // or a more optimized datastructure that holds the geometry data for direct use
     // leaving start_from falsy == fade in starting from global page shape 
+    // obviously has no effect on the intermediate calls to highlight (as they automatically
+    // transition from current position)
     function highlight(e, start_from) {
         if (highlight_last_invoked_with === e) { // highlight invoked on the same target
             return; // an optimization
