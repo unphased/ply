@@ -4,7 +4,7 @@
     load('http://code.jquery.com/jquery.min.js',function(){
         load('http://unphased.github.com/ply/debug.js',function(){            
             load('http://unphased.github.com/ply/ply.js',function(){
-                load('http://unphased.github.com/ply/2ply.js'); // 2ply can be executed at any point to transparently augment functionality                
+                load('http://unphased.github.com/ply/ply_L2.js'); // 2ply can be executed at any point to transparently augment functionality                
 
                 // some basic UI to allow selection of features via my debug lib
                 // In order to preserve regular site functionality as much as possible, 
@@ -43,15 +43,15 @@
                         if (evt.which === 3) {
                             //evt.preventDefault(); // this appears to not be able to prevent context menu
                             if (!evt.shiftKey) { 
-                                DEBUG.highlight(evt.target, element_selected);
+                                DEBUG.highlight(evt.target, DEBUG.get_focused());
                                 element_selected = evt.target;
                                 highlight_active = true;
                             }
                         } else if (evt.which === 1) {
                             // treat double-click also as starting selection (nice for touchpad users)
                             if (Date.now() - start_time < 300) {
-                                evt.preventDefault(); // hopefully this can suppress selection of text. 
-                                DEBUG.highlight(evt.target, element_selected);
+                                evt.preventDefault(); // this hopefully suppresses selection of text. 
+                                DEBUG.highlight(evt.target, DEBUG.get_focused());
                                 element_selected = evt.target;
                                 highlight_active = true;
                             }
@@ -98,7 +98,7 @@
                             // is second tap start
                             evt.preventDefault(); // stop scroll, stop "copy" popup and selector 
                             highlight_active = true;
-                            DEBUG.highlight(evt.target, element_selected);
+                            DEBUG.highlight(evt.target, DEBUG.get_focused());
                             element_selected = evt.target;
                         } 
                         // if not fast enough, just function as normal

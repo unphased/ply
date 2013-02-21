@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 17edcc6 fix for not correctly setting state for touch %#";
+    var git_context = "#% 79ab556 added a method for querying current focused item %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -322,7 +322,9 @@ var DEBUG = (function() {
         highlight_last_invoked_with = e;
     }
 
+    var focused_element;
     function focused(e) {
+        focused_element = e;
         //console.log("focused",e);
         // lazily init
         var jc = $("#debug_element_container");
@@ -378,6 +380,9 @@ var DEBUG = (function() {
             });
         }
     }
+    function get_focused() {
+        return focused_element;
+    }
 
     // A heads-up display in the sense that it pops up in your face. 
     // I use OSD (on-screen-display) as that term better describes the experience of this feature. 
@@ -404,6 +409,7 @@ var DEBUG = (function() {
         clean_list: clean,
         highlight: highlight,
         focused: focused, 
+        get_focused: get_focused,
         error: error,
      
         // This is just marked when any event makes its way through the primary
