@@ -289,7 +289,7 @@ var DEBUG = (function() {
             var w = je.width();
             var h = je.height();
 
-            var style_of_e = getComputedStyle(e);
+            var style_of_e = e.style;
 
             var transOuter = "translate3d("+
                 (p.left-parseInt(style_of_e.marginLeft,10))+"px, "+
