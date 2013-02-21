@@ -290,7 +290,8 @@ var DEBUG = (function() {
             var w = je.width();
             var h = je.height();
 
-            var style_of_e = e.style;
+            var style_of_e = e.style; 
+            console.log("soe",style_of_e);
 
             var transOuter = "translate3d("+
                 (p.left-parseInt(style_of_e.marginLeft,10))+"px, "+
