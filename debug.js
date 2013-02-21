@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 03c028e disabling consolelog on nontouch %#";
+    var git_context = "#% c06e645 maybe this gCS call is important. lol probably was super important. %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -233,7 +233,7 @@ var DEBUG = (function() {
             jouter.on(transEndEventName,function(){
                 jouter.remove(); // erase me
                 jinner.remove();
-                console.log("removed");
+                //console.log("removed");
             });
             /* 
             var css_set_outer = {opacity: 0};
@@ -308,7 +308,7 @@ var DEBUG = (function() {
             var w = je.width();
             var h = je.height();
 
-            var style_of_e = e.style;
+            var style_of_e = getComputedStyle(e);
 
             var transOuter = "translate3d("+
                 (p.left-parseInt(style_of_e.marginLeft,10))+"px, "+
