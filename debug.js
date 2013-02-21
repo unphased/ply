@@ -330,7 +330,7 @@ var DEBUG = (function() {
             inner.ply_HL_dimX = w;
             inner.ply_HL_dimY = h;
             //console.log("O",transOuter);
-            //console.log("I",transInner);
+            //console.log("I",transInner); 
         }
         //original_console_log.apply(window.console,["highlight2",e, jc]);
         highlight_last_invoked_with = e;
