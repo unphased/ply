@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% c4c70e3 could be these string to number comparisons causing it %#";
+    var git_context = "#% 484bd67 making that negative margin color change use a transition so it isnt jarring %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -168,8 +168,8 @@ var DEBUG = (function() {
         //hyphen_mp('perspective') + ": 1000;\n" +
         "width: 100; height: 100; \n} \n" +
         "#debug_element_container > div { \n\t" +
-        hyphen_style(transitionDurationStyle) + ": 0.4s, 0.4s; \n\t" + 
-        hyphen_mp('transitionProperty') + ": "+hyphen_mp('transform')+", opacity; \n\t" +
+        hyphen_style(transitionDurationStyle) + ": 0.4s, 0.4s, 0.2s; \n\t" + 
+        hyphen_mp('transitionProperty') + ": "+hyphen_mp('transform')+", opacity, background-color; \n\t" +
         hyphen_mp('transformOrigin') + ": 0 0; \n\t" + 
         hyphen_mp('transitionTimingFunction') + ": cubic-bezier(0.500, 0.500, 0.200, 1.000), linear; \n\t" +
         //hyphen_mp('backfaceVisibility') + ": hidden;\n\t" + 
