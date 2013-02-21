@@ -113,7 +113,7 @@
                     },
                     touchend: function(evt) {
                         // todo: make me a bit less dumb by remembering the finger ID of the triggering finger
-                        if (evt.touches.length === 0) { 
+                        if (evt.touches.length === 0 && select_active) { 
                             // no touches = terminate selection
                             DEBUG.highlight(null);
                             DEBUG.focused(element_selected);

@@ -315,7 +315,7 @@ var DEBUG = (function() {
     }
 
     function focused(e) {
-        console.log("focused",e);
+        //console.log("focused",e);
         // lazily init
         var jc = $("#debug_element_container");
         if (jc.length === 0) {
