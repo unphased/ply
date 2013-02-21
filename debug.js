@@ -71,7 +71,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 484bd67 making that negative margin color change use a transition so it isnt jarring %#";
+    var git_context = "#% 842d1a8 move more func into mobile only mode %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -104,22 +104,25 @@ var DEBUG = (function() {
         // you've got one
     };
 
-    if (is_touch_device()) console.log = instrumented_log; 
+    if (is_touch_device()) 
+    {
+        console.log = instrumented_log; 
+
+        var show_log_buffer = false;
+        $("#log_buffer_dump").before($('<button>toggle full log buffer snapshot</button>').on('click',function(){
+            show_log_buffer = !show_log_buffer;
+            if (show_log_buffer) {
+                $("#log_buffer_dump").html(log_buffer.join(''));
+            } else {
+                $("#log_buffer_dump").html("");
+            }
+        })).on("touchenter",function(){console.log("touchenter on toggle buffer dump button");})
+            .on('touchleave',function(){console.log("touchleave on toggle buffer dump button");});
+    }
 
     function error(e) {
         log_buffer.push('<div class="error">'+e.toString()+" at "+e.stack+"</div>");
     }
-    
-    var show_log_buffer = false;
-    $("#log_buffer_dump").before($('<button>toggle full log buffer snapshot</button>').on('click',function(){
-        show_log_buffer = !show_log_buffer;
-        if (show_log_buffer) {
-            $("#log_buffer_dump").html(log_buffer.join(''));
-        } else {
-            $("#log_buffer_dump").html("");
-        }
-    })).on("touchenter",function(){console.log("touchenter on toggle buffer dump button");})
-        .on('touchleave',function(){console.log("touchleave on toggle buffer dump button");});
 
     // clears out old values in debug log (run me periodically)
     function clean() {
