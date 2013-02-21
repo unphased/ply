@@ -221,6 +221,7 @@ var DEBUG = (function() {
         if (highlight_last_invoked_with === e) { // highlight invoked on the same target
             return; // an optimization
         }
+        console.log("highlight",e,start_from);
         // lazily init top level element 
         var jc = $("#debug_element_container");
         if (jc.length === 0) {
