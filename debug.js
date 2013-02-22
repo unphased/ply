@@ -1,4 +1,8 @@
-/// slu's JS browser debug/util layer deluxe. Please include prior to loading libraries that depend on it
+  ////////////////////////////////////////////////
+ /// slu's JS browser debug/util layer deluxe ///
+////////////////////////////////////////////////
+
+/// Please include prior to loading libraries that depend on it
 /// Primarily provides functionality for live DOM manipulation style debugging
 /// which was used heavily throughout development of ply.js.
 /// You will be able to access exposed features through window.DEBUG.
@@ -72,7 +76,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 1037d8f commented out an assertion and a few logs in level 2 %#";
+    var git_context = "#% b0d9b9b lol comments %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 

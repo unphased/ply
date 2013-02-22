@@ -1,11 +1,11 @@
 ////////////////////////////////////////////
 //////////////// ply_L2.js /////////////////
 ////////////////////////////////////////////
-////  Secondary event generation stage  ////
-//// For use in conjunction with ply.js ////
+////  Secondary event generation stage   ///
+///  For use in conjunction with ply.js ////
 ////////////////////////////////////////////
-// Level 2 focuses on element-specific    //
-// application of 3D transforms via touch //
+/// Level 2: DOM-aware auto-application   //
+//  of 3D transforms through HTML5 touch ///
 ////////////////////////////////////////////
 
 // ============================================================================
