@@ -247,12 +247,6 @@ var PLY = (function ($) {
                 epm.ec = evt.target;
             }
         }, 
-        //mouseover: function (evt) { //console.log("mouseover", evt.target);
-
-        //},
-        //mouseout: function (evt) { //console.log("mouseout", evt.target);
-
-        //},
         mousewheel: function (evt) { console.log("mousewheel", evt.wheelDeltaX, evt.wheelDeltaY); 
             if (evt.target.tagName === "HTML") return; // don't waste cycles scanning Modernizr's class list on <html>
             var et = evt.target;
@@ -492,28 +486,7 @@ var PLY = (function ($) {
                         // this touch is no longer valid so remove from element's touch hash
                         delete ed.t[id];
                         // update count
-                        ed.count--;                        
-
-                        /* *** this stuff gotta move out of ply domain -- also wont be needing count loop since i track count now (duuuh)
-                        // we set the transform on the data for the element while leaving 
-                        // touch info the same (as I want to preserve the semantics of pointer_state)
-                        // to the value that would achieve the correct positioning
-                        // it then follows that this is only necessary in the case where the number of 
-                        // remaining touches is 1: 
-                        var count_touches = 0;
-                        var touch; 
-                        for (var z in ed) {
-                            var c = z.charCodeAt(0);
-                            if (c < 58 && c > 47) { // fast is-number check
-                                touch = ed[z];
-                                count_touches++;
-                                if (count_touches > 1) break; // short-circuit (take note c_t will be either 0, 1, or 2)
-                            }
-                        }
-                        if (count_touches === 1) {
-                            // this also needs to be moved out of ply's domain 
-                            ed.trans = "translate3d("+(touch.xs-touch.xc)+"px,"+(touch.ys-touch.yc)+"px,0) " + ep[id].e.style[TransformStyle];
-                        } */
+                        ed.count--;
                     }
 
                     // en[ep[id].ni] = null; // clear out reference to node
