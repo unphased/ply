@@ -1,4 +1,8 @@
-/// slu's JS browser debug/util layer deluxe. Please include prior to loading libraries that depend on it
+  ////////////////////////////////////////////////
+ /// slu's JS browser debug/util layer deluxe ///
+////////////////////////////////////////////////
+
+/// Please include prior to loading libraries that depend on it
 /// Primarily provides functionality for live DOM manipulation style debugging
 /// which was used heavily throughout development of ply.js.
 /// You will be able to access exposed features through window.DEBUG.
