@@ -129,7 +129,6 @@ var PLY_L2 = (function ($) {
             evt.target.style[TransformStyle] = "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans;
             console.log("transform got set to: "+evt.target.style[TransformStyle], "using", "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans);
         },
-
         ply_transform: function(evt) {
             // todo: make this not require a per-input run of $.data (actually it may be unavoidable.. sigh)
             var dt = $.data(evt.target,"ply");
