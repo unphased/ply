@@ -76,7 +76,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% cebf0eb iframe testing %#";
+    var git_context = "#% aeb2a35 trying another iframe target %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
