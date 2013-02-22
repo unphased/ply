@@ -65,8 +65,9 @@ var PLY_L2 = (function ($) {
 
     var level_2_events = {
         ply_onetouchstart: function(evt) {
-            console.log("1S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
+            //console.log("1S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
             //assert(this === evt.changedTouch.target, "this is evt.ct.target (firsttouchstart)");
+            // I am not sure that this assertion should be true, the target of touch could also be a child...
             assert(evt.target === evt.changedTouch.target, "this is evt.ct.target (firsttouchstart)");
             var dt = $.data(evt.target,"ply");
             assert(dt,"dt exists");
@@ -97,13 +98,13 @@ var PLY_L2 = (function ($) {
             }
         },
         ply_twotouchesstart: function(evt) {
-            console.log("2S", $.data(evt.target,"ply").trans);
+            //console.log("2S", $.data(evt.target,"ply").trans);
             // The tracking of the position the initial finger was at actually has to be taken care of by ply itself
             // and becomes the .xs2 .ys2 properties
             //var touch = evt.existingTouch;
             $.data(evt.target,"ply").trans = evt.target.style[TransformStyle]; 
             // simply keep the same spot
-            console.log("into",  $.data(evt.target,"ply").trans, "end 2S");
+            //console.log("into",  $.data(evt.target,"ply").trans, "end 2S");
         },
         ply_threetouchesstart: function(evt) {
             console.log("3S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
@@ -149,7 +150,7 @@ var PLY_L2 = (function ($) {
             // all premult'd to original transform
             final_style += t;
             evt.target.style[TransformStyle] = final_style;
-            console.log("transform set to: "+final_style);
+            //console.log("transform set to: "+final_style);
             //console.log("transform after: "+evt.target.style[TransformStyle]);
         }
     };
