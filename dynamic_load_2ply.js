@@ -1,8 +1,8 @@
 var ply_$ = null;
 (function(){
     "use strict";
-    // serial script loading; if no cb provided, it will still be loaded (you just have no feedback)
-    function load(url,cb){var x=document.body.appendChild(document.createElement('script'));x.src=url;if (cb){x.onload=cb;}}
+    // serial script loading; if no cb provided, it will also be set as async
+    function load(url,cb){var x=document.body.appendChild(document.createElement('script'));x.src=url;if(cb){x.onload=cb}else{x.setAttribute('async','')}}
 
     // BEGIN parallel script loading (one-shot), could perhaps be using jQuery deferred/promises
     // but I *really* like the elegant simplicity of my approach here
@@ -32,16 +32,24 @@ var ply_$ = null;
 
     var resources = [
         {url: "http://code.jquery.com/jquery-1.9.1.js", tag: "script", cb: 
-            ((typeof jQuery!=="undefined")?function(){ ply_$ = $.noConflict(true) }:null)
+            (window.jQuery?function(){ ply_$ = $.noConflict(true) }:null)
             // To explain this a bit: only if jQuery already exists on the page we're injecting to should noConflict
             // be invoked. Otherwise, our up-to-date jQuery will be enabled like normal. This is the best of all worlds
         },
-        {url: "http://unphased.github.com/ply/debug.js", tag: "script"},
         {url: "http://unphased.github.com/ply/modernizr-2.6.2.min.js", tag: "script"}
     ];
 
-    async_load(resources,function(){
+    // if jQuery of a sufficiently recent pedigree is present then 
+    if (window.jQuery) {
+        var jqv = jQuery.jquery.split(".");
+        if (jqv[0]>=1&&jqv[1]>=8) {
+            resources.splice(0,1);
+            console.log("jQuery >= 1.8.0 present("+jQuery.jquery+"), not loading latest jQuery.");
+        }
+    }
 
+    async_load(resources,function(){
+        load("http://unphased.github.com/ply/debug.js");
         load('http://unphased.github.com/ply/ply.js',function(){
             load('http://unphased.github.com/ply/ply_L2.js');
             /*global PLY:false DEBUG:false*/
