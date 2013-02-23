@@ -445,4 +445,5 @@ var DEBUG = (function($) {
 
     return exposed;
 })(ply_$ || jQuery);
-// will use either your site's jQuery, or if in conjunction with ply, a guaranteed-up-to-date jQuery
+// will use either your site's jQuery, or if in conjunction with ply and a jQuery conflict had occurred,
+// use the guaranteed-up-to-date jQuery

@@ -31,7 +31,11 @@ var ply_$ = null;
     // END parallel script loading (todo: make me into a gist)
 
     var resources = [
-        {url: "http://code.jquery.com/jquery-1.9.1.js", tag: "script", cb: function(){ ply_$ = $.noConflict(true) }},
+        {url: "http://code.jquery.com/jquery-1.9.1.js", tag: "script", cb: 
+            (jQuery?function(){ ply_$ = $.noConflict(true) }:null)
+            // To explain this a bit: only if jQuery already exists on the page we're injecting to should noConflict
+            // be invoked. Otherwise, our up-to-date jQuery will be enabled like normal. This is the best of all worlds
+        },
         {url: "http://unphased.github.com/ply/debug.js", tag: "script"},
         {url: "http://unphased.github.com/ply/modernizr-2.6.2.min.js", tag: "script"}
     ];
