@@ -391,6 +391,20 @@ var DEBUG = (function() {
         return focused_element;
     }
 
+
+    // BEGIN a refactor/conjoining of highlight() and focus(): 
+    // they should not duplicate code; this monolithic function will 
+    // eventually handle all cases, and use some js magic (like getBoundingClientRect) 
+    // to support visualization of more elements than jQuery does out of the box
+    // such as SVG <g> elements. Oh, also, do account for transforms as well. 
+    // Oh, and also display a little text tip that shows any id's or classes set
+    // on the item (gotta think about whether these text tips, and also the 
+    // size measurements (and even visibility) of the marker indicators can be made
+    // to listen to dynamic changes due to other client scripting.)
+    function indicator(item) {
+
+    }
+
     // A heads-up display in the sense that it pops up in your face. 
     // I use OSD (on-screen-display) as that term better describes the experience of this feature. 
     // Attempts to be minimalistic in its styling (uses CSS from the dynamic CSS injection up above)
