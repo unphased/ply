@@ -2,7 +2,7 @@ var ply_$ = null;
 (function(){
     "use strict";
     // serial script loading; if no cb provided, it will also be set as async
-    function load(url,cb){var x=document.body.appendChild(document.createElement('script'));x.src=url;x.onload=function(){console.log("Dynamically loaded "+url);if(cb){cb();}} if(!cb){x.setAttribute('async','')}}
+    function load(url,cb){var x=document.body.appendChild(document.createElement('script'));x.src=url;x.onload=function(){console.log("Dynamically loaded "+url);if(cb){cb();}};if(!cb){x.setAttribute('async','')}}
 
     // BEGIN parallel script loading (one-shot), could perhaps be using jQuery deferred/promises
     // but I *really* like the elegant simplicity of my approach here
