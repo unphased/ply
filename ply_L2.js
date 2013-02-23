@@ -30,11 +30,13 @@
 // IN THE SOFTWARE. 
 // ============================================================================
 
+/*global Modernizr:false DEBUG:false PLY:false */
 var PLY_L2 = (function ($) {
+    "use strict";
 
     var assert = DEBUG.assert || function(assertion,message){if (!assertion) console.log("ASSERTION FAILED: "+message);};
-    var TransformStyle = PLY.Modernizr.prefixed("transform"); 
-    var TransformOriginStyle = PLY.Modernizr.prefixed("transformOrigin");
+    var TransformStyle = Modernizr.prefixed("transform"); 
+    var TransformOriginStyle = Modernizr.prefixed("transformOrigin");
 
     // this is used to obtain the true offset within the page to get the authoritative 
     // origin point (which is used along with pageX/Y from input)
@@ -135,8 +137,8 @@ var PLY_L2 = (function ($) {
             var dt = $.data(evt.target,"ply");
             var o = dt.offset; 
             var t = dt.trans;
-            startX = evt.startX - o.x;
-            startY = evt.startY - o.y;
+            var startX = evt.startX - o.x;
+            var startY = evt.startY - o.y;
             //console.log("ply_transform",o);
 
             // transform := T * T_o * R * S * T_o^-1 * transform

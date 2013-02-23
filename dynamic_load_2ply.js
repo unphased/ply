@@ -1,12 +1,38 @@
+/*global PLY:false DEBUG:false Modernizr:false*/
 (function(){
-    // serial script loading 
+    "use strict";
+    // serial script loading; if no cb provided, it will still be loaded (you just have no feedback)
     function load(url,cb){var x=document.body.appendChild(document.createElement('script'));x.src=url;if (cb){x.onload=cb;}}
-    load('http://code.jquery.com/jquery.js',function(){
-        load('http://unphased.github.com/ply/debug.js',function(){            
-            load('http://unphased.github.com/ply/ply.js',function(){
-                load('http://unphased.github.com/ply/ply_L2.js'); // 2ply can be executed at any point to transparently augment functionality                
 
-                // some basic UI to allow selection of features via my debug lib
+    // BEGIN parallel script loading (one-shot), could perhaps be using jQuery deferred/promises
+    // but I *really* like the elegant simplicity of my approach here
+    var async_load = function(resources_array, cb_all_done){
+        var total_remaining = resources_array.length;
+        var queue = resources_array.map(function(e){
+            var elem = document.body.appendChild(document.createElement(e.tag));
+            elem.src = e.url;
+            var x = {url: e.url, tag: e.tag, loaded: false, element: elem};
+            elem.onload = function(){
+                total_remaining--;
+                x.loaded = true;
+                console.log("Dynamically loaded "+e.url);
+                if (total_remaining === 0) 
+                    cb_all_done();
+            };
+            return x;
+        });
+    };
+    // END parallel script loading (todo: make me into a gist)
+
+    async_load([
+            {url: "http://code.jquery.com/jquery.js", tag: "script"},
+            {url: "http://unphased.github.com/ply/debug.js", tag: "script"},
+            {url: "http://unphased.github.com/ply/modernizr-2.6.2.min.js", tag: "script"}
+        ],function(){
+            load('http://unphased.github.com/ply/ply.js',function(){
+                load('http://unphased.github.com/ply/ply_L2.js');
+
+                // defines some UI to allow selection of features via my debug lib
                 // In order to preserve regular site functionality as much as possible, 
                 // a double-tap custom gesture is required to start selection mode.
                 
@@ -120,8 +146,8 @@
                             highlight_active = false;
                         }
                     }
-                });
-            });
-        });
-    });
-})();
+                }); // PLY.attach_handlers_on_document
+            }); // load(ply.js)
+        } // cb for async_load
+    ); // async_load call
+})(); // function wrapper

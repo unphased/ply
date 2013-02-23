@@ -11,6 +11,7 @@
 // #debug_log
 // #log_buffer_dump
 
+/*global Modernizr:false*/
 var DEBUG = (function() {
     "use strict";
 
@@ -81,11 +82,6 @@ var DEBUG = (function() {
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
-    /* Modernizr 2.6.2 (Custom Build) | MIT & BSD
-    * Build: http://modernizr.com/download/#-prefixed-testprop-testallprops-domprefixes
-    */
-    local_Modernizr=function(a,b,c){function w(a){i.cssText=a}function x(a,b){return w(prefixes.join(a+";")+(b||""))}function y(a,b){return typeof a===b}function z(a,b){return!!~(""+a).indexOf(b)}function A(a,b){for(var d in a){var e=a[d];if(!z(e,"-")&&i[e]!==c)return b=="pfx"?e:!0}return!1}function B(a,b,d){for(var e in a){var f=b[a[e]];if(f!==c)return d===!1?a[e]:y(f,"function")?f.bind(d||b):f}return!1}function C(a,b,c){var d=a.charAt(0).toUpperCase()+a.slice(1),e=(a+" "+m.join(d+" ")+d).split(" ");return y(b,"string")||y(b,"undefined")?A(e,b):(e=(a+" "+n.join(d+" ")+d).split(" "),B(e,b,c))}var d="2.6.2",e={},f=b.documentElement,g="modernizr",h=b.createElement(g),i=h.style,j,k={}.toString,l="Webkit Moz O ms",m=l.split(" "),n=l.toLowerCase().split(" "),o={},p={},q={},r=[],s=r.slice,t,u={}.hasOwnProperty,v;!y(u,"undefined")&&!y(u.call,"undefined")?v=function(a,b){return u.call(a,b)}:v=function(a,b){return b in a&&y(a.constructor.prototype[b],"undefined")},Function.prototype.bind||(Function.prototype.bind=function(b){var c=this;if(typeof c!="function")throw new TypeError;var d=s.call(arguments,1),e=function(){if(this instanceof e){var a=function(){};a.prototype=c.prototype;var f=new a,g=c.apply(f,d.concat(s.call(arguments)));return Object(g)===g?g:f}return c.apply(b,d.concat(s.call(arguments)))};return e});for(var D in o)v(o,D)&&(t=D.toLowerCase(),e[t]=o[D](),r.push((e[t]?"":"no-")+t));return e.addTest=function(a,b){if(typeof a=="object")for(var d in a)v(a,d)&&e.addTest(d,a[d]);else{a=a.toLowerCase();if(e[a]!==c)return e;b=typeof b=="function"?b():b,typeof enableClasses!="undefined"&&enableClasses&&(f.className+=" "+(b?"":"no-")+a),e[a]=b}return e},w(""),h=j=null,e._version=d,e._domPrefixes=n,e._cssomPrefixes=m,e.testProp=function(a){return A([a])},e.testAllProps=C,e.prefixed=function(a,b,c){return b?C(a,b,c):C(a,"pfx")},e}(this,this.document);
-
     function is_touch_device() {
         return !!('ontouchstart' in window) || 
             !!('onmsgesturechange' in window); // works on ie10
@@ -135,7 +131,7 @@ var DEBUG = (function() {
         var now = datenow();
         var debuglog = $("#debug_log")[0];
         var dc = debuglog.children;
-        for (i = dc.length-1; dc.length > 50 && i >= 0; --i) {
+        for (var i = dc.length-1; dc.length > 50 && i >= 0; --i) {
             var timestamp = dc[i].getAttribute('data-time');
             if (timestamp && timestamp < (now - 15000))
                 debuglog.removeChild(dc[i]);
@@ -150,9 +146,9 @@ var DEBUG = (function() {
         'transition'       : 'transitionend'
     }; 
     var transEndEventName;
-    var transformStyle = local_Modernizr.prefixed('transform');
+    var transformStyle = Modernizr.prefixed('transform');
 
-    if (!local_Modernizr.testAllProps('animationName')) { alert("@keyframes are not supported"); }
+    if (!Modernizr.testAllProps('animationName')) { alert("@keyframes are not supported"); }
     var keyframesPrefixed = hyphen_mp('animationName').replace('animation-name','keyframes');
 
     function hyphen_style(style) {
@@ -160,10 +156,10 @@ var DEBUG = (function() {
     }
 
     function hyphen_mp(style) {
-        return hyphen_style(local_Modernizr.prefixed(style));
+        return hyphen_style(Modernizr.prefixed(style));
     }
 
-    var transitionDurationStyle = local_Modernizr.prefixed('transitionDuration');
+    var transitionDurationStyle = Modernizr.prefixed('transitionDuration');
 
     var css = //"body { "+hyphen_mp('backfaceVisibility')+": hidden; "+hyphen_mp('perspective') + ": 1000; }\n" +
         "#debug_element_container { \n" +
@@ -212,9 +208,9 @@ var DEBUG = (function() {
     }
     head.appendChild(style);
 
-    transEndEventName = transEndEventNames[ local_Modernizr.prefixed('transition') ];
+    transEndEventName = transEndEventNames[ Modernizr.prefixed('transition') ];
 
-    var show_border_highlights = false;
+    //var show_border_highlights = false;
     var highlight_last_invoked_with = null;
     // an interface for portably highlighting any page element (without interacting w/ it)
     // start_from determines the animation source for initializing the highlight. It can be 
@@ -262,7 +258,7 @@ var DEBUG = (function() {
             //console.log("running the update");
             if (!outer) { // update command: add if not present
                 assert(!inner, "outer does not exist so neither should inner"); // just a sanity check
-                css_set = {opacity: 0};
+                var css_set = {opacity: 0};
                 //css_set[local_Modernizr.prefixed('backfaceVisibility')] = "hidden";
                 if (start_from) {
                     if (start_from instanceof HTMLElement) {
@@ -352,7 +348,7 @@ var DEBUG = (function() {
             var transFocus = "translate3d("+p.left+"px,"+p.top+"px,0) scale3d("+ow/500+","+oh/500+",1)"; 
             if (jfocus.length === 0) { // jouter not present 
                 // create. 
-                css_obj = {opacity: 0};
+                var css_obj = {opacity: 0};
                 var transStart = "translate3d("+(p.left+ow/2)+"px,"+(p.top+oh/2)+"px,0) scale3d(0,0,1)";
                 css_obj[transformStyle] = transStart;
                 jfocus = $('<div id="debug_element_focused"></div>').css(css_obj);

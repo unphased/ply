@@ -29,19 +29,22 @@
 // IN THE SOFTWARE. 
 // ============================================================================
 
-var assert = DEBUG.assert || function(assertion,message){if (!assertion) console.log("ASSERTION FAILED: "+message);};
+/*global PLY:false Modernizr:false DEBUG:false */
+(function(){
+	"use strict";
+	var assert = DEBUG.assert || function(assertion,message){if (!assertion) console.log("ASSERTION FAILED: "+message);};
 
-// Independently define multiple standard listeners rather than conjoin them all at the hip. 
-// Mumbo jumbo "separation of concerns", etc. 
-// No, seriously though, it's super important if you don't enjoy pulling hair out ;)
-var level_3_events = {
-    touchstart: function(evt) {
-        
-    },
-    touchend: function(evt) {
+	// Independently define multiple standard listeners rather than conjoin them all at the hip. 
+	// Mumbo jumbo "separation of concerns", etc. 
+	// No, seriously though, it's super important if you don't enjoy pulling hair out ;)
+	var level_3_events = {
+        touchstart: function(evt) {
+            
+        },
+        touchend: function(evt) {
 
-    }
-};
+        }
+	};
 
-PLY.attach_handlers_on_document(level_3_events);
-
+	PLY.attach_handlers_on_document(level_3_events);
+});
