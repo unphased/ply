@@ -6,7 +6,7 @@
 // This script contains level 1 features //
 ///////////////////////////////////////////
 ////// * DOM-aware input processing  //////
-/////  * Dependent on jQuery        ///////
+/////  * Dependent on jQuery.data() ///////
 ///////////////////////////////////////////
 
 // ============================================================================
@@ -31,20 +31,17 @@
 // IN THE SOFTWARE. 
 // ============================================================================
 
-var PLY = (function ($) {
+/*global DEBUG:false Modernizr:false */
+var PLY = (function ($data) {
+    // following line is for use with jshint, it is a global decl
+    
+    "use strict";
 
     var assert = DEBUG.assert || function(assertion,message){if (!assertion) console.log("ASSERTION FAILED: "+message);};
     var datenow = DEBUG.datenow;
     var escapeHtml = DEBUG.escapeHtml;
     var serialize = DEBUG.serialize;
     var isInDOM = DEBUG.isInDOM;
-
-    // ply currently only uses modernizr for prefixed(). This is a minimal 2.6.2 custom build
-        
-    /* Modernizr 2.6.2 (Custom Build) | MIT & BSD
-    * Build: http://modernizr.com/download/#-prefixed-testprop-testallprops-domprefixes
-    */
-    ply_Modernizr=function(a,b,c){function w(a){i.cssText=a}function x(a,b){return w(prefixes.join(a+";")+(b||""))}function y(a,b){return typeof a===b}function z(a,b){return!!~(""+a).indexOf(b)}function A(a,b){for(var d in a){var e=a[d];if(!z(e,"-")&&i[e]!==c)return b=="pfx"?e:!0}return!1}function B(a,b,d){for(var e in a){var f=b[a[e]];if(f!==c)return d===!1?a[e]:y(f,"function")?f.bind(d||b):f}return!1}function C(a,b,c){var d=a.charAt(0).toUpperCase()+a.slice(1),e=(a+" "+m.join(d+" ")+d).split(" ");return y(b,"string")||y(b,"undefined")?A(e,b):(e=(a+" "+n.join(d+" ")+d).split(" "),B(e,b,c))}var d="2.6.2",e={},f=b.documentElement,g="modernizr",h=b.createElement(g),i=h.style,j,k={}.toString,l="Webkit Moz O ms",m=l.split(" "),n=l.toLowerCase().split(" "),o={},p={},q={},r=[],s=r.slice,t,u={}.hasOwnProperty,v;!y(u,"undefined")&&!y(u.call,"undefined")?v=function(a,b){return u.call(a,b)}:v=function(a,b){return b in a&&y(a.constructor.prototype[b],"undefined")},Function.prototype.bind||(Function.prototype.bind=function(b){var c=this;if(typeof c!="function")throw new TypeError;var d=s.call(arguments,1),e=function(){if(this instanceof e){var a=function(){};a.prototype=c.prototype;var f=new a,g=c.apply(f,d.concat(s.call(arguments)));return Object(g)===g?g:f}return c.apply(b,d.concat(s.call(arguments)))};return e});for(var D in o)v(o,D)&&(t=D.toLowerCase(),e[t]=o[D](),r.push((e[t]?"":"no-")+t));return e.addTest=function(a,b){if(typeof a=="object")for(var d in a)v(a,d)&&e.addTest(d,a[d]);else{a=a.toLowerCase();if(e[a]!==c)return e;b=typeof b=="function"?b():b,typeof enableClasses!="undefined"&&enableClasses&&(f.className+=" "+(b?"":"no-")+a),e[a]=b}return e},w(""),h=j=null,e._version=d,e._domPrefixes=n,e._cssomPrefixes=m,e.testProp=function(a){return A([a])},e.testAllProps=C,e.prefixed=function(a,b,c){return b?C(a,b,c):C(a,"pfx")},e}(this,this.document);
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
@@ -106,9 +103,6 @@ var PLY = (function ($) {
         // the ply mechanism for globally assigning event handlers
         attach_handlers_on_document: attach_handlers_on_document, 
 
-        // lightweight non-overwriting modernizr (for prefixed())
-        Modernizr: ply_Modernizr,
-
         sanityCheck: internalCheck // this is like a unit test that you can run any time
         // sanityCheck is not bound to/dependent on debug status
     };
@@ -136,15 +130,15 @@ var PLY = (function ($) {
         }
     };
 
-    // a neat little exercise in recursive programming
+    /* a neat little exercise in recursive programming
     $.fn.addClassToChildren = function (class_name) {
         var c = this.children();
         if (c.length)
             c.addClass(class_name).addClassToChildren(class_name);
-    };
+    }; */
 
-    var TransformStyle = ply_Modernizr.prefixed("transform"); 
-    var TransformOriginStyle = ply_Modernizr.prefixed("transformOrigin");
+    var TransformStyle = Modernizr.prefixed("transform"); 
+    var TransformOriginStyle = Modernizr.prefixed("transformOrigin");
     //var PerspectiveStyle = ply_Modernizr.prefixed("perspective");
     //var BackfaceVisibilityStyle = ply_Modernizr.prefixed("backfaceVisibility");
     //console.log("bfvs: "+BackfaceVisibilityStyle);    
@@ -152,7 +146,7 @@ var PLY = (function ($) {
     var Mutation_Observer = true;
     //(window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver);
     
-    $(function (){
+    /*$(function (){
         // propagate "umbrella" style classes through to their children, now and in
         // the future. 
     
@@ -176,7 +170,7 @@ var PLY = (function ($) {
         $(".ply-collect").on("DOMNodeInserted",function (evt){
             $(evt.target).addClass("ply-cc");
         }).addClassToChildren("ply-cc");
-    });
+    }); */
 
     // routine that should be run for debug sanity checking at any point in time that you desire or are able to
     function internalCheck() {
@@ -199,27 +193,29 @@ var PLY = (function ($) {
             // looks like sometimes something can be taken out of touches list before a touchend
             // for it is sent out!
             if (ep[x].hasOwnProperty('ni')) {
-                assert($.data(ep[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
-                assert($.data(ep[x].e,'ply').t[x] === ep[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(ep[x])+"; "+serialize($.data(ep[x].e,'ply')));
-                assert(ep[x].ni === $.data(ep[x].e,'ply').node_id, "node id check "+ep[x].ni+", "+$.data(ep[x].e,'ply').node_id);
+                assert($data(ep[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
+                assert($data(ep[x].e,'ply').t[x] === ep[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(ep[x])+"; "+serialize($data(ep[x].e,'ply')));
+                assert(ep[x].ni === $data(ep[x].e,'ply').node_id, "node id check "+ep[x].ni+", "+$data(ep[x].e,'ply').node_id);
                 assert(en[ep[x].ni] === ep[x].e, "check element with id");
             }
         }
         for (var j=0;j<en.length;++j) {
             // check internal consistency of touches container by verifying with data contents
-            assert($.data(en[j],'ply').node_id === j, "node_id "+j+" should be equal to $.data(en["+j+"],'ply').node_id");
+            assert($data(en[j],'ply').node_id === j, "node_id "+j+" should be equal to $data(en["+j+"],'ply').node_id");
             // check the count matches 
             var touch_count = 0;
-            for (var y in $.data(en[j],'ply').t) {
+            for (var y in $data(en[j],'ply').t) {
                 touch_count ++;
             }
-            assert(touch_count === $.data(en[j],'ply').count, "count checks out for touches on element "); 
+            assert(touch_count === $data(en[j],'ply').count, "count checks out for touches on element "); 
         }   
     }
 
     function key(evt) {
         return evt.which || evt.keyCode || /*window.*/event.keyCode;
     }
+
+    var touchend_touchcancel;
 
     // entry point for code is the document's event handlers. 
     var level_1_events = {
@@ -302,7 +298,7 @@ var PLY = (function ($) {
             }
 
             // always track touch data (ep) 
-            // The values in our data_list are to be referenced by two datastructus: the $.data(e) and the ep
+            // The values in our data_list are to be referenced by two datastructus: the $data(e) and the ep
             var dl = data_list.length;
             for (var k=0;k<dl;++k) { // go and insert the new touches into ep
                 var dk = data_list[k];
@@ -312,12 +308,12 @@ var PLY = (function ($) {
 
             // only when element is a noscroll (interesting element) AND in noscroll mode (or could initiate it) do we track touches on the element's data (on a per element basis) -- this runs at least once on each element AFAIK
             if ((ps_count === 0 || !exposed.allow_scroll) && (' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1) {
-                // set up $.data stuff on element
-                var dt = $.data(seen_target,"ply");
+                // set up $data stuff on element
+                var dt = $data(seen_target,"ply");
                 var nid = en.length;
                 //console.log('nid',nid);
                 if (!dt) { // new element to put in our node index buffer
-                    dt = $.data(seen_target,"ply",{node_id: nid, count: 0, t: {}});
+                    dt = $data(seen_target,"ply",{node_id: nid, count: 0, t: {}});
                     en.push(seen_target);
                     console.log('en extended ',en);
                 } else { // otherwise look node up and use its index
@@ -421,7 +417,7 @@ var PLY = (function ($) {
             var ecl = ec.length;
             for (var i=0;i<ecl;++i) {
                 var eci = ec[i];
-                delete $.data(exposed.pointer_state[eci.identifier].e,'ply')[eci.identifier];
+                delete $data(exposed.pointer_state[eci.identifier].e,'ply')[eci.identifier];
                 delete exposed.pointer_state[eci.identifier];
                 console.log('removed ',eci.identifier, " now pointer_state is ",exposed.pointer_state);
             } */
@@ -447,7 +443,7 @@ var PLY = (function ($) {
                     if (ep[id].hasOwnProperty('ni')) { // if is a touch that requires removing from data
                         // i.e. is a "ply enabled" element
                         var ei = ep[id];
-                        var ed = $.data(ei.e, 'ply');
+                        var ed = $data(ei.e, 'ply');
 
                         var event = document.createEvent('HTMLEvents'); 
                         switch (ed.count) {
@@ -485,7 +481,7 @@ var PLY = (function ($) {
                             clickevent.initMouseEvent("click", true, true, window, 1, 
                                 ei.t.screenX, ei.t.screenY, ei.t.clientX, ei.t.clientY, 
                                 false, false, false, false, 0, null);
-                            click_not_prevented = ei.e.dispatchEvent(clickevent);
+                            var click_not_prevented = ei.e.dispatchEvent(clickevent);
                         }
 
                         // this touch is no longer valid so remove from element's touch hash
@@ -558,7 +554,7 @@ var PLY = (function ($) {
 
             // for each element
             for (var ni in elems) {
-                var nd = $.data(en[Number(ni)],'ply');
+                var nd = $data(en[Number(ni)],'ply');
                 /* 
                 var one, two; 
                 one = undefined; two = undefined;
@@ -709,4 +705,5 @@ var PLY = (function ($) {
     attach_handlers_on_document(level_1_events);
 
     return exposed;
-})(jQuery);
+})(jQuery.data);
+// only dependency is on jQuery.data
