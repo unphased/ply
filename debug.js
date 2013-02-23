@@ -76,7 +76,7 @@ var DEBUG = (function() {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 12e4c24 took out iframe; added border radius on weird test element %#";
+    var git_context = "#% b35a326 plannig out next steps and also switching to non minimized jquery so i can debug into jquery %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -389,6 +389,20 @@ var DEBUG = (function() {
     }
     function get_focused() {
         return focused_element;
+    }
+
+
+    // BEGIN a refactor/conjoining of highlight() and focus(): 
+    // they should not duplicate code; this monolithic function will 
+    // eventually handle all cases, and use some js magic (like getBoundingClientRect) 
+    // to support visualization of more elements than jQuery does out of the box
+    // such as SVG <g> elements. Oh, also, do account for transforms as well. 
+    // Oh, and also display a little text tip that shows any id's or classes set
+    // on the item (gotta think about whether these text tips, and also the 
+    // size measurements (and even visibility) of the marker indicators can be made
+    // to listen to dynamic changes due to other client scripting.)
+    function indicator(item) {
+
     }
 
     // A heads-up display in the sense that it pops up in your face. 

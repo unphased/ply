@@ -1,7 +1,7 @@
 (function(){
     // serial script loading 
     function load(url,cb){var x=document.body.appendChild(document.createElement('script'));x.src=url;if (cb){x.onload=cb;}}
-    load('http://code.jquery.com/jquery.min.js',function(){
+    load('http://code.jquery.com/jquery.js',function(){
         load('http://unphased.github.com/ply/debug.js',function(){            
             load('http://unphased.github.com/ply/ply.js',function(){
                 load('http://unphased.github.com/ply/ply_L2.js'); // 2ply can be executed at any point to transparently augment functionality                
