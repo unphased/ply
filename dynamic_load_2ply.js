@@ -32,7 +32,7 @@ var ply_$ = null;
 
     var resources = [
         {url: "http://code.jquery.com/jquery-1.9.1.js", tag: "script", cb: 
-            (jQuery?function(){ ply_$ = $.noConflict(true) }:null)
+            ((typeof jQuery!=="undefined")?function(){ ply_$ = $.noConflict(true) }:null)
             // To explain this a bit: only if jQuery already exists on the page we're injecting to should noConflict
             // be invoked. Otherwise, our up-to-date jQuery will be enabled like normal. This is the best of all worlds
         },
