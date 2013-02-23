@@ -160,4 +160,4 @@ var PLY_L2 = (function ($) {
 
     // produce public interface
     return exposed;
-})();
+})(jQuery);
