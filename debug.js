@@ -7,13 +7,14 @@
 /// which was used heavily throughout development of ply.js.
 /// You will be able to access exposed features through window.DEBUG.
 
-// there are a few special DOM id's: 
+// there are a few special DOM id's:
 // #debug_log
 // #log_buffer_dump
 
 var DEBUG = (function() {
+    "use strict";
 
-	var AssertException, assert; 
+	var AssertException, assert;
     
     AssertException = function (message) { this.message = message; };
     AssertException.prototype.toString = function () {
@@ -45,7 +46,7 @@ var DEBUG = (function() {
     var json_handler = function (key,val) {
         if (val instanceof HTMLElement) {
             // tells us which child we are (incl. textnodes)
-            // for (var k=0,e=val; (e = e.previousSibling); ++k); 
+            // for (var k=0,e=val; (e = e.previousSibling); ++k);
             // tells us which (real node) index it is
             var k = val.parentNode&&val.parentNode.children?Array.prototype.indexOf.call(val.parentNode.children,val):undefined;
             var cn = val.className;
@@ -401,13 +402,13 @@ var DEBUG = (function() {
     // on the item (gotta think about whether these text tips, and also the 
     // size measurements (and even visibility) of the marker indicators can be made
     // to listen to dynamic changes due to other client scripting.)
-    function indicator(item) {
+    function indicator(item, start_from, animation_class) {
 
     }
+    // END refactor/replacement
 
     // A heads-up display in the sense that it pops up in your face. 
     // I use OSD (on-screen-display) as that term better describes the experience of this feature. 
-    // Attempts to be minimalistic in its styling (uses CSS from the dynamic CSS injection up above)
     function OSD(item) {
         if (typeof item !== "string") { console.log("non-string item for OSD is not implemented"); return; }
         // lazy init a container for holding and showing the display. They are to be shown horizontally centered and at the bottom of the window. 
@@ -419,7 +420,7 @@ var DEBUG = (function() {
         
     }
 
-    // primitive set of methods provided by debug
+    // methods provided by debug
     var exposed = {
         enabled: true,
         assert: assert,

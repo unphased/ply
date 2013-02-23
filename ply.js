@@ -32,6 +32,9 @@
 // ============================================================================
 
 var PLY = (function ($) {
+    // following line is for use with jshint, it is a global decl
+    /*global DEBUG:false */
+    "use strict";
 
     var assert = DEBUG.assert || function(assertion,message){if (!assertion) console.log("ASSERTION FAILED: "+message);};
     var datenow = DEBUG.datenow;
