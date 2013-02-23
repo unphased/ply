@@ -6,7 +6,7 @@
 // This script contains level 1 features //
 ///////////////////////////////////////////
 ////// * DOM-aware input processing  //////
-/////  * Dependent on jQuery        ///////
+/////  * Dependent on jQuery.data() ///////
 ///////////////////////////////////////////
 
 // ============================================================================
@@ -32,7 +32,7 @@
 // ============================================================================
 
 /*global DEBUG:false Modernizr:false */
-var PLY = (function ($) {
+var PLY = (function ($data) {
     // following line is for use with jshint, it is a global decl
     
     "use strict";
@@ -130,12 +130,12 @@ var PLY = (function ($) {
         }
     };
 
-    // a neat little exercise in recursive programming
+    /* a neat little exercise in recursive programming
     $.fn.addClassToChildren = function (class_name) {
         var c = this.children();
         if (c.length)
             c.addClass(class_name).addClassToChildren(class_name);
-    };
+    }; */
 
     var TransformStyle = Modernizr.prefixed("transform"); 
     var TransformOriginStyle = Modernizr.prefixed("transformOrigin");
@@ -146,7 +146,7 @@ var PLY = (function ($) {
     var Mutation_Observer = true;
     //(window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver);
     
-    $(function (){
+    /*$(function (){
         // propagate "umbrella" style classes through to their children, now and in
         // the future. 
     
@@ -170,7 +170,7 @@ var PLY = (function ($) {
         $(".ply-collect").on("DOMNodeInserted",function (evt){
             $(evt.target).addClass("ply-cc");
         }).addClassToChildren("ply-cc");
-    });
+    }); */
 
     // routine that should be run for debug sanity checking at any point in time that you desire or are able to
     function internalCheck() {
@@ -193,27 +193,29 @@ var PLY = (function ($) {
             // looks like sometimes something can be taken out of touches list before a touchend
             // for it is sent out!
             if (ep[x].hasOwnProperty('ni')) {
-                assert($.data(ep[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
-                assert($.data(ep[x].e,'ply').t[x] === ep[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(ep[x])+"; "+serialize($.data(ep[x].e,'ply')));
-                assert(ep[x].ni === $.data(ep[x].e,'ply').node_id, "node id check "+ep[x].ni+", "+$.data(ep[x].e,'ply').node_id);
+                assert($data(ep[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
+                assert($data(ep[x].e,'ply').t[x] === ep[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(ep[x])+"; "+serialize($data(ep[x].e,'ply')));
+                assert(ep[x].ni === $data(ep[x].e,'ply').node_id, "node id check "+ep[x].ni+", "+$data(ep[x].e,'ply').node_id);
                 assert(en[ep[x].ni] === ep[x].e, "check element with id");
             }
         }
         for (var j=0;j<en.length;++j) {
             // check internal consistency of touches container by verifying with data contents
-            assert($.data(en[j],'ply').node_id === j, "node_id "+j+" should be equal to $.data(en["+j+"],'ply').node_id");
+            assert($data(en[j],'ply').node_id === j, "node_id "+j+" should be equal to $data(en["+j+"],'ply').node_id");
             // check the count matches 
             var touch_count = 0;
-            for (var y in $.data(en[j],'ply').t) {
+            for (var y in $data(en[j],'ply').t) {
                 touch_count ++;
             }
-            assert(touch_count === $.data(en[j],'ply').count, "count checks out for touches on element "); 
+            assert(touch_count === $data(en[j],'ply').count, "count checks out for touches on element "); 
         }   
     }
 
     function key(evt) {
         return evt.which || evt.keyCode || /*window.*/event.keyCode;
     }
+
+    var touchend_touchcancel;
 
     // entry point for code is the document's event handlers. 
     var level_1_events = {
@@ -296,7 +298,7 @@ var PLY = (function ($) {
             }
 
             // always track touch data (ep) 
-            // The values in our data_list are to be referenced by two datastructus: the $.data(e) and the ep
+            // The values in our data_list are to be referenced by two datastructus: the $data(e) and the ep
             var dl = data_list.length;
             for (var k=0;k<dl;++k) { // go and insert the new touches into ep
                 var dk = data_list[k];
@@ -306,12 +308,12 @@ var PLY = (function ($) {
 
             // only when element is a noscroll (interesting element) AND in noscroll mode (or could initiate it) do we track touches on the element's data (on a per element basis) -- this runs at least once on each element AFAIK
             if ((ps_count === 0 || !exposed.allow_scroll) && (' '+seen_target.className+' ').indexOf(" ply-noscroll ") !== -1) {
-                // set up $.data stuff on element
-                var dt = $.data(seen_target,"ply");
+                // set up $data stuff on element
+                var dt = $data(seen_target,"ply");
                 var nid = en.length;
                 //console.log('nid',nid);
                 if (!dt) { // new element to put in our node index buffer
-                    dt = $.data(seen_target,"ply",{node_id: nid, count: 0, t: {}});
+                    dt = $data(seen_target,"ply",{node_id: nid, count: 0, t: {}});
                     en.push(seen_target);
                     console.log('en extended ',en);
                 } else { // otherwise look node up and use its index
@@ -415,7 +417,7 @@ var PLY = (function ($) {
             var ecl = ec.length;
             for (var i=0;i<ecl;++i) {
                 var eci = ec[i];
-                delete $.data(exposed.pointer_state[eci.identifier].e,'ply')[eci.identifier];
+                delete $data(exposed.pointer_state[eci.identifier].e,'ply')[eci.identifier];
                 delete exposed.pointer_state[eci.identifier];
                 console.log('removed ',eci.identifier, " now pointer_state is ",exposed.pointer_state);
             } */
@@ -441,7 +443,7 @@ var PLY = (function ($) {
                     if (ep[id].hasOwnProperty('ni')) { // if is a touch that requires removing from data
                         // i.e. is a "ply enabled" element
                         var ei = ep[id];
-                        var ed = $.data(ei.e, 'ply');
+                        var ed = $data(ei.e, 'ply');
 
                         var event = document.createEvent('HTMLEvents'); 
                         switch (ed.count) {
@@ -479,7 +481,7 @@ var PLY = (function ($) {
                             clickevent.initMouseEvent("click", true, true, window, 1, 
                                 ei.t.screenX, ei.t.screenY, ei.t.clientX, ei.t.clientY, 
                                 false, false, false, false, 0, null);
-                            click_not_prevented = ei.e.dispatchEvent(clickevent);
+                            var click_not_prevented = ei.e.dispatchEvent(clickevent);
                         }
 
                         // this touch is no longer valid so remove from element's touch hash
@@ -552,7 +554,7 @@ var PLY = (function ($) {
 
             // for each element
             for (var ni in elems) {
-                var nd = $.data(en[Number(ni)],'ply');
+                var nd = $data(en[Number(ni)],'ply');
                 /* 
                 var one, two; 
                 one = undefined; two = undefined;
@@ -703,4 +705,4 @@ var PLY = (function ($) {
     attach_handlers_on_document(level_1_events);
 
     return exposed;
-})(jQuery);
+})(jQuery.data);

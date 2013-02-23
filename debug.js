@@ -11,8 +11,8 @@
 // #debug_log
 // #log_buffer_dump
 
-/*global Modernizr:false*/
-var DEBUG = (function() {
+/*global Modernizr:false ply_$:false*/
+var DEBUG = (function($) {
     "use strict";
 
 	var AssertException, assert;
@@ -406,7 +406,7 @@ var DEBUG = (function() {
     // A heads-up display in the sense that it pops up in your face. 
     // I use OSD (on-screen-display) as that term better describes the experience of this feature. 
     function OSD(item) {
-        if (typeof item !== "string") { console.log("non-string item for OSD is not implemented"); return; }
+        if (typeof item !== "string") { console.log("non-string item for OSD is not acceptable"); return; }
         // lazy init a container for holding and showing the display. They are to be shown horizontally centered and at the bottom of the window. 
     }
 
@@ -444,4 +444,5 @@ var DEBUG = (function() {
     console.log("Revision: "+exposed.revision);
 
     return exposed;
-})();
+})(ply_$ || jQuery);
+// will use either your site's jQuery, or if in conjunction with ply, a guaranteed-up-to-date jQuery
