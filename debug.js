@@ -399,7 +399,7 @@ var DEBUG = (function($) {
     // size measurements (and even visibility) of the marker indicators can be made
     // to listen to dynamic changes due to other client scripting.)
     function indicator(item, start_from, animation_class) {
-
+        
     }
     // END refactor/replacement
 
