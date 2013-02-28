@@ -78,7 +78,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 3fe8630 okay this should run now %#";
+    var git_context = "#% 30ee579 revising readme (cutting out unimplemented promises and mostly stupid/unrealistic ideas) %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -399,7 +399,7 @@ var DEBUG = (function($) {
     // size measurements (and even visibility) of the marker indicators can be made
     // to listen to dynamic changes due to other client scripting.)
     function indicator(item, start_from, animation_class) {
-
+        
     }
     // END refactor/replacement
 
