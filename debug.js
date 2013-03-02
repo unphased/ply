@@ -78,7 +78,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 30ee579 revising readme (cutting out unimplemented promises and mostly stupid/unrealistic ideas) %#";
+    var git_context = "#% da14fb4 fix original test page %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -444,6 +444,6 @@ var DEBUG = (function($) {
     console.log("Revision: "+exposed.revision);
 
     return exposed;
-})(ply_$ || jQuery);
+})(window.ply_$ || jQuery);
 // will use either your site's jQuery, or if in conjunction with ply and a jQuery conflict had occurred,
 // use the guaranteed-up-to-date jQuery
