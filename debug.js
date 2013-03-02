@@ -444,6 +444,6 @@ var DEBUG = (function($) {
     console.log("Revision: "+exposed.revision);
 
     return exposed;
-})(ply_$ || jQuery);
+})(window.ply_$ || jQuery);
 // will use either your site's jQuery, or if in conjunction with ply and a jQuery conflict had occurred,
 // use the guaranteed-up-to-date jQuery

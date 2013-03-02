@@ -706,4 +706,4 @@ var PLY = (function ($data) {
 
     return exposed;
 })(jQuery.data);
-// only dependency is on jQuery.data
+// only dependency is on jQuery.data, any old version of it should work
