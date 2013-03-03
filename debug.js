@@ -411,7 +411,8 @@ var DEBUG = (function($) {
     }
 
     // Exploratory work on fixed UI elements that stay in their position regardless of
-    // zoom and pan of the browser
+    // zoom and pan of the browser **EXPERIMENTAL** (will most likely be subject to
+    // zoom and limited to left and top sides, on touch platforms)
     function HUD() {
         
     }
