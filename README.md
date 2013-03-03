@@ -7,7 +7,7 @@ ply.js
 
 ply implements a comprehensive set of responsive and accurate multitouch gestures using the standard JavaScript event paradigm.
 
-On top of this, ply makes it easy to automatically implements intuitive auto-transform using accelerated CSS3 3D transforms.
+On top of this, ply makes it easy to automatically implement intuitive auto-transform using accelerated CSS3 3D transforms.
 
 (Not sure if this is going to happen or is in scope) ply makes use of requestAnimationFrame to efficiently schedule transform style updates and computations.
 
