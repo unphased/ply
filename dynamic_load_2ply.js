@@ -31,7 +31,7 @@ var ply_$ = null;
     // END parallel script loading (todo: make me into a gist)
 
     var resources = [
-        {url: "http://code.jquery.com/jquery-1.9.1.js", tag: "script", cb: 
+        {url: "https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js", tag: "script", cb: 
             (window.jQuery?function(){ ply_$ = $.noConflict(true) }:null)
             // To explain this a bit: only if jQuery already exists on the page we're injecting to should noConflict
             // be invoked. Otherwise, our up-to-date jQuery will be enabled like normal. This is the best of all worlds
@@ -49,9 +49,9 @@ var ply_$ = null;
     }
 
     async_load(resources,function(){
-        load("http://unphased.github.com/ply/debug.js",function(){
-            load('http://unphased.github.com/ply/ply.js',function(){
-                load('http://unphased.github.com/ply/ply_L2.js');
+        load("https://raw.github.com/unphased/ply/master/debug.js",function(){
+            load('https://raw.github.com/unphased/ply/master/ply.js',function(){
+                load('https://raw.github.com/unphased/ply/master/ply_L2.js');
                 /*global PLY:false DEBUG:false*/
 
                 // defines some UI to allow selection of features via my debug lib
