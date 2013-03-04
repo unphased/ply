@@ -36,7 +36,7 @@ var ply_$ = null;
             // To explain this a bit: only if jQuery already exists on the page we're injecting to should noConflict
             // be invoked. Otherwise, our up-to-date jQuery will be enabled like normal. This is the best of all worlds
         },
-        {url: "http://unphased.github.com/ply/modernizr-2.6.2.min.js", tag: "script"}
+        {url: "https://raw.github.com/unphased/ply/master/modernizr-2.6.2.min.js", tag: "script"}
     ];
 
     // if jQuery of a sufficiently recent pedigree is present then 
