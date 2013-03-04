@@ -56,15 +56,6 @@ var PLY = (function ($data) {
         // touches are stored under their id as key.
         pointer_state: {}, 
 
-        // this is the global state that tracks whether a short single touch 
-        // can be interpreted as a click. 
-        // This can be implemented a ton of different ways but putting it here
-        // is probably most straightforward. 
-        // This flag is what allows us to seamlessly (and without the 300ms 
-        // delay) issue a click, however obviously the double-tap zoom gesture
-        // is not going to work on ply-enabled elements)
-        click_possible: true, 
-
         // used by touchmove event to run code only when necessary
         tmTime: datenow(),
 
@@ -229,7 +220,7 @@ var PLY = (function ($data) {
 
             // trap the right clicks!! this is huge
             if (evt.which === 3) // secondary mouse button causes context menu,
-                // context menu prevents mouseup. ply by default ignores
+                // context menu prevents mouseup. ply does not respond to
                 // the secondary mouse button interaction
                 return;
             exposed.pointer_state.m = {xs:evt.pageX, ys:evt.pageY, 
@@ -384,11 +375,7 @@ var PLY = (function ($data) {
             }
             if (!exposed.allow_scroll) { // never allow scroll once you start manipulating something 
                 evt.preventDefault();
-            }
-            if (ps_count_real > 1) {
-                // if at any point two touches exist, the click event is never fired on a ply enabled element
-                exposed.click_possible = false;
-            }
+            }            
         },
 
         // After extensive testing on devices it became clear that the tracking of state
@@ -467,23 +454,6 @@ var PLY = (function ($data) {
                         event.touches_active_on_element = ed.t;
                         var defaultNotPrevented = ei.e.dispatchEvent(event);
 
-                        // now this is super neat. I don't know if preventDefault on touchend will change
-                        // the behavior (for firing or not firing click), but with ply it will be possible
-                        // to prevent the click by preventDefault on oneend! How nice is that? 
-                        if (defaultNotPrevented && ed.count === 1 && exposed.click_possible) {
-                            // the naive $.click() generally fails on anchor elements because 
-                            // probably for preventing script kiddie nastiness. 
-
-                            // So, I fire a click event created using the DOM API and attempt to 
-                            // fill it up with what data is available in the original touchstart. 
-                            var clickevent = document.createEvent("MouseEvents");
-                            // Not sure if touch can provide a screenX/Y
-                            clickevent.initMouseEvent("click", true, true, window, 1, 
-                                ei.t.screenX, ei.t.screenY, ei.t.clientX, ei.t.clientY, 
-                                false, false, false, false, 0, null);
-                            var click_not_prevented = ei.e.dispatchEvent(clickevent);
-                        }
-
                         // this touch is no longer valid so remove from element's touch hash
                         delete ed.t[id];
                         // update count
@@ -500,7 +470,6 @@ var PLY = (function ($data) {
             }
             if (etl === 0) { // this indicates no touches remain
                 exposed.allow_scroll = true;
-                exposed.click_possible = true;
             }
         }),
         touchcancel: touchend_touchcancel,
@@ -595,13 +564,7 @@ var PLY = (function ($data) {
                     // which is probably about as efficient as we can get given what is available (early 2013).
                     // Since this is the single finger case there is no transform computation so the event
                     // will be sent like usual
-                    var defaultNotPrevented = en[ni].dispatchEvent(event);
-
-                    // if at any point a single touch has moved too far, prevent it from ever firing 
-                    // the click event 
-                    if (exposed.click_possible && (Math.abs(event.deltaX)+Math.abs(event.deltaY)) > 10) {
-                        exposed.click_possible = false;
-                    }
+                    var defaultNotPrevented = en[ni].dispatchEvent(event);                    
                 } else {
                     var two, j;
                     j=0; 
