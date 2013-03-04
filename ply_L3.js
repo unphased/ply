@@ -31,20 +31,17 @@
 
 /*global PLY:false Modernizr:false DEBUG:false */
 (function(){
-	"use strict";
-	var assert = DEBUG.assert || function(assertion,message){if (!assertion) console.log("ASSERTION FAILED: "+message);};
+    "use strict";
+    var assert = DEBUG.assert || function(assertion,message){if (!assertion) console.log("ASSERTION FAILED: "+message);};
 
-	// Independently define multiple standard listeners rather than conjoin them all at the hip. 
-	// Mumbo jumbo "separation of concerns", etc. 
-	// No, seriously though, it's super important if you don't enjoy pulling hair out ;)
-	var level_3_events = {
-        touchstart: function(evt) {
-            
-        },
-        touchend: function(evt) {
+    // Independently define multiple standard listeners rather than conjoin them all at the hip. 
+    // Enables separation of concerns, very powerful.
+    var level_3_events = { 
+        // this implements a no-delay button operation, including setting convenient state classes 
+        ply_onestart: function() {
 
         }
-	};
+    };
 
-	PLY.attach_handlers_on_document(level_3_events);
-});
+    PLY.attach_handlers_on_document(level_3_events);
+})();

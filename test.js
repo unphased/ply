@@ -11,7 +11,7 @@
         window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] || 
             window[vendors[x]+'CancelRequestAnimationFrame'];
     }
-    if (!window.requestAnimationFrame)
+    if (!window.requestAnimationFrame) {
         window.requestAnimationFrame = function(callback, element) {
             var currTime = datenow();
             var timeToCall = Math.max(0, 16 - (currTime - lastTime));
@@ -20,11 +20,13 @@
             lastTime = currTime + timeToCall;
             return id;
         };
+    }
  
-    if (!window.cancelAnimationFrame)
+    if (!window.cancelAnimationFrame) {
         window.cancelAnimationFrame = function(id) {
             clearTimeout(id);
         };
+    }
     
     var transform_name = Modernizr.prefixed('transform');
     var hide_transform = "translate3d(-99999px,-99999px,0)";

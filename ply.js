@@ -5,7 +5,7 @@
 ///////////////////////////////////////////
 // This script contains level 1 features //
 ///////////////////////////////////////////
-////// * DOM-aware input processing  //////
+////// * DOM-aware transform events  //////
 /////  * Dependent on jQuery.data() ///////
 ///////////////////////////////////////////
 
@@ -348,10 +348,10 @@ var PLY = (function ($data) {
                         var event = document.createEvent('HTMLEvents'); 
                         switch (dt.count) {
                             case 1: 
-                                event.initEvent('ply_onetouchstart',true,true);
+                                event.initEvent('ply_onestart',true,true);
                                 break;
                             case 2: 
-                                event.initEvent('ply_twotouchesstart',true,true);
+                                event.initEvent('ply_twostart',true,true);
                                 // set an updated start position for the existing point to prevent a "warp"
                                 // find the first touch on the element and set it to current value
                                 for (var ti in dt.t) { if (ti !== dj.id) { break; } }
@@ -361,7 +361,7 @@ var PLY = (function ($data) {
                                 ep[ti].ys2 = ep[ti].yc;
                                 break;
                             case 3: 
-                                event.initEvent('ply_threetouchesstart',true,true);
+                                event.initEvent('ply_threestart',true,true);
                                 break;
                             default: 
                                 console.log("zero or fourth or fifth or... touchstart (unimplemented) n="+dt.count);
@@ -448,17 +448,17 @@ var PLY = (function ($data) {
                         var event = document.createEvent('HTMLEvents'); 
                         switch (ed.count) {
                             case 1: 
-                                event.initEvent('ply_onetouchend',true,true);
+                                event.initEvent('ply_oneend',true,true);
                                 break;
                             case 2: 
-                                event.initEvent('ply_twotouchesend',true,true);
+                                event.initEvent('ply_twoend',true,true);
                                 for (var ti in ed.t) {
                                     if (ti !== id) break;
                                 }
                                 event.remainingTouch = ep[ti].t; 
                                 break;
                             case 3: 
-                                event.initEvent('ply_threetouchesend',true,true);
+                                event.initEvent('ply_threeend',true,true);
                                 break;
                             default:
                                 console.log("nthtouchend n="+ed.count);
@@ -469,7 +469,7 @@ var PLY = (function ($data) {
 
                         // now this is super neat. I don't know if preventDefault on touchend will change
                         // the behavior (for firing or not firing click), but with ply it will be possible
-                        // to prevent the click by preventDefault on onetouchend! How nice is that? 
+                        // to prevent the click by preventDefault on oneend! How nice is that? 
                         if (defaultNotPrevented && ed.count === 1 && exposed.click_possible) {
                             // the naive $.click() generally fails on anchor elements because 
                             // probably for preventing script kiddie nastiness. 

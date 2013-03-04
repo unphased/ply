@@ -4,8 +4,7 @@
 ////  Secondary event generation stage   ///
 ///  For use in conjunction with ply.js ////
 ////////////////////////////////////////////
-/// Level 2: DOM-aware auto-application   //
-//  of 3D transforms through HTML5 touch ///
+//// Level 2: DOM-aware auto-transform /////
 ////////////////////////////////////////////
 
 // ============================================================================
@@ -66,7 +65,7 @@ var PLY_L2 = (function ($) {
     };
 
     var level_2_events = {
-        ply_onetouchstart: function(evt) {
+        ply_onestart: function(evt) {
             //console.log("1S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
             //assert(this === evt.changedTouch.target, "this is evt.ct.target (firsttouchstart)");
             // I am not sure that this assertion should be true, the target of touch could also be a child...
@@ -99,7 +98,7 @@ var PLY_L2 = (function ($) {
                 evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
             }
         },
-        ply_twotouchesstart: function(evt) {
+        ply_twostart: function(evt) {
             //console.log("2S", $.data(evt.target,"ply").trans);
             // The tracking of the position the initial finger was at actually has to be taken care of by ply itself
             // and becomes the .xs2 .ys2 properties
@@ -108,13 +107,13 @@ var PLY_L2 = (function ($) {
             // simply keep the same spot
             //console.log("into",  $.data(evt.target,"ply").trans, "end 2S");
         },
-        ply_threetouchesstart: function(evt) {
+        ply_threestart: function(evt) {
             console.log("3S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
         },
-        ply_onetouchend: function(evt) {
+        ply_oneend: function(evt) {
             console.log("1E");
         },
-        ply_twotouchesend: function(evt) {
+        ply_twoend: function(evt) {
             console.log("2E", $.data(evt.target,"ply").trans);
             // must properly update trans on termination of second touch 
             // append to my transform the offset of the remaining touch
@@ -124,7 +123,7 @@ var PLY_L2 = (function ($) {
             //console.log("ed trans"+"translate3d(" + (touch.xs-touch.xc) + "px," + (touch.ys-touch.yc) + "px,0) " + evt.target.style[TransformStyle]);
             console.log("into", $.data(evt.target,"ply").trans, "remainingTouch", touch, "end 2E");
         },
-        ply_threetouchesend: function(evt) {
+        ply_threeend: function(evt) {
             console.log("3E");
         },
         ply_translate: function(evt) {
