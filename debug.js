@@ -78,7 +78,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 4aa5b43 fixing test.js %#";
+    var git_context = "#% 4df9b1b a fix for jquery %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -411,7 +411,8 @@ var DEBUG = (function($) {
     }
 
     // Exploratory work on fixed UI elements that stay in their position regardless of
-    // zoom and pan of the browser
+    // zoom and pan of the browser **EXPERIMENTAL** (will most likely be subject to
+    // zoom and limited to left and top sides, on touch platforms)
     function HUD() {
         
     }

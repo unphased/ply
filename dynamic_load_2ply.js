@@ -41,10 +41,10 @@ var ply_$ = null;
 
     // if jQuery of a sufficiently recent pedigree is present then 
     if (window.jQuery) {
-        var jqv = jQuery.jquery.split(".");
+        var jqv = jQuery().jquery.split(".");
         if (jqv[0]>=1&&jqv[1]>=8) {
             resources.splice(0,1);
-            console.log("jQuery >= 1.8.0 present("+jQuery.jquery+"), not loading latest jQuery.");
+            console.log("jQuery >= 1.8.0 present("+jQuery().jquery+"), not loading latest jQuery.");
         }
     }
 
