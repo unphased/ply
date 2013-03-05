@@ -412,10 +412,16 @@ var DEBUG = (function($) {
 
     // Exploratory work on fixed UI elements that stay in their position regardless of
     // zoom and pan of the browser **EXPERIMENTAL** (will most likely be subject to
-    // zoom and limited to left and top sides, on touch platforms)
+    // zoom and limited to left and top sides, on touch platforms) 
+    // pretty much any regular elements should be able to be dynamically manipulated
+    // inside a HUD element and it should overlay everything 
     function HUD() {
-        
+
     }
+
+    // abstraction of a 3d-accelerated scrolling view? There might be enough semantic 
+    // weight through the setting of CSS. 
+    // function () {}
 
     // methods provided by debug
     var exposed = {
