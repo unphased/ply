@@ -170,6 +170,6 @@ var ply_$ = null;
                     }
                 }); // PLY.attach_handlers_on_document
             }); // load(ply.js)
-        })
+        });
     }); // async_load call
 })(); // function wrapper
