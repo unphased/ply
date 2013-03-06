@@ -212,7 +212,7 @@ var DEBUG = (function($) {
 
     //var show_border_highlights = false;
     var highlight_last_invoked_with = null;
-    // an interface for portably highlighting any page element (without interacting w/ it)
+    // an interface for portably highlighting any page element (without doing anything to it)
     // start_from determines the animation source for initializing the highlight. It can be 
     // either an element (in which case its measurements are obtained with jQuery like usual)
     // or a more optimized datastructure that holds the geometry data for direct use
@@ -389,22 +389,37 @@ var DEBUG = (function($) {
     }
 
 
-    // BEGIN a refactor/conjoining of highlight() and focus(): 
-    // they should not duplicate code; this monolithic function will 
-    // eventually handle all cases, and use some js magic (like getBoundingClientRect) 
+    // use some magic (like getBoundingClientRect) 
     // to support visualization of more elements than jQuery does out of the box
     // such as SVG <g> elements. Oh, also, do account for transforms as well. 
-    // Oh, and also display a little text tip that shows any id's or classes set
-    // on the item (gotta think about whether these text tips, and also the 
-    // size measurements (and even visibility) of the marker indicators can be made
-    // to listen to dynamic changes due to other client scripting.)
-    function indicator(item, start_from, animation_class) {
+    // Also uses the element specific text display through this
+    // (gotta think about whether these text tips, and also the 
+    // size measurements and position (and showing a removal animation upon removal)
+    // of the marker indicators can be made to listen to dynamic changes due to
+    // existing, independent client scripting.)
+
+    // architecturally, this function handles setting the visible indicative styles 
+    // present on a single element on the page. This is not a traditional state machine;
+    // the target_state is a string that specifies what the indication of this element
+    // consists of. 
+    function indication(item, target_state) {
         
     }
-    // END refactor/replacement
+
+    // this is the one that encapsulates the previous highlight() and focus(), 
+    // consolidates the logic for manipulating HW-Accel'd layers and their transitions
+    // and their borders. region specifies which region (inner, with padding, with border, with margin)
+    function indicator_pane(item, region) {}
+
+    // placement is not trivial (at all) for this so it should be separate and appear on top of the 
+    // indicator panes. 
+    function indicator_text(item, offset) {
+
+    }
 
     // A heads-up display in the sense that it pops up in your face. 
     // I use OSD (on-screen-display) as that term better describes the experience of this feature. 
+    // This is for displaying the activation of global events with large text. 
     function OSD(item) {
         if (typeof item !== "string") { console.log("non-string item for OSD is not acceptable"); return; }
         // lazy init a container for holding and showing the display. They are to be shown horizontally centered and at the bottom of the window. 
@@ -415,6 +430,8 @@ var DEBUG = (function($) {
     // zoom and limited to left and top sides, on touch platforms) 
     // pretty much any regular elements should be able to be dynamically manipulated
     // inside a HUD element and it should overlay everything 
+    // This is for building static UI elements like an expanding scrolling view of 
+    // the DOM structure of the HTML. 
     function HUD() {
 
     }
