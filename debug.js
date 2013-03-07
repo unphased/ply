@@ -392,6 +392,7 @@ var DEBUG = (function($) {
     // use some magic (like getBoundingClientRect) 
     // to support visualization of more elements than jQuery does out of the box
     // such as SVG <g> elements. Oh, also, do account for transforms as well. 
+    // and wouldn't hurt either to account for scroll offset (which may be custom or builtin -- sigh)
     // Also uses the element specific text display through this
     // (gotta think about whether these text tips, and also the 
     // size measurements and position (and showing a removal animation upon removal)
