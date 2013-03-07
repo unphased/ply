@@ -397,13 +397,21 @@ var DEBUG = (function($) {
     // (gotta think about whether these text tips, and also the 
     // size measurements and position (and showing a removal animation upon removal)
     // of the marker indicators can be made to listen to dynamic changes due to
-    // existing, independent client scripting.)
+    // existing, independent client scripting.) 
+
+    // the initial implementation will use a timed polling approach to achieve responsiveness 
+    // to page dynamism; transitioning to event/observer based responsiveness comes later 
+    // because that is one of those diminishing ROI situations. 
+
+    // With that in mind, then this function's scope is simply to evaluate the state of 
+    // its target element and manage the instrumentation of indicator elements according
+    // to the specified indicator state 
 
     // architecturally, this function handles setting the visible indicative styles 
-    // present on a single element on the page. This is not a traditional state machine;
-    // the target_state is a string that specifies what the indication of this element
-    // consists of. 
-    function indication(item, target_state) {
+    // present on a single element on the page. This is a more or less trivial state machine;
+    // the indicator_state is a string that specifies what the indication of this element
+    // will become. Whatever is specified will be applied (and transitioned to). 
+    function indication(item, indicator_state) {
         
     }
 
@@ -412,7 +420,7 @@ var DEBUG = (function($) {
     // and their borders. region specifies which region (inner, with padding, with border, with margin)
     function indicator_pane(item, region) {}
 
-    // placement is not trivial (at all) for this so it should be separate and appear on top of the 
+    // placement is not trivial for this so it should be managed separately and appear on top of the 
     // indicator panes. 
     function indicator_text(item, offset) {
 
