@@ -85,7 +85,7 @@ var PLY_L2 = (function ($) {
                 evt.target.style[PerspectiveStyle] = "1000";
             */
             
-            // This gives us prefiltered antialiasing via texture sampling (helps on pretty much all browsers)
+            // This gives us prefiltered antialiasing via texture sampling (smooths out the edges of stuff as they are transformed)
             evt.target.style.outline = "1px solid transparent";
             var etst = evt.target.style[TransformStyle];
             if (!etst || etst === "none") {
