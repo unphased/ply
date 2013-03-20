@@ -61,7 +61,7 @@ var PLY_L2 = (function ($) {
         var dt = $.data(e,"ply");
         e.style[TransformStyle] = "translate3d(0,0,0)"; // reset position
         // mark to stop applying xforms
-        dt.is_transform_canceled = true;
+        e.className.replace('ply-transforming','');
     }
 
     var exposed = {
@@ -89,6 +89,9 @@ var PLY_L2 = (function ($) {
 
             // set this to prevent rubber band effect
             evt.target.style[TransitionDurationStyle] = "0s"; 
+            if ((' '+evt.target.className+' ').indexOf('ply-transforming') === -1) {
+                evt.target.className += ' ply-transforming';
+            }
 
             /* 
             // ensure backface visibility 
@@ -123,12 +126,9 @@ var PLY_L2 = (function ($) {
         },
         ply_threestart: function(evt) {
             console.log("3S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
-            reset_transform_with_duration(evt.target,"2s");
         },
         ply_oneend: function(evt) {
             console.log("1E");
-            var dt = $.data(evt.target,"ply");
-            if (dt.is_transform_canceled) dt.is_transform_canceled = false;
         },
         ply_twoend: function(evt) {
             console.log("2E", $.data(evt.target,"ply").trans);
@@ -145,7 +145,7 @@ var PLY_L2 = (function ($) {
         },
         ply_translate: function(evt) {
             var dt = $.data(evt.target,"ply");
-            if (dt.is_transform_canceled) return;
+            if (evt.target.className.indexOf('ply-transforming') === -1) return;
             //console.log("transform before setting translate: "+$(evt.target).css(TransformStyle));
             evt.target.style[TransformStyle] = "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans;
             console.log("transform got set to: "+evt.target.style[TransformStyle], "using", "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + dt.trans);
@@ -153,7 +153,7 @@ var PLY_L2 = (function ($) {
         ply_transform: function(evt) {
             // todo: make this not require a per-input run of $.data (actually it may be unavoidable.. sigh)
             var dt = $.data(evt.target,"ply");
-            if (dt.is_transform_canceled) return;
+            if (evt.target.className.indexOf('ply-transforming') === -1) return;
             var o = dt.offset; 
             var t = dt.trans;
             var startX = evt.startX - o.x;
