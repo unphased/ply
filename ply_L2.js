@@ -56,6 +56,7 @@ var PLY_L2 = (function ($) {
 
     function reset_transform_with_duration(e, duration) {
         e.style[TransformDurationStyle] = duration;
+        console.log('tds: '+TransformDurationStyle);
         assert(getComputedStyle(e).getPropertyValue(TransformDurationStyle) === duration, "durationstyle: "+duration+" vs "+getComputedStyle(e)[TransformDurationStyle]);
         e.style[TransformStyle] = "translate3d(0,0,0)";
     }
