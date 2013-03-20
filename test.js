@@ -250,4 +250,17 @@
     if (DEBUG){
         $("h1").after('<button id="debug_toggle" onclick="DEBUG.enabled = !DEBUG.enabled">toggle all debug</button>');
     }
+    PLY.attach_handlers_on_document({
+        ply_oneend: function(evt) {
+            var dt = $.data(evt.target,"ply");
+            if (!dt._test_no_reset) {
+                PLY_L2.reset_transform_to_zero(evt.target,"1s"); 
+                dt._test_no_reset = false;
+            }
+        },
+        ply_threestart: function(evt) {
+            var dt = $.data(evt.target,"ply");
+            dt._test_no_reset = true;
+        }
+    });
 }());
