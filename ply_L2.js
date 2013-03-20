@@ -36,7 +36,7 @@ var PLY_L2 = (function ($) {
     var assert = DEBUG.assert || function(assertion,message){if (!assertion) console.log("ASSERTION FAILED: "+message);};
     var TransformStyle = Modernizr.prefixed("transform"); 
     var TransformOriginStyle = Modernizr.prefixed("transformOrigin");
-    var TransformDurationStyle = Modernizr.prefixed("transformDuration");
+    var TransitionDurationStyle = Modernizr.prefixed("transitionDuration");
 
     // this is used to obtain the true offset within the page to get the authoritative 
     // origin point (which is used along with pageX/Y from input)
@@ -55,9 +55,9 @@ var PLY_L2 = (function ($) {
     }
 
     function reset_transform_with_duration(e, duration) {
-        e.style[TransformDurationStyle] = duration;
-        console.log('tds: '+TransformDurationStyle);
-        assert(getComputedStyle(e).getPropertyValue(TransformDurationStyle) === duration, "durationstyle: "+duration+" vs "+getComputedStyle(e)[TransformDurationStyle]);
+        e.style[TransitionDurationStyle] = duration;
+        console.log('tds: '+TransitionDurationStyle);
+        assert(getComputedStyle(e).getPropertyValue(TransitionDurationStyle) === duration, "durationstyle: "+duration+" vs "+getComputedStyle(e)[TransitionDurationStyle]);
         e.style[TransformStyle] = "translate3d(0,0,0)";
     }
 
@@ -85,7 +85,7 @@ var PLY_L2 = (function ($) {
             evt.target.style[TransformOriginStyle] = "0 0"; 
 
             // set this to prevent rubber band effect
-            evt.target.style[TransformDurationStyle] = "0s"; 
+            evt.target.style[TransitionDurationStyle] = "0s"; 
 
             /* 
             // ensure backface visibility 
