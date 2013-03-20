@@ -1,7 +1,7 @@
 ply.js
 ======
 
-> (tr. v.) to use or wield diligently
+> ply: (tr. v.) to use or wield diligently
 
 ### A JavaScript browser event expansion pack
 
