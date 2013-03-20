@@ -36,6 +36,7 @@ var PLY_L2 = (function ($) {
     var assert = DEBUG.assert || function(assertion,message){if (!assertion) console.log("ASSERTION FAILED: "+message);};
     var TransformStyle = Modernizr.prefixed("transform"); 
     var TransformOriginStyle = Modernizr.prefixed("transformOrigin");
+    var TransformDurationStyle = Modernizr.prefixed("transformDuration");
 
     // this is used to obtain the true offset within the page to get the authoritative 
     // origin point (which is used along with pageX/Y from input)
@@ -45,7 +46,7 @@ var PLY_L2 = (function ($) {
         assert(getComputedStyle(e)[TransformStyle] === "none"); // this assert should as a side effect ensure the clearing out occurs
         // use an appropriate method to obtain the offset after clearing out transform
         // taking the easy way out with jQuery is probably the best way to go 
-        // (1.9.0(+?) will use fast method, but DOM walking method is also legit)
+        // (1.9.0(+?) will use fast method, but DOM walking method in older jQueries is also legit)
         var jeo = $(e).offset();
         var jeoc = {x: jeo.left, y: jeo.top};
         // set our style back 
@@ -53,12 +54,18 @@ var PLY_L2 = (function ($) {
         return jeoc;
     }
 
+    function reset_transform_with_duration(e, duration) {
+        e.style[TransformDurationStyle] = duration;
+        assert(getComputedStyle(e)[TransformDurationStyle] === duration);
+        e.style[TransformStyle] = "translate3d(0,0,0)";
+    }
+
     var exposed = {
-        // primarily contains state that is intended to be queried for the purpose of
+        // This could for example contain methods for 
         // avoiding touch gesture conflicts between ongoing manipulation and gesture recognition. 
-        reset_currently_manipulating_elements: function() {
-            // run me from a gesture that should cancel any ongoing manips
-        },
+
+        // takes single argument with 
+        reset_transform_to_zero: reset_transform_with_duration,
 
         // following items are for revealing the state of manipulations for easy monitoring
         active_items: []
@@ -73,8 +80,11 @@ var PLY_L2 = (function ($) {
             var dt = $.data(evt.target,"ply");
             assert(dt,"dt exists");
             dt.offset = untransformed_offset(evt.target);
-            // set the initial styles 
+            // set this because the rest of this stuff depends on it
             evt.target.style[TransformOriginStyle] = "0 0"; 
+
+            // set this to prevent rubber band effect
+            evt.target.style[TransformDurationStyle] = "0s"; 
 
             /* 
             // ensure backface visibility 
@@ -109,6 +119,7 @@ var PLY_L2 = (function ($) {
         },
         ply_threestart: function(evt) {
             console.log("3S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
+            reset_transform_with_duration(evt.target,"2s");
         },
         ply_oneend: function(evt) {
             console.log("1E");

@@ -362,7 +362,6 @@ var DEBUG = (function($) {
                     jfocus.addClass('pulsate_opacity');
                 });
                 /* setTimeout(function(){ // alternatively we can do a getComputedStyle
-                    
                 },0); */
             } else {
                 focus.style[transformStyle] = transFocus; 
