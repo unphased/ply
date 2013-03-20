@@ -58,7 +58,10 @@ var PLY_L2 = (function ($) {
         e.style[TransitionDurationStyle] = duration;
         console.log('tds: '+TransitionDurationStyle);
         assert(getComputedStyle(e).getPropertyValue(TransitionDurationStyle) === duration, "durationstyle: "+duration+" vs "+getComputedStyle(e)[TransitionDurationStyle]);
-        e.style[TransformStyle] = "translate3d(0,0,0)";
+        var dt = $.data(e,"ply");
+        e.style[TransformStyle] = "translate3d(0,0,0)"; // reset position
+        // mark to stop applying xforms
+        dt.is_transform_canceled = true;
     }
 
     var exposed = {
@@ -124,6 +127,8 @@ var PLY_L2 = (function ($) {
         },
         ply_oneend: function(evt) {
             console.log("1E");
+            var dt = $.data(evt.target,"ply");
+            if (dt.is_transform_canceled) dt.is_transform_canceled = false;
         },
         ply_twoend: function(evt) {
             console.log("2E", $.data(evt.target,"ply").trans);
@@ -139,13 +144,16 @@ var PLY_L2 = (function ($) {
             console.log("3E");
         },
         ply_translate: function(evt) {
+            var dt = $.data(evt.target,"ply");
+            if (dt.is_transform_canceled) return;
             //console.log("transform before setting translate: "+$(evt.target).css(TransformStyle));
             evt.target.style[TransformStyle] = "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans;
-            console.log("transform got set to: "+evt.target.style[TransformStyle], "using", "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans);
+            console.log("transform got set to: "+evt.target.style[TransformStyle], "using", "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + dt.trans);
         },
         ply_transform: function(evt) {
             // todo: make this not require a per-input run of $.data (actually it may be unavoidable.. sigh)
             var dt = $.data(evt.target,"ply");
+            if (dt.is_transform_canceled) return;
             var o = dt.offset; 
             var t = dt.trans;
             var startX = evt.startX - o.x;
