@@ -60,7 +60,7 @@ var PLY_L2 = (function ($) {
             x.style[TransitionDurationStyle] = '0s'; 
             assert(getComputedStyle(x)[TransitionDurationStyle] === '0s');
             x.style[TransformStyle] = 'translate3d(0,2px,1px)'; 
-            assert(getComputedStyle(x)[TransformStyle] === 'translate3d(0,2px,1px)');
+            console.log("phantomgcs: "+getComputedStyle(x)[TransformStyle]);
             x.style[TransformStyle] = 'none'; 
         },
         // same as 8 but using setTimeout  
