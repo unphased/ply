@@ -87,8 +87,8 @@ var PLY_L2 = (function ($) {
             // so it accepts capital M in matrix. yeah i know, this is pretty stupid. 
             var split = currentTransform.split(',');
             console.log('split ',split);
-            jeoc.x += (split[12] || split[4]);
-            jeoc.y += (split[13] || split[5]); // extract out the x and y translations, these will be needed
+            jeoc.x += Number(split[12] || split[4]);
+            jeoc.y += Number(split[13] || split[5].slice(1,-1)); // extract out the x and y translations, these will be needed
             // to adjust offset since we're grabbing the item 
             console.log('jeoc ',jeoc.x,jeoc.y);
         }
