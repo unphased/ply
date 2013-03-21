@@ -78,7 +78,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 77c2279 adding a cool little keyboard async tester to help me figure out this transition behavior %#";
+    var git_context = "#% 2641d7a capital letters %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
