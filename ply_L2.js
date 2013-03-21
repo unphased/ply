@@ -43,7 +43,7 @@ var PLY_L2 = (function ($) {
     function untransformed_offset(e) {
         var currentTransform = e.style[TransformStyle];
         e.style[TransformStyle] = "none"; // clear it out
-        assert(getComputedStyle(e).getPropertyValue(TransformStyle) === "none", "check clearing"); // this assert should as a side effect ensure the clearing out occurs
+        assert(getComputedStyle(e)[TransformStyle] === "none", "check clearing"); // this assert should as a side effect ensure the clearing out occurs
         // use an appropriate method to obtain the offset after clearing out transform
         // taking the easy way out with jQuery is probably the best way to go 
         // (1.9.0(+?) will use fast method, but DOM walking method in older jQueries is also legit)
@@ -57,7 +57,7 @@ var PLY_L2 = (function ($) {
     function reset_transform_with_duration(e, duration) {
         e.style[TransitionDurationStyle] = duration;
         console.log('tds: '+TransitionDurationStyle);
-        assert(getComputedStyle(e).getPropertyValue(TransitionDurationStyle) === duration, "durationstyle: "+duration+" vs "+getComputedStyle(e)[TransitionDurationStyle]);
+        assert(getComputedStyle(e)[TransitionDurationStyle] === duration, "durationstyle: "+duration+" vs "+getComputedStyle(e)[TransitionDurationStyle]);
         var dt = $.data(e,"ply");
         e.style[TransformStyle] = "translate3d(0,0,0)"; // reset position
         // mark to stop applying xforms
