@@ -41,27 +41,27 @@ var PLY_L2 = (function ($) {
     var TransitionDurationStyle = Modernizr.prefixed("transitionDuration");
 
     DEBUG.globalAsyncKeybind({
-        '1': function() { $(".keyboard-bound")[0].style[TransitionDurationStyle] = '1s'; },
-        '5': function() { $(".keyboard-bound")[0].style[TransitionDurationStyle] = '5s'; },
-        '6': function() { var x = $(".keyboard-bound")[0]; x.style[TransitionDurationStyle] = '5s'; assert(getComputedStyle(x)[TransitionDurationStyle] === '5s'); },
-        '0': function() { $(".keyboard-bound")[0].style[TransitionDurationStyle] = '0s'; },
-        'M': function() { $(".keyboard-bound")[0].style[TransformStyle] = 'translate3d(300px, 0, 0) rotateZ(180deg)'; },
-        'O': function() { $(".keyboard-bound")[0].style[TransformStyle] = 'none'; },
-        'S': function() { var x = $(".keyboard-bound")[0]; x.style[TransformStyle] = getComputedStyle(x)[TransformStyle]; },
+        '1': function() { $('.keyboard-bound')[0].style[TransitionDurationStyle] = '1s'; },
+        '5': function() { $('.keyboard-bound')[0].style[TransitionDurationStyle] = '5s'; },
+        '6': function() { var x = $('.keyboard-bound')[0]; x.style[TransitionDurationStyle] = '5s'; assert(getComputedStyle(x)[TransitionDurationStyle] === '5s'); },
+        '0': function() { $('.keyboard-bound')[0].style[TransitionDurationStyle] = '0s'; },
+        'M': function() { $('.keyboard-bound')[0].style[TransformStyle] = 'translate3d(300px, 0, 0) rotateZ(180deg)'; },
+        'O': function() { $('.keyboard-bound')[0].style[TransformStyle] = ''; },
+        'S': function() { var x = $('.keyboard-bound')[0]; x.style[TransformStyle] = getComputedStyle(x)[TransformStyle]; },
         // Set 0 and transition to zero, at once
         '9': function() { 
-            var x = $(".keyboard-bound")[0];
+            var x = $('.keyboard-bound')[0];
             x.style[TransitionDurationStyle] = '0s'; 
-            x.style[TransformStyle] = 'none'; 
+            x.style[TransformStyle] = ''; 
         },
         // same as 9 but with an attempt to force the duration to stick in the middle 
         '8': function() {
-            var x = $(".keyboard-bound")[0];
+            var x = $('.keyboard-bound')[0];
             x.style[TransitionDurationStyle] = '0s'; 
             //assert(getComputedStyle(x)[TransitionDurationStyle] === '0s');
             x.style[TransformStyle] = 'translate3d(0,0,1px)'; 
-            console.log("phantomgcs: "+getComputedStyle(x)[TransformStyle]);
-            x.style[TransformStyle] = 'none'; 
+            console.log('phantomgcs: '+getComputedStyle(x)[TransformStyle]);
+            x.style[TransformStyle] = ''; 
         }
     });
 
@@ -71,10 +71,10 @@ var PLY_L2 = (function ($) {
         var computed = getComputedStyle(e);
         var currentTransform = computed[TransformStyle]; 
         var currentDuration = computed[TransitionDurationStyle];
-        e.style[TransitionDurationStyle] = "0s";
-        e.style[TransformStyle] = "translate3d(0,0,1px)"; // absolutely guarantee reset
+        e.style[TransitionDurationStyle] = '0s';
+        e.style[TransformStyle] = 'translate3d(0,0,1px)'; // absolutely guarantee reset
         getComputedStyle(e);
-        e.style[TransformStyle] = "none";                 // by consecutively twiddling CSS
+        e.style[TransformStyle] = '';                 // by consecutively twiddling CSS
         /// var gCS_TS = getComputedStyle(e)[TransformStyle];
         /// assert(gCS_TS === "none", "check clearing: "+gCS_TS); 
         
@@ -93,9 +93,9 @@ var PLY_L2 = (function ($) {
     function reset_transform_with_duration(e, duration) {
         e.style[TransitionDurationStyle] = duration;
         console.log('tds: '+TransitionDurationStyle);
-        assert(getComputedStyle(e)[TransitionDurationStyle] === duration, "durationstyle: "+duration+" vs "+getComputedStyle(e)[TransitionDurationStyle]);
-        var dt = $.data(e,"ply");
-        e.style[TransformStyle] = "none"; // reset position
+        assert(getComputedStyle(e)[TransitionDurationStyle] === duration, 'durationstyle: '+duration+' vs '+getComputedStyle(e)[TransitionDurationStyle]);
+        var dt = $.data(e,'ply');
+        e.style[TransformStyle] = ''; // reset position
         // mark to stop applying xforms
         e.className.replace('ply-transforming','');
     }
