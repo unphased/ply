@@ -47,6 +47,7 @@ var PLY_L2 = (function ($) {
         var currentTransform = computed[TransformStyle]; 
         var currentDuration = computed[TransitionDurationStyle];
         e.style[TransitionDurationStyle] = "0s";
+        assert(getComputedStyle(e)[TransitionDurationStyle] === "0s");
         e.style[TransformStyle] = "none"; // clear it out
         var gCS_TS = getComputedStyle(e)[TransformStyle];
         assert(gCS_TS === "none", "check clearing: "+gCS_TS); // this assert should as a side effect ensure the clearing out occurs
