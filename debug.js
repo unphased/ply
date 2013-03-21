@@ -78,7 +78,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 2641d7a capital letters %#";
+    var git_context = "#% 64ada61 making public %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -483,6 +483,7 @@ var DEBUG = (function($) {
         focused: focused, 
         get_focused: get_focused,
         error: error,
+        globalAsyncKeybind: globalAsyncKeybind,
      
         // This is just marked when any event makes its way through the primary
         // event handlers so that the test site can be a bit more efficient about 
