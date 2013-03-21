@@ -78,7 +78,7 @@ var PLY_L2 = (function ($) {
         var currentTransform = computed[TransformStyle]; 
         var currentDuration = computed[TransitionDurationStyle];
         e.style[TransitionDurationStyle] = "0s";
-        //assert(getComputedStyle(e)[TransitionDurationStyle] === "0s");
+        assert(getComputedStyle(e)[TransitionDurationStyle] === "0s");
         e.style[TransformStyle] = "translate3d(0,0,1px)"; // absolutely guarantee reset
         e.style[TransformStyle] = "none";                 // by consecutively twiddling CSS
         var gCS_TS = getComputedStyle(e)[TransformStyle];

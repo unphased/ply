@@ -78,7 +78,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% d584f0e I think that helped, found out that if setting the same thing it wont cause recomputation %#";
+    var git_context = "#% 97842c6 maybe one more thing %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
