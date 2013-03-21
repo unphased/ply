@@ -40,6 +40,13 @@ var PLY_L2 = (function ($) {
     var TransitionPropertyStyle = Modernizr.prefixed("transitionProperty");
     var TransitionDurationStyle = Modernizr.prefixed("transitionDuration");
 
+    DEBUG.globalAsyncKeybind({
+        '1': function() { $(".keyboard-bound")[0].style[TransitionDurationStyle] = '1s'; },
+        '0': function() { $(".keyboard-bound")[0].style[TransitionDurationStyle] = '0s'; },
+        'm': function() { $(".keyboard-bound")[0].style[TransformStyle] = 'translate3d(300px, 0, 0) rotateZ(300deg)'; },
+        'o': function() { $(".keyboard-bound")[0].style[TransformStyle] = 'none'; }
+    });
+
     // this is used to obtain the true offset within the page to get the authoritative 
     // origin point (which is used along with pageX/Y from input)
     function untransformed_offset(e) {

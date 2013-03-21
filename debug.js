@@ -78,7 +78,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 3a0f5f9 adding a check %#";
+    var git_context = "#% 77c2279 adding a cool little keyboard async tester to help me figure out this transition behavior %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -447,6 +447,28 @@ var DEBUG = (function($) {
     // abstraction of a 3d-accelerated scrolling view? There might be enough semantic 
     // weight through the setting of CSS. 
     // function () {}
+
+
+    // this is a convenience debugger helper to map arbitrary code to keyboard input
+    // keychar_funclist must be a hash of functions where the key is a char representing the 
+    // keyboard key that will trigger the function. These funcs will be invoked with no args. 
+    function globalAsyncKeybind(keychar_funclist) {
+        document.addEventListener("keydown", function (evt) {
+            function key(evt) {
+                return evt.which || evt.keyCode || /*window.*/event.keyCode;
+            }
+            try {
+                var target_func = keychar_funclist[String.fromCharCode(key(evt))];
+                if (target_func) target_func();
+            } catch (e) {
+                // show the error to the DOM to help out for mobile (also cool on PC)
+                var html = '<div class="error">'+e.toString()+" at "+e.stack+"</div>";
+                $("#debug_log").prepend(html);
+                error(e);
+                throw e; // rethrow to give it to debugging safari, rather than be silent
+            }
+        });
+    }
 
     // methods provided by debug
     var exposed = {
