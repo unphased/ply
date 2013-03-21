@@ -37,7 +37,8 @@ var PLY = (function ($data) {
     
     "use strict";
 
-    var assert = DEBUG.assert || function(assertion,message){if (!assertion) console.log("ASSERTION FAILED: "+message);};
+    var assert = DEBUG.assert || function(){};
+
     var datenow = DEBUG.datenow;
     var escapeHtml = DEBUG.escapeHtml;
     var serialize = DEBUG.serialize;

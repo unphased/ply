@@ -33,15 +33,19 @@
 var PLY_L2 = (function ($) {
     //"use strict"; // permissible to uncomment strict mode when in need of debugging
 
-    var assert = DEBUG.assert || function(assertion,message){if (!assertion) console.log("ASSERTION FAILED: "+message);};
+    var assert = (DEBUG && DEBUG.assert) || function() {}; 
+
     var TransformStyle = Modernizr.prefixed("transform"); 
     var TransformOriginStyle = Modernizr.prefixed("transformOrigin");
+    var TransitionPropertyStyle = Modernizr.prefixed("transitionProperty");
     var TransitionDurationStyle = Modernizr.prefixed("transitionDuration");
 
     // this is used to obtain the true offset within the page to get the authoritative 
     // origin point (which is used along with pageX/Y from input)
     function untransformed_offset(e) {
         var currentTransform = e.style[TransformStyle];
+        var old_esTDS = e.style[TransitionDurationStyle];
+        e.style[TransitionDurationStyle] = "0s";
         e.style[TransformStyle] = "none"; // clear it out
         var gCS_TS = getComputedStyle(e)[TransformStyle];
         assert(gCS_TS === "none", "check clearing: "+gCS_TS); // this assert should as a side effect ensure the clearing out occurs
@@ -51,7 +55,9 @@ var PLY_L2 = (function ($) {
         var jeo = $(e).offset();
         var jeoc = {x: jeo.left, y: jeo.top};
         // set our style back 
+        e.style[TransitionDurationStyle] = old_esTDS; // restore duration of transition
         e.style[TransformStyle] = currentTransform;
+        // this can actually interrupt any existing animation, but we really don't care about it too much. Just leave it. 
         return jeoc;
     }
 
