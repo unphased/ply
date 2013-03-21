@@ -56,7 +56,7 @@ var PLY_L2 = (function ($) {
         var jeo = $(e).offset();
         var jeoc = {x: jeo.left, y: jeo.top};
         // set our style back 
-        e.style[TransitionDurationStyle] = old_esTDS; // restore duration of transition
+        e.style[TransitionDurationStyle] = currentDuration; // restore duration of transition
         e.style[TransformStyle] = currentTransform;
         // this can actually interrupt any existing animation, but we really don't care about it too much. Just leave it. 
         return jeoc;
