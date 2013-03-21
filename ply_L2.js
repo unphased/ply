@@ -78,10 +78,11 @@ var PLY_L2 = (function ($) {
         var currentTransform = computed[TransformStyle]; 
         var currentDuration = computed[TransitionDurationStyle];
         e.style[TransitionDurationStyle] = "0s";
-        assert(getComputedStyle(e)[TransitionDurationStyle] === "0s");
-        e.style[TransformStyle] = "none"; // clear it out
+        //assert(getComputedStyle(e)[TransitionDurationStyle] === "0s");
+        e.style[TransformStyle] = "translate3d(0,0,1px)"; // absolutely guarantee reset
+        e.style[TransformStyle] = "none";                 // by consecutively twiddling CSS
         var gCS_TS = getComputedStyle(e)[TransformStyle];
-        assert(gCS_TS === "none", "check clearing: "+gCS_TS); // this assert should as a side effect ensure the clearing out occurs
+        assert(gCS_TS === "none", "check clearing: "+gCS_TS); 
         // use an appropriate method to obtain the offset after clearing out transform
         // taking the easy way out with jQuery is probably the best way to go 
         // (1.9.0(+?) will use fast method, but DOM walking method in older jQueries is also legit)
