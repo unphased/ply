@@ -207,6 +207,7 @@ var PLY_L2 = (function ($) {
             if (evt.target.className.indexOf('ply-transforming') === -1) return;
             var o = dt.offset; 
             var t = dt.trans;
+            console.log('in transform offset=',o.x+','+o.y);
             var startX = evt.startX - o.x;
             var startY = evt.startY - o.y;
             //console.log("ply_transform",o);
