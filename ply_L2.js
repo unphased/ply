@@ -43,6 +43,7 @@ var PLY_L2 = (function ($) {
     DEBUG.globalAsyncKeybind({
         '1': function() { $(".keyboard-bound")[0].style[TransitionDurationStyle] = '1s'; },
         '5': function() { $(".keyboard-bound")[0].style[TransitionDurationStyle] = '5s'; },
+        '6': function() { var x = $(".keyboard-bound")[0]; x.style[TransitionDurationStyle] = '5s'; assert(getComputedStyle(x)[TransitionDurationStyle] === '5s'); },
         '0': function() { $(".keyboard-bound")[0].style[TransitionDurationStyle] = '0s'; },
         'M': function() { $(".keyboard-bound")[0].style[TransformStyle] = 'translate3d(300px, 0, 0) rotateZ(180deg)'; },
         'O': function() { $(".keyboard-bound")[0].style[TransformStyle] = 'none'; },
