@@ -260,7 +260,7 @@
         },
         ply_threestart: function(evt) {
             var dt = $.data(evt.target,"ply");
-            dt._test_no_reset = true;
+            dt._test_no_reset = !dt._test_no_reset;
         }
     });
 }());

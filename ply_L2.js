@@ -144,6 +144,7 @@ var PLY_L2 = (function ($) {
             // This gives us prefiltered antialiasing via texture sampling (smooths out the edges of stuff as they are transformed)
             evt.target.style.outline = "1px solid transparent";
             var etst = evt.target.style[TransformStyle];
+            console.log("etst "+etst);
             if (!etst || etst === "none") {
                 dt.trans = ""; // I know of no way to avoid matrix() matrix without applying an actual 3d matrix does not interfere
             } else {
