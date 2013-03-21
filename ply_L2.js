@@ -190,7 +190,7 @@ var PLY_L2 = (function ($) {
             if (evt.target.className.indexOf('ply-transforming') === -1) return;
             //console.log("transform before setting translate: "+$(evt.target).css(TransformStyle));
             evt.target.style[TransformStyle] = "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + $.data(evt.target,"ply").trans;
-            console.log("transform got set to: "+evt.target.style[TransformStyle], "using", "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + dt.trans);
+            console.log("translate got set to: "+evt.target.style[TransformStyle], "using", "translate3d("+evt.deltaX+"px,"+evt.deltaY+"px,0) " + dt.trans);
         },
         ply_transform: function(evt) {
             // todo: make this not require a per-input run of $.data (actually it may be unavoidable.. sigh)
