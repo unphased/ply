@@ -43,8 +43,9 @@ var PLY_L2 = (function ($) {
     DEBUG.globalAsyncKeybind({
         '1': function() { $(".keyboard-bound")[0].style[TransitionDurationStyle] = '1s'; },
         '0': function() { $(".keyboard-bound")[0].style[TransitionDurationStyle] = '0s'; },
-        'M': function() { $(".keyboard-bound")[0].style[TransformStyle] = 'translate3d(300px, 0, 0) rotateZ(300deg)'; },
-        'O': function() { $(".keyboard-bound")[0].style[TransformStyle] = 'none'; }
+        'M': function() { $(".keyboard-bound")[0].style[TransformStyle] = 'translate3d(300px, 0, 0) rotateZ(90deg)'; },
+        'O': function() { $(".keyboard-bound")[0].style[TransformStyle] = 'none'; },
+        'S': function() { $(".keyboard-bound")[0].style[TransformStyle] = getComputedStyle($(".keyboard-bound")[0])[TransformStyle]; }
     });
 
     // this is used to obtain the true offset within the page to get the authoritative 
