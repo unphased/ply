@@ -2,7 +2,7 @@
 
 (function() {
     /*global DEBUG:false Modernizr:false requestAnimationFrame:true cancelAnimationFrame:true PLY:false PLY_L2:false*/
-    "use strict";
+    //"use strict"; // permissible to uncomment strict mode when in need of debugging
     var datenow = DEBUG.datenow;
     var lastTime = 0;
     var vendors = ['ms', 'moz', 'webkit', 'o'];
