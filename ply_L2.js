@@ -43,8 +43,9 @@ var PLY_L2 = (function ($) {
     // this is used to obtain the true offset within the page to get the authoritative 
     // origin point (which is used along with pageX/Y from input)
     function untransformed_offset(e) {
-        var currentTransform = e.style[TransformStyle];
-        var old_esTDS = e.style[TransitionDurationStyle];
+        var computed = getComputedStyle(e);
+        var currentTransform = computed[TransformStyle]; 
+        var currentDuration = computed[TransitionDurationStyle];
         e.style[TransitionDurationStyle] = "0s";
         e.style[TransformStyle] = "none"; // clear it out
         var gCS_TS = getComputedStyle(e)[TransformStyle];
