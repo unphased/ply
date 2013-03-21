@@ -73,11 +73,13 @@ var PLY_L2 = (function ($) {
         var currentDuration = computed[TransitionDurationStyle];
         e.style[TransitionDurationStyle] = '0s';
         e.style[TransformStyle] = 'translate3d(0,0,1px)'; // absolutely guarantee reset
-        getComputedStyle(e);
+        console.log("checking via gcs here: "+getComputedStyle(e)[TransformStyle]);
+        
+        //getComputedStyle(e);
         e.style[TransformStyle] = 'none';                 // by consecutively twiddling CSS
         /// var gCS_TS = getComputedStyle(e)[TransformStyle];
         /// assert(gCS_TS === "none", "check clearing: "+gCS_TS); 
-        console.log("checking via gcs here: "+getComputedStyle(e)[TransformStyle]);
+        
         // use an appropriate method to obtain the offset after clearing out transform
         // taking the easy way out with jQuery is probably the best way to go 
         // (1.9.0(+?) will use fast method, but DOM walking method in older jQueries is also legit)
