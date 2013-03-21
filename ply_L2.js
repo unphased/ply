@@ -45,7 +45,28 @@ var PLY_L2 = (function ($) {
         '0': function() { $(".keyboard-bound")[0].style[TransitionDurationStyle] = '0s'; },
         'M': function() { $(".keyboard-bound")[0].style[TransformStyle] = 'translate3d(300px, 0, 0) rotateZ(180deg)'; },
         'O': function() { $(".keyboard-bound")[0].style[TransformStyle] = 'none'; },
-        'S': function() { $(".keyboard-bound")[0].style[TransformStyle] = getComputedStyle($(".keyboard-bound")[0])[TransformStyle]; }
+        'S': function() { var x = $(".keyboard-bound")[0]; x.style[TransformStyle] = getComputedStyle(x)[TransformStyle]; },
+        // Set 0 and transition to zero, at once
+        '9': function() { 
+            var x = $(".keyboard-bound")[0];
+            x.style[TransitionDurationStyle] = '0s'; 
+            x.style[TransformStyle] = 'none'; 
+        },
+        // same as 9 but with an attempt to force the duration to stick in the middle 
+        '8': function() {
+            var x = $(".keyboard-bound")[0];
+            x.style[TransitionDurationStyle] = '0s'; 
+            assert(getComputedStyle(x)[TransitionDurationStyle] === '0s');
+            x.style[TransformStyle] = 'none'; 
+        },
+        // same as 8 but using setTimeout  
+        '7': function() {
+            var x = $(".keyboard-bound")[0];
+            x.style[TransitionDurationStyle] = '0s'; 
+            setTimeout(function(){
+                x.style[TransformStyle] = 'none'; 
+            },0);
+        }
     });
 
     // this is used to obtain the true offset within the page to get the authoritative 
