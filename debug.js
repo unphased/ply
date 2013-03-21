@@ -24,8 +24,8 @@ var DEBUG = (function($) {
 
     assert = function (exp, message) {
         if (!exp) {
-            console.log("Assertion Failed: "+message);
-            //throw new AssertException(message);
+            console.log("ASSERTION FAILED: "+message);
+            throw new AssertException(message);
         }
     };
 
