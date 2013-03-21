@@ -24,8 +24,8 @@ var DEBUG = (function($) {
 
     assert = function (exp, message) {
         if (!exp) {
-            console.log("Assertion Failed: "+message);
-            //throw new AssertException(message);
+            console.log("ASSERTION FAILED: "+message);
+            throw new AssertException(message);
         }
     };
 
@@ -78,7 +78,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% e9aa30a untested good api-targeted refactor %#";
+    var git_context = "#% 2a02241 making assert stronger again %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
