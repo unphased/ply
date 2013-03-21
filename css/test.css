@@ -12,8 +12,7 @@
 /* try to keep stuff from changing viewport size */
 html, body{
     margin: 0;
-    overflow-x: hidden;
-    overflow-y: visible;
+    /* overflow-x: hidden; */
 }
 
 body {
