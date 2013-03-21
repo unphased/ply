@@ -579,12 +579,14 @@ var PLY = (function ($data) {
                     }
                     // we need to do the transform
                     // If the element has been specified to react automatically to the two finger 
-                    // transforms, the default behavior will be the direct application (via rAF) of the
+                    // transforms, the default behavior should be the direct application of the
                     // transform, and thus the transform event will only be produced when rAF is idle.
                     // This is to eliminate the inefficiency of having to use an
                     // input sampling dependent update scheme, because in all likelihood the computation of
                     // the new transform *need* *not* *occur* unless rAF indicates for us that our
                     // system can handle "more things". 
+
+                    // That being said, it's a bit complicated to code up so right now we just go ahead and call based on inputs. Seems to not suffer from adverse effects due to bad perf on e.g. Android. 
                     
                     //console.log("two touches",one,two,"on",en[ni]);
                     var event2 = document.createEvent('HTMLEvents'); // this is for compatibility with DOM Level 2

@@ -67,7 +67,7 @@ var PLY_L2 = (function ($) {
 
     // this is used to obtain the true offset within the page to get the authoritative 
     // origin point (which is used along with pageX/Y from input)
-    function untransformed_offset(e) {
+    function transformed_offset(e) {
         var computed = getComputedStyle(e);
         var currentTransform = computed[TransformStyle]; 
         var currentDuration = computed[TransitionDurationStyle];
@@ -83,6 +83,13 @@ var PLY_L2 = (function ($) {
         // (1.9.0(+?) will use fast method, but DOM walking method in older jQueries is also legit)
         var jeo = $(e).offset();
         var jeoc = {x: jeo.left, y: jeo.top};
+        if (currentTransform.indexOf('atrix') !== -1) { 
+            // so it accepts capital M in matrix. yeah i know, this is pretty stupid. 
+            var split = currentTransform.split(',');
+            jeoc.x += split[12] || split[4];
+            jeoc.y += split[13] || split[5]; // extract out the x and y translations, these will be needed
+            // to adjust offset since we're grabbing the item 
+        }
         // set our style back 
         e.style[TransitionDurationStyle] = currentDuration; // restore duration of transition
         e.style[TransformStyle] = currentTransform;
@@ -119,7 +126,7 @@ var PLY_L2 = (function ($) {
             assert(evt.target === evt.changedTouch.target, "this is evt.ct.target (firsttouchstart)");
             var dt = $.data(evt.target,"ply");
             assert(dt,"dt exists");
-            dt.offset = untransformed_offset(evt.target); // todo: only run this when necessary by marking a flag 
+            dt.offset = transformed_offset(evt.target); // todo: only run this when necessary by marking a flag 
             // upon DOM modifications occur that could result in offset changes. 
 
             // set this because the rest of this stuff depends on it
