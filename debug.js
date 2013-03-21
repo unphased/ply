@@ -483,6 +483,7 @@ var DEBUG = (function($) {
         focused: focused, 
         get_focused: get_focused,
         error: error,
+        globalAsyncKeybind: globalAsyncKeybind,
      
         // This is just marked when any event makes its way through the primary
         // event handlers so that the test site can be a bit more efficient about 
