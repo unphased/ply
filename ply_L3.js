@@ -32,7 +32,7 @@
 /*global PLY:false Modernizr:false DEBUG:false */
 (function(){
     "use strict";
-    var assert = DEBUG.assert || function(assertion,message){if (!assertion) console.log("ASSERTION FAILED: "+message);};
+    var assert = DEBUG.assert || function(){};
 
     // Independently define multiple standard listeners rather than conjoin them all at the hip. 
     // Enables separation of concerns, very powerful.
