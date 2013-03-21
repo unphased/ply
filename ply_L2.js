@@ -31,7 +31,7 @@
 
 /*global Modernizr:false DEBUG:false PLY:false */
 var PLY_L2 = (function ($) {
-    "use strict";
+    //"use strict"; // permissible to uncomment strict mode when in need of debugging
 
     var assert = DEBUG.assert || function(assertion,message){if (!assertion) console.log("ASSERTION FAILED: "+message);};
     var TransformStyle = Modernizr.prefixed("transform"); 
