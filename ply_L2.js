@@ -60,7 +60,7 @@ var PLY_L2 = (function ($) {
         console.log('tds: '+TransitionDurationStyle);
         assert(getComputedStyle(e)[TransitionDurationStyle] === duration, "durationstyle: "+duration+" vs "+getComputedStyle(e)[TransitionDurationStyle]);
         var dt = $.data(e,"ply");
-        e.style[TransformStyle] = "translate3d(0,0,0)"; // reset position
+        e.style[TransformStyle] = "none"; // reset position
         // mark to stop applying xforms
         e.className.replace('ply-transforming','');
     }
