@@ -83,7 +83,7 @@ var PLY_L2 = (function ($) {
         // (1.9.0(+?) will use fast method, but DOM walking method in older jQueries is also legit)
         var jeo = $(e).offset();
         var jeoc = {x: jeo.left, y: jeo.top};
-        if (currentTransform.indexOf('atrix') !== -1) { 
+        if (false && currentTransform.indexOf('atrix') !== -1) { 
             // so it accepts capital M in matrix. yeah i know, this is pretty stupid. 
             var split = currentTransform.split(',');
             console.log('split ',split);
