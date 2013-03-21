@@ -78,7 +78,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% d898079 taking out use strict to let me debug %#";
+    var git_context = "#% 12fd981 getpropertyvalue only accepts the hyphenated name %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
