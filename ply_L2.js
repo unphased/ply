@@ -77,7 +77,7 @@ var PLY_L2 = (function ($) {
         e.style[TransformStyle] = '';                 // by consecutively twiddling CSS
         /// var gCS_TS = getComputedStyle(e)[TransformStyle];
         /// assert(gCS_TS === "none", "check clearing: "+gCS_TS); 
-        
+        console.log("checking via gcs here: "+getComputedStyle(e)[TransformStyle]);
         // use an appropriate method to obtain the offset after clearing out transform
         // taking the easy way out with jQuery is probably the best way to go 
         // (1.9.0(+?) will use fast method, but DOM walking method in older jQueries is also legit)
