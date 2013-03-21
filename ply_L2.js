@@ -112,7 +112,7 @@ var PLY_L2 = (function ($) {
     };
 
     var level_2_events = {
-        ply_onestart: function(evt) {
+        ply_onestart: function(evt) { console.log("1S");
             //console.log("1S", evt.changedTouch.identifier, "all touches: ", evt.touches_active_on_element);
             //assert(this === evt.changedTouch.target, "this is evt.ct.target (firsttouchstart)");
             // I am not sure that this assertion should be true, the target of touch could also be a child...
@@ -154,7 +154,7 @@ var PLY_L2 = (function ($) {
                 evt.target.style[TransformStyle] = getComputedStyle(evt.target)[TransformStyle];
             }
         },
-        ply_twostart: function(evt) {
+        ply_twostart: function(evt) { console.log("2S");
             //console.log("2S", $.data(evt.target,"ply").trans);
             // The tracking of the position the initial finger was at actually has to be taken care of by ply itself
             // and becomes the .xs2 .ys2 properties
