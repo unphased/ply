@@ -448,6 +448,28 @@ var DEBUG = (function($) {
     // weight through the setting of CSS. 
     // function () {}
 
+
+    // this is a convenience debugger helper to map arbitrary code to keyboard input
+    // keychar_funclist must be a hash of functions where the key is a char representing the 
+    // keyboard key that will trigger the function. These funcs will be invoked with no args. 
+    function globalAsyncKeybind(keychar_funclist) {
+        document.addEventListener("keydown", function (evt) {
+            function key(evt) {
+                return evt.which || evt.keyCode || /*window.*/event.keyCode;
+            }
+            try {
+                var target_func = keychar_funclist[String.fromCharCode(key(evt))];
+                if (target_func) target_func();
+            } catch (e) {
+                // show the error to the DOM to help out for mobile (also cool on PC)
+                var html = '<div class="error">'+e.toString()+" at "+e.stack+"</div>";
+                $("#debug_log").prepend(html);
+                error(e);
+                throw e; // rethrow to give it to debugging safari, rather than be silent
+            }
+        });
+    }
+
     // methods provided by debug
     var exposed = {
         enabled: true,
