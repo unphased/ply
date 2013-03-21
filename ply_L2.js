@@ -58,18 +58,10 @@ var PLY_L2 = (function ($) {
         '8': function() {
             var x = $(".keyboard-bound")[0];
             x.style[TransitionDurationStyle] = '0s'; 
-            assert(getComputedStyle(x)[TransitionDurationStyle] === '0s');
-            x.style[TransformStyle] = 'translate3d(0,2px,1px)'; 
+            //assert(getComputedStyle(x)[TransitionDurationStyle] === '0s');
+            x.style[TransformStyle] = 'translate3d(0,0,1px)'; 
             console.log("phantomgcs: "+getComputedStyle(x)[TransformStyle]);
             x.style[TransformStyle] = 'none'; 
-        },
-        // same as 8 but using setTimeout  
-        '7': function() {
-            var x = $(".keyboard-bound")[0];
-            x.style[TransitionDurationStyle] = '0s'; 
-            setTimeout(function(){
-                x.style[TransformStyle] = 'none'; 
-            },0);
         }
     });
 
@@ -80,7 +72,6 @@ var PLY_L2 = (function ($) {
         var currentTransform = computed[TransformStyle]; 
         var currentDuration = computed[TransitionDurationStyle];
         e.style[TransitionDurationStyle] = "0s";
-        assert(getComputedStyle(e)[TransitionDurationStyle] === "0s");
         e.style[TransformStyle] = "translate3d(0,0,1px)"; // absolutely guarantee reset
         e.style[TransformStyle] = "none";                 // by consecutively twiddling CSS
         var gCS_TS = getComputedStyle(e)[TransformStyle];
@@ -126,8 +117,11 @@ var PLY_L2 = (function ($) {
             assert(evt.target === evt.changedTouch.target, "this is evt.ct.target (firsttouchstart)");
             var dt = $.data(evt.target,"ply");
             assert(dt,"dt exists");
-            dt.offset = untransformed_offset(evt.target);
+            dt.offset = untransformed_offset(evt.target); // todo: only run this when necessary by marking a flag 
+            // upon DOM modifications occur that could result in offset changes. 
+
             // set this because the rest of this stuff depends on it
+            // TODO: Make this all apply based on CSS class
             evt.target.style[TransformOriginStyle] = "0 0"; 
 
             // set this to prevent rubber band effect
