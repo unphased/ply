@@ -159,7 +159,9 @@ var PLY_L2 = (function ($) {
             // The tracking of the position the initial finger was at actually has to be taken care of by ply itself
             // and becomes the .xs2 .ys2 properties
             //var touch = evt.existingTouch;
-            $.data(evt.target,"ply").trans = evt.target.style[TransformStyle]; 
+            var TS = evt.target.style[TransformStyle];
+            if (TS === 'none') TS = '';
+            $.data(evt.target,"ply").trans = TS; 
             // simply keep the same spot
             //console.log("into",  $.data(evt.target,"ply").trans, "end 2S");
         },
