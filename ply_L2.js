@@ -89,6 +89,7 @@ var PLY_L2 = (function ($) {
             jeoc.x += split[12] || split[4];
             jeoc.y += split[13] || split[5]; // extract out the x and y translations, these will be needed
             // to adjust offset since we're grabbing the item 
+            console.log('jeoc ',jeoc.x,jeoc.y);
         }
         // set our style back 
         e.style[TransitionDurationStyle] = currentDuration; // restore duration of transition
