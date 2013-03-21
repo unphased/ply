@@ -59,7 +59,8 @@ var PLY_L2 = (function ($) {
             var x = $(".keyboard-bound")[0];
             x.style[TransitionDurationStyle] = '0s'; 
             assert(getComputedStyle(x)[TransitionDurationStyle] === '0s');
-            x.style[TransformStyle] = 'translate3d(0,0,1px)'; 
+            x.style[TransformStyle] = 'translate3d(0,2px,1px)'; 
+            assert(getComputedStyle(x)[TransformStyle] === 'translate3d(0,2px,1px)');
             x.style[TransformStyle] = 'none'; 
         },
         // same as 8 but using setTimeout  
