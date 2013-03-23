@@ -99,7 +99,7 @@ ul {
     bottom: 5px;
     padding: 5px;
     overflow: auto;
-    -webkit-overflow-scrolling: touch; this breaks tapping title bar to scroll 
+    -webkit-overflow-scrolling: touch;
     /* max-height: 296px; /* account for border */
     -webkit-transition: -webkit-transform 1s;
 }
