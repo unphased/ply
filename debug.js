@@ -78,7 +78,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 6cb47a8 moving low level debug code to more appropriate location %#";
+    var git_context = "#% 53aae28 a function profile instrument feature %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -470,6 +470,23 @@ var DEBUG = (function($) {
         });
     }
 
+    function instrument_with_accumulated_profile(routine, report_receiver, report_count) {
+        var rc = report_count || 30;
+        var each = 1.0/rc; // keeping shit simple
+        var accum = 0;
+        var count = 0; // some ephemeral profiling DS's closed over the instrumented routine's function
+        return function() {
+            var time = datenow();
+            routine();
+            accum += each*(datenow()-time);
+            if (++count === rc) {
+                count = 0; 
+                report_count(accum);
+                accum = 0;
+            }
+        };   
+    }
+
     // methods provided by debug
     var exposed = {
         enabled: true,
@@ -484,6 +501,7 @@ var DEBUG = (function($) {
         get_focused: get_focused,
         error: error,
         globalAsyncKeybind: globalAsyncKeybind,
+        instrument_profile: instrument_with_accumulated_profile,
      
         // This is just marked when any event makes its way through the primary
         // event handlers so that the test site can be a bit more efficient about 
