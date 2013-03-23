@@ -263,4 +263,31 @@
             dt._test_no_reset = !dt._test_no_reset;
         }
     });
+
+    var TransformStyle = Modernizr.prefixed("transform"); 
+    var TransitionDurationStyle = Modernizr.prefixed("transitionDuration");
+    DEBUG.globalAsyncKeybind({
+        '1': function() { $('.keyboard-bound')[0].style[TransitionDurationStyle] = '1s'; },
+        '5': function() { $('.keyboard-bound')[0].style[TransitionDurationStyle] = '5s'; },
+        '6': function() { var x = $('.keyboard-bound')[0]; x.style[TransitionDurationStyle] = '5s'; DEBUG.assert(getComputedStyle(x)[TransitionDurationStyle] === '5s'); },
+        '0': function() { $('.keyboard-bound')[0].style[TransitionDurationStyle] = '0s'; },
+        'M': function() { $('.keyboard-bound')[0].style[TransformStyle] = 'translate3d(300px, 0, 0) rotateZ(180deg)'; },
+        'O': function() { $('.keyboard-bound')[0].style[TransformStyle] = ''; },
+        'S': function() { var x = $('.keyboard-bound')[0]; x.style[TransformStyle] = getComputedStyle(x)[TransformStyle]; },
+        // Set 0 and transition to zero, at once
+        '9': function() { 
+            var x = $('.keyboard-bound')[0];
+            x.style[TransitionDurationStyle] = '0s'; 
+            x.style[TransformStyle] = ''; 
+        },
+        // same as 9 but with an attempt to force the duration to stick in the middle 
+        '8': function() {
+            var x = $('.keyboard-bound')[0];
+            x.style[TransitionDurationStyle] = '0s'; 
+            //assert(getComputedStyle(x)[TransitionDurationStyle] === '0s');
+            x.style[TransformStyle] = 'translate3d(0,0,1px)'; 
+            console.log('phantomgcs: '+getComputedStyle(x)[TransformStyle]);
+            x.style[TransformStyle] = ''; 
+        }
+    });
 }());
