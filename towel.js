@@ -79,9 +79,8 @@ var UTIL = (function () {
             cb_list[i] = function() {
                 var x = document.body.appendChild(document.createElement('script'));
                 x.src = r;
-                console.log("loading "+r);
                 x.onload = function() { 
-                    console.log("js_load: loaded "+r); 
+                    console.log("Dynamically loaded "+r+" via js_load"); 
                     if (i === resources.length-1) {
                         cb_done();
                     } else {
