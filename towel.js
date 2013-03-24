@@ -67,6 +67,7 @@ var UTIL = (function () {
         // So this is an iterative approach that makes a nested "function stack" where 
         // the inner functions are hidden inside the closures. 
         for (var i=resources.length-1; i>=0; --i) {
+            console.log('wtf: '+i);
             cur_cont = function() {
                 var x = document.body.appendChild(document.createElement('script'));
                 x.src = resources[i];
