@@ -108,7 +108,7 @@ var PLY = (function ($data) {
         return str.slice(0,-2)+"]";
     }
 
-    var each = TOWEL.each;
+    var each = UTIL.each;
 
     // var noscroll_class_set = {
     //     'ply-translate': function () {
