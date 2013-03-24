@@ -68,13 +68,14 @@ var UTIL = (function () {
         // So this is an iterative approach that makes a nested "function stack" where 
         // the inner functions are hidden inside the closures. 
         array_each(resources, function(r) {
-            cur_cont = function() {
+            var tmp_f = function() {
                 var x = document.body.appendChild(document.createElement('script'));
                 x.src = r;
                 console.log("loading "+r);
                 // epic not-quite-recursion. I don't even know what this is called. It's inside-out.
-                x.onload = function() { console.log("js_load: loaded "+resources[i]); cur_cont(); }; // TODO: get rid of this function creation once we know it works right 
+                x.onload = function() { console.log("js_load: loaded "+r); cur_cont(); }; // TODO: get rid of this function creation once we know it works right 
             };
+            cur_cont = tmp_f; // do not make the function recursive. We're generating a closure with it inside. 
         });
         cur_cont();
     }
