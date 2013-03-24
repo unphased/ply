@@ -43,8 +43,47 @@ var TOWEL = (function () {
             return x;
         });
     }
+
+    // for scoped iteration over an object (clean version of jquery each)
+    // if you need a comment to show you how to use this fn, you might wanna think twice about what you're doing. 
+    function each(obj, f) {
+        for (var i in obj) {
+            f(i, obj[i]);
+        }
+    }
+
+    // named this way because "each" functions generally are for iterating over obj/hashes
+    // but for an array we must ensure the order
+    // cb receives index and item
+    function each_reverse_on_array(array, cb) {
+
+    }
+
+    function loadjs(resources, cb_done) {
+        if (Array.isArray(resources)) {
+            var cur_cont = cb_done; // this strange continuation passing procedural programming style is ... strangely fun 
+            for (var i=resources.length-1; i>=0; --i) {
+                var next_cb = function() {
+
+                };
+            }
+        } else {
+            var x=document.body.appendChild(document.createElement('script'));
+            x.src=url;
+            x.onload=function(){
+                console.log("Dynamically loaded "+url);
+                if(cb){cb();}
+            };
+            if(!cb){
+                x.setAttribute('async','')
+            }
+        }
+    }
     
     return {
-        async_load: async_load
+        each: each,
+        // each_reverse_on_array: each_reverse_on_array,
+        async_load: async_load,
+        loadjs: loadjs
     };
 })();

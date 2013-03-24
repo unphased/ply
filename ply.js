@@ -108,12 +108,7 @@ var PLY = (function ($data) {
         return str.slice(0,-2)+"]";
     }
 
-    // for scoped iteration over an object (faster version of jquery each)
-    function each(obj, f) {
-        for (var i in obj) {
-            f(i, obj[i]);
-        }
-    }
+    var each = TOWEL.each;
 
     var noscroll_class_set = {
         'ply-translate': function () {
