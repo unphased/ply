@@ -26,24 +26,24 @@ var UTIL = (function () {
 
     function async_load(resources_array, cb_all_done){
         var total_remaining = resources_array.length;
-        resources_array.forEach(function(e){
+        for (var i=total_remaining; i >= 0; --i) {
+            var e = resources_array[i];
+            if (!resources_array[i]) continue;
+            if (typeof e === 'string') e = {url: e};
+            e.tag = e.tag || 'script';
             var tag = document.body.appendChild(document.createElement(e.tag));
             tag.src = e.url;
-            for (var attr in e.attrs) {
-                tag.setAttribute(attr, e.attrs[attr]);
-            }
-            if (e.tag == "script") // auto-add async attr to script
+            for (var attr in e.attrs) { tag.setAttribute(attr, e.attrs[attr]) }
+            if (e.tag == 'script') // auto-add async attr to script
                 tag.setAttribute('async','');
-            //var x = {url: e.url, loaded: false};
             tag.onload = function(){
                 if (e.cb) e.cb();
                 total_remaining--;
-                //x.loaded = true;
-                console.log("Dynamically loaded "+e.url);
+                console.log("Dynamically loaded "+e.url+", "+total_remaining+" parallel scripts left to load");
                 if (total_remaining === 0)
                     cb_all_done();
             };
-        });
+        }
     }
 
     // for scoped iteration over an object (clean version of jquery each)
