@@ -78,5 +78,5 @@
         }
     };
 
-    PLY.attach_handlers_on_document(level_3_events);
+    //PLY.attach_handlers_on_document(level_3_events);
 })();
