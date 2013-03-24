@@ -99,9 +99,13 @@ ul {
     bottom: 5px;
     padding: 5px;
     overflow: auto;
-    -webkit-overflow-scrolling: touch;
+    /*-webkit-overflow-scrolling: touch; */ /* I make this enable via JS so I can ensure scrolling up by tapping top works */
     /* max-height: 296px; /* account for border */
     -webkit-transition: -webkit-transform 1s;
+}
+
+#debug.touchscroll { 
+    -webkit-overflow-scrolling: touch;
 }
 
 .log {

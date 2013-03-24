@@ -247,6 +247,15 @@
         debug_show_hide = !debug_show_hide;
     });
 
+    $(function(){
+        $("#debug").on('touchstart',function(){
+            this.className += ' touchscroll';
+        });
+        $("#debug").on('touchend',function(){
+            this.className.replace(/ touchscroll/g,'');
+        });
+    });
+
     if (DEBUG){
         $("h1").after('<button id="debug_toggle" onclick="DEBUG.enabled = !DEBUG.enabled">toggle all debug</button>');
     }
