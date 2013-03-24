@@ -247,13 +247,11 @@
         debug_show_hide = !debug_show_hide;
     });
 
-    $(function(){
-        $("#debug").on('touchstart',function(){
-            this.className += ' touchscroll';
-        });
-        $("#debug").on('touchend',function(){
-            this.className.replace(/ touchscroll/g,'');
-        });
+    $(document).on('#debug', 'touchstart',function(){
+        this.className += ' touchscroll';
+    });
+    $(document).on('#debug', 'touchend',function(){
+        this.className.replace(/ touchscroll/g,'');
     });
 
     if (DEBUG){
