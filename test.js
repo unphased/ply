@@ -247,10 +247,10 @@
         debug_show_hide = !debug_show_hide;
     });
 
-    $(document).on('#debug', 'touchstart',function(){
+    $(document).on('touchstart', '#debug', function(){
         $(this).addClass('touchscroll');
     });
-    $(document).on('#debug', 'touchend',function(){
+    $(document).on('touchend', '#debug', function(){
         $(this).removeClass('touchscroll');
     });
 
