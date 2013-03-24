@@ -7,6 +7,22 @@
 var UTIL = (function () {
     //"use strict"; // temporarily comment out to let safari's debugger through
     
+    // for scoped iteration over an object (clean version of jquery each)
+    // if you need a comment to show you how to use this fn, you might wanna think twice about what you're doing. 
+    function each(obj, f) {
+        for (var i in obj) {
+            f(i, obj[i]);
+        }
+    }
+
+    // iterates through array (which as you know is a hash), via a for loop over integers
+    function array_each(arr, f) {
+        var l = arr.length; // will die if you modify the array in the loop function. BEWARE
+        for (var i=0; i<l; ++i) {
+            f(arr[i]);
+        }
+    }
+
     // parallel script loading, could perhaps be using jQuery deferred/promises
     // but I *really* like the elegant simplicity of my approach here
     // can put in potentially null entries in array (they will be cleanly skipped)
@@ -26,9 +42,7 @@ var UTIL = (function () {
 
     function async_load(resources_array, cb_all_done){
         var total_remaining = resources_array.length;
-        for (var i=total_remaining; i >= 0; --i) {
-            var e = resources_array[i];
-            if (!e) continue;
+        array_each(resources_array, function(e) { if (e) {
             if (typeof e === 'string') e = {url: e};
             e.tag = e.tag || 'script';
             var tag = document.body.appendChild(document.createElement(e.tag));
@@ -43,15 +57,7 @@ var UTIL = (function () {
                 if (total_remaining === 0)
                     cb_all_done();
             };
-        }
-    }
-
-    // for scoped iteration over an object (clean version of jquery each)
-    // if you need a comment to show you how to use this fn, you might wanna think twice about what you're doing. 
-    function each(obj, f) {
-        for (var i in obj) {
-            f(i, obj[i]);
-        }
+        }});
     }
 
     // synchronous dynamic script loading. 
@@ -65,7 +71,7 @@ var UTIL = (function () {
                 var x = document.body.appendChild(document.createElement('script'));
                 x.src = resources[i];
                 // epic not-quite-recursion. I don't even know what this is called. It's inside-out.
-                x.onload = function() { console.log("loaded "+resources[i]); cur_cont(); }; // TODO: get rid of this function creation once we know it works right 
+                x.onload = function() { console.log("jd_load: loaded "+resources[i]); cur_cont(); }; // TODO: get rid of this function creation once we know it works right 
             };
         }
         cur_cont();
