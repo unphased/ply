@@ -28,7 +28,7 @@ var UTIL = (function () {
         var total_remaining = resources_array.length;
         for (var i=total_remaining; i >= 0; --i) {
             var e = resources_array[i];
-            if (!resources_array[i]) continue;
+            if (!e) continue;
             if (typeof e === 'string') e = {url: e};
             e.tag = e.tag || 'script';
             var tag = document.body.appendChild(document.createElement(e.tag));
