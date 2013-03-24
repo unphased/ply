@@ -3,6 +3,7 @@
 ////////////////////////////////////////////////
 
 // towel.js contains a set of utilities. It is for keeping things DRY. 
+// There is occasionally some overlap with jQuery's good stuff. 
 
 var UTIL = (function () {
     //"use strict"; // temporarily comment out to let safari's debugger through
@@ -70,21 +71,26 @@ var UTIL = (function () {
 
     // synchronous dynamic script loading. 
     // takes an array of js url's to be loaded in that specific order. 
+    // assembles an array of functions that are referenced more directly rather than 
+    // using only nested closures. I couldn't get it going with the closures and gave up on it. 
     function js_load(resources, cb_done) {
-        var cur_cont = cb_done; // this strange continuation passing procedural programming style is ... strangely fun 
-        // So this is an iterative approach that makes a nested "function stack" where 
-        // the inner functions are hidden inside the closures. 
-        array_each_reverse(resources, function(r) {
-            var tmp_f = function() {
+        var cb_list = []; // this is not space optimal but nobody gives a damn 
+        array_each(resources, function(r, i) {
+            cb_list[i] = function() {
                 var x = document.body.appendChild(document.createElement('script'));
                 x.src = r;
                 console.log("loading "+r);
-                // epic not-quite-recursion. I don't even know what this is called. It's inside-out.
-                x.onload = function() { console.log("js_load: loaded "+r); cur_cont(); }; // TODO: get rid of this function creation once we know it works right 
+                x.onload = function() { 
+                    console.log("js_load: loaded "+r); 
+                    if (i === resources.length-1) {
+                        cb_done();
+                    } else {
+                        cb_list[i+1]();
+                    }
+                }; 
             };
-            cur_cont = tmp_f; // do not make the function recursive. We're generating a closure with it inside. 
         });
-        cur_cont();
+        cb_list[0]();
     }
 
     // combined synchronous and asynchronous dynamic script loading scripting sugar.
