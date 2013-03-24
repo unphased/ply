@@ -68,7 +68,7 @@
         // gonna do our sanity check for ply
         PLY.sanityCheck();
         
-        if (debug_show_hide) {
+        if (debug_show_hide && !$("#debug").hasClass('touchscroll')) {
             // skip the HTML debug dump of the data if its view is hidden
 
             var str = '<div>node_ids:</div><ol start="0">';
@@ -248,10 +248,10 @@
     });
 
     $(document).on('#debug', 'touchstart',function(){
-        this.className += ' touchscroll';
+        $(this).addClass('touchscroll');
     });
     $(document).on('#debug', 'touchend',function(){
-        this.className.replace(/ touchscroll/g,'');
+        $(this).removeClass('touchscroll');
     });
 
     if (DEBUG){
