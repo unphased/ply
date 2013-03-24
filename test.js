@@ -180,7 +180,6 @@
             var pssci = pssmc.children[i];
             if (ppp.e || ppp.es === ppp.ec) {
                 // I defer the calling of elementFromPoint to here for performance reasons
-                // ply will never do this kind of heavy lifting without being told to
                 var detected_element;
                 if ((detected_element = document.elementFromPoint(ppp.xc-scrollX,ppp.yc-scrollY)) !== ppp.es) {
                     var de = $(detected_element);
@@ -247,6 +246,9 @@
         debug_show_hide = !debug_show_hide;
     });
 
+    // i have no idea what's going on with the behavior of this bug where the tap top to scroll up does not work. 
+    // it looks like once i defer the assignment of the class that enables the touch scrolling to page load 
+    // it all just magically functions. 
     $(function(){$("#debug").addClass('touchscroll');});
     // $(document).on('touchstart', '#debug', function(){
     //     $(this).addClass('touchscroll');

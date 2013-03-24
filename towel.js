@@ -55,9 +55,9 @@ var UTIL = (function () {
         }
     }
 
-    // synchronous dynamic script loading. I think that the density of awesome in this file is really neat. 
+    // synchronous dynamic script loading. 
     // takes an array of js url's to be loaded in that specific order. 
-    function loadjs(resources, cb_done) {
+    function js_load(resources, cb_done) {
         var cur_cont = cb_done; // this strange continuation passing procedural programming style is ... strangely fun 
         // So this is an iterative approach that makes a nested "function stack" where 
         // the inner functions are hidden inside the closures. 
@@ -90,6 +90,6 @@ var UTIL = (function () {
     return {
         each: each,
         async_load: async_load,
-        loadjs: loadjs
+        js_load: js_load
     };
 })();

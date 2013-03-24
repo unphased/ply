@@ -77,7 +77,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% dd2bfea madness!!!! %#";
+    var git_context = "#% d84e0ac change name %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
