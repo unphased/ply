@@ -26,24 +26,23 @@ var UTIL = (function () {
 
     function async_load(resources_array, cb_all_done){
         var total_remaining = resources_array.length;
-        var queue = resources_array.map(function(e){
-            var elem = document.body.appendChild(document.createElement(e.tag));
-            elem.src = e.url;
+        resources_array.forEach(function(e){
+            var tag = document.body.appendChild(document.createElement(e.tag));
+            tag.src = e.url;
             for (var attr in e.attrs) {
-                elem.setAttribute(attr, e.attrs[attr]);
+                tag.setAttribute(attr, e.attrs[attr]);
             }
             if (e.tag == "script") // auto-add async attr to script
-                elem.setAttribute('async','');
-            var x = {url: e.url, loaded: false};
-            elem.onload = function(){
+                tag.setAttribute('async','');
+            //var x = {url: e.url, loaded: false};
+            tag.onload = function(){
                 if (e.cb) e.cb();
                 total_remaining--;
-                x.loaded = true;
+                //x.loaded = true;
                 console.log("Dynamically loaded "+e.url);
                 if (total_remaining === 0)
                     cb_all_done();
             };
-            return x;
         });
     }
 
