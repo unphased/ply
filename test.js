@@ -68,7 +68,7 @@
         // gonna do our sanity check for ply
         PLY.sanityCheck();
         
-        if (debug_show_hide && !$("#debug").hasClass('touchscroll')) {
+        if (debug_show_hide) {
             // skip the HTML debug dump of the data if its view is hidden
 
             var str = '<div>node_ids:</div><ol start="0">';
@@ -247,7 +247,7 @@
         debug_show_hide = !debug_show_hide;
     });
 
-    $(function(){$("#debug").addClass('touchscroll');});
+    //$(function(){$("#debug").addClass('touchscroll');});
     // $(document).on('touchstart', '#debug', function(){
     //     $(this).addClass('touchscroll');
     // });
