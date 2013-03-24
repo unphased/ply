@@ -8,7 +8,7 @@ var UTIL = (function () {
     //"use strict"; // temporarily comment out to let safari's debugger through
     
     // for scoped iteration over an object (clean version of jquery each)
-    // if you need a comment to show you how to use this fn, you might wanna think twice about what you're doing. 
+    // f receives args (key, value)
     function each(obj, f) {
         for (var i in obj) {
             f(i, obj[i]);
@@ -16,10 +16,11 @@ var UTIL = (function () {
     }
 
     // iterates through array (which as you know is a hash), via a for loop over integers
+    // f receives args (value, index)
     function array_each(arr, f) {
         var l = arr.length; // will die if you modify the array in the loop function. BEWARE
         for (var i=0; i<l; ++i) {
-            f(arr[i]);
+            f(arr[i], i);
         }
     }
 
@@ -66,15 +67,15 @@ var UTIL = (function () {
         var cur_cont = cb_done; // this strange continuation passing procedural programming style is ... strangely fun 
         // So this is an iterative approach that makes a nested "function stack" where 
         // the inner functions are hidden inside the closures. 
-        for (var i=resources.length-1; i>=0; --i) {
-            console.log('wtf: '+i);
+        array_each(resources, function(r) {
             cur_cont = function() {
                 var x = document.body.appendChild(document.createElement('script'));
-                x.src = resources[i];
+                x.src = r;
+                console.log("loading "+r);
                 // epic not-quite-recursion. I don't even know what this is called. It's inside-out.
-                x.onload = function() { console.log("jd_load: loaded "+resources[i]); cur_cont(); }; // TODO: get rid of this function creation once we know it works right 
+                x.onload = function() { console.log("js_load: loaded "+resources[i]); cur_cont(); }; // TODO: get rid of this function creation once we know it works right 
             };
-        }
+        });
         cur_cont();
     }
 
