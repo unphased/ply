@@ -1,10 +1,10 @@
 ////////////////////////////////////////////
 //////////////// ply_L3.js /////////////////
 ////////////////////////////////////////////
-////  Tertiary event generation stage   ////
-//// For use in conjunction with ply.js ////
+////  Tertiary event generation stage    ///
+///  For use in conjunction with ply.js ////
 ////////////////////////////////////////////
-//// Level 3 focuses on global gestures ////
+///////// Level 3: Global gestures /////////
 ////////////////////////////////////////////
 
 // ============================================================================
@@ -78,5 +78,5 @@
         }
     };
 
-    PLY.attach_handlers_on_document(level_3_events);
+    //PLY.attach_handlers_on_document(level_3_events);
 })();

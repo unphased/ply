@@ -2,12 +2,11 @@
  /// slu's JS browser debug/util layer deluxe ///
 ////////////////////////////////////////////////
 
-/// Please include prior to loading libraries that depend on it
-/// Primarily provides functionality for live DOM manipulation style debugging
-/// which was used heavily throughout development of ply.js.
-/// You will be able to access exposed features through window.DEBUG.
+// debug.js is a resource-level instrumentation script. Include to gain 
+// debugging capabilities, and removal implies release deployment. 
+// predicate debugging features on the presence of DEBUG global.
 
-// there are a few special DOM id's:
+// there are a few special DOM id's that are referenced:
 // #debug_log
 // #log_buffer_dump
 
@@ -78,7 +77,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% bbb2de8 fixing %#";
+    var git_context = "#% 3999112 temporarily disabling L3 %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
