@@ -24,6 +24,13 @@ var UTIL = (function () {
         }
     }
 
+    function array_each_reverse(arr, f) {
+        var l = arr.length; // will die if you modify the array in the loop function. BEWARE
+        for (var i=l-1; i>=0; --i) {
+            f(arr[i], i);
+        }
+    }
+
     // parallel script loading, could perhaps be using jQuery deferred/promises
     // but I *really* like the elegant simplicity of my approach here
     // can put in potentially null entries in array (they will be cleanly skipped)
@@ -67,7 +74,7 @@ var UTIL = (function () {
         var cur_cont = cb_done; // this strange continuation passing procedural programming style is ... strangely fun 
         // So this is an iterative approach that makes a nested "function stack" where 
         // the inner functions are hidden inside the closures. 
-        array_each(resources, function(r) {
+        array_each_reverse(resources, function(r) {
             var tmp_f = function() {
                 var x = document.body.appendChild(document.createElement('script'));
                 x.src = r;
