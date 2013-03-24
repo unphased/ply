@@ -247,7 +247,7 @@
         debug_show_hide = !debug_show_hide;
     });
 
-    $("#debug").addClass('touchscroll');
+    $(function(){$("#debug").addClass('touchscroll');});
     // $(document).on('touchstart', '#debug', function(){
     //     $(this).addClass('touchscroll');
     // });
