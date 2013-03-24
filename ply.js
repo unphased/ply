@@ -29,7 +29,7 @@
 // IN THE SOFTWARE. 
 // ============================================================================
 
-/*global DEBUG:false Modernizr:false */
+/*global DEBUG:false TOWEL:false Modernizr:false */
 var PLY = (function ($data) {
     // following line is for use with jshint, it is a global decl
     
@@ -38,9 +38,9 @@ var PLY = (function ($data) {
     var assert = DEBUG.assert || function(){};
 
     var datenow = DEBUG.datenow;
-    var escapeHtml = DEBUG.escapeHtml;
+    // var escapeHtml = DEBUG.escapeHtml;
     var serialize = DEBUG.serialize;
-    var isInDOM = DEBUG.isInDOM;
+    // var isInDOM = DEBUG.isInDOM;
 
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
@@ -108,18 +108,13 @@ var PLY = (function ($data) {
         return str.slice(0,-2)+"]";
     }
 
-    // for scoped iteration over an object (faster version of jquery each)
-    function each(obj, f) {
-        for (var i in obj) {
-            f(i, obj[i]);
-        }
-    }
+    var each = TOWEL.each;
 
-    var noscroll_class_set = {
-        'ply-translate': function () {
+    // var noscroll_class_set = {
+    //     'ply-translate': function () {
 
-        }
-    };
+    //     }
+    // };
 
     /* a neat little exercise in recursive programming
     $.fn.addClassToChildren = function (class_name) {
@@ -128,13 +123,13 @@ var PLY = (function ($data) {
             c.addClass(class_name).addClassToChildren(class_name);
     }; */
 
-    var TransformStyle = Modernizr.prefixed("transform"); 
-    var TransformOriginStyle = Modernizr.prefixed("transformOrigin");
+    // var TransformStyle = Modernizr.prefixed("transform"); 
+    // var TransformOriginStyle = Modernizr.prefixed("transformOrigin");
     //var PerspectiveStyle = ply_Modernizr.prefixed("perspective");
     //var BackfaceVisibilityStyle = ply_Modernizr.prefixed("backfaceVisibility");
     //console.log("bfvs: "+BackfaceVisibilityStyle);    
 
-    var Mutation_Observer = true;
+    // var Mutation_Observer = true;
     //(window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver);
     
     /*$(function (){
