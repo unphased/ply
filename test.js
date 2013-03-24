@@ -247,12 +247,13 @@
         debug_show_hide = !debug_show_hide;
     });
 
-    $(document).on('touchstart', '#debug', function(){
-        $(this).addClass('touchscroll');
-    });
-    $(document).on('touchend', '#debug', function(){
-        $(this).removeClass('touchscroll');
-    });
+    $("#debug").addClass('touchscroll');
+    // $(document).on('touchstart', '#debug', function(){
+    //     $(this).addClass('touchscroll');
+    // });
+    // $(document).on('touchend', '#debug', function(){
+    //     $(this).removeClass('touchscroll');
+    // });
 
     if (DEBUG){
         $("h1").after('<button id="debug_toggle" onclick="DEBUG.enabled = !DEBUG.enabled">toggle all debug</button>');
