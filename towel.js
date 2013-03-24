@@ -2,9 +2,9 @@
  /// slu's JS browser debug/util layer deluxe ///
 ////////////////////////////////////////////////
 
-// util.js contains a set of tools. Use as a shared library. Keeping it DRY. 
+// towel.js contains a set of utilities. It is for keeping things DRY. 
 
-var UTIL = (function ($) {
+var TOWEL = (function () {
     "use strict";
     
     // parallel script loading, could perhaps be using jQuery deferred/promises
@@ -47,4 +47,4 @@ var UTIL = (function ($) {
     return {
         async_load: async_load
     };
-})(jQuery);
+})();
