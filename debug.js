@@ -77,7 +77,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 6df8078 more fixing in asyncload %#";
+    var git_context = "#% 6f0c72a yet more fixing in asyncload %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
