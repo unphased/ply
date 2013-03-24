@@ -5,7 +5,7 @@
 // towel.js contains a set of utilities. It is for keeping things DRY. 
 
 var UTIL = (function () {
-    "use strict";
+    //"use strict"; // temporarily comment out to let safari's debugger through
     
     // parallel script loading, could perhaps be using jQuery deferred/promises
     // but I *really* like the elegant simplicity of my approach here
