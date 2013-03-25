@@ -141,6 +141,9 @@ var DEBUG = (function($) {
         }
     }
 
+// the stuff following this are to be moved over to util because they are not debug-only 
+// functionality. 
+
     var transEndEventNames = {
         'WebkitTransition' : 'webkitTransitionEnd',
         'MozTransition'    : 'transitionend',
@@ -499,8 +502,12 @@ var DEBUG = (function($) {
                 report_count(accum);
                 accum = 0;
             }
-        };   
+        };
     }
+
+    // next up: moving over stuff from test.js to here so that debug can enhance 
+    // any page with stuff, like the touch point locations (though the targeted 
+    // objects have been superceded by the new animated overlays)
 
     // methods provided by debug
     var exposed = {
