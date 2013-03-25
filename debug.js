@@ -48,7 +48,8 @@ var DEBUG = (function($) {
             // tells us which child we are (incl. textnodes)
             // for (var k=0,e=val; (e = e.previousSibling); ++k);
             // tells us which (real node) index it is
-            var k = val.parentNode&&val.parentNode.children?Array.prototype.indexOf.call(val.parentNode.children,val):undefined;
+            var k = val.parentNode && val.parentNode.children ? 
+                Array.prototype.indexOf.call(val.parentNode.children,val) : undefined;
             var cn = val.className;
             var tn = val.tagName;
             var id = val.id;
@@ -62,7 +63,8 @@ var DEBUG = (function($) {
     function serialize(arg) {
         if (typeof arg === "undefined") return "undefined";
         if (typeof arg === "function") return "function";
-        return JSON.stringify(arg,json_handler).replace(/"([^"]*)":/g,"$1: ").replace(/\},([^ ])/g,'},  $1').replace(/,([^ ])/g,', $1');
+        return JSON.stringify(arg,json_handler).replace(/"([^"]*)":/g,"$1: ")
+            .replace(/\},([^ ])/g,'},  $1').replace(/,([^ ])/g,', $1');
     }
 
     function isInDOM(e) {
@@ -122,7 +124,9 @@ var DEBUG = (function($) {
     }
 
     function error(e) {
-        log_buffer.push('<div class="error">'+e.toString()+" at "+e.stack+"</div>");
+        var e_html = '<div class="error">'+e.toString()+" at "+e.stack+"</div>";
+        log_buffer.push(e_html);
+        $("#debug_log").prepend(e_html);
     }
 
     // clears out old values in debug log (run me periodically)
@@ -247,11 +251,13 @@ var DEBUG = (function($) {
             var ws = (outer.ply_HL_dimX + 20) / outer.ply_HL_dimX; 
             var hs = (outer.ply_HL_dimY + 20) / outer.ply_HL_dimY; 
             outer.style.opacity = "0";
-            outer.style[transformStyle] = "translate(-10px, -10px) "+outer.style[transformStyle]+" scale3d("+ws+", "+hs+", 1)";
+            outer.style[transformStyle] = "translate(-10px, -10px) "+outer.style[transformStyle]+
+                " scale3d("+ws+", "+hs+", 1)";
             ws = (inner.ply_HL_dimX - 10) / inner.ply_HL_dimX;
             hs = (inner.ply_HL_dimY - 10) / inner.ply_HL_dimY;
             inner.style.opacity = "0";
-            inner.style[transformStyle] = "translate(5px, 5px) "+inner.style[transformStyle]+" scale3d("+(ws<=0.1?0.1:ws)+", "+(hs<=0.1?0.1:hs)+", 1)";
+            inner.style[transformStyle] = "translate(5px, 5px) "+inner.style[transformStyle]+
+                " scale3d("+(ws<=0.1?0.1:ws)+", "+(hs<=0.1?0.1:hs)+", 1)";
         } else {
             jouter.off(transEndEventName);
             //console.log("running the update");
@@ -263,12 +269,17 @@ var DEBUG = (function($) {
                     if (start_from instanceof HTMLElement) {
                         var jsf = $(start_from);
                         var jsfp = jsf.offset();
-                        css_set[transformStyle] = "translate3d("+jsfp.left+"px,"+jsfp.top+"px,0) scale3d("+jsf.outerWidth()/500+","+jsf.outerHeight()/500+",1)";
+                        css_set[transformStyle] = "translate3d("+jsfp.left+ 
+                            "px,"+jsfp.top+"px,0) scale3d("+jsf.outerWidth()/500+","+
+                            jsf.outerHeight()/500+",1)";
                     } else {
-                        css_set[transformStyle] = "translate3d("+start_from.left+"px,"+start_from.top+"px,0) scale3d("+start_from.owf/500+","+start_from.ohf/500+",1)";
+                        css_set[transformStyle] = "translate3d("+start_from.left+
+                            "px,"+start_from.top+"px,0) scale3d("+start_from.owf/500+","+
+                            start_from.ohf/500+",1)";
                     }
                 } else {
-                    css_set[transformStyle] = "scale3d("+document.documentElement.scrollWidth/500+","+document.documentElement.scrollHeight/500+",1)";
+                    css_set[transformStyle] = "scale3d("+document.documentElement.scrollWidth/500+","+
+                        document.documentElement.scrollHeight/500+",1)";
                 }
                 var jo = $('<div id="debug_element_highlighter_outer"></div>').css(css_set);
                 var ji = $('<div id="debug_element_highlighter_inner"></div>').css(css_set);
@@ -302,7 +313,10 @@ var DEBUG = (function($) {
             outer.style.opacity = "1";
             outer.ply_HL_dimX = ow;
             outer.ply_HL_dimY = oh;
-            if (parseInt(style_of_e.marginLeft,10) < 0 || parseInt(style_of_e.marginTop,10) < 0 || parseInt(style_of_e.marginRight,10) < 0 || parseInt(style_of_e.marginBottom,10) < 0) {
+            if (parseInt(style_of_e.marginLeft,10) < 0 || 
+                parseInt(style_of_e.marginTop,10) < 0 || 
+                parseInt(style_of_e.marginRight,10) < 0 || 
+                parseInt(style_of_e.marginBottom,10) < 0) {
                 // if a negative margin exists, mark the extents of the margin out more prominently
                 outer.style.backgroundColor = "rgba(255,40,20,0.5)";
             } else {
@@ -353,7 +367,8 @@ var DEBUG = (function($) {
                 jfocus = $('<div id="debug_element_focused"></div>').css(css_obj);
                 jc.append(jfocus);
                 focus = jfocus[0];
-                assert(window.getComputedStyle(focus).getPropertyValue('opacity') === "0"); // must ensure this does not get optimized out
+                assert(window.getComputedStyle(focus).getPropertyValue('opacity') === "0"); 
+                // must ensure this does not get optimized out
                 focus.style.opacity = "1";
                 focus.style[transformStyle] = transFocus;
                 jfocus.on(transEndEventName, function() {
@@ -429,7 +444,8 @@ var DEBUG = (function($) {
     // This is for displaying the activation of global events with large text. 
     function OSD(item) {
         if (typeof item !== "string") { console.log("non-string item for OSD is not acceptable"); return; }
-        // lazy init a container for holding and showing the display. They are to be shown horizontally centered and at the bottom of the window. 
+        // lazy init a container for holding and showing the display. 
+        // They are to be shown horizontally centered and at the bottom of the window. 
     }
 
     // Exploratory work on fixed UI elements that stay in their position regardless of
@@ -461,8 +477,8 @@ var DEBUG = (function($) {
                 if (target_func) target_func();
             } catch (e) {
                 // show the error to the DOM to help out for mobile (also cool on PC)
-                var html = '<div class="error">'+e.toString()+" at "+e.stack+"</div>";
-                $("#debug_log").prepend(html);
+                //var html = '<div class="error">'+e.toString()+" at "+e.stack+"</div>";
+                //$("#debug_log").prepend(html);
                 error(e);
                 throw e; // rethrow to give it to debugging safari, rather than be silent
             }
