@@ -1,4 +1,5 @@
-// depends on debug.js
+// This script is one an exception to the rule that code should function simply by 
+// failing to include debug.js prior to loading it. 
 
 (function() {
     /*global DEBUG:false Modernizr:false requestAnimationFrame:true cancelAnimationFrame:true PLY:false PLY_L2:false*/
@@ -257,9 +258,9 @@
     //     $(this).removeClass('touchscroll');
     // });
 
-    if (DEBUG){
+    //if (DEBUG){
         $("h1").after('<button id="debug_toggle" onclick="DEBUG.enabled = !DEBUG.enabled">toggle all debug</button>');
-    }
+    //}
     PLY.attach_handlers_on_document({
         ply_oneend: function(evt) {
             var dt = $.data(evt.target,"ply");

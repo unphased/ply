@@ -653,13 +653,11 @@ var PLY = (function ($data) {
                     v.apply(this, arguments);
                 } catch (e) {
                     // show the error to the DOM to help out for mobile (also cool on PC)
-                    var html = '<div class="error">'+e.toString()+" at "+e.stack+"</div>";
-                    $("#debug_log").prepend(html);
                     DEBUG.error(e);
                     throw e; // rethrow to give it to debugging safari, rather than be silent
                 }
                 DEBUG.event_processed = true; 
-            }:v, true); // hook to capture phase to catch in the event of stopPropagation()
+            } : v, true); // hook to capture phase to catch in the event of stopPropagation()
         });
     }
     attach_handlers_on_document(level_1_events);
