@@ -6,6 +6,9 @@
 // debugging capabilities, and removal implies release deployment. 
 // predicate debugging features on the presence of DEBUG global.
 
+// routines found in this debug layer are permitted to fail spectacularly in 
+// the absence of necessary components such as ply.js
+
 // there are a few special DOM id's that are referenced:
 // #debug_log
 // #log_buffer_dump
@@ -505,9 +508,12 @@ var DEBUG = (function($) {
         };
     }
 
-    // next up: moving over stuff from test.js to here so that debug can enhance 
-    // any page with stuff, like the touch point locations (though the targeted 
-    // objects have been superceded by the new animated overlays)
+    // touch point location debug functionality is encapsulated in these public functions 
+    // this depends on PLY but not in the sense that it requires it on load. it requires it to run: 
+    // so they can be loaded asynchronously. 
+    function update_pointer_state() {
+        
+    }
 
     // methods provided by debug
     var exposed = {
