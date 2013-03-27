@@ -7,7 +7,7 @@
 // predicate debugging features on the presence of DEBUG global.
 
 // routines found in this debug layer are permitted to fail spectacularly in 
-// the absence of necessary components such as ply.js
+// the absence of necessary components such as jQuery, ply.js, utils (towel.js)
 
 // there are a few special DOM id's that are referenced:
 // #debug_log
@@ -512,7 +512,49 @@ var DEBUG = (function($) {
     // this depends on PLY but not in the sense that it requires it on load. it requires it to run: 
     // so they can be loaded asynchronously. 
     function update_pointer_state() {
-        
+        var jptr_marker_ctnr = $("#ply_ptr_marker_ctnr");
+        if (jptr_marker_ctnr.length === 0) {
+            jptr_marker_ctnr = $('html').append(
+                '<div id="ply_ptr_marker_ctnr">'+
+                    '<div class="current">'+
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                    '</div>'+
+                    '<div class="start">'+
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                    '</div>'+
+                    '<div class="intermediate_start">'+ // these are "interrupted" start pts
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                        '<div></div>'+
+                    '</div>'+
+                '</div>'
+            );
+        } 
     }
 
     // methods provided by debug
