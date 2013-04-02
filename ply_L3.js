@@ -29,10 +29,9 @@
 // IN THE SOFTWARE. 
 // ============================================================================
 
-/*global PLY:false Modernizr:false DEBUG:false */
+/*global PLY:false Modernizr:false DEBUG:false assert:false*/
 (function(){
     "use strict";
-    var assert = DEBUG.assert || function(){};
 
     // Independently define multiple standard listeners rather than conjoin them all at the hip. 
     // Enables separation of concerns, very powerful.

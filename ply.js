@@ -29,13 +29,11 @@
 // IN THE SOFTWARE. 
 // ============================================================================
 
-/*global DEBUG:false TOWEL:false Modernizr:false */
+/*global DEBUG:false TOWEL:false Modernizr:false assert:false*/
 var PLY = (function ($data) {
     // following line is for use with jshint, it is a global decl
     
     "use strict";
-
-    var assert = DEBUG.assert || function(){};
 
     var datenow = DEBUG.datenow;
     // var escapeHtml = DEBUG.escapeHtml;

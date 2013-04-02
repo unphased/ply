@@ -29,11 +29,9 @@
 // IN THE SOFTWARE. 
 // ============================================================================
 
-/*global Modernizr:false DEBUG:false PLY:false */
+/*global Modernizr:false DEBUG:false PLY:false assert:false*/
 var PLY_L2 = (function ($) {
-    //"use strict"; // permissible to uncomment strict mode when in need of debugging
-
-    var assert = (DEBUG && DEBUG.assert) || function() {}; 
+    //"use strict"; // permissible to uncomment strict mode when in need of debugging 
 
     var TransformStyle = Modernizr.prefixed("transform"); 
     var TransformOriginStyle = Modernizr.prefixed("transformOrigin");
