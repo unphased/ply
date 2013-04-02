@@ -4,9 +4,15 @@
 
 // towel.js contains a set of utilities. It is for keeping things DRY. 
 // There is occasionally some overlap with jQuery's good stuff. 
+// Modernizr is used a little bit for the sake of brevity.
 
+/*global assert:false*/
 var UTIL = (function () {
+    /*global Modernizr:false*/
     //"use strict"; // temporarily comment out to let safari's debugger through
+
+    // util is the first included script usually: initializes release mode assert
+    window.assert = function () {};
     
     // for scoped iteration over an object (clean version of jquery each)
     // f receives args (key, value)
@@ -106,10 +112,53 @@ var UTIL = (function () {
     function load_js_dependency_tree(resources, cb_all_done) {
         
     }
+
+    var transEndEventNames = {
+        'WebkitTransition' : 'webkitTransitionEnd',
+        'MozTransition'    : 'transitionend',
+        'OTransition'      : 'oTransitionEnd',
+        'msTransition'     : 'MSTransitionEnd',
+        'transition'       : 'transitionend'
+    }; 
+    var transEndEventName = transEndEventNames[ Modernizr.prefixed('transition') ];
+    var transformStyle = Modernizr.prefixed('transform');
+
+    if (!Modernizr.testAllProps('animationName'))
+        alert("@keyframes are not supported");
+    var keyframesPrefixed = hyphen_mp('animationName').replace('animation-name','keyframes');
+
+    function hyphen_style(style) {
+        return style.replace(/([A-Z])/g, function(str,m1){ return '-' + m1.toLowerCase(); }).replace(/^ms-/,'-ms-');
+    }
+
+    function hyphen_mp(style) {
+        return hyphen_style(Modernizr.prefixed(style));
+    }
+
+    var transitionDurationStyle = Modernizr.prefixed('transitionDuration');
+
+    function inject_css(css) {
+        // append a style tag to head 
+        var head = document.getElementsByTagName("head")[0];
+        var style = document.createElement("style");
+        style.type = "text/css";
+        if (style.styleSheet){
+            style.styleSheet.cssText = css;
+        } else {
+            style.appendChild(document.createTextNode(css));
+        }
+        head.appendChild(style);
+    }
     
     return {
         each: each,
+        array_each: array_each,
         async_load: async_load,
-        js_load: js_load
+        js_load: js_load, 
+        transEndEventName: transEndEventName,
+        transformStyle: transformStyle,
+        hyphen_mp: hyphen_mp,
+        transitionDurationStyle: transitionDurationStyle,
+        injectCSS: inject_css
     };
 })();
