@@ -42,7 +42,7 @@ div {
     font-weight: bold;
 }
 
-#pointer_marker_container, #pointer_start_marker_container, #element_start_highlight_layers, #element_current_highlight_layers {
+/* #pointer_marker_container, #pointer_start_marker_container, #element_start_highlight_layers, #element_current_highlight_layers {
     pointer-events: none;
     border: none;
     position: absolute;
@@ -80,7 +80,7 @@ div {
     background-color: #3c3;
     border: #070 2px solid;
     box-shadow: 0 0 8px 0 #3c3;
-}
+} */
 
 ul {
     margin: 0 0;
