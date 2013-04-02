@@ -84,7 +84,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
    
-    var git_context = "#% 0a86211 more fixin %#";
+    var git_context = "#% 7a44d64 the css %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -515,7 +515,39 @@ var DEBUG = (function($) {
     }
 
     // var transformStyle = Modernizr.prefixed('transform');
-    var hide_transform = "translate3d(-99999px,-99999px,0)";
+    var hide_transform = 'translate3d(-99999px,-99999px,0)';
+
+    var pointer_debug_css = 
+        '#ply_ptr_marker_ctnr, #ply_ptr_marker_ctnr > div {\n' +
+            'pointer-events: none;\n' +
+            'border: none;\n' +
+            'position: absolute;\n' +
+            'top: 0; left: 0;\n' +
+        '}\n' +
+        '#ply_ptr_marker_ctnr > div > div {\n' +
+            'pointer-events: none;\n' +
+            'position: absolute;\n' +
+            'background-color: #33f;\n' +
+            'border: #009 2px solid;\n' +
+            'top: -4px;\n' +
+            'left: -4px;\n' +
+            'width: 4px;\n' +
+            'height: 4px;\n' +
+            'border-radius: 300px;\n' +
+            'box-shadow: 0 0 8px 0 #33f;\n' +
+        '}\n' +
+        '#ply_ptr_marker_ctnr > .start > div {\n' +
+            'background-color: #f33;\n' +
+            'border: #900 2px solid;\n' +
+            'box-shadow: 0 0 8px 0 #f33;\n' +
+        '}\n' +
+        '#ply_ptr_marker_ctnr > .intermediate_start > div {\n' +
+            'background-color: #3c3;\n' +
+            'border: #070 2px solid;\n' +
+            'box-shadow: 0 0 8px 0 #3c3;\n' +
+        '\n}';
+
+    inject_css(pointer_debug_css);
 
     // touch point location debug functionality is encapsulated in these public functions 
     // this depends on PLY but not in the sense that it requires it on load. it requires it to run: 
@@ -595,7 +627,6 @@ var DEBUG = (function($) {
             pmcs.children[i].style[transformStyle] = hide_transform;
             pmci.children[i].style[transformStyle] = hide_transform;
         }
-
     }
 
     // methods provided by debug
