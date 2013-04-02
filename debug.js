@@ -3,17 +3,19 @@
 ////////////////////////////////////////////////
 
 // debug.js is a resource-level instrumentation script. Include to gain 
-// debugging capabilities, and removal implies release deployment. 
+// debugging capabilities, and absence implies release deployment. 
 // predicate debugging features on the presence of DEBUG global.
+// TODO: Remove all references to DEBUG.enabled (it used to be the switchable debug flag). 
+// Instead, build individual toggle controls into debugging features separately. 
 
 // routines found in this debug layer are permitted to fail spectacularly in 
 // the absence of necessary components such as jQuery, ply.js, utils (towel.js)
 
-// there are a few special DOM id's that are referenced:
+// For now, there might be a few special DOM id's that are referenced:
 // #debug_log
 // #log_buffer_dump
 
-/*global Modernizr:false ply_$:false*/
+/*global Modernizr:false ply_$:false PLY:false*/
 var DEBUG = (function($) {
     "use strict";
 
@@ -170,6 +172,19 @@ var DEBUG = (function($) {
 
     var transitionDurationStyle = Modernizr.prefixed('transitionDuration');
 
+    function inject_css(css) {
+        // append a style tag to head 
+        var head = document.getElementsByTagName("head")[0];
+        var style = document.createElement("style");
+        style.type = "text/css";
+        if (style.styleSheet){
+            style.styleSheet.cssText = css;
+        } else {
+            style.appendChild(document.createTextNode(css));
+        }
+        head.appendChild(style);
+    }
+
     var css = //"body { "+hyphen_mp('backfaceVisibility')+": hidden; "+hyphen_mp('perspective') + ": 1000; }\n" +
         "#debug_element_container { \n" +
         "\tposition: absolute; \n" +
@@ -206,16 +221,7 @@ var DEBUG = (function($) {
         //hyphen_mp('animationFillMode') + ": both;\n" + 
         "} \n";
 
-    // append a style tag to head 
-    var head = document.getElementsByTagName("head")[0];
-    var style = document.createElement("style");
-    style.type = "text/css";
-    if (style.styleSheet){
-        style.styleSheet.cssText = css;
-    } else {
-        style.appendChild(document.createTextNode(css));
-    }
-    head.appendChild(style);
+    inject_css(css);    
 
     transEndEventName = transEndEventNames[ Modernizr.prefixed('transition') ];
 
@@ -508,14 +514,17 @@ var DEBUG = (function($) {
         };
     }
 
+    // var transformStyle = Modernizr.prefixed('transform');
+    var hide_transform = "translate3d(-99999px,-99999px,0)";
+
     // touch point location debug functionality is encapsulated in these public functions 
     // this depends on PLY but not in the sense that it requires it on load. it requires it to run: 
-    // so they can be loaded asynchronously. 
+    // so they can be loaded asynchronously so long as this does not run before it loads.
     function update_pointer_state() {
         var jptr_marker_ctnr = $("#ply_ptr_marker_ctnr");
         if (jptr_marker_ctnr.length === 0) {
-            jptr_marker_ctnr = $('html').append(
-                '<div id="ply_ptr_marker_ctnr">'+
+            jptr_marker_ctnr = 
+                $('<div id="ply_ptr_marker_ctnr">'+
                     '<div class="current">'+
                         '<div></div>'+
                         '<div></div>'+
@@ -552,9 +561,41 @@ var DEBUG = (function($) {
                         '<div></div>'+
                         '<div></div>'+
                     '</div>'+
-                '</div>'
-            );
-        } 
+                '</div>').appendTo('html');
+        }
+        var pmc = jptr_marker_ctnr[0];
+        var pmcc = pmc.children[0];
+        var pmcs = pmc.children[1];
+        var pmci = pmc.children[2];
+        // var scrollX = document.body.scrollTop;
+        // var scrollY = document.body.scrollLeft;
+        var i=0;
+        for (var p in PLY.pointer_state) {
+            if (i === 10) { alert( 'More than 10 fingers. Wat'); }
+            var pp = PLY.pointer_state[p];
+            var pmcci = pmcc.children[i];
+            var pmcsi = pmcs.children[i];
+            var pmcii = pmci.children[i];
+            pmcci.style[transformStyle] = 'translate3d('+pp.xc+'px,'+pp.yc+'px,0)';
+            pmcsi.style[transformStyle] = 'translate3d('+pp.xs+'px,'+pp.ys+'px,0)';
+            if (pp.xs2) {
+                pmcii.style[transformStyle] = 'translate3d('+pp.xs2+'px,'+pp.ys2+'px,0)';
+            } else {
+                pmcii.style[transformStyle] = hide_transform;
+            }
+            if (pp.fatness) {
+                var rounded_fatness = Math.floor(pp.fatness*100);
+                pmcci.style.width = pmcci.style.height = rounded_fatness+'px';
+                pmcci.style.top = pmcci.style.left = -(rounded_fatness/2+2)+'px';
+            }
+            ++i;
+        }
+        for (;i<10;++i) {
+            pmcc.children[i].style[transformStyle] = hide_transform;
+            pmcs.children[i].style[transformStyle] = hide_transform;
+            pmci.children[i].style[transformStyle] = hide_transform;
+        }
+
     }
 
     // methods provided by debug
@@ -566,10 +607,12 @@ var DEBUG = (function($) {
         isInDOM: isInDOM,
         revision: git_context.slice(3,-3), 
         clean_list: clean,
+        update_pointer_state: update_pointer_state,
         highlight: highlight,
         focused: focused, 
         get_focused: get_focused,
         error: error,
+        injectCSS: inject_css,
         globalAsyncKeybind: globalAsyncKeybind,
         instrument_profile: instrument_with_accumulated_profile,
      

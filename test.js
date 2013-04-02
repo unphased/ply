@@ -29,8 +29,8 @@
         };
     }
     
-    var transform_name = Modernizr.prefixed('transform');
-    var hide_transform = "translate3d(-99999px,-99999px,0)";
+    // var transform_name = Modernizr.prefixed('transform');
+    // var hide_transform = "translate3d(-99999px,-99999px,0)";
 
     var no_events_processed_for = 0;
 
@@ -94,6 +94,7 @@
             $("#debug").html(str); 
         }
         
+        /*
         // actual debug visualization of pointer locations
         if (!$('#pointer_marker_container').length) {
             $('#debug').before(
@@ -229,7 +230,9 @@
             pmc.children[i].style[transform_name] = hide_transform;
             psmc.children[i].style[transform_name] = hide_transform;
             pssmc.children[i].style[transform_name] = hide_transform;
-        }
+        } */
+
+        DEBUG.update_pointer_state();
         // cleaning up the debug log 
         DEBUG.clean_list();
     }
