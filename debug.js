@@ -16,7 +16,7 @@
 // #log_buffer_dump
 
 var DEBUG = (function($) {
-    /*global Modernizr:false ply_$:false PLY:false UTIL:false*/
+    /*global UTIL:false, PLY:false, Modernizr:false, ply_$:false*/
     "use strict";
 
 	var AssertException = function (message) { this.message = message; };
@@ -51,7 +51,7 @@ var DEBUG = (function($) {
             // tells us which child we are (incl. textnodes)
             // for (var k=0,e=val; (e = e.previousSibling); ++k);
             // tells us which (real node) index it is
-            var k = val.parentNode && val.parentNode.children ? 
+            var k = val.parentNode && val.parentNode.children ?
                 Array.prototype.indexOf.call(val.parentNode.children,val) : undefined;
             var cn = val.className;
             var tn = val.tagName;
@@ -62,7 +62,7 @@ var DEBUG = (function($) {
         return val;
     };
 
-    
+
     function serialize(arg) {
         if (typeof arg === "undefined") return "undefined";
         if (typeof arg === "function") return "function";
@@ -81,13 +81,13 @@ var DEBUG = (function($) {
 
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
-   
+
     var git_context = "#% REVISION %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
     function is_touch_device() {
-        return !!('ontouchstart' in window) || 
+        return !!('ontouchstart' in window) ||
             !!('onmsgesturechange' in window); // works on ie10
     }
 
@@ -105,14 +105,14 @@ var DEBUG = (function($) {
         var now = datenow();
         var html_str = '<div class="log" data-time="'+now+'">'+str+'</div>';
         log_buffer.push(html_str);
-        $("#debug_log").prepend(html_str); 
+        $("#debug_log").prepend(html_str);
         // this means all logs in your application get dumped into #debug_log if 
         // you've got one
     };
 
-    if (is_touch_device()) 
+    if (is_touch_device())
     {
-        console.log = instrumented_log; 
+        console.log = instrumented_log;
 
         var show_log_buffer = false;
         $("#log_buffer_dump").before($('<button>toggle full log buffer snapshot</button>').on('click',function(){
@@ -180,7 +180,7 @@ var DEBUG = (function($) {
             routine();
             accum += each*(datenow()-time);
             if (++count === rc) {
-                count = 0; 
+                count = 0;
                 report_count(accum);
                 accum = 0;
             }
@@ -190,7 +190,7 @@ var DEBUG = (function($) {
     var hide_transform = 'translate3d(-99999px,-99999px,0)';
     var transformStyle = UTIL.transformStyle;
 
-    var pointer_debug_css = 
+    var pointer_debug_css =
         '#ply_ptr_marker_ctnr, #ply_ptr_marker_ctnr > div {\n' +
             'pointer-events: none;\n' +
             'border: none;\n' +
@@ -228,7 +228,7 @@ var DEBUG = (function($) {
     function update_pointer_state() {
         var jptr_marker_ctnr = $("#ply_ptr_marker_ctnr");
         if (jptr_marker_ctnr.length === 0) {
-            jptr_marker_ctnr = 
+            jptr_marker_ctnr =
                 $('<div id="ply_ptr_marker_ctnr">'+
                     '<div class="current">'+
                         '<div></div>'+
@@ -308,18 +308,18 @@ var DEBUG = (function($) {
         escapeHtml: escapeHtml,
         serialize: serialize,
         isInDOM: isInDOM,
-        revision: git_context.slice(3,-3), 
+        revision: git_context.slice(3,-3),
         clean_list: clean,
         update_pointer_state: update_pointer_state,
         error: error,
         globalAsyncKeybind: globalAsyncKeybind,
         instrument_profile: instrument_with_accumulated_profile,
-     
+
         // This is just marked when any event makes its way through the primary
         // event handlers so that the test site can be a bit more efficient about 
         // re-updating the DOM. I may eventually let the events that don't 
         // change the debugprints to also not set this either. 
-        event_processed: false, 
+        event_processed: false,
         datenow: datenow
     };
 
