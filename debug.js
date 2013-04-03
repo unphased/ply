@@ -95,7 +95,6 @@ var DEBUG = (function($) {
     // echo console logs to the debug 
     var instrumented_log = function () {
         original_console_log.apply(window.console, arguments);
-        if (!exposed.enabled) return;
         var str = "";
         for (var i=0;i<arguments.length;++i) {
             str += escapeHtml(serialize(arguments[i])).replace(/ {2}/g,'</br>');
@@ -304,7 +303,7 @@ var DEBUG = (function($) {
 
     // methods provided by debug
     var exposed = {
-        enabled: true,
+        enable_debug_printing: true,
         escapeHtml: escapeHtml,
         serialize: serialize,
         isInDOM: isInDOM,
