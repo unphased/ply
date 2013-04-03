@@ -6,14 +6,14 @@
 // There is occasionally some overlap with jQuery's good stuff. 
 // Modernizr is used a little bit for the sake of brevity.
 
-/*global assert:false*/
+
 var UTIL = (function () {
-    /*global Modernizr:false*/
+    /*global assert:true, Modernizr:false*/
     //"use strict"; // temporarily comment out to let safari's debugger through
 
     // util is the first included script usually: initializes release mode assert
-    window.assert = function () {};
-    
+    assert = function () {};
+
     // for scoped iteration over an object (clean version of jquery each)
     // f receives args (key, value)
     function each(obj, f) {
@@ -85,14 +85,14 @@ var UTIL = (function () {
             cb_list[i] = function() {
                 var x = document.body.appendChild(document.createElement('script'));
                 x.src = r;
-                x.onload = function() { 
-                    console.log("Dynamically loaded "+r+" via js_load"); 
+                x.onload = function() {
+                    console.log("Dynamically loaded "+r+" via js_load");
                     if (i === resources.length-1) {
                         cb_done();
                     } else {
                         cb_list[i+1]();
                     }
-                }; 
+                };
             };
         });
         cb_list[0]();
@@ -110,7 +110,7 @@ var UTIL = (function () {
     //     "https://raw.github.com/unphased/ply/master/modernizr-2.6.2.min.js": true
     // ];
     function load_js_dependency_tree(resources, cb_all_done) {
-        
+
     }
 
     var transEndEventNames = {
@@ -119,7 +119,7 @@ var UTIL = (function () {
         'OTransition'      : 'oTransitionEnd',
         'msTransition'     : 'MSTransitionEnd',
         'transition'       : 'transitionend'
-    }; 
+    };
     var transEndEventName = transEndEventNames[ Modernizr.prefixed('transition') ];
     var transformStyle = Modernizr.prefixed('transform');
 
@@ -149,12 +149,12 @@ var UTIL = (function () {
         }
         head.appendChild(style);
     }
-    
+
     return {
         each: each,
         array_each: array_each,
         async_load: async_load,
-        js_load: js_load, 
+        js_load: js_load,
         transEndEventName: transEndEventName,
         transformStyle: transformStyle,
         hyphen_mp: hyphen_mp,

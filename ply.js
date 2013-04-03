@@ -29,10 +29,11 @@
 // IN THE SOFTWARE. 
 // ============================================================================
 
-/*global DEBUG:false TOWEL:false Modernizr:false assert:false*/
+
 var PLY = (function ($data) {
+    /*global DEBUG:false, UTIL:false, Modernizr:false, assert:false*/
     // following line is for use with jshint, it is a global decl
-    
+
     "use strict";
 
     var datenow = DEBUG.datenow;
@@ -43,22 +44,22 @@ var PLY = (function ($data) {
     // various parts of state of the library 
     // accessible via window.PLY to allow debug display
     var exposed = {
-       
+
         // Never assume that keys is not filled with keys that were held down 
         // the last time the browser was in focus.
-        keys_depressed: {}, 
+        keys_depressed: {},
 
         // pointer_state stores state of mouse and/or touches. It will treat 
         // the mouse somewhat differently by storing it into the "m" property
         // touches are stored under their id as key.
-        pointer_state: {}, 
+        pointer_state: {},
 
         // used by touchmove event to run code only when necessary
         // TODO: why is this public? 
         tmTime: datenow(),
 
         // converges on the time it takes to run touchmove
-        tmProfile: 3, 
+        tmProfile: 3,
         // just for reference purposes: my iPhone 5 appears to execute (not 
         // including the dispatch/computation stage)
         // touchmove, when debug is off, within 200 microseconds (one touch)
@@ -90,7 +91,7 @@ var PLY = (function ($data) {
         // clear out the values in here so as to not leak DOM nodes. 
 
         // the ply mechanism for globally assigning event handlers
-        attach_handlers_on_document: attach_handlers_on_document, 
+        attach_handlers_on_document: attach_handlers_on_document,
 
         sanityCheck: internalCheck // this is like a unit test that you can run any time
         // sanityCheck is not bound to/dependent on debug status
@@ -129,7 +130,7 @@ var PLY = (function ($data) {
 
     // var Mutation_Observer = true;
     //(window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver);
-    
+
     /*$(function (){
         // propagate "umbrella" style classes through to their children, now and in
         // the future. 
@@ -191,8 +192,8 @@ var PLY = (function ($data) {
             for (var y in $data(en[j],'ply').t) {
                 touch_count ++;
             }
-            assert(touch_count === $data(en[j],'ply').count, "count checks out for touches on element "); 
-        }   
+            assert(touch_count === $data(en[j],'ply').count, "count checks out for touches on element ");
+        }
     }
 
     function key(evt) {
@@ -203,7 +204,7 @@ var PLY = (function ($data) {
 
     // entry point for code is the document's event handlers. 
     var level_1_events = {
-        click: function (evt) { console.log('click', evt.pageX, evt.pageY, "on", evt.target); 
+        click: function (evt) { console.log('click', evt.pageX, evt.pageY, "on", evt.target);
 
         },
         mousedown: function (evt) { //console.log('mousedown',evt.pageX,evt.pageY);
@@ -216,7 +217,7 @@ var PLY = (function ($data) {
                 // context menu prevents mouseup. ply does not respond to
                 // the secondary mouse button interaction
                 return;
-            exposed.pointer_state.m = {xs:evt.pageX, ys:evt.pageY, 
+            exposed.pointer_state.m = {xs:evt.pageX, ys:evt.pageY,
                 xc: evt.pageX, yc: evt.pageY, es: evt.target, ec: evt.target};
         },
         mouseup: function (evt) { //console.log('mouseup',evt.pageX,evt.pageY);
@@ -225,20 +226,20 @@ var PLY = (function ($data) {
             // devices do not use window systems. 
             delete exposed.pointer_state.m;
         },
-        mousemove: function (evt) { 
+        mousemove: function (evt) {
             var epm = exposed.pointer_state.m;
             if (epm) {
                 epm.xc = evt.pageX; epm.yc = evt.pageY;
                 epm.ec = evt.target;
             }
-        }, 
-        mousewheel: function (evt) { console.log("mousewheel", evt.wheelDeltaX, evt.wheelDeltaY); 
+        },
+        mousewheel: function (evt) { console.log("mousewheel", evt.wheelDeltaX, evt.wheelDeltaY);
             if (evt.target.tagName === "HTML") return; // don't waste cycles scanning Modernizr's class list on <html>
             var et = evt.target;
             // check for safari "bug"
-            if (evt.target.nodeType === 3) /* is text node */ 
+            if (evt.target.nodeType === 3) /* is text node */
                 et = evt.target.parentNode;
-            if (et.className && (' '+et.className+' ').indexOf(" ply-noscroll ") !== -1) 
+            if (et.className && (' '+et.className+' ').indexOf(" ply-noscroll ") !== -1)
                 evt.preventDefault();
         },
         keydown: function (evt) { console.log("keydown",key(evt));
@@ -305,7 +306,7 @@ var PLY = (function ($data) {
                 }
                 //dt.offset = untransformed_offset(seen_target); // only set this on creation of first touch! 
                 //dt.trans = seen_target.style[TransformStyle]; // this should be tracked by the user not by ply's data. It must be set on start 
-                
+
                 /* 
                 var touches_on_e = 0;
                 var touch; 
@@ -329,25 +330,25 @@ var PLY = (function ($data) {
                     if (!dt.t.hasOwnProperty(dj.id)) {
                         dt.count++;
                         dt.t[dj.id] = dj;
-                        var event = document.createEvent('HTMLEvents'); 
+                        var event = document.createEvent('HTMLEvents');
                         switch (dt.count) {
-                            case 1: 
+                            case 1:
                                 event.initEvent('ply_onestart',true,true);
                                 break;
-                            case 2: 
+                            case 2:
                                 event.initEvent('ply_twostart',true,true);
                                 // set an updated start position for the existing point to prevent a "warp"
                                 // find the first touch on the element and set it to current value
                                 for (var ti in dt.t) { if (ti !== dj.id) { break; } }
-                                event.existingTouch = ep[ti].t; 
+                                event.existingTouch = ep[ti].t;
                                 // take note that existingTouch *could be created at the exact same time* as changedTouch
                                 ep[ti].xs2 = ep[ti].xc;
                                 ep[ti].ys2 = ep[ti].yc;
                                 break;
-                            case 3: 
+                            case 3:
                                 event.initEvent('ply_threestart',true,true);
                                 break;
-                            default: 
+                            default:
                                 console.log("zero or fourth or fifth or... touchstart (unimplemented) n="+dt.count);
                         }
                         // set some helpful touch specific info into the event
@@ -368,7 +369,7 @@ var PLY = (function ($data) {
             }
             if (!exposed.allow_scroll) { // never allow scroll once you start manipulating something 
                 evt.preventDefault();
-            }            
+            }
         },
 
         // After extensive testing on devices it became clear that the tracking of state
@@ -401,7 +402,7 @@ var PLY = (function ($data) {
                 delete exposed.pointer_state[eci.identifier];
                 console.log('removed ',eci.identifier, " now pointer_state is ",exposed.pointer_state);
             } */
-            
+
             // using touches (because it is more reliable) to determine which touches have been removed
             var et = evt.touches;
             var etl = et.length;
@@ -425,19 +426,19 @@ var PLY = (function ($data) {
                         var ei = ep[id];
                         var ed = $data(ei.e, 'ply');
 
-                        var event = document.createEvent('HTMLEvents'); 
+                        var event = document.createEvent('HTMLEvents');
                         switch (ed.count) {
-                            case 1: 
+                            case 1:
                                 event.initEvent('ply_oneend',true,true);
                                 break;
-                            case 2: 
+                            case 2:
                                 event.initEvent('ply_twoend',true,true);
                                 for (var ti in ed.t) {
                                     if (ti !== id) break;
                                 }
-                                event.remainingTouch = ep[ti].t; 
+                                event.remainingTouch = ep[ti].t;
                                 break;
-                            case 3: 
+                            case 3:
                                 event.initEvent('ply_threeend',true,true);
                                 break;
                             default:
@@ -455,7 +456,7 @@ var PLY = (function ($data) {
 
                     // en[ep[id].ni] = null; // clear out reference to node
                     // no! don't clear out ref to node. If same node re-touched, reuse id
-                    
+
                     // delete the other ref to this touch's state object 
                     delete ep[id];
                     //console.log('removed ',id," now ep is ",ep);                    
@@ -469,7 +470,7 @@ var PLY = (function ($data) {
         // The majority of functionality is funneled through the (capturing) touchmove handler on the document. 
         // It is quite possible for this to execute 180 times per second for a three finger situation.
         // Because of this, extra effort should be put toward optimizing this function. 
-        touchmove: function (evt) { 
+        touchmove: function (evt) {
         //console.log("touchmove ",id_string_for_touch_list(evt.changedTouches),id_string_for_touch_list(evt.touches));
             if (exposed.allow_scroll) return; // since this is touch device, when scrolling we don't do ply-things
             evt.preventDefault(); // prevent the pinching (this is primarily for Android: on iOS a preventdefault on the touchstart is sufficient to suppress pinch)
@@ -481,7 +482,7 @@ var PLY = (function ($data) {
             // completing ply transform tasks)
             var start = datenow();
             if (start - exposed.tmTime < 7) return; // discard the event
-            
+
             var et = evt.touches;
             var etl = et.length;
             var ep = exposed.pointer_state;
@@ -489,7 +490,7 @@ var PLY = (function ($data) {
             var elems = {}; // this is a hash of integers
             for (var i=0; i<etl; ++i) { // loop over all pointers: assemble the elements to transform array 
                 var eti = et[i];
-                var ep_etid = ep[eti.identifier]; 
+                var ep_etid = ep[eti.identifier];
                 if (!ep_etid) continue;
                 // ep_etid.es is the actual element to be manipulated
                 // full_pointer_list.push({e: ep_etid.es, x: eti.pageX-ep_etid.xs, y: eti.pageY-ep_etid.ys});
@@ -498,7 +499,7 @@ var PLY = (function ($data) {
                     // do not mark change if only force changes
                     ep_etid.xc = eti.pageX;
                     ep_etid.yc = eti.pageY;
-                    
+
                     // Assembles a hash of node_id's to get an efficient DOM node list 
                     // does not set this if the current changed touch is not on a tracked node
                     if (ep_etid.hasOwnProperty('ni')) {
@@ -557,10 +558,10 @@ var PLY = (function ($data) {
                     // which is probably about as efficient as we can get given what is available (early 2013).
                     // Since this is the single finger case there is no transform computation so the event
                     // will be sent like usual
-                    var defaultNotPrevented = en[ni].dispatchEvent(event);                    
+                    var defaultNotPrevented = en[ni].dispatchEvent(event);
                 } else {
                     var two, j;
-                    j=0; 
+                    j=0;
                     for (var y in nd.t) { // a two iteration loop
                         if (j === 0) one = nd.t[y];
                         else {
@@ -579,11 +580,11 @@ var PLY = (function ($data) {
                     // system can handle "more things". 
 
                     // That being said, it's a bit complicated to code up so right now we just go ahead and call based on inputs. Seems to not suffer from adverse effects due to bad perf on e.g. Android. 
-                    
+
                     //console.log("two touches",one,two,"on",en[ni]);
                     var event2 = document.createEvent('HTMLEvents'); // this is for compatibility with DOM Level 2
                     event2.initEvent('ply_transform',true,true);
-                    var xs1 = one.xs2 || one.xs; 
+                    var xs1 = one.xs2 || one.xs;
                     var ys1 = one.ys2 || one.ys;
                     var xs2 = two.xs2 || two.xs;
                     var ys2 = two.ys2 || two.ys;
@@ -603,7 +604,7 @@ var PLY = (function ($data) {
                     var xs_dist = Math.abs(xs_diff);
                     var ys_dist = Math.abs(ys_diff);
                     var xc_dist = Math.abs(xc_diff);
-                    var yc_dist = Math.abs(yc_diff); 
+                    var yc_dist = Math.abs(yc_diff);
                     var start_dist = Math.sqrt(xs_dist * xs_dist + ys_dist * ys_dist);
                     var currt_dist = Math.sqrt(xc_dist * xc_dist + yc_dist * yc_dist);
                     event2.scale = currt_dist / start_dist;
@@ -643,7 +644,7 @@ var PLY = (function ($data) {
 
     function attach_handlers_on_document(handler_map) {
         each(handler_map, function (event_name,v) {
-            if (!v) return; 
+            if (!v) return;
             document.addEventListener(event_name, DEBUG?function () {
                 // in debug mode (i.e. if debug.js is included) all exceptions originating from 
                 // ply and 2ply global events are caught and reported to debug elements if present
@@ -654,7 +655,7 @@ var PLY = (function ($data) {
                     DEBUG.error(e);
                     throw e; // rethrow to give it to debugging safari, rather than be silent
                 }
-                DEBUG.event_processed = true; 
+                DEBUG.event_processed = true;
             } : v, true); // hook to capture phase to catch in the event of stopPropagation()
         });
     }
