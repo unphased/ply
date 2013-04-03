@@ -624,7 +624,7 @@ var PLY = (function ($data) {
             var now = datenow();
             var diff = Math.min(now - exposed.tmTime,200);
             exposed.tmTime = now; // update this last
-            if (DEBUG.enabled) {
+            if (DEBUG) {
                 var profile = now - start;
                 var dispatchProfile = now - beforeDispatch;
                 exposed.tmProfile += (profile - exposed.tmProfile) * 0.02;
@@ -645,18 +645,23 @@ var PLY = (function ($data) {
     function attach_handlers_on_document(handler_map) {
         each(handler_map, function (event_name,v) {
             if (!v) return;
-            document.addEventListener(event_name, DEBUG?function () {
-                // in debug mode (i.e. if debug.js is included) all exceptions originating from 
-                // ply and 2ply global events are caught and reported to debug elements if present
-                try {
+            document.addEventListener(event_name, function() {
+                if (DEBUG) {
+                    // in debug mode (i.e. if debug.js is included) all exceptions originating from 
+                    // ply and 2ply global events are caught and reported to debug elements if present
+                    try {
+                        v.apply(this, arguments);
+                    } catch (e) {
+                        // show the error to the DOM to help out for mobile (also cool on PC)
+                        DEBUG.error(e);
+                        throw e; // rethrow to give it to debugging safari, rather than be silent
+                    }
+                    DEBUG.event_processed = true;
+                } else {
                     v.apply(this, arguments);
-                } catch (e) {
-                    // show the error to the DOM to help out for mobile (also cool on PC)
-                    DEBUG.error(e);
-                    throw e; // rethrow to give it to debugging safari, rather than be silent
                 }
-                DEBUG.event_processed = true;
-            } : v, true); // hook to capture phase to catch in the event of stopPropagation()
+            }, true);
+            // hook to capture phase to catch in the event of stopPropagation()
         });
     }
     attach_handlers_on_document(level_1_events);

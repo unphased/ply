@@ -75,22 +75,22 @@ var PLY_L2 = (function ($) {
         return jeoc;
     }
 
-    // function reset_transform_with_duration(e, duration) {
-    //     e.style[TransitionDurationStyle] = duration;
-    //     console.log('tds: '+TransitionDurationStyle);
-    //     assert(getComputedStyle(e)[TransitionDurationStyle] === duration, 'durationstyle: '+duration+' vs '+getComputedStyle(e)[TransitionDurationStyle]);
-    //     var dt = $.data(e,'ply');
-    //     e.style[TransformStyle] = ''; // reset position
-    //     // mark to stop applying xforms
-    //     e.className.replace('ply-transforming','');
-    // }
+    function reset_transform_with_duration(e, duration) {
+        e.style[TransitionDurationStyle] = duration;
+        console.log('tds: '+TransitionDurationStyle);
+        assert(getComputedStyle(e)[TransitionDurationStyle] === duration, 'durationstyle: '+duration+' vs '+getComputedStyle(e)[TransitionDurationStyle]);
+        // var dt = $.data(e,'ply');
+        e.style[TransformStyle] = ''; // reset position
+        // mark to stop applying xforms
+        e.className.replace('ply-transforming','');
+    }
 
     var exposed = {
         // This could for example contain methods for
         // avoiding touch gesture conflicts between ongoing manipulation and gesture recognition.
 
         // takes single argument with
-        // reset_transform_to_zero: reset_transform_with_duration,
+        reset_transform_to_zero: reset_transform_with_duration,
 
         // following items are for revealing the state of manipulations for easy monitoring
         active_items: []
