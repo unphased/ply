@@ -9,14 +9,14 @@
     var vendors = ['ms', 'moz', 'webkit', 'o'];
     for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
         window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] || 
+        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] ||
             window[vendors[x]+'CancelRequestAnimationFrame'];
     }
     if (!window.requestAnimationFrame) {
         window.requestAnimationFrame = function(callback, element) {
             var currTime = datenow();
             var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function() { callback(currTime + timeToCall); }, 
+            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
               timeToCall);
             lastTime = currTime + timeToCall;
             return id;
@@ -46,7 +46,7 @@
             requestAnimationFrame(debug_refresh);
         else console.log("document has lost focus. Stopping rAF");
 
-        if (!DEBUG.enabled) return; // wait next tick (iOS does not issue window focus
+        if (!DEBUG.enable_debug_printing) return; // wait next tick (iOS does not issue window focus
                                 // rAF start/restart won't work with toggling debug)
         if (!DEBUG.event_processed) {
             if (no_events_processed_for++ > 0) { // counts ticks (technically could be a boolean)
@@ -262,7 +262,7 @@
     // });
 
     //if (DEBUG){
-        $("h1").after('<button id="debug_toggle" onclick="DEBUG.enabled = !DEBUG.enabled">toggle all debug</button>');
+        $("h1").after('<button id="debug_toggle" onclick="DEBUG.enable_debug_printing = !DEBUG.enable_debug_printing">toggle all debug</button>');
     //}
     PLY.attach_handlers_on_document({
         ply_oneend: function(evt) {
