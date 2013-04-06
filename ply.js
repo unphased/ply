@@ -44,16 +44,6 @@ var PLY = (function ($data) {
     // various parts of state of the library
     // accessible via window.PLY to allow debug display
     var exposed = {
-
-        // Never assume that keys is not filled with keys that were held down
-        // the last time the browser was in focus.
-        keys_depressed: {},
-
-        // pointer_state stores state of mouse and/or touches. It will treat
-        // the mouse somewhat differently by storing it into the "m" property
-        // touches are stored under their id as key.
-        pointer_state: {},
-
         // used by touchmove event to run code only when necessary
         // TODO: why is this public?
         tmTime: datenow(),

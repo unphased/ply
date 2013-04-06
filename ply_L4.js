@@ -78,6 +78,6 @@
         },
         keyup: function (evt) { console.log("keyup",key(evt));
             delete exposed.keys_depressed[key(evt)];
-        },
+        }
     };
 })();
