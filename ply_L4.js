@@ -33,4 +33,51 @@
 (function(){
     "use strict";
     
+
+    var level_4_events = {
+    	click: function (evt) { console.log('click', evt.pageX, evt.pageY, "on", evt.target);
+
+        },
+        mousedown: function (evt) { //console.log('mousedown',evt.pageX,evt.pageY);
+            // need to trap drag-of-selection. Crap. You'll have to prevent
+            // selections entirely. Funny this stuff is quite
+            // less problematic for touch events.
+
+            // trap the right clicks!! this is huge
+            if (evt.which === 3) // secondary mouse button causes context menu,
+                // context menu prevents mouseup. ply does not respond to
+                // the secondary mouse button interaction
+                return;
+            exposed.pointer_state.m = {xs:evt.pageX, ys:evt.pageY,
+                xc: evt.pageX, yc: evt.pageY, es: evt.target, ec: evt.target};
+        },
+        mouseup: function (evt) { //console.log('mouseup',evt.pageX,evt.pageY);
+            // this event may fail to fire by dragging mouse out of
+            // window. This is less of a concern for touch since most touch
+            // devices do not use window systems.
+            delete exposed.pointer_state.m;
+        },
+        mousemove: function (evt) {
+            var epm = exposed.pointer_state.m;
+            if (epm) {
+                epm.xc = evt.pageX; epm.yc = evt.pageY;
+                epm.ec = evt.target;
+            }
+        },
+        mousewheel: function (evt) { console.log("mousewheel", evt.wheelDeltaX, evt.wheelDeltaY);
+            if (evt.target.tagName === "HTML") return; // don't waste cycles scanning Modernizr's class list on <html>
+            var et = evt.target;
+            // check for safari "bug"
+            if (evt.target.nodeType === 3) /* is text node */
+                et = evt.target.parentNode;
+            if (et.className && (' '+et.className+' ').indexOf(" ply-noscroll ") !== -1)
+                evt.preventDefault();
+        },
+        keydown: function (evt) { console.log("keydown",key(evt));
+            exposed.keys_depressed[key(evt)] = String.fromCharCode(key(evt));
+        },
+        keyup: function (evt) { console.log("keyup",key(evt));
+            delete exposed.keys_depressed[key(evt)];
+        }
+    };
 })();

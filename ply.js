@@ -44,16 +44,6 @@ var PLY = (function ($data) {
     // various parts of state of the library
     // accessible via window.PLY to allow debug display
     var exposed = {
-
-        // Never assume that keys is not filled with keys that were held down
-        // the last time the browser was in focus.
-        keys_depressed: {},
-
-        // pointer_state stores state of mouse and/or touches. It will treat
-        // the mouse somewhat differently by storing it into the "m" property
-        // touches are stored under their id as key.
-        pointer_state: {},
-
         // used by touchmove event to run code only when necessary
         // TODO: why is this public?
         tmTime: datenow(),
@@ -204,50 +194,6 @@ var PLY = (function ($data) {
 
     // entry point for code is the document's event handlers.
     var level_1_events = {
-        click: function (evt) { console.log('click', evt.pageX, evt.pageY, "on", evt.target);
-
-        },
-        mousedown: function (evt) { //console.log('mousedown',evt.pageX,evt.pageY);
-            // need to trap drag-of-selection. Crap. You'll have to prevent
-            // selections entirely. Funny this stuff is quite
-            // less problematic for touch events.
-
-            // trap the right clicks!! this is huge
-            if (evt.which === 3) // secondary mouse button causes context menu,
-                // context menu prevents mouseup. ply does not respond to
-                // the secondary mouse button interaction
-                return;
-            exposed.pointer_state.m = {xs:evt.pageX, ys:evt.pageY,
-                xc: evt.pageX, yc: evt.pageY, es: evt.target, ec: evt.target};
-        },
-        mouseup: function (evt) { //console.log('mouseup',evt.pageX,evt.pageY);
-            // this event may fail to fire by dragging mouse out of
-            // window. This is less of a concern for touch since most touch
-            // devices do not use window systems.
-            delete exposed.pointer_state.m;
-        },
-        mousemove: function (evt) {
-            var epm = exposed.pointer_state.m;
-            if (epm) {
-                epm.xc = evt.pageX; epm.yc = evt.pageY;
-                epm.ec = evt.target;
-            }
-        },
-        mousewheel: function (evt) { console.log("mousewheel", evt.wheelDeltaX, evt.wheelDeltaY);
-            if (evt.target.tagName === "HTML") return; // don't waste cycles scanning Modernizr's class list on <html>
-            var et = evt.target;
-            // check for safari "bug"
-            if (evt.target.nodeType === 3) /* is text node */
-                et = evt.target.parentNode;
-            if (et.className && (' '+et.className+' ').indexOf(" ply-noscroll ") !== -1)
-                evt.preventDefault();
-        },
-        keydown: function (evt) { console.log("keydown",key(evt));
-            exposed.keys_depressed[key(evt)] = String.fromCharCode(key(evt));
-        },
-        keyup: function (evt) { console.log("keyup",key(evt));
-            delete exposed.keys_depressed[key(evt)];
-        },
         touchstart: function (evt) { //console.log("touchstart", id_string_for_touch_list(evt.targetTouches));
 
             exposed.tmTime = 0; // reset touchmove timer
