@@ -82,7 +82,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% bdcc3be taking out mouse bits from ply.js also i am switching debug off on my test page and i cleaned up trailing spaces on ply_L3.js %#";
+    var git_context = "#% 69b55a5 working on the breakage %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 

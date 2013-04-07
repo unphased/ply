@@ -36,9 +36,9 @@ var PLY = (function ($data) {
 
     "use strict";
 
-    var datenow = DEBUG.datenow;
-    // var escapeHtml = DEBUG.escapeHtml;
-    var serialize = DEBUG.serialize;
+    // var datenow = DEBUG.datenow;
+
+    // var serialize = DEBUG.serialize;
     // var isInDOM = DEBUG.isInDOM;
 
     // various parts of state of the library
@@ -46,7 +46,7 @@ var PLY = (function ($data) {
     var exposed = {
         // used by touchmove event to run code only when necessary
         // TODO: why is this public?
-        tmTime: datenow(),
+        tmTime: 100,
 
         // converges on the time it takes to run touchmove
         tmProfile: 3,
@@ -169,7 +169,7 @@ var PLY = (function ($data) {
             // for it is sent out!
             if (ep[x].hasOwnProperty('ni')) {
                 assert($data(ep[x].e,'ply'),"exists: data of element in pointer_state indexed "+x);
-                assert($data(ep[x].e,'ply').t[x] === ep[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+serialize(ep[x])+"; "+serialize($data(ep[x].e,'ply')));
+                assert($data(ep[x].e,'ply').t[x] === ep[x], "pointer_state["+x+"] is exactly equal to the data of its e property: "+(DEBUG?DEBUG.serialize(ep[x]):"")+"; "+(DEBUG?DEBUG.serialize($data(ep[x].e,'ply')):""));
                 assert(ep[x].ni === $data(ep[x].e,'ply').node_id, "node id check "+ep[x].ni+", "+$data(ep[x].e,'ply').node_id);
                 assert(en[ep[x].ni] === ep[x].e, "check element with id");
             }
