@@ -33,6 +33,10 @@
 (function(){
     "use strict";
 
+    function key(evt) {
+        return evt.which || evt.keyCode || /*window.*/event.keyCode;
+    }
+
     var level_4_events = {
     	click: function (evt) { console.log('click', evt.pageX, evt.pageY, "on", evt.target);
 

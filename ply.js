@@ -44,6 +44,8 @@ var PLY = (function ($data) {
     // various parts of state of the library
     // accessible via window.PLY to allow debug display
     var exposed = {
+
+        pointer_state: {},
         // used by touchmove event to run code only when necessary
         // TODO: why is this public?
         tmTime: 100,
@@ -184,10 +186,6 @@ var PLY = (function ($data) {
             }
             assert(touch_count === $data(en[j],'ply').count, "count checks out for touches on element ");
         }
-    }
-
-    function key(evt) {
-        return evt.which || evt.keyCode || /*window.*/event.keyCode;
     }
 
     var touchend_touchcancel;
