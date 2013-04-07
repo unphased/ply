@@ -82,7 +82,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 6a2a55d bringing back the pointer_state because i dont know why i took that out (clearly was not thinking) %#";
+    var git_context = "#% 4375887 taking out all the profile/timing stuff, so that it is ready for use without debug, I am still unsure about how to do the profiling stuff, it should in theory be separate from debug as debug is liable to introduce slowdowns. Perhaps it can be a similar usage pattern as debug and can be enabled at will %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
