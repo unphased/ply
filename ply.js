@@ -424,8 +424,9 @@ var PLY = (function ($data) {
             // and gives browser about 7 ms of grace-period between touchmove events
             // (which is way more than it should be taking esp. since I start the timing after
             // completing ply transform tasks)
-            var start = datenow();
-            if (start - exposed.tmTime < 7) return; // discard the event
+
+            // var start = datenow();
+            // if (start - exposed.tmTime < 7) return; // discard the event
 
             var et = evt.touches;
             var etl = et.length;
@@ -457,7 +458,7 @@ var PLY = (function ($data) {
 
             //console.log("elems=",elems);
 
-            var beforeDispatch = datenow();
+            // var beforeDispatch = datenow();
 
             // for each element
             for (var ni in elems) {
@@ -565,16 +566,16 @@ var PLY = (function ($data) {
                     }
                 }
             }
-            var now = datenow();
-            var diff = Math.min(now - exposed.tmTime,200);
-            exposed.tmTime = now; // update this last
-            if (DEBUG) {
-                var profile = now - start;
-                var dispatchProfile = now - beforeDispatch;
-                exposed.tmProfile += (profile - exposed.tmProfile) * 0.02;
-                exposed.tmProfileDispatch += (dispatchProfile - exposed.tmProfileDispatch) * 0.02;
-                exposed.tmRate += (diff - exposed.tmRate) * 0.02;
-            }
+            // var now = datenow();
+            // var diff = Math.min(now - exposed.tmTime,200);
+            // exposed.tmTime = now; // update this last
+            // if (DEBUG) {
+            //     var profile = now - start;
+            //     var dispatchProfile = now - beforeDispatch;
+            //     exposed.tmProfile += (profile - exposed.tmProfile) * 0.02;
+            //     exposed.tmProfileDispatch += (dispatchProfile - exposed.tmProfileDispatch) * 0.02;
+            //     exposed.tmRate += (diff - exposed.tmRate) * 0.02;
+            // }
         }
         // these two don't bubble according to MDN. So it'd be useless putting them on document.
         // also fairly certain that no browser implements them yet.
