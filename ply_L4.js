@@ -4,7 +4,7 @@
 ////  Quaternary event generation stage  ///
 ///  For use in conjunction with ply.js ////
 ////////////////////////////////////////////
-////////////// Level 4: Mouse //////////////
+///////// Level 4: Mouse + Keyboard ////////
 ////////////////////////////////////////////
 
 // ============================================================================
@@ -32,7 +32,6 @@
 /*global PLY:false Modernizr:false DEBUG:false */
 (function(){
     "use strict";
-    
 
     var level_4_events = {
     	click: function (evt) { console.log('click', evt.pageX, evt.pageY, "on", evt.target);

@@ -82,7 +82,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables 
     var log_buffer = [];
 
-    var git_context = "#% 1bc797e here it is %#";
+    var git_context = "#% b82a745 adding widget.js to build out reusable responsive multitouch widgets %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
