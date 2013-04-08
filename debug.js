@@ -2,13 +2,13 @@
  /// slu's JS browser debug/util layer deluxe ///
 ////////////////////////////////////////////////
 
-// debug.js is a resource-level instrumentation script. Include to gain 
-// debugging capabilities, and absence implies release deployment. 
+// debug.js is a resource-level instrumentation script. Include to gain
+// debugging capabilities, and absence implies release deployment.
 // predicate debugging features on the presence of DEBUG global.
-// TODO: Remove all references to DEBUG.enabled (it used to be the switchable debug flag). 
-// Instead, build individual toggle controls into debugging features separately. 
+// TODO: Remove all references to DEBUG.enabled (it used to be the switchable debug flag).
+// Instead, build individual toggle controls into debugging features separately.
 
-// routines found in this debug layer are permitted to fail spectacularly in 
+// routines found in this debug layer are permitted to fail spectacularly in
 // the absence of necessary components such as jQuery, ply.js, utils (towel.js)
 
 // For now, there might be a few special DOM id's that are referenced:
@@ -79,7 +79,7 @@ var DEBUG = (function($) {
         return false;
     }
 
-    // all vars except the variable "exposed" are private variables 
+    // all vars except the variable "exposed" are private variables
     var log_buffer = [];
 
     var git_context = "#% REVISION %#";
@@ -92,7 +92,7 @@ var DEBUG = (function($) {
     }
 
     var original_console_log = console.log;
-    // echo console logs to the debug 
+    // echo console logs to the debug
     var instrumented_log = function () {
         original_console_log.apply(window.console, arguments);
         var str = "";
@@ -105,7 +105,7 @@ var DEBUG = (function($) {
         var html_str = '<div class="log" data-time="'+now+'">'+str+'</div>';
         log_buffer.push(html_str);
         $("#debug_log").prepend(html_str);
-        // this means all logs in your application get dumped into #debug_log if 
+        // this means all logs in your application get dumped into #debug_log if
         // you've got one
     };
 
@@ -143,14 +143,14 @@ var DEBUG = (function($) {
         }
     }
 
-// the stuff following this are to be moved over to util because they are not debug-only 
-// functionality. 
+// the stuff following this are to be moved over to util because they are not debug-only
+// functionality.
 
 
 
     // this is a convenience debugger helper to map arbitrary code to keyboard input
-    // keychar_funclist must be a hash of functions where the key is a char representing the 
-    // keyboard key that will trigger the function. These funcs will be invoked with no args. 
+    // keychar_funclist must be a hash of functions where the key is a char representing the
+    // keyboard key that will trigger the function. These funcs will be invoked with no args.
     function globalAsyncKeybind(keychar_funclist) {
         document.addEventListener("keydown", function (evt) {
             function key(evt) {
@@ -221,8 +221,8 @@ var DEBUG = (function($) {
 
     UTIL.injectCSS(pointer_debug_css);
 
-    // touch point location debug functionality is encapsulated in these public functions 
-    // this depends on PLY but not in the sense that it requires it on load. it requires it to run: 
+    // touch point location debug functionality is encapsulated in these public functions
+    // this depends on PLY but not in the sense that it requires it on load. it requires it to run:
     // so they can be loaded asynchronously so long as this does not run before it loads.
     function update_pointer_state() {
         var jptr_marker_ctnr = $("#ply_ptr_marker_ctnr");
@@ -315,9 +315,9 @@ var DEBUG = (function($) {
         instrument_profile: instrument_with_accumulated_profile,
 
         // This is just marked when any event makes its way through the primary
-        // event handlers so that the test site can be a bit more efficient about 
-        // re-updating the DOM. I may eventually let the events that don't 
-        // change the debugprints to also not set this either. 
+        // event handlers so that the test site can be a bit more efficient about
+        // re-updating the DOM. I may eventually let the events that don't
+        // change the debugprints to also not set this either.
         event_processed: false,
         datenow: datenow
     };
