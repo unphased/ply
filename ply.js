@@ -48,19 +48,19 @@ var PLY = (function ($data) {
         pointer_state: {},
         // used by touchmove event to run code only when necessary
         // TODO: why is this public?
-        tmTime: 100,
+        // tmTime: 100,
 
         // converges on the time it takes to run touchmove
-        tmProfile: 3,
+        // tmProfile: 3,
         // just for reference purposes: my iPhone 5 appears to execute (not
         // including the dispatch/computation stage)
         // touchmove, when debug is off, within 200 microseconds (one touch)
-        tmProfileDispatch: 3,
+        // tmProfileDispatch: 3,
         // converges on the time it takes to run only the block that computes
         // and dispatches (and executes) the ply manipulation events
 
         // converges on the rate touchmove is run
-        tmRate: 16,
+        // tmRate: 16,
 
         // allow_scroll is a global flag that (basically) triggers calling
         // preventDefault on touch events. This is more or less geared toward
