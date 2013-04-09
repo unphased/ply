@@ -29,16 +29,22 @@
 // IN THE SOFTWARE.
 // ============================================================================
 
+// Usage note: This file depends on ply.js.
+
 /*global PLY:false Modernizr:false DEBUG:false */
 (function(){
     "use strict";
+
+    var exposed = {
+        key_state: {}
+    };
 
     function key(evt) {
         return evt.which || evt.keyCode || /*window.*/event.keyCode;
     }
 
     var level_4_events = {
-    	click: function (evt) { console.log('click', evt.pageX, evt.pageY, "on", evt.target);
+        click: function (evt) { console.log('click', evt.pageX, evt.pageY, "on", evt.target);
 
         },
         mousedown: function (evt) { //console.log('mousedown',evt.pageX,evt.pageY);
@@ -51,17 +57,17 @@
                 // context menu prevents mouseup. ply does not respond to
                 // the secondary mouse button interaction
                 return;
-            exposed.pointer_state.m = {xs:evt.pageX, ys:evt.pageY,
+            PLY.pointer_state.m = {xs:evt.pageX, ys:evt.pageY,
                 xc: evt.pageX, yc: evt.pageY, es: evt.target, ec: evt.target};
         },
         mouseup: function (evt) { //console.log('mouseup',evt.pageX,evt.pageY);
             // this event may fail to fire by dragging mouse out of
             // window. This is less of a concern for touch since most touch
             // devices do not use window systems.
-            delete exposed.pointer_state.m;
+            delete PLY.pointer_state.m;
         },
         mousemove: function (evt) {
-            var epm = exposed.pointer_state.m;
+            var epm = PLY.pointer_state.m;
             if (epm) {
                 epm.xc = evt.pageX; epm.yc = evt.pageY;
                 epm.ec = evt.target;
@@ -77,10 +83,14 @@
                 evt.preventDefault();
         },
         keydown: function (evt) { console.log("keydown",key(evt));
-            exposed.keys_depressed[key(evt)] = String.fromCharCode(key(evt));
+            exposed.key_state[key(evt)] = String.fromCharCode(key(evt));
         },
         keyup: function (evt) { console.log("keyup",key(evt));
-            delete exposed.keys_depressed[key(evt)];
+            delete exposed.key_state[key(evt)];
         }
     };
+
+    PLY.attach_handlers_on_document(level_4_events);
+
+    return exposed;
 })();
