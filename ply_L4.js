@@ -70,7 +70,7 @@
             var ps = PLY.pointer_state;
             assert(ps.m.buttons[evt.which],"ps.m.buttons["+evt.which+"] is present");
             delete ps.m.buttons[evt.which];
-            if (Object.keys(ps.m.buttons).length === 0) {
+            if (!ps.m.buttons || Object.keys(ps.m.buttons).length === 0) {
                 // No more buttons pressed
                 delete PLY.pointer_state.m;
             }
