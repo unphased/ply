@@ -17,7 +17,7 @@
 
 var DEBUG = (function($) {
     /*global UTIL:false, PLY:false, Modernizr:false, ply_$:false*/
-    "use strict";
+    //"use strict";
 
 	var AssertException = function (message) { this.message = message; };
     AssertException.prototype.toString = function () {
@@ -82,7 +82,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables
     var log_buffer = [];
 
-    var git_context = "#% aba33a8 enabling toggle to control the log again... man this is some annoying dejavu.... cant be bothered to hunt down the original change though %#";
+    var git_context = "#% 463425c wtf strict %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
