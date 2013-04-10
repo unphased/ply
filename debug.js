@@ -30,7 +30,7 @@ var DEBUG = (function($) {
             throw new AssertException(message);
         }
     };
-    var assert = assert; // suppresses a jshint
+
 
     // this HTML escapist came from mustache.js
     var entityMap = {
@@ -199,7 +199,7 @@ var DEBUG = (function($) {
         if (Array.isArray(arg2))
             instrument_with_accumulated_profile(routine_noarg, arg2, arg3, arg4);
         else {
-            assert(arg4 === undefined);
+            window.assert(arg4 === undefined);
             instrument_with_accumulated_profile(routine_noarg, [], arg2, arg3);
         }
     }
