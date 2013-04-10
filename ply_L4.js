@@ -33,7 +33,7 @@
 
 (function(){
     /*global PLY:false Modernizr:false assert:false DEBUG:false */
-    "use strict";
+    //"use strict";
 
     var exposed = {
         key_state: {},
