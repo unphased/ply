@@ -335,6 +335,7 @@ var DEBUG = (function($) {
         globalAsyncKeybind: globalAsyncKeybind,
         instrument_profile: instrument_profile,
         instrument_profile_on: instrument_profile_on,
+        profiles: profiles,
 
 
         // This is just marked when any event makes its way through the primary
