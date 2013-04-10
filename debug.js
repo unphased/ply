@@ -30,7 +30,7 @@ var DEBUG = (function($) {
             throw new AssertException(message);
         }
     };
-    var assert = assert; // suppresses a jshint
+
 
     // this HTML escapist came from mustache.js
     var entityMap = {
@@ -83,7 +83,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables
     var log_buffer = [];
 
-    var git_context = "#% fd96d0b This was tremendously elaborate to work through the logic. I really am not sure if clojure can be efficient enough to be worth it, though, because of how short the resultant JS is here. It's just I'd have no idea how to go one more meta-level above this. %#";
+    var git_context = "#% 91e5832 assert is strange %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -199,7 +199,7 @@ var DEBUG = (function($) {
         if (Array.isArray(arg2))
             instrument_with_accumulated_profile(routine_noarg, arg2, arg3, arg4);
         else {
-            assert(arg4 === undefined);
+            window.assert(arg4 === undefined);
             instrument_with_accumulated_profile(routine_noarg, [], arg2, arg3);
         }
     }
