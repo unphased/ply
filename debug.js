@@ -82,7 +82,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables
     var log_buffer = [];
 
-    var git_context = "#% 67bdb8b enabling log hook %#";
+    var git_context = "#% aba33a8 enabling toggle to control the log again... man this is some annoying dejavu.... cant be bothered to hunt down the original change though %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -104,13 +104,13 @@ var DEBUG = (function($) {
         var now = datenow();
         var html_str = '<div class="log" data-time="'+now+'">'+str+'</div>';
         log_buffer.push(html_str);
-        $("#debug_log").prepend(html_str);
+        if (DEBUG && DEBUG.enabled) $("#debug_log").prepend(html_str);
         // this means all logs in your application get dumped into #debug_log if
         // you've got one
     };
 
-    //if (is_touch_device())
-    //{
+    if (true)
+    {
         console.log = instrumented_log;
 
         var show_log_buffer = false;
@@ -123,7 +123,7 @@ var DEBUG = (function($) {
             }
         })).on("touchenter",function(){console.log("touchenter on toggle buffer dump button");})
             .on('touchleave',function(){console.log("touchleave on toggle buffer dump button");});
-    //}
+    }
 
     function error(e) {
         var e_html = '<div class="error">'+e.toString()+" at "+e.stack+"</div>";
