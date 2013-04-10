@@ -48,7 +48,7 @@
         // click: function (evt) { //console.log('click', evt.pageX, evt.pageY, "on", evt.target);
 
         // },
-        mousedown: function (evt) { //console.log('mousedown',evt.pageX,evt.pageY);
+        mousedown: function (evt) { console.log('mousedown which: '+evt.which+' button: '+evt.button);
             // need to trap drag-of-selection. Crap. You'll have to prevent
             // selections entirely. Funny this stuff is quite
             // less problematic for touch events.
@@ -65,7 +65,7 @@
             }
             ps.m.buttons[evt.which] = true;
         },
-        mouseup: function (evt) { //console.log('mouseup',evt.pageX,evt.pageY);
+        mouseup: function (evt) { console.log('mouseup which: '+evt.which+' button: '+evt.button);
             // this event may fail to fire by dragging mouse out of window.
             var ps = PLY.pointer_state;
             if (ps.m && ps.m.buttons) delete ps.m.buttons[evt.which];
