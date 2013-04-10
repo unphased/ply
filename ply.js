@@ -82,9 +82,6 @@ var PLY = (function ($data) {
         // what will be necessary, however, is for mutation events/observer to
         // clear out the values in here so as to not leak DOM nodes.
 
-        // the ply mechanism for globally assigning event handlers
-        attach_handlers_on_document: attach_handlers_on_document,
-
         sanityCheck: internalCheck // this is like a unit test that you can run any time
         // sanityCheck is not bound to/dependent on debug status
     };

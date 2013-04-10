@@ -205,7 +205,7 @@ var PLY_L2 = (function ($) {
     };
 
     // make use of shared code (this attaches handlers to document)
-    PLY.attach_handlers_on_document(level_2_events);
+    UTIL.attach_handlers_on_document(level_2_events);
 
     // produce public interface
     return exposed;
