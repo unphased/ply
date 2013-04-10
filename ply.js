@@ -34,7 +34,7 @@ var PLY = (function ($data) {
     /*global DEBUG:false, UTIL:false, Modernizr:false, assert:false*/
     // following line is for use with jshint, it is a global decl
 
-    "use strict";
+    //"use strict";
 
     // var datenow = DEBUG.datenow;
 
