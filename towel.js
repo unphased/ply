@@ -154,7 +154,7 @@ var UTIL = (function () {
         each(handler_map, function (event_name,v) {
             if (!v) return;
             var prof_v;
-            var h_this = this, h_args = arguments, v_wrap = function () { v.apply(h_this, h_args); };
+            var h_this = arguments.callee.caller, h_args = arguments, v_wrap = function () { v.apply(h_this, h_args); };
             if (window.DEBUG && profile_list && profile_list[event_name]) {
                 prof_v = window.DEBUG.instrument_profile_on(v_wrap,event_name,30);
             }
