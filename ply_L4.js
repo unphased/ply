@@ -31,12 +31,13 @@
 
 // Usage note: This file depends on ply.js.
 
-/*global PLY:false Modernizr:false DEBUG:false */
 (function(){
+    /*global PLY:false Modernizr:false assert:false DEBUG:false */
     "use strict";
 
     var exposed = {
-        key_state: {}
+        key_state: {},
+        mouse_button_state: {}
     };
 
     function key(evt) {
@@ -44,27 +45,35 @@
     }
 
     var level_4_events = {
-        click: function (evt) { console.log('click', evt.pageX, evt.pageY, "on", evt.target);
+        // click: function (evt) { //console.log('click', evt.pageX, evt.pageY, "on", evt.target);
 
-        },
+        // },
         mousedown: function (evt) { //console.log('mousedown',evt.pageX,evt.pageY);
             // need to trap drag-of-selection. Crap. You'll have to prevent
             // selections entirely. Funny this stuff is quite
             // less problematic for touch events.
 
-            // trap the right clicks!! this is huge
             if (evt.which === 3) // secondary mouse button causes context menu,
                 // context menu prevents mouseup. ply does not respond to
-                // the secondary mouse button interaction
+                // the secondary mouse button to be on the safe side
                 return;
-            PLY.pointer_state.m = {xs:evt.pageX, ys:evt.pageY,
+
+            var ps = PLY.pointer_state;
+            if (!ps.m) {
+                ps.m = {xs:evt.pageX, ys:evt.pageY, buttons: {},
                 xc: evt.pageX, yc: evt.pageY, es: evt.target, ec: evt.target};
+            }
+            ps.m.buttons[evt.which] = true;
         },
         mouseup: function (evt) { //console.log('mouseup',evt.pageX,evt.pageY);
-            // this event may fail to fire by dragging mouse out of
-            // window. This is less of a concern for touch since most touch
-            // devices do not use window systems.
-            delete PLY.pointer_state.m;
+            // this event may fail to fire by dragging mouse out of window.
+            var ps = PLY.pointer_state;
+            assert(ps.m.buttons[evt.which],"ps.m.buttons["+evt.which+"] is present");
+            delete ps.m.buttons[evt.which];
+            if (Object.keys(ps.m.buttons).length === 0) {
+                // No more buttons pressed
+                delete PLY.pointer_state.m;
+            }
         },
         mousemove: function (evt) {
             var epm = PLY.pointer_state.m;
