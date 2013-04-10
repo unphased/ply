@@ -587,23 +587,43 @@ var PLY = (function ($data) {
         }, */
     };
 
+    var profiled_handlers = {
+        "touchstart": 1,
+        "touchmove": 1,
+        "touchend": 1 // aw shit that's all of 'em
+    };
     function attach_handlers_on_document(handler_map) {
         each(handler_map, function (event_name,v) {
             if (!v) return;
+            var prof_v;
+            var h_this = this, h_args = arguments, v_wrap = function () { v.apply(h_this, h_args); };
+            if (DEBUG && profiled_handlers[event_name]) {
+                prof_v = DEBUG.instrument_profile_on(v_wrap,event_name,30);
+            }
             document.addEventListener(event_name, function() {
-                if (DEBUG) {
-                    // in debug mode (i.e. if debug.js is included) all exceptions originating from
-                    // ply and 2ply global events are caught and reported to debug elements if present
+                // in debug mode (i.e. if debug.js is included) all exceptions originating from
+                // this handler maker are caught and reported to debug elements if present
+
+                if (DEBUG && profiled_handlers[event_name] && !prof_v) {
+                    // dynamic profiled routine generation
+                    prof_v = DEBUG.instrument_profile_on(v_wrap,event_name,30);
+                }
+                if (DEBUG && DEBUG.enabled) {
                     try {
-                        v.apply(this, arguments);
+                        if (prof_v && DEBUG.profiles[event_name].enabled) {
+                            prof_v();
+                        }
+                        v_wrap();
                     } catch (e) {
                         // show the error to the DOM to help out for mobile (also cool on PC)
                         DEBUG.error(e);
                         throw e; // rethrow to give it to debugging safari, rather than be silent
                     }
                     DEBUG.event_processed = true;
+                } else if (DEBUG && prof_v && DEBUG.profiles[event_name].enabled) {
+                    prof_v();
                 } else {
-                    v.apply(this, arguments);
+                    v_wrap();
                 }
             }, true);
             // hook to capture phase to catch in the event of stopPropagation()

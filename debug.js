@@ -30,6 +30,7 @@ var DEBUG = (function($) {
             throw new AssertException(message);
         }
     };
+    var assert = assert; // suppresses a jshint
 
     // this HTML escapist came from mustache.js
     var entityMap = {
@@ -82,7 +83,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables
     var log_buffer = [];
 
-    var git_context = "#% 9603307 sigh %#";
+    var git_context = "#% fd96d0b This was tremendously elaborate to work through the logic. I really am not sure if clojure can be efficient enough to be worth it, though, because of how short the resultant JS is here. It's just I'd have no idea how to go one more meta-level above this. %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -143,10 +144,6 @@ var DEBUG = (function($) {
         }
     }
 
-// the stuff following this are to be moved over to util because they are not debug-only
-// functionality.
-
-
 
     // this is a convenience debugger helper to map arbitrary code to keyboard input
     // keychar_funclist must be a hash of functions where the key is a char representing the
@@ -169,21 +166,45 @@ var DEBUG = (function($) {
         });
     }
 
-    function instrument_with_accumulated_profile(routine, report_receiver, report_count) {
+    // exposed for easy review and is filled with summary from state
+    // currently works as plain holder of whatever instrumenter gives it
+    var profiles = {};
+
+    // be sure to use me correctly (i.e. don't throw away my retval, etc)
+    function reporter_maker(name_of_profile_report) {
+        profiles[name_of_profile_report] = "initprofile";
+        return function (report_from_profiler) {
+            profiles[name_of_profile_report] = report_from_profiler;
+        };
+    }
+
+    function instrument_with_accumulated_profile(routine, routine_args, report_receiver, report_count) {
         var rc = report_count || 30;
-        var each = 1.0/rc; // keeping shit simple
+        var each = 1.0/rc; // keeping it simple
+        // some ephemeral profiling DS's closed over the instrumented routine's function
         var accum = 0;
-        var count = 0; // some ephemeral profiling DS's closed over the instrumented routine's function
+        var count = 0;
         return function() {
             var time = datenow();
-            routine();
+            routine.apply(this, routine_args);
             accum += each*(datenow()-time);
             if (++count === rc) {
                 count = 0;
-                report_count(accum);
+                report_receiver(accum);
                 accum = 0;
             }
         };
+    }
+    function instrument_profile(routine_noarg, arg2, arg3, arg4) {
+        if (Array.isArray(arg2))
+            instrument_with_accumulated_profile(routine_noarg, arg2, arg3, arg4);
+        else {
+            assert(arg4 === undefined);
+            instrument_with_accumulated_profile(routine_noarg, [], arg2, arg3);
+        }
+    }
+    function instrument_profile_on(routine_noarg, name, count) {
+        instrument_profile(routine_noarg, reporter_maker(name), count);
     }
 
     var hide_transform = 'translate3d(-99999px,-99999px,0)';
@@ -312,7 +333,10 @@ var DEBUG = (function($) {
         update_pointer_state: update_pointer_state,
         error: error,
         globalAsyncKeybind: globalAsyncKeybind,
-        instrument_profile: instrument_with_accumulated_profile,
+        instrument_profile: instrument_profile,
+        instrument_profile_on: instrument_profile_on,
+        profiles: profiles,
+
 
         // This is just marked when any event makes its way through the primary
         // event handlers so that the test site can be a bit more efficient about
