@@ -82,7 +82,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables
     var log_buffer = [];
 
-    var git_context = "#% 7198dab more visibility %#";
+    var git_context = "#% 67bdb8b enabling log hook %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -109,8 +109,8 @@ var DEBUG = (function($) {
         // you've got one
     };
 
-    if (is_touch_device())
-    {
+    //if (is_touch_device())
+    //{
         console.log = instrumented_log;
 
         var show_log_buffer = false;
@@ -123,7 +123,7 @@ var DEBUG = (function($) {
             }
         })).on("touchenter",function(){console.log("touchenter on toggle buffer dump button");})
             .on('touchleave',function(){console.log("touchleave on toggle buffer dump button");});
-    }
+    //}
 
     function error(e) {
         var e_html = '<div class="error">'+e.toString()+" at "+e.stack+"</div>";
