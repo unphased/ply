@@ -2,7 +2,7 @@
 // failing to include debug.js prior to loading it.
 
 (function() {
-    /*global DEBUG:false Modernizr:false requestAnimationFrame:true cancelAnimationFrame:true PLY:false PLY_L2:false assert:false*/
+    /*global UTIL:false DEBUG:false Modernizr:false requestAnimationFrame:true cancelAnimationFrame:true PLY:false PLY_L2:false assert:false*/
     //"use strict"; // permissible to uncomment strict mode when in need of debugging
     var datenow = DEBUG.datenow;
     var lastTime = 0;
@@ -264,7 +264,7 @@
     //if (DEBUG){
         $("h1").after('<button id="debug_toggle" onclick="DEBUG.enable_debug_printing = !DEBUG.enable_debug_printing">toggle all debug</button>');
     //}
-    PLY.attach_handlers_on_document({
+    UTIL.attach_handlers_on_document({
         ply_oneend: function(evt) {
             var dt = $.data(evt.target,"ply");
             if (!dt._test_no_reset) {

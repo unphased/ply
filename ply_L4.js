@@ -32,7 +32,7 @@
 // Usage note: This file depends on ply.js.
 
 (function(){
-    /*global PLY:false Modernizr:false assert:false DEBUG:false */
+    /*global PLY:false Modernizr:false assert:false DEBUG:false UTIL:false */
     //"use strict";
 
     var exposed = {
@@ -98,7 +98,7 @@
         }
     };
 
-    PLY.attach_handlers_on_document(level_4_events);
+    UTIL.attach_handlers_on_document(level_4_events);
 
     return exposed;
 })();

@@ -2,8 +2,8 @@
  /// slu's JS browser debug/util layer deluxe ///
 ////////////////////////////////////////////////
 
-// towel.js contains a set of utilities. It is for keeping things DRY. 
-// There is occasionally some overlap with jQuery's good stuff. 
+// towel.js contains a set of utilities. It is for keeping things DRY.
+// There is occasionally some overlap with jQuery's good stuff.
 // Modernizr is used a little bit for the sake of brevity.
 
 
@@ -41,12 +41,12 @@ var UTIL = (function () {
     // parallel script loading, could perhaps be using jQuery deferred/promises
     // but I *really* like the elegant simplicity of my approach here
     // can put in potentially null entries in array (they will be cleanly skipped)
-    // Sample (not very dry example) usage: 
+    // Sample (not very dry example) usage:
 
     // resources = [
     //     window.jQuery ? {
     //         url: "https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js",
-    //         tag: "script", 
+    //         tag: "script",
     //         cb: function(){ ply_$ = $.noConflict(true) }
     //     } : {
     //         url: "https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js",
@@ -75,12 +75,12 @@ var UTIL = (function () {
         }});
     }
 
-    // synchronous dynamic script loading. 
-    // takes an array of js url's to be loaded in that specific order. 
-    // assembles an array of functions that are referenced more directly rather than 
-    // using only nested closures. I couldn't get it going with the closures and gave up on it. 
+    // synchronous dynamic script loading.
+    // takes an array of js url's to be loaded in that specific order.
+    // assembles an array of functions that are referenced more directly rather than
+    // using only nested closures. I couldn't get it going with the closures and gave up on it.
     function js_load(resources, cb_done) {
-        var cb_list = []; // this is not space optimal but nobody gives a damn 
+        var cb_list = []; // this is not space optimal but nobody gives a damn
         array_each(resources, function(r, i) {
             cb_list[i] = function() {
                 var x = document.body.appendChild(document.createElement('script'));
@@ -104,7 +104,7 @@ var UTIL = (function () {
 
     // resources = {
     //     "https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js": {
-    //         tag: "script", 
+    //         tag: "script",
     //         cb: function(){ ply_$ = $.noConflict(true) }
     //     },
     //     "https://raw.github.com/unphased/ply/master/modernizr-2.6.2.min.js": true
@@ -138,7 +138,7 @@ var UTIL = (function () {
     var transitionDurationStyle = Modernizr.prefixed('transitionDuration');
 
     function inject_css(css) {
-        // append a style tag to head 
+        // append a style tag to head
         var head = document.getElementsByTagName("head")[0];
         var style = document.createElement("style");
         style.type = "text/css";
@@ -150,6 +150,44 @@ var UTIL = (function () {
         head.appendChild(style);
     }
 
+    function attach_handlers_on_document(handler_map, profile_list) {
+        each(handler_map, function (event_name,v) {
+            if (!v) return;
+            var prof_v;
+            var h_this = this, h_args = arguments, v_wrap = function () { v.apply(h_this, h_args); };
+            if (window.DEBUG && profile_list[event_name]) {
+                prof_v = window.DEBUG.instrument_profile_on(v_wrap,event_name,30);
+            }
+            document.addEventListener(event_name, function() {
+                // in debug mode (i.e. if debug.js is included) all exceptions originating from
+                // this handler maker are caught and reported to debug elements if present
+
+                if (window.DEBUG && profile_list[event_name] && !prof_v) {
+                    // dynamic profiled routine generation
+                    prof_v = window.DEBUG.instrument_profile_on(v_wrap,event_name,30);
+                }
+                if (window.DEBUG && window.DEBUG.enabled) {
+                    try {
+                        if (prof_v && window.DEBUG.profiles[event_name].enabled) {
+                            prof_v();
+                        }
+                        v_wrap();
+                    } catch (e) {
+                        // show the error to the DOM to help out for mobile (also cool on PC)
+                        window.DEBUG.error(e);
+                        throw e; // rethrow to give it to debugging safari, rather than be silent
+                    }
+                    window.DEBUG.event_processed = true;
+                } else if (window.DEBUG && prof_v && window.DEBUG.profiles[event_name].enabled) {
+                    prof_v();
+                } else {
+                    v_wrap();
+                }
+            }, true);
+            // hook to capture phase to catch in the event of stopPropagation()
+        });
+    }
+
     return {
         each: each,
         array_each: array_each,
@@ -159,6 +197,7 @@ var UTIL = (function () {
         transformStyle: transformStyle,
         hyphen_mp: hyphen_mp,
         transitionDurationStyle: transitionDurationStyle,
-        injectCSS: inject_css
+        injectCSS: inject_css,
+        attach_handlers_on_document: attach_handlers_on_document
     };
 })();
