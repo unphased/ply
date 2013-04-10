@@ -82,7 +82,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables
     var log_buffer = [];
 
-    var git_context = "#% 463425c wtf strict %#";
+    var git_context = "#% 9603307 sigh %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -104,7 +104,7 @@ var DEBUG = (function($) {
         var now = datenow();
         var html_str = '<div class="log" data-time="'+now+'">'+str+'</div>';
         log_buffer.push(html_str);
-        if (DEBUG && DEBUG.enabled) $("#debug_log").prepend(html_str);
+        if (DEBUG && DEBUG.enable_debug_printing) $("#debug_log").prepend(html_str);
         // this means all logs in your application get dumped into #debug_log if
         // you've got one
     };
