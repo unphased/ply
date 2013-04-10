@@ -55,7 +55,7 @@
 
             if (evt.which === 3) // secondary mouse button causes context menu,
                 // context menu prevents mouseup. ply does not respond to
-                // the secondary mouse button to be on the safe side
+                // the secondary mouse button in an attempt to not rock the boat
                 return;
 
             var ps = PLY.pointer_state;

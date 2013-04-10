@@ -143,10 +143,6 @@ var DEBUG = (function($) {
         }
     }
 
-// the stuff following this are to be moved over to util because they are not debug-only
-// functionality.
-
-
 
     // this is a convenience debugger helper to map arbitrary code to keyboard input
     // keychar_funclist must be a hash of functions where the key is a char representing the
