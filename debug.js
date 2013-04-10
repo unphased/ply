@@ -17,7 +17,7 @@
 
 var DEBUG = (function($) {
     /*global UTIL:false, PLY:false, Modernizr:false, ply_$:false*/
-    "use strict";
+    //"use strict";
 
 	var AssertException = function (message) { this.message = message; };
     AssertException.prototype.toString = function () {
