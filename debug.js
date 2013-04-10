@@ -166,6 +166,18 @@ var DEBUG = (function($) {
         });
     }
 
+    // exposed for easy review and is filled with summary from state
+    // currently works as plain holder of whatever instrumenter gives it
+    var profiles = {};
+
+    // be sure to use me correctly (i.e. don't throw away my retval, etc)
+    function reporter_maker(name_of_profile_report) {
+        profiles[name_of_profile_report] = "initprofile";
+        return function (report_from_profiler) {
+            profiles[name_of_profile_report] = report_from_profiler;
+        };
+    }
+
     function instrument_with_accumulated_profile(routine, routine_args, report_receiver, report_count) {
         var rc = report_count || 30;
         var each = 1.0/rc; // keeping it simple
@@ -190,6 +202,9 @@ var DEBUG = (function($) {
             assert(arg4 === undefined);
             instrument_with_accumulated_profile(routine_noarg, [], arg2, arg3);
         }
+    }
+    function instrument_profile_on(routine_noarg, name, count) {
+        instrument_profile(routine_noarg, reporter_maker(name), count);
     }
 
     var hide_transform = 'translate3d(-99999px,-99999px,0)';
@@ -319,6 +334,7 @@ var DEBUG = (function($) {
         error: error,
         globalAsyncKeybind: globalAsyncKeybind,
         instrument_profile: instrument_profile,
+        instrument_profile_on: instrument_profile_on,
 
 
         // This is just marked when any event makes its way through the primary
