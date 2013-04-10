@@ -68,8 +68,7 @@
         mouseup: function (evt) { //console.log('mouseup',evt.pageX,evt.pageY);
             // this event may fail to fire by dragging mouse out of window.
             var ps = PLY.pointer_state;
-            assert(ps.m.buttons[evt.which],"ps.m.buttons["+evt.which+"] is present");
-            delete ps.m.buttons[evt.which];
+            if (ps.m.buttons) delete ps.m.buttons[evt.which];
             if (!ps.m.buttons || Object.keys(ps.m.buttons).length === 0) {
                 // No more buttons pressed
                 delete PLY.pointer_state.m;
