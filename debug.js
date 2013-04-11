@@ -347,10 +347,11 @@ var DEBUG = (function($) {
     };
 
     // generally helpful debugging info
-    console.log("UA: "+navigator.userAgent);
-    console.log("window.devicePixelRatio:", window.devicePixelRatio);
-    console.log("Revision: "+exposed.revision);
-
+    $(function() {
+        console.log("UA: "+navigator.userAgent);
+        console.log("window.devicePixelRatio:", window.devicePixelRatio);
+        console.log("Revision: "+exposed.revision);
+    });
     return exposed;
 })(window.ply_$ || jQuery);
 // will use either your site's jQuery, or if in conjunction with ply and a jQuery conflict had occurred,

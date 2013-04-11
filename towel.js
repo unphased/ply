@@ -153,15 +153,14 @@ var UTIL = (function () {
     function attach_handlers_on_document(handler_map, profile_list) {
         each(handler_map, function (event_name,v) {
             if (!v) return;
-            var v_bound = v.bind(this);
-            var h_args = arguments;
-            var prof_v, v_wrap = function () { v_bound(h_args); };
-            if (window.DEBUG && profile_list && profile_list[event_name]) {
-                prof_v = window.DEBUG.instrument_profile_on(v_wrap,event_name,30);
-            }
+
+            var prof_v;
             document.addEventListener(event_name, function() {
                 // in debug mode (i.e. if debug.js is included) all exceptions originating from
                 // this handler maker are caught and reported to debug elements if present
+                var v_bound = v.bind(this);
+                var h_args = arguments;
+                var v_wrap = function () { v_bound(h_args); };
 
                 if (window.DEBUG && profile_list && profile_list[event_name] && !prof_v) {
                     // dynamic profiled routine generation
