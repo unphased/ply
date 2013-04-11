@@ -83,7 +83,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables
     var log_buffer = [];
 
-    var git_context = "#% 6b50c2c testing this %#";
+    var git_context = "#% 30f879e hopefully this works %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -347,10 +347,11 @@ var DEBUG = (function($) {
     };
 
     // generally helpful debugging info
-    console.log("UA: "+navigator.userAgent);
-    console.log("window.devicePixelRatio:", window.devicePixelRatio);
-    console.log("Revision: "+exposed.revision);
-
+    $(function() {
+        console.log("UA: "+navigator.userAgent);
+        console.log("window.devicePixelRatio:", window.devicePixelRatio);
+        console.log("Revision: "+exposed.revision);
+    });
     return exposed;
 })(window.ply_$ || jQuery);
 // will use either your site's jQuery, or if in conjunction with ply and a jQuery conflict had occurred,
