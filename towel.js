@@ -153,8 +153,9 @@ var UTIL = (function () {
     function attach_handlers_on_document(handler_map, profile_list) {
         each(handler_map, function (event_name,v) {
             if (!v) return;
-            var prof_v;
-            var h_args = arguments, v_wrap = function () { v.apply(arguments.callee.caller, h_args); };
+            var v_bound = v.bind(this);
+            var h_args = arguments;
+            var prof_v, v_wrap = function () { v_bound(h_args); };
             if (window.DEBUG && profile_list && profile_list[event_name]) {
                 prof_v = window.DEBUG.instrument_profile_on(v_wrap,event_name,30);
             }
