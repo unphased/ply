@@ -83,7 +83,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables
     var log_buffer = [];
 
-    var git_context = "#% 30f879e hopefully this works %#";
+    var git_context = "#% 9e897a9 hopefully this will work %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -178,7 +178,7 @@ var DEBUG = (function($) {
         };
     }
 
-    function instrument_with_accumulated_profile(routine, routine_args, report_receiver, report_count) {
+    function instrument_with_accumulated_profile(routine, report_receiver, report_count) {
         var rc = report_count || 30;
         var each = 1.0/rc; // keeping it simple
         // some ephemeral profiling DS's closed over the instrumented routine's function
@@ -186,7 +186,7 @@ var DEBUG = (function($) {
         var count = 0;
         return function() {
             var time = datenow();
-            routine.apply(this, routine_args);
+            routine.apply(this, arguments);
             accum += each*(datenow()-time);
             if (++count === rc) {
                 count = 0;
@@ -195,16 +195,8 @@ var DEBUG = (function($) {
             }
         };
     }
-    function instrument_profile(routine_noarg, arg2, arg3, arg4) {
-        if (Array.isArray(arg2))
-            instrument_with_accumulated_profile(routine_noarg, arg2, arg3, arg4);
-        else {
-            window.assert(arg4 === undefined);
-            instrument_with_accumulated_profile(routine_noarg, [], arg2, arg3);
-        }
-    }
     function instrument_profile_on(routine_noarg, name, count) {
-        instrument_profile(routine_noarg, reporter_maker(name), count);
+        instrument_with_accumulated_profile(routine_noarg, reporter_maker(name), count);
     }
 
     var hide_transform = 'translate3d(-99999px,-99999px,0)';
@@ -333,7 +325,6 @@ var DEBUG = (function($) {
         update_pointer_state: update_pointer_state,
         error: error,
         globalAsyncKeybind: globalAsyncKeybind,
-        instrument_profile: instrument_profile,
         instrument_profile_on: instrument_profile_on,
         profiles: profiles,
 
