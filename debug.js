@@ -171,10 +171,12 @@ var DEBUG = (function($) {
     var profiles = {};
 
     // be sure to use me correctly (i.e. don't throw away my retval, etc)
-    function reporter_maker(name_of_profile_report) {
-        profiles[name_of_profile_report] = "initprofile";
+    function reporter_maker(name_of_profile_report, cb) {
+        var pn = profiles[name_of_profile_report];
+        pn = { value: "initprofile", enabled: true, cb: cb };
         return function (report_from_profiler) {
-            profiles[name_of_profile_report] = report_from_profiler;
+            pn.value = report_from_profiler;
+            if (pn.cb) { pn.cb(name_of_profile_report, report_from_profiler); }
         };
     }
 
@@ -195,8 +197,8 @@ var DEBUG = (function($) {
             }
         };
     }
-    function instrument_profile_on(routine_noarg, name, count) {
-        instrument_with_accumulated_profile(routine_noarg, reporter_maker(name), count);
+    function instrument_profile_on(routine_noarg, name, count, cb) {
+        instrument_with_accumulated_profile(routine_noarg, reporter_maker(name, cb), count);
     }
 
     var hide_transform = 'translate3d(-99999px,-99999px,0)';
