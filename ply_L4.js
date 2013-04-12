@@ -98,7 +98,7 @@
         }
     };
 
-    UTIL.attach_handlers_on_document(level_4_events, {mousewheel: true});
+    UTIL.attach_handlers_on_document(level_4_events, {mousewheel: function(name, report){console.log("profile of "+name+" is "+report)}});
 
     return exposed;
 })();
