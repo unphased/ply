@@ -164,7 +164,7 @@ var UTIL = (function () {
                     prof_v = window.DEBUG.instrument_profile_on(v,event_name,30,(typeof pe === 'function')?pe:undefined);
                 }
                 var dp = window.DEBUG.profiles;
-                if (window.DEBUG && window.DEBUG.enabled) {
+                if (window.DEBUG && window.DEBUG.enable_debug_printing) {
                     try {
                         if (prof_v && dp[event_name].enabled) {
                             prof_v.apply(this, arguments);
