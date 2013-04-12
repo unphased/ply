@@ -98,7 +98,7 @@
         }
     };
 
-    UTIL.attach_handlers_on_document(level_4_events);
+    UTIL.attach_handlers_on_document(level_4_events, {mousewheel: true});
 
     return exposed;
 })();
