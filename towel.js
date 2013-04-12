@@ -158,30 +158,28 @@ var UTIL = (function () {
             document.addEventListener(event_name, function() {
                 // in debug mode (i.e. if debug.js is included) all exceptions originating from
                 // this handler maker are caught and reported to debug elements if present
-                var v_bound = v.bind(this);
-                var h_args = arguments;
-                var v_wrap = function () { v_bound(h_args); };
 
                 if (window.DEBUG && profile_list && profile_list[event_name] && !prof_v) {
                     // dynamic profiled routine generation
-                    prof_v = window.DEBUG.instrument_profile_on(v_wrap,event_name,30);
+                    prof_v = window.DEBUG.instrument_profile_on(v,event_name,30);
                 }
                 if (window.DEBUG && window.DEBUG.enabled) {
                     try {
                         if (prof_v && window.DEBUG.profiles[event_name].enabled) {
-                            prof_v();
+                            prof_v.apply(this, arguments);
+                        } else {
+                            v.apply(this, arguments);
                         }
-                        v_wrap();
                     } catch (e) {
                         // show the error to the DOM to help out for mobile (also cool on PC)
                         window.DEBUG.error(e);
                         throw e; // rethrow to give it to debugging safari, rather than be silent
                     }
                     window.DEBUG.event_processed = true;
-                } else if (window.DEBUG && prof_v && window.DEBUG.profiles[event_name].enabled) {
-                    prof_v();
+                } else if (prof_v && window.DEBUG && window.DEBUG.profiles[event_name].enabled) {
+                    prof_v.apply(this, arguments);
                 } else {
-                    v_wrap();
+                    v.apply(this, arguments);
                 }
             }, true);
             // hook to capture phase to catch in the event of stopPropagation()
