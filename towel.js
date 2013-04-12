@@ -163,9 +163,10 @@ var UTIL = (function () {
                     // dynamic profiled routine generation
                     prof_v = window.DEBUG.instrument_profile_on(v,event_name,30,(typeof pe === 'function')?pe:undefined);
                 }
+                var dp = window.DEBUG.profiles;
                 if (window.DEBUG && window.DEBUG.enabled) {
                     try {
-                        if (prof_v && window.DEBUG.profiles[event_name].enabled) {
+                        if (prof_v && dp[event_name].enabled) {
                             prof_v.apply(this, arguments);
                         } else {
                             v.apply(this, arguments);
@@ -176,7 +177,7 @@ var UTIL = (function () {
                         throw e; // rethrow to give it to debugging safari, rather than be silent
                     }
                     window.DEBUG.event_processed = true;
-                } else if (prof_v && window.DEBUG && window.DEBUG.profiles[event_name].enabled) {
+                } else if (prof_v && window.DEBUG && dp[event_name] && dp[event_name].enabled) {
                     prof_v.apply(this, arguments);
                 } else {
                     v.apply(this, arguments);
