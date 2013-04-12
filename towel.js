@@ -150,7 +150,7 @@ var UTIL = (function () {
         head.appendChild(style);
     }
 
-    function attach_handlers_on_document(handler_map, profile_list) {
+    function attach_handlers_on_document(handler_map, profile_these_handlers) {
         each(handler_map, function (event_name,v) {
             if (!v) return;
 
@@ -159,7 +159,7 @@ var UTIL = (function () {
                 // in debug mode (i.e. if debug.js is included) all exceptions originating from
                 // this handler maker are caught and reported to debug elements if present
 
-                if (window.DEBUG && profile_list && profile_list[event_name] && !prof_v) {
+                if (window.DEBUG && profile_these_handlers && profile_these_handlers[event_name] && !prof_v) {
                     // dynamic profiled routine generation
                     prof_v = window.DEBUG.instrument_profile_on(v,event_name,30);
                 }
