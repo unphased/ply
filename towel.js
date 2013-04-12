@@ -166,8 +166,12 @@ var UTIL = (function () {
                 var dp = window.DEBUG.profiles;
                 if (window.DEBUG && window.DEBUG.enable_debug_printing) {
                     try {
-                        if (prof_v && dp[event_name] && dp[event_name].enabled) {
-                            prof_v.apply(this, arguments);
+                        if (prof_v) {
+                            if (dp[event_name]) {
+                                if (dp[event_name].enabled) {
+                                    prof_v.apply(this, arguments);
+                                }
+                            }
                         } else {
                             v.apply(this, arguments);
                         }
