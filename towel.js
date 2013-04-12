@@ -169,10 +169,12 @@ var UTIL = (function () {
                         if (prof_v) {
                             if (dp[event_name]) {
                                 if (dp[event_name].enabled) {
+                                    var t = true;
                                     prof_v.apply(this, arguments);
                                 }
                             }
-                        } else {
+                        }
+                        if (typeof (t) === 'undefined') {
                             v.apply(this, arguments);
                         }
                     } catch (e) {
