@@ -83,7 +83,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables
     var log_buffer = [];
 
-    var git_context = "#% b152861 sexy %#";
+    var git_context = "#% d8fde91 return value! %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -197,8 +197,8 @@ var DEBUG = (function($) {
             }
         };
     }
-    function instrument_profile_on(routine_noarg, name, count, cb) {
-        instrument_with_accumulated_profile(routine_noarg, reporter_maker(name, cb), count);
+    function instrument_profile_on(routine, name, count, cb) {
+        return instrument_with_accumulated_profile(routine, reporter_maker(name, cb), count);
     }
 
     var hide_transform = 'translate3d(-99999px,-99999px,0)';
