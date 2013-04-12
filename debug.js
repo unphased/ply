@@ -83,7 +83,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables
     var log_buffer = [];
 
-    var git_context = "#% cd642b9 expanding out names %#";
+    var git_context = "#% bf052d1 more fixin %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -172,9 +172,9 @@ var DEBUG = (function($) {
 
     // be sure to use me correctly (i.e. don't throw away my retval, etc)
     function reporter_maker(name_of_profile_report, cb) {
-        var pn = profiles[name_of_profile_report];
-        pn = { value: "initprofile", enabled: true, cb: cb };
+        profiles[name_of_profile_report] = { value: "initprofile", enabled: true, cb: cb };
         return function (report_from_profiler) {
+            var pn = profiles[name_of_profile_report];
             pn.value = report_from_profiler;
             if (pn.cb) { pn.cb(name_of_profile_report, report_from_profiler); }
         };
