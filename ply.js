@@ -585,9 +585,9 @@ var PLY = (function ($data) {
     };
 
     var profiled_handlers = {
-        "touchstart": 1,
-        "touchmove": 1,
-        "touchend": 1 // aw shit that's all of 'em
+        "touchstart": function(name, report) {console.log("touchstart profile: "+report)},
+        "touchmove": function(name, report) {console.log("touchmove profile: "+report)},
+        "touchend": function(name, report) {console.log("touchend profile: "+report)} // aw shit that's all of 'em
     };
 
     UTIL.attach_handlers_on_document(level_1_events, profiled_handlers);
