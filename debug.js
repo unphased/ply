@@ -180,20 +180,25 @@ var DEBUG = (function($) {
         };
     }
 
-    function instrument_with_accumulated_profile(routine, report_receiver, report_count) {
-        var rc = report_count || 30;
-        var each = 1.0/rc; // keeping it simple
+    function instrument_with_accumulated_profile(routine, report_receiver, duration_ratio) {
+        var rc = 1.0/duration_ratio;
+
         // some ephemeral profiling DS's closed over the instrumented routine's function
         var accum = 0;
+        var starting = true;
         var count = 0;
         return function() {
             var time = datenow();
             routine.apply(this, arguments);
-            accum += each*(datenow()-time);
+            if (starting) {
+                accum += each*(datenow()-time);
+            } else {
+
+            }
             if (++count === rc) {
                 count = 0;
+                starting = false;
                 report_receiver(accum);
-                accum = 0;
             }
         };
     }
