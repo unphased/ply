@@ -2,18 +2,18 @@
  /// slu's JS browser debug/util layer deluxe ///
 ////////////////////////////////////////////////
 
-// towel.js contains a set of utilities. It is for keeping things DRY. 
-// There is occasionally some overlap with jQuery's good stuff. 
+// towel.js contains a set of utilities. It is for keeping things DRY.
+// There is occasionally some overlap with jQuery's good stuff.
 // Modernizr is used a little bit for the sake of brevity.
 
-/*global assert:false*/
+
 var UTIL = (function () {
-    /*global Modernizr:false*/
+    /*global assert:true, Modernizr:false*/
     //"use strict"; // temporarily comment out to let safari's debugger through
 
     // util is the first included script usually: initializes release mode assert
-    window.assert = function () {};
-    
+    assert = function () {};
+
     // for scoped iteration over an object (clean version of jquery each)
     // f receives args (key, value)
     function each(obj, f) {
@@ -41,12 +41,12 @@ var UTIL = (function () {
     // parallel script loading, could perhaps be using jQuery deferred/promises
     // but I *really* like the elegant simplicity of my approach here
     // can put in potentially null entries in array (they will be cleanly skipped)
-    // Sample (not very dry example) usage: 
+    // Sample (not very dry example) usage:
 
     // resources = [
     //     window.jQuery ? {
     //         url: "https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js",
-    //         tag: "script", 
+    //         tag: "script",
     //         cb: function(){ ply_$ = $.noConflict(true) }
     //     } : {
     //         url: "https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js",
@@ -75,24 +75,24 @@ var UTIL = (function () {
         }});
     }
 
-    // synchronous dynamic script loading. 
-    // takes an array of js url's to be loaded in that specific order. 
-    // assembles an array of functions that are referenced more directly rather than 
-    // using only nested closures. I couldn't get it going with the closures and gave up on it. 
+    // synchronous dynamic script loading.
+    // takes an array of js url's to be loaded in that specific order.
+    // assembles an array of functions that are referenced more directly rather than
+    // using only nested closures. I couldn't get it going with the closures and gave up on it.
     function js_load(resources, cb_done) {
-        var cb_list = []; // this is not space optimal but nobody gives a damn 
+        var cb_list = []; // this is not space optimal but nobody gives a damn
         array_each(resources, function(r, i) {
             cb_list[i] = function() {
                 var x = document.body.appendChild(document.createElement('script'));
                 x.src = r;
-                x.onload = function() { 
-                    console.log("Dynamically loaded "+r+" via js_load"); 
+                x.onload = function() {
+                    console.log("Dynamically loaded "+r+" via js_load");
                     if (i === resources.length-1) {
                         cb_done();
                     } else {
                         cb_list[i+1]();
                     }
-                }; 
+                };
             };
         });
         cb_list[0]();
@@ -104,13 +104,13 @@ var UTIL = (function () {
 
     // resources = {
     //     "https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js": {
-    //         tag: "script", 
+    //         tag: "script",
     //         cb: function(){ ply_$ = $.noConflict(true) }
     //     },
     //     "https://raw.github.com/unphased/ply/master/modernizr-2.6.2.min.js": true
     // ];
     function load_js_dependency_tree(resources, cb_all_done) {
-        
+
     }
 
     var transEndEventNames = {
@@ -119,7 +119,7 @@ var UTIL = (function () {
         'OTransition'      : 'oTransitionEnd',
         'msTransition'     : 'MSTransitionEnd',
         'transition'       : 'transitionend'
-    }; 
+    };
     var transEndEventName = transEndEventNames[ Modernizr.prefixed('transition') ];
     var transformStyle = Modernizr.prefixed('transform');
 
@@ -138,7 +138,7 @@ var UTIL = (function () {
     var transitionDurationStyle = Modernizr.prefixed('transitionDuration');
 
     function inject_css(css) {
-        // append a style tag to head 
+        // append a style tag to head
         var head = document.getElementsByTagName("head")[0];
         var style = document.createElement("style");
         style.type = "text/css";
@@ -149,16 +149,54 @@ var UTIL = (function () {
         }
         head.appendChild(style);
     }
-    
+
+    function attach_handlers_on_document(handler_map, profile_these_handlers) {
+        each(handler_map, function (event_name,v) {
+            if (!v) return;
+
+            var prof_v;
+            document.addEventListener(event_name, function() {
+                // in debug mode (i.e. if debug.js is included) all exceptions originating from
+                // this handler maker are caught and reported to debug elements if present
+                var pe = profile_these_handlers[event_name];
+                if (window.DEBUG && profile_these_handlers && pe && !prof_v) {
+                    // dynamic profiled routine generation
+                    prof_v = window.DEBUG.instrument_profile_on(v,event_name,30,(typeof pe === 'function')?pe:undefined);
+                }
+                //var dp = window.DEBUG.profiles;
+                if (window.DEBUG && window.DEBUG.enable_debug_printing) {
+                    try {
+                        if (prof_v && window.DEBUG.profiles[event_name] && window.DEBUG.profiles[event_name].enabled) {
+                            prof_v.apply(this, arguments);
+                        } else {
+                            v.apply(this, arguments);
+                        }
+                    } catch (e) {
+                        // show the error to the DOM to help out for mobile (also cool on PC)
+                        window.DEBUG.error(e);
+                        throw e; // rethrow to give it to debugging safari, rather than be silent
+                    }
+                    window.DEBUG.event_processed = true;
+                } else if (prof_v && window.DEBUG && window.DEBUG.profiles[event_name] && window.DEBUG.profiles[event_name].enabled) {
+                    prof_v.apply(this, arguments);
+                } else {
+                    v.apply(this, arguments);
+                }
+            }, true);
+            // hook to capture phase to catch in the event of stopPropagation()
+        });
+    }
+
     return {
         each: each,
         array_each: array_each,
         async_load: async_load,
-        js_load: js_load, 
+        js_load: js_load,
         transEndEventName: transEndEventName,
         transformStyle: transformStyle,
         hyphen_mp: hyphen_mp,
         transitionDurationStyle: transitionDurationStyle,
-        injectCSS: inject_css
+        injectCSS: inject_css,
+        attach_handlers_on_document: attach_handlers_on_document
     };
 })();

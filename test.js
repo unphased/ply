@@ -1,34 +1,34 @@
-// This script is one an exception to the rule that code should function simply by 
-// failing to include debug.js prior to loading it. 
+// This script is one an exception to the rule that code should function simply by
+// failing to include debug.js prior to loading it.
 
 (function() {
-    /*global DEBUG:false Modernizr:false requestAnimationFrame:true cancelAnimationFrame:true PLY:false PLY_L2:false assert:false*/
+    /*global UTIL:false DEBUG:false Modernizr:false requestAnimationFrame:true cancelAnimationFrame:true PLY:false PLY_L2:false assert:false*/
     //"use strict"; // permissible to uncomment strict mode when in need of debugging
     var datenow = DEBUG.datenow;
     var lastTime = 0;
     var vendors = ['ms', 'moz', 'webkit', 'o'];
     for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
         window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] || 
+        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] ||
             window[vendors[x]+'CancelRequestAnimationFrame'];
     }
     if (!window.requestAnimationFrame) {
         window.requestAnimationFrame = function(callback, element) {
             var currTime = datenow();
             var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function() { callback(currTime + timeToCall); }, 
+            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
               timeToCall);
             lastTime = currTime + timeToCall;
             return id;
         };
     }
- 
+
     if (!window.cancelAnimationFrame) {
         window.cancelAnimationFrame = function(id) {
             clearTimeout(id);
         };
     }
-    
+
     // var transform_name = Modernizr.prefixed('transform');
     // var hide_transform = "translate3d(-99999px,-99999px,0)";
 
@@ -41,22 +41,22 @@
         if (time < 1e12) {
             // we're getting new-style sub-ms time stamp
         }
-        // schedule 
-        if (document.hasFocus()) 
+        // schedule
+        if (document.hasFocus())
             requestAnimationFrame(debug_refresh);
         else console.log("document has lost focus. Stopping rAF");
 
-        if (!DEBUG.enabled) return; // wait next tick (iOS does not issue window focus
+        if (!DEBUG.enable_debug_printing) return; // wait next tick (iOS does not issue window focus
                                 // rAF start/restart won't work with toggling debug)
         if (!DEBUG.event_processed) {
             if (no_events_processed_for++ > 0) { // counts ticks (technically could be a boolean)
-                return; // wait next tick 
+                return; // wait next tick
             }
         } else {
             no_events_processed_for = 0;
         }
 
-        DEBUG.event_processed = false; // mark it updated: we're gonna go update the stuff. 
+        DEBUG.event_processed = false; // mark it updated: we're gonna go update the stuff.
 
         // Preventing a mess in PLY.pointer_state caused by .html() setting #debug
         var pp = PLY.pointer_state;
@@ -68,7 +68,7 @@
 
         // gonna do our sanity check for ply
         PLY.sanityCheck();
-        
+
         if (debug_show_hide) {
             // skip the HTML debug dump of the data if its view is hidden
 
@@ -91,9 +91,9 @@
             }
             str += "</ul><div>revision: "+DEBUG.revision+"</div>";
 
-            $("#debug").html(str); 
+            $("#debug").html(str);
         }
-        
+
         /*
         // actual debug visualization of pointer locations
         if (!$('#pointer_marker_container').length) {
@@ -170,7 +170,7 @@
         //console.log("scrollY"+scrollY);
         var ppk = Object.keys(PLY.pointer_state);
         var ppl = ppk.length;
-        
+
         var i = 0;
         for (var p in PLY.pointer_state) {
             if (i === 10) { alert("I see more than 10 pointers. wat"); }
@@ -191,7 +191,7 @@
                         echli.style.height = de.outerHeight()+"px";
                         echli.style[transform_name] = "translate3d("+deo.left+"px,"+deo.top+"px,0)";
                     } else {
-                        echli.style[transform_name] = hide_transform;    
+                        echli.style[transform_name] = hide_transform;
                     }
                 } else
                     echli.style[transform_name] = hide_transform;
@@ -233,7 +233,7 @@
         } */
 
         DEBUG.update_pointer_state();
-        // cleaning up the debug log 
+        // cleaning up the debug log
         DEBUG.clean_list();
     }
     requestAnimationFrame(debug_refresh);
@@ -243,16 +243,16 @@
     });
 
     var debug_show_hide = true;
-    $('.ply_js_title').parent().on('mousedown touchstart',function(e) { 
+    $('.ply_js_title').parent().on('mousedown touchstart',function(e) {
         e.preventDefault();
         var w = $("#debug").innerWidth();
         $("#debug").css('WebkitTransform','translate3d('+(debug_show_hide?w+10:0)+'px,0,0)');
         debug_show_hide = !debug_show_hide;
     });
 
-    // i have no idea what's going on with the behavior of this bug where the tap top to scroll up does not work. 
-    // it looks like once i defer the assignment of the class that enables the touch scrolling to page load 
-    // it all just magically functions. 
+    // i have no idea what's going on with the behavior of this bug where the tap top to scroll up does not work.
+    // it looks like once i defer the assignment of the class that enables the touch scrolling to page load
+    // it all just magically functions.
     $(function(){$("#debug").addClass('touchscroll');});
     // $(document).on('touchstart', '#debug', function(){
     //     $(this).addClass('touchscroll');
@@ -262,13 +262,13 @@
     // });
 
     //if (DEBUG){
-        $("h1").after('<button id="debug_toggle" onclick="DEBUG.enabled = !DEBUG.enabled">toggle all debug</button>');
+        $("h1").after('<button id="debug_toggle" onclick="DEBUG.enable_debug_printing = !DEBUG.enable_debug_printing">toggle all debug</button>');
     //}
-    PLY.attach_handlers_on_document({
+    UTIL.attach_handlers_on_document({
         ply_oneend: function(evt) {
             var dt = $.data(evt.target,"ply");
             if (!dt._test_no_reset) {
-                PLY_L2.reset_transform_to_zero(evt.target,"1s"); 
+                PLY_L2.reset_transform_to_zero(evt.target,"1s");
                 dt._test_no_reset = false;
             }
         },
@@ -278,7 +278,7 @@
         }
     });
 
-    var TransformStyle = Modernizr.prefixed("transform"); 
+    var TransformStyle = Modernizr.prefixed("transform");
     var TransitionDurationStyle = Modernizr.prefixed("transitionDuration");
     DEBUG.globalAsyncKeybind({
         '1': function() { $('.keyboard-bound')[0].style[TransitionDurationStyle] = '1s'; },
@@ -289,19 +289,19 @@
         'O': function() { $('.keyboard-bound')[0].style[TransformStyle] = ''; },
         'S': function() { var x = $('.keyboard-bound')[0]; x.style[TransformStyle] = getComputedStyle(x)[TransformStyle]; },
         // Set 0 and transition to zero, at once
-        '9': function() { 
+        '9': function() {
             var x = $('.keyboard-bound')[0];
-            x.style[TransitionDurationStyle] = '0s'; 
-            x.style[TransformStyle] = ''; 
+            x.style[TransitionDurationStyle] = '0s';
+            x.style[TransformStyle] = '';
         },
-        // same as 9 but with an attempt to force the duration to stick in the middle 
+        // same as 9 but with an attempt to force the duration to stick in the middle
         '8': function() {
             var x = $('.keyboard-bound')[0];
-            x.style[TransitionDurationStyle] = '0s'; 
+            x.style[TransitionDurationStyle] = '0s';
             //assert(getComputedStyle(x)[TransitionDurationStyle] === '0s');
-            x.style[TransformStyle] = 'translate3d(0,0,1px)'; 
+            x.style[TransformStyle] = 'translate3d(0,0,1px)';
             console.log('phantomgcs: '+getComputedStyle(x)[TransformStyle]);
-            x.style[TransformStyle] = ''; 
+            x.style[TransformStyle] = '';
         }
     });
 }());
