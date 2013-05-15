@@ -26,7 +26,7 @@ var DEBUG = (function($) {
 
     window.assert = function (exp, message) {
         if (!exp) {
-            console.log("ASSERTION FAILED: "+message);
+            console.log("ASSERTION FAILED ", args.slice(1));
             throw new AssertException(message);
         }
     };
