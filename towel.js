@@ -62,7 +62,7 @@ var UTIL = (function () {
             e.tag = e.tag || 'script';
             var tag = document.body.appendChild(document.createElement(e.tag));
             tag.src = e.url;
-            for (var attr in e.attrs) { tag.setAttribute(attr, e.attrs[attr]) }
+            for (var attr in e.attrs) { tag.setAttribute(attr, e.attrs[attr]); }
             if (e.tag == 'script') // auto-add async attr to script
                 tag.setAttribute('async','');
             tag.onload = function(){
@@ -153,12 +153,12 @@ var UTIL = (function () {
     function attach_handlers_on_document(handler_map, profile_these_handlers) {
         each(handler_map, function (event_name,v) {
             if (!v) return;
+            var pe = profile_these_handlers[event_name];
 
             var prof_v;
             document.addEventListener(event_name, function() {
                 // in debug mode (i.e. if debug.js is included) all exceptions originating from
                 // this handler maker are caught and reported to debug elements if present
-                var pe = profile_these_handlers[event_name];
                 if (window.DEBUG && profile_these_handlers && pe && !prof_v) {
                     // dynamic profiled routine generation
                     prof_v = window.DEBUG.instrument_profile_on(v,event_name,30,(typeof pe === 'function')?pe:undefined);
