@@ -166,15 +166,9 @@ var UTIL = (function () {
                 //var dp = window.DEBUG.profiles;
                 if (window.DEBUG && window.DEBUG.enable_debug_printing) {
                     try {
-                        if (prof_v) {
-                            if (window.DEBUG.profiles[event_name]) {
-                                if (window.DEBUG.profiles[event_name].enabled) {
-                                    var t = true;
-                                    prof_v.apply(this, arguments);
-                                }
-                            }
-                        }
-                        if (typeof (t) === 'undefined') {
+                        if (prof_v && window.DEBUG.profiles[event_name] && window.DEBUG.profiles[event_name].enabled) {
+                            prof_v.apply(this, arguments);
+                        } else {
                             v.apply(this, arguments);
                         }
                     } catch (e) {

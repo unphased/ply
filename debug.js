@@ -19,14 +19,14 @@ var DEBUG = (function($) {
     /*global UTIL:false, PLY:false, Modernizr:false, ply_$:false*/
     //"use strict";
 
-	var AssertException = function (message) { this.message = message; };
+    var AssertException = function (message) { this.message = message; };
     AssertException.prototype.toString = function () {
         return 'AssertException: ' + this.message;
     };
 
     window.assert = function (exp, message) {
         if (!exp) {
-            console.log("ASSERTION FAILED: "+message);
+            console.log("ASSERTION FAILED ", args.slice(1));
             throw new AssertException(message);
         }
     };
@@ -83,7 +83,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables
     var log_buffer = [];
 
-    var git_context = "#% f9978a4 routines for touch %#";
+    var git_context = "#% 0ee05e1 I believe this fixes a stupid syntax error %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -180,20 +180,25 @@ var DEBUG = (function($) {
         };
     }
 
-    function instrument_with_accumulated_profile(routine, report_receiver, report_count) {
-        var rc = report_count || 30;
-        var each = 1.0/rc; // keeping it simple
+    function instrument_with_accumulated_profile(routine, report_receiver, duration_ratio) {
+        var rc = 1.0/duration_ratio;
+
         // some ephemeral profiling DS's closed over the instrumented routine's function
         var accum = 0;
+        var starting = true;
         var count = 0;
         return function() {
             var time = datenow();
             routine.apply(this, arguments);
-            accum += each*(datenow()-time);
+            if (starting) {
+                accum += each*(datenow()-time);
+            } else {
+                accum += (accum - (datenow()-time) * duration_ratio);
+            }
             if (++count === rc) {
                 count = 0;
+                starting = false;
                 report_receiver(accum);
-                accum = 0;
             }
         };
     }
