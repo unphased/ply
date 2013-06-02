@@ -83,7 +83,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables
     var log_buffer = [];
 
-    var git_context = "#% 0ee05e1 I believe this fixes a stupid syntax error %#";
+    var git_context = "#% d9e9e0c hopefully this fixes %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -191,11 +191,11 @@ var DEBUG = (function($) {
             var time = datenow();
             routine.apply(this, arguments);
             if (starting) {
-                accum += each*(datenow()-time);
+                accum += rc*(datenow()-time);
             } else {
                 accum += (accum - (datenow()-time) * duration_ratio);
             }
-            if (++count === rc) {
+            if (++count === duration_ratio) {
                 count = 0;
                 starting = false;
                 report_receiver(accum);
