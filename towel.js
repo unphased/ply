@@ -153,7 +153,7 @@ var UTIL = (function () {
     function attach_handlers_on_document(handler_map, profile_these_handlers) {
         each(handler_map, function (event_name,v) {
             if (!v) return;
-            var pe = profile_these_handlers[event_name];
+            var pe = profile_these_handlers && profile_these_handlers[event_name];
 
             var prof_v;
             document.addEventListener(event_name, function() {
