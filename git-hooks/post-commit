@@ -4,8 +4,10 @@
 git checkout gh-pages
 git merge -Xtheirs master # favor master (as that is where *all* dev occurs; gh-pages is where auto-edits occur)
 # update the js file with commit identification information from git
-sed -i_bak "s/#%.*%#/#% `git log master -1 --format="%h %s"` %#/" public/debug.js
-git add public/debug.js
-rm public/debug.js_bak
+sed -i_bak "s/#%.*%#/#% `git log master -1 --format="%h %s"` %#/" debug.js
+git add debug.js
+rm debug.js_bak
 git commit -m"script writes git hash into js file"
 git checkout master
+
+echo "POSTCOMMIT HOOK IS RUN"
