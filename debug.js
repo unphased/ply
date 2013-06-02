@@ -191,11 +191,11 @@ var DEBUG = (function($) {
             var time = datenow();
             routine.apply(this, arguments);
             if (starting) {
-                accum += each*(datenow()-time);
+                accum += rc*(datenow()-time);
             } else {
                 accum += (accum - (datenow()-time) * duration_ratio);
             }
-            if (++count === rc) {
+            if (++count === duration_ratio) {
                 count = 0;
                 starting = false;
                 report_receiver(accum);
