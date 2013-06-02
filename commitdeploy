@@ -19,5 +19,5 @@ git checkout gh-pages
 git pull
 git merge -Xtheirs master --no-commit
 MASTER_COMMIT=`git log master -1 --format='%h %s'`
-sed -i_bak "s$DELIM#%.*%#$DELIM#% $MASTER_COMMIT %#$DELIM" debug.js && git add debug.js && git commit -m"scripted update of code from master at $MASTER_COMMIT" && git push origin master gh-pages
+sed -i_bak "s$DELIM#%.*%#$DELIM#% $MASTER_COMMIT %#$DELIM" public/debug.js && git add public/debug.js && git commit -m"scripted update of code from master at $MASTER_COMMIT" && git push origin master gh-pages
 git checkout master
