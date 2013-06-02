@@ -19,7 +19,7 @@ var DEBUG = (function($) {
     /*global UTIL:false, PLY:false, Modernizr:false, ply_$:false*/
     //"use strict";
 
-	var AssertException = function (message) { this.message = message; };
+    var AssertException = function (message) { this.message = message; };
     AssertException.prototype.toString = function () {
         return 'AssertException: ' + this.message;
     };
@@ -193,7 +193,7 @@ var DEBUG = (function($) {
             if (starting) {
                 accum += each*(datenow()-time);
             } else {
-                accum += (accum - (datenow()-time) * duration_ratio;
+                accum += (accum - (datenow()-time) * duration_ratio);
             }
             if (++count === rc) {
                 count = 0;
