@@ -195,6 +195,7 @@ var UTIL = (function () {
         transEndEventName: transEndEventName,
         transformStyle: transformStyle,
         hyphen_mp: hyphen_mp,
+        keyframesPrefixed: keyframesPrefixed,
         hyphen_style: hyphen_style,
         transitionDurationStyle: transitionDurationStyle,
         injectCSS: inject_css,
