@@ -75,7 +75,7 @@ var UTIL = (function () {
         }});
     }
 
-    // synchronous dynamic script loading.
+    // synchronous dynamic batch script loading.
     // takes an array of js url's to be loaded in that specific order.
     // assembles an array of functions that are referenced more directly rather than
     // using only nested closures. I couldn't get it going with the closures and gave up on it.
@@ -195,6 +195,7 @@ var UTIL = (function () {
         transEndEventName: transEndEventName,
         transformStyle: transformStyle,
         hyphen_mp: hyphen_mp,
+        hyphen_style: hyphen_style,
         transitionDurationStyle: transitionDurationStyle,
         injectCSS: inject_css,
         attach_handlers_on_document: attach_handlers_on_document
