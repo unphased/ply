@@ -1,0 +1,2 @@
+#!/bin/sh
+echo %%%%%%% gd --cached --stat:; git diff --cached --stat; echo %%%%%%% gst:; git status; echo %%%%%%% gd:; git diff | diff-highlight; echo %%%%%%% gdstat:; git diff --stat; echo %%%%%%%% jshints:; jshint $(git ls-files | grep ".js$" | grep -v "modernizr\|jquery");

@@ -5,7 +5,7 @@
 // towel.js contains a set of utilities. It is for keeping things DRY.
 // There is occasionally some overlap with jQuery's good stuff.
 // Modernizr is used a little bit for the sake of brevity.
-
+// Don't panic.
 
 var UTIL = (function () {
     /*global assert:true, Modernizr:false*/
@@ -173,7 +173,7 @@ var UTIL = (function () {
                         }
                     } catch (e) {
                         // show the error to the DOM to help out for mobile (also cool on PC)
-                        window.DEBUG.error(e);
+                        _log.error(e);
                         throw e; // rethrow to give it to debugging safari, rather than be silent
                     }
                     window.DEBUG.event_processed = true;
