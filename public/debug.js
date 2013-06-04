@@ -3,30 +3,27 @@
 ////////////////////////////////////////////////
 
 // debug.js is a resource-level instrumentation script. Include to gain
-// debugging capabilities, and absence implies release deployment.
-// predicate debugging features on the presence of DEBUG global.
-// TODO: Remove all references to DEBUG.enabled (it used to be the switchable debug flag).
-// Instead, build individual toggle controls into debugging features separately.
+// debugging capabilities, and absence implies a lean release environment.
+// predicate debugging features on the presence of this DEBUG global variable.
 
 // routines found in this debug layer are permitted to fail spectacularly in
 // the absence of necessary components such as jQuery, ply.js, utils (towel.js)
 
 // For now, there might be a few special DOM id's that are referenced:
-// #debug_log
 // #log_buffer_dump
 
 var DEBUG = (function($) {
     /*global UTIL:false, PLY:false, Modernizr:false, ply_$:false*/
     //"use strict";
 
-	var AssertException = function (message) { this.message = message; };
+    var AssertException = function (message) { this.message = message; };
     AssertException.prototype.toString = function () {
         return 'AssertException: ' + this.message;
     };
 
     window.assert = function (exp, message) {
         if (!exp) {
-            console.log("ASSERTION FAILED: "+message);
+            console.log("ASSERTION FAILED ", args.slice(1));
             throw new AssertException(message);
         }
     };
@@ -92,7 +89,7 @@ var DEBUG = (function($) {
             !!('onmsgesturechange' in window); // works on ie10
     }
 
-    var original_console_log = console.log;
+    /* var original_console_log = console.log;
     // echo console logs to the debug
     var instrumented_log = function () {
         original_console_log.apply(window.console, arguments);
@@ -110,39 +107,111 @@ var DEBUG = (function($) {
         // you've got one
     };
 
-    if (true)
-    {
-        console.log = instrumented_log;
+    console.log = instrumented_log; */
 
-        var show_log_buffer = false;
-        $("#log_buffer_dump").before($('<button>toggle full log buffer snapshot</button>').on('click',function(){
-            show_log_buffer = !show_log_buffer;
-            if (show_log_buffer) {
-                $("#log_buffer_dump").html(log_buffer.join(''));
-            } else {
-                $("#log_buffer_dump").html("");
+    var LOGENABLED = true; // if false, no logging thru _log occurs (regular console log works like normal)
+    var CAPTURELOG = true; // if true, debug_log list is filled in when _log runs. whether traditional logging occurs or not is not affected and does not affect this.
+
+    var log_attachments = []; // log attachments are a creation of mine which
+    var log_attachments_len = 0; // desperate and paranoid attempt at performance squeezing
+
+    // This is something that can potentially make things slow. Just be careful with it...
+    // For instance, don't store references to anything your cb receives. It would consume massive amounts of memory.
+    function attach_log_cb(cb) {
+        log_attachments.push(cb);
+        log_attachments_len ++;
+    }
+    // the log below will also invoke, this will 
+    // This amazing log wrapper for webkit lifted from http://stackoverflow.com/a/14842659/340947
+    _log = (function (methods, undefined) {
+
+        var Log = Error; // does this do anything?  proper inheritance...?
+        Log.prototype.write = function (args, method) {
+            /// <summary>
+            /// Paulirish-like console.log wrapper.  Includes stack trace via @fredrik SO suggestion (see remarks for sources).
+            /// </summary>
+            /// <param name="args" type="Array">list of details to log, as provided by `arguments`</param>
+            /// <param name="method" type="string">the console method to use:  debug, log, warn, info, error</param>
+            /// <remarks>Includes line numbers by calling Error object -- see
+            /// * http://paulirish.com/2009/log-a-lightweight-wrapper-for-consolelog/
+            /// * http://stackoverflow.com/questions/13815640/a-proper-wrapper-for-console-log-with-correct-line-number
+            /// * http://stackoverflow.com/a/3806596/1037948
+            /// </remarks>
+
+            // via @fredrik SO trace suggestion; wrapping in special construct so it stands out
+            var suffix = {
+                "@": (this.lineNumber ?
+                    this.fileName + ':' + this.lineNumber + ":1" :
+                    // add arbitrary column value for chrome linking
+                    extractLineNumberFromStack(this.stack)
+                )
+            };
+
+            args = args.concat([suffix]);
+            // via @paulirish console wrapper
+            if (console && console[method]) {
+                if (console[method].apply) { console[method].apply(console, args); } else { console[method](args); } // nicer display in some browsers
             }
-        })).on("touchenter",function(){console.log("touchenter on toggle buffer dump button");})
-            .on('touchleave',function(){console.log("touchleave on toggle buffer dump button");});
-    }
+        };
+        var extractLineNumberFromStack = function (stack) {
+            /// <summary>
+            /// Get the line/filename detail from a Webkit stack trace.  See http://stackoverflow.com/a/3806596/1037948
+            /// </summary>
+            /// <param name="stack" type="String">the stack string</param>
 
-    function error(e) {
-        var e_html = '<div class="error">'+e.toString()+" at "+e.stack+"</div>";
-        log_buffer.push(e_html);
-        $("#debug_log").prepend(e_html);
-    }
+            // correct line number according to how Log().write implemented
+            var line = stack.split('\n')[3];
+            // fix for various display text
+            line = (line.indexOf(' (') >= 0 ?
+                line.split(' (')[1].substring(0, line.length - 1) :
+                line.split('at ')[1]);
+            return line;
+        };
 
-    // clears out old values in debug log (run me periodically)
-    function clean() {
-        var now = datenow();
-        var debuglog = $("#debug_log")[0];
-        var dc = debuglog.children;
-        for (var i = dc.length-1; dc.length > 50 && i >= 0; --i) {
-            var timestamp = dc[i].getAttribute('data-time');
-            if (timestamp && timestamp < (now - 15000))
-                debuglog.removeChild(dc[i]);
+        // method builder
+        var logMethod = function(method) {
+            return function (params) {
+                /// <summary>
+                /// Paulirish-like console.log wrapper
+                /// </summary>
+                /// <param name="params" type="[...]">list your logging parameters</param>
+                var v;
+                if (CAPTURELOG || LOGENABLED) {
+                    v = Array.prototype.slice.call(arguments,0);
+                }
+                if (CAPTURELOG) {
+                    // log_buffer takes on a slightly proprietary compact format 
+                    log_buffer.push(method[0]+' '+v.map(function(e){return escapeHTML(serialize(e)).replace(/ {2}/g,'</br>');}).join(' '));
+                }
+                // only if explicitly true somewhere
+                if (LOGENABLED) {
+                    Log().write(v, method); // turn into proper array & declare method to use
+                }
+
+                if (log_attachments_len) {
+                    for (var x in log_attachments) {
+                        log_attachments[x](log_buffer);
+                    }
+                }
+            };//--  fn  logMethod
+        };
+        var result = logMethod('log'); // base for backwards compatibility, simplicity
+        // add some extra juice
+        for(var i in methods) result[methods[i]] = logMethod(methods[i]);
+
+        return result; // expose
+    })(['error', 'debug', 'info', 'warn']); // _log
+
+    var show_log_buffer = false;
+    $("#log_buffer_dump").before($('<button>toggle full log buffer snapshot</button>').on('click',function(){
+        show_log_buffer = !show_log_buffer;
+        if (show_log_buffer) {
+            $("#log_buffer_dump").html(log_buffer.join(''));
+        } else {
+            $("#log_buffer_dump").html("");
         }
-    }
+    })).on("touchenter",function(){console.log("touchenter on toggle buffer dump button");})
+        .on('touchleave',function(){console.log("touchleave on toggle buffer dump button");});
 
 
     // this is a convenience debugger helper to map arbitrary code to keyboard input
@@ -160,7 +229,7 @@ var DEBUG = (function($) {
                 // show the error to the DOM to help out for mobile (also cool on PC)
                 //var html = '<div class="error">'+e.toString()+" at "+e.stack+"</div>";
                 //$("#debug_log").prepend(html);
-                error(e);
+                _log.error(e);
                 throw e; // rethrow to give it to debugging safari, rather than be silent
             }
         });
@@ -191,11 +260,11 @@ var DEBUG = (function($) {
             var time = datenow();
             routine.apply(this, arguments);
             if (starting) {
-                accum += each*(datenow()-time);
+                accum += rc*(datenow()-time);
             } else {
-                accum += (accum - (datenow()-time) * duration_ratio;
+                accum += (accum - (datenow()-time) * duration_ratio);
             }
-            if (++count === rc) {
+            if (++count === duration_ratio) {
                 count = 0;
                 starting = false;
                 report_receiver(accum);
@@ -328,14 +397,13 @@ var DEBUG = (function($) {
         serialize: serialize,
         isInDOM: isInDOM,
         revision: git_context.slice(3,-3),
-        clean_list: clean,
         update_pointer_state: update_pointer_state,
-        error: error,
         globalAsyncKeybind: globalAsyncKeybind,
         instrument_profile_on: instrument_profile_on,
         profiles: profiles,
-
-
+        CAPTURELOG: CAPTURELOG,
+        LOGENABLED: LOGENABLED,
+        attach_log_cb: attach_log_cb,
         // This is just marked when any event makes its way through the primary
         // event handlers so that the test site can be a bit more efficient about
         // re-updating the DOM. I may eventually let the events that don't
@@ -344,11 +412,11 @@ var DEBUG = (function($) {
         datenow: datenow
     };
 
-    // generally helpful debugging info
+    // generally helpful debugging info we're gonna globally provide
     $(function() {
-        console.log("UA: "+navigator.userAgent);
-        console.log("window.devicePixelRatio:", window.devicePixelRatio);
-        console.log("Revision: "+exposed.revision);
+        console.info("UA: "+navigator.userAgent);
+        console.info("window.devicePixelRatio:", window.devicePixelRatio);
+        console.info("Revision: "+exposed.revision);
     });
     return exposed;
 })(window.ply_$ || jQuery);

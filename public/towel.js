@@ -5,7 +5,7 @@
 // towel.js contains a set of utilities. It is for keeping things DRY.
 // There is occasionally some overlap with jQuery's good stuff.
 // Modernizr is used a little bit for the sake of brevity.
-
+// Don't panic.
 
 var UTIL = (function () {
     /*global assert:true, Modernizr:false*/
@@ -62,7 +62,7 @@ var UTIL = (function () {
             e.tag = e.tag || 'script';
             var tag = document.body.appendChild(document.createElement(e.tag));
             tag.src = e.url;
-            for (var attr in e.attrs) { tag.setAttribute(attr, e.attrs[attr]) }
+            for (var attr in e.attrs) { tag.setAttribute(attr, e.attrs[attr]); }
             if (e.tag == 'script') // auto-add async attr to script
                 tag.setAttribute('async','');
             tag.onload = function(){
@@ -75,7 +75,7 @@ var UTIL = (function () {
         }});
     }
 
-    // synchronous dynamic script loading.
+    // synchronous dynamic batch script loading.
     // takes an array of js url's to be loaded in that specific order.
     // assembles an array of functions that are referenced more directly rather than
     // using only nested closures. I couldn't get it going with the closures and gave up on it.
@@ -153,12 +153,12 @@ var UTIL = (function () {
     function attach_handlers_on_document(handler_map, profile_these_handlers) {
         each(handler_map, function (event_name,v) {
             if (!v) return;
+            var pe = profile_these_handlers && profile_these_handlers[event_name];
 
             var prof_v;
             document.addEventListener(event_name, function() {
                 // in debug mode (i.e. if debug.js is included) all exceptions originating from
                 // this handler maker are caught and reported to debug elements if present
-                var pe = profile_these_handlers[event_name];
                 if (window.DEBUG && profile_these_handlers && pe && !prof_v) {
                     // dynamic profiled routine generation
                     prof_v = window.DEBUG.instrument_profile_on(v,event_name,30,(typeof pe === 'function')?pe:undefined);
@@ -173,7 +173,7 @@ var UTIL = (function () {
                         }
                     } catch (e) {
                         // show the error to the DOM to help out for mobile (also cool on PC)
-                        window.DEBUG.error(e);
+                        _log.error(e);
                         throw e; // rethrow to give it to debugging safari, rather than be silent
                     }
                     window.DEBUG.event_processed = true;
@@ -195,6 +195,8 @@ var UTIL = (function () {
         transEndEventName: transEndEventName,
         transformStyle: transformStyle,
         hyphen_mp: hyphen_mp,
+        keyframesPrefixed: keyframesPrefixed,
+        hyphen_style: hyphen_style,
         transitionDurationStyle: transitionDurationStyle,
         injectCSS: inject_css,
         attach_handlers_on_document: attach_handlers_on_document
