@@ -47,7 +47,7 @@
         else console.log("document has lost focus. Stopping rAF");
 
         if (!DEBUG.enable_debug_printing) return; // wait next tick (iOS does not issue window focus
-                                // rAF start/restart won't work with toggling debug)
+                                // rAF start/restart won't work with toggling debug; ios simply wont fire rAF)
         if (!DEBUG.event_processed) {
             if (no_events_processed_for++ > 0) { // counts ticks (technically could be a boolean)
                 return; // wait next tick
@@ -233,9 +233,27 @@
         } */
 
         DEBUG.update_pointer_state();
+        // clears out old values in debug log (run me periodically)
+        function clean() {
+            var now = datenow();
+            var debuglog = $("#debug_log")[0];
+            var dc = debuglog.children;
+            for (var i = dc.length-1; dc.length > 50 && i >= 0; --i) {
+                var timestamp = dc[i].getAttribute('data-time');
+                if (timestamp && timestamp < (now - 15000))
+                    debuglog.removeChild(dc[i]);
+            }
+        }
         // cleaning up the debug log
-        DEBUG.clean_list();
+        clean();
     }
+    DEBUG.attach_log_cb(function (logbuffer) {
+        // insert the latest value in here (as it will always be on)
+        var str = '<div class="log" data-time="'+datenow()+'">' + logbuffer[logbuffer.length-1].substr(2) + '</div>';
+        if (DEBUG.enable_debug_printing) {
+            $("#debug_log").prepend(str);
+        }
+    });
     requestAnimationFrame(debug_refresh);
     $(window).focus(function(){
         console.log("Window got focus. Jumpstarting rAF");
@@ -261,8 +279,8 @@
     //     $(this).removeClass('touchscroll');
     // });
 
-    //if (DEBUG){
-        $("h1").after('<button id="debug_toggle" onclick="DEBUG.enable_debug_printing = !DEBUG.enable_debug_printing">toggle all debug</button>');
+    // enable_debug_printing is an ad-hoc solution for storing some globally debug-related state.
+    $("h1").after('<button id="debug_toggle" onclick="DEBUG.enable_debug_printing = !DEBUG.enable_debug_printing">toggle all debug</button>');
     //}
     UTIL.attach_handlers_on_document({
         ply_oneend: function(evt) {

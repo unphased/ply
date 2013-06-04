@@ -8,7 +8,7 @@ then
 	MESSAGE="commitdeploy scripted commit on master performed on host `hostname` at `date`" 
 else 
 	echo "Using provided argument list as commit message"
-	MESSAGE="$*"
+	MESSAGE="$*" #not "$@"; we *want* to smash into single string
 fi
 # apply message to code
 DELIM='|'

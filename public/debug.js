@@ -3,16 +3,13 @@
 ////////////////////////////////////////////////
 
 // debug.js is a resource-level instrumentation script. Include to gain
-// debugging capabilities, and absence implies release deployment.
-// predicate debugging features on the presence of DEBUG global.
-// TODO: Remove all references to DEBUG.enabled (it used to be the switchable debug flag).
-// Instead, build individual toggle controls into debugging features separately.
+// debugging capabilities, and absence implies a lean release environment.
+// predicate debugging features on the presence of this DEBUG global variable.
 
 // routines found in this debug layer are permitted to fail spectacularly in
 // the absence of necessary components such as jQuery, ply.js, utils (towel.js)
 
 // For now, there might be a few special DOM id's that are referenced:
-// #debug_log
 // #log_buffer_dump
 
 var DEBUG = (function($) {
@@ -83,7 +80,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables
     var log_buffer = [];
 
-    var git_context = "#% 7a93608 Here is more stuff %#";
+    var git_context = "#% 45bc907 Merge branch 'master' of github.com:unphased/ply %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -112,6 +109,19 @@ var DEBUG = (function($) {
 
     console.log = instrumented_log; */
 
+    var LOGENABLED = true; // if false, no logging thru _log occurs (regular console log works like normal)
+    var CAPTURELOG = true; // if true, debug_log list is filled in when _log runs. whether traditional logging occurs or not is not affected and does not affect this.
+
+    var log_attachments = []; // log attachments are a creation of mine which
+    var log_attachments_len = 0; // desperate and paranoid attempt at performance squeezing
+
+    // This is something that can potentially make things slow. Just be careful with it...
+    // For instance, don't store references to anything your cb receives. It would consume massive amounts of memory.
+    function attach_log_cb(cb) {
+        log_attachments.push(cb);
+        log_attachments_len ++;
+    }
+    // the log below will also invoke, this will 
     // This amazing log wrapper for webkit lifted from http://stackoverflow.com/a/14842659/340947
     _log = (function (methods, undefined) {
 
@@ -165,12 +175,24 @@ var DEBUG = (function($) {
                 /// Paulirish-like console.log wrapper
                 /// </summary>
                 /// <param name="params" type="[...]">list your logging parameters</param>
-
+                var v;
+                if (CAPTURELOG || LOGENABLED) {
+                    v = Array.prototype.slice.call(arguments,0);
+                }
+                if (CAPTURELOG) {
+                    // log_buffer takes on a slightly proprietary compact format 
+                    log_buffer.push(method[0]+' '+v.map(function(e){return escapeHTML(serialize(e)).replace(/ {2}/g,'</br>');}).join(' '));
+                }
                 // only if explicitly true somewhere
-                if (typeof LOGENABLED === typeof undefined || !LOGENABLED) return;
+                if (LOGENABLED) {
+                    Log().write(v, method); // turn into proper array & declare method to use
+                }
 
-                // call handler extension which provides stack trace
-                Log().write(Array.prototype.slice.call(arguments, 0), method); // turn into proper array & declare method to use
+                if (log_attachments_len) {
+                    for (var x in log_attachments) {
+                        log_attachments[x](log_buffer);
+                    }
+                }
             };//--  fn  logMethod
         };
         var result = logMethod('log'); // base for backwards compatibility, simplicity
@@ -179,8 +201,6 @@ var DEBUG = (function($) {
 
         return result; // expose
     })(['error', 'debug', 'info', 'warn']); // _log
-
-    window.LOGENABLED = true;
 
     var show_log_buffer = false;
     $("#log_buffer_dump").before($('<button>toggle full log buffer snapshot</button>').on('click',function(){
@@ -192,24 +212,6 @@ var DEBUG = (function($) {
         }
     })).on("touchenter",function(){console.log("touchenter on toggle buffer dump button");})
         .on('touchleave',function(){console.log("touchleave on toggle buffer dump button");});
-
-    function error(e) {
-        var e_html = '<div class="error">'+e.toString()+" at "+e.stack+"</div>";
-        log_buffer.push(e_html);
-        $("#debug_log").prepend(e_html);
-    }
-
-    // clears out old values in debug log (run me periodically)
-    function clean() {
-        var now = datenow();
-        var debuglog = $("#debug_log")[0];
-        var dc = debuglog.children;
-        for (var i = dc.length-1; dc.length > 50 && i >= 0; --i) {
-            var timestamp = dc[i].getAttribute('data-time');
-            if (timestamp && timestamp < (now - 15000))
-                debuglog.removeChild(dc[i]);
-        }
-    }
 
 
     // this is a convenience debugger helper to map arbitrary code to keyboard input
@@ -227,7 +229,7 @@ var DEBUG = (function($) {
                 // show the error to the DOM to help out for mobile (also cool on PC)
                 //var html = '<div class="error">'+e.toString()+" at "+e.stack+"</div>";
                 //$("#debug_log").prepend(html);
-                error(e);
+                _log.error(e);
                 throw e; // rethrow to give it to debugging safari, rather than be silent
             }
         });
@@ -395,14 +397,13 @@ var DEBUG = (function($) {
         serialize: serialize,
         isInDOM: isInDOM,
         revision: git_context.slice(3,-3),
-        clean_list: clean,
         update_pointer_state: update_pointer_state,
-        error: error,
         globalAsyncKeybind: globalAsyncKeybind,
         instrument_profile_on: instrument_profile_on,
         profiles: profiles,
-
-
+        CAPTURELOG: CAPTURELOG,
+        LOGENABLED: LOGENABLED,
+        attach_log_cb: attach_log_cb,
         // This is just marked when any event makes its way through the primary
         // event handlers so that the test site can be a bit more efficient about
         // re-updating the DOM. I may eventually let the events that don't
