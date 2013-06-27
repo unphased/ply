@@ -80,7 +80,7 @@ var DEBUG = (function($) {
     // all vars except the variable "exposed" are private variables
     var log_buffer = [];
 
-    var git_context = "#% 45bc907 Merge branch 'master' of github.com:unphased/ply %#";
+    var git_context = "#% 33a2850 Typo %#";
 
     var datenow = Date.now?Date.now:function(){return (new Date()).getTime();};
 
@@ -181,7 +181,7 @@ var DEBUG = (function($) {
                 }
                 if (CAPTURELOG) {
                     // log_buffer takes on a slightly proprietary compact format 
-                    log_buffer.push(method[0]+' '+v.map(function(e){return escapeHTML(serialize(e)).replace(/ {2}/g,'</br>');}).join(' '));
+                    log_buffer.push(method[0]+' '+v.map(function(e){return escapeHtml(serialize(e)).replace(/ {2}/g,'</br>');}).join(' '));
                 }
                 // only if explicitly true somewhere
                 if (LOGENABLED) {
